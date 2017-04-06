@@ -1,0 +1,20 @@
+{
+  "name": "serverus",
+  "version": "1.0.0",
+  "description": "Backend Webserver managing submissions/annoucements",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "repository":{
+    "type": "git",
+    "url":"https://github.com/AztecGameLab/Serverus.git"
+  },
+  "dependencies":
+  {
+    "babel": "*",
+    "webpack":"*"
+  }
+}
