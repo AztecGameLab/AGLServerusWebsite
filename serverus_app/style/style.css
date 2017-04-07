@@ -3,3 +3,18 @@ ul.nav {
     margin: 0;
     padding: 0;
 }
+div.navContainer {
+    font-family: Helvetica;
+    padding: 0;
+    overflow: hidden;
+    background-color: #212121;
+}
+button.btnNav {
+    padding: 0;
+    display: inline-block;
+    overflow: hidden;
+    background-color: #212121;
+    color: white;
+    border: none;
+    outline: none;
+}
