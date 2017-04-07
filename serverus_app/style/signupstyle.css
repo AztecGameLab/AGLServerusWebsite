@@ -1,0 +1,12 @@
+.div_signup{
+    margin: 0 auto;
+    text-align: center;
+
+}
+input {
+
+    padding: 10px 10px;
+    border-radius: 4px;
+    width: 20%;
+    margin-bottom: 20px;
+}
