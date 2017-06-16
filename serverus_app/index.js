@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Home from './components/Home.jsx';
-import NavigationBar from './components/NavigationBar.jsx';
+import BrowserRouter from 'react-router-dom';
+import App from './containers/App.jsx';
 import * as firebase from 'firebase';
 
   const config = {
@@ -15,6 +15,6 @@ import * as firebase from 'firebase';
   firebase.initializeApp(config);
 
 ReactDOM.render(
-    <NavigationBar />,
-    document.getElementById('navbar')
+    <App/>,
+    document.getElementById('App')
 );
