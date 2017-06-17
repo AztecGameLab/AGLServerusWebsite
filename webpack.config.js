@@ -21,8 +21,8 @@ devtool : "#source-map",
             { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=25000'}
         ]
     },
-     devServer: {
-      historyApiFallback: true
-  },
+    devServer: {
+    historyApiFallback: true
+},
     plugins: [HTMLWebpackPluginConfig]
 }

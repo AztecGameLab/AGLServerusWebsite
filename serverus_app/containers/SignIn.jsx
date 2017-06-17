@@ -15,11 +15,9 @@ export default class SignIn extends React.Component {
     }
     render() {
         return (
-            
-            <Router>
             <div>
             <h1 className = "current-page">Sign In!</h1>
-                 <form >
+                <form >
                     <input className = "input_username" 
                             type = "text" 
                             placeholder = "Username"/>
@@ -35,12 +33,10 @@ export default class SignIn extends React.Component {
                     type = "button" 
                     id = "btn-login" 
                     className="btn btn-primary btn-lg btn-success"> Login </button>
-               
                 </form>
-                 <Link to="/signup">Sign up!</Link>
+                <Link to="/signup">Sign up!</Link>
                 <Route path="/signup" component={SignUp} />
             </div>
-            </Router>
         );
     }
 }

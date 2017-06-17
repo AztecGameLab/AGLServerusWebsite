@@ -30,6 +30,7 @@ const NavigationBar = (props) => {
                 <div className="icon-bar">
                     <Link to="/" className="home-icon"><i className="fa fa-flask"></i></Link>
                     {user}
+                    <Link to="/signup"><i className="fa fa-user-plus"></i></Link>
                     <Link to="/games"><i className="fa fa-gamepad"></i></Link>
                     <Link to="/competitions"><i className="fa fa-trophy"></i></Link>
                     <Link to="/users"><i className="fa fa-users"></i></Link>
@@ -39,6 +40,7 @@ const NavigationBar = (props) => {
                     <div className="current-page">
                         <Route exact path="/" component={Home} />
                         <Route path="/signin" component={SignIn} />
+                        <Route path="/signup" component={SignUp}/>
                         <Route path="/profile" component={Profile} />
                         <Route path="/games" component={Games} />
                         <Route path="/competitions" component={Competitions} />
@@ -51,4 +53,4 @@ const NavigationBar = (props) => {
             );
 };
 
-export default NavigationBar
+export default NavigationBar;
