@@ -20,25 +20,52 @@ body {
 \_| \_/\__,_| \_/ |_|\__, |\__,_|\__|_|\___/|_| |_| \____/ \__,_|_|   
                       __/ |                                           
                      |___/                                            */
+.top-bar {
+    list-style-type: none;
+    background-color: #30343e;
+    margin-left: 240;
+    padding: 0;
+    overflow: hidden;
+    height: 80px;
+}
+
+.top-bar a {
+    text-align: left;
+    padding: 0 50px 0 50px; /*top right bottom left*/
+    transition: all 0.3s ease-out;
+    color: white;
+    font-size: 15px;
+    border-left: 1px solid #252830;
+    box-sizing: border-box;
+    line-height: 30px;
+    text-decoration: none; /* no underline */
+    float: right;
+}
+
 .icon-bar {
     background-color: #30343e;
     height: 100%;
     position: fixed;
-    width: 80px;
+    width: 240px;
     top:0;
     left:0;
-
 }
 
+span {
+    text-align: right;
+    padding-left: 30px;
+}
 .icon-bar a {
     display: block;
-    text-align: center;
-    padding-top: 25px;
-    padding-bottom: 25px;
+    text-align: left;
+    padding: 10px 0 10px 20px; /*top right bottom left*/
     transition: all 0.3s ease-out;
     color: white;
-    font-size: 25px;
+    font-size: 15px;
     border-top: 1px solid #252830;
+    box-sizing: border-box;
+    line-height: 60px;
+    text-decoration: none; /* no underline */
 }
 
 .icon-bar a:hover {
@@ -65,7 +92,7 @@ body {
                                                  |___/      */
 .current-page {
     position:relative;
-    margin-left:80px; 
+    margin-left:240px; 
     padding: 50px;
     color: white;
     width:100%;

@@ -1,6 +1,6 @@
 import React from 'react'
 import style from '../style/style.css'
-import NavigationBar from '../components/NavigationBar.jsx'
+import OuterFrame from '../components/OuterFrame.jsx'
 
 export default class App extends React.Component {
     state = {
@@ -23,7 +23,7 @@ export default class App extends React.Component {
         
         return (
             <div>
-                <NavigationBar loggedIn={loggedIn}
+                <OuterFrame loggedIn={loggedIn}
                     loginAuth={this.loginAuth} />
             </div>
         )
