@@ -4,13 +4,13 @@ const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
     template: 'serverus_app/index.html',
     filename: 'index.html',
     inject: 'body'
-})
+});
 
 module.exports = {
     entry: path.resolve(__dirname, 'serverus_app') + '/index.js',
     output: {
         path: path.resolve(__dirname, 'serverus_app') + '/dist/',
-        filename: 'index_bundle.js',
+        filename: 'index_bundle.js'
 },
 devtool : "#source-map",
     module: {
@@ -25,4 +25,4 @@ devtool : "#source-map",
     historyApiFallback: true
 },
     plugins: [HTMLWebpackPluginConfig]
-}
+};
