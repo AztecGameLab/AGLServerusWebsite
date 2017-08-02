@@ -15,6 +15,11 @@ const SidebarNav = (props) => {
                     style = {sidebarStyle.menuElement}>
                     Games
                 </Link>
+                <Link 
+                    to = "markdown" 
+                    style = {sidebarStyle.menuElement}>
+                    Markdown Editor
+                </Link>
                 
             </div>
         );
