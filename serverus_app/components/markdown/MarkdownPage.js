@@ -1,15 +1,25 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import Markmirror from 'react-markmirror';
 
-const Editor = props => {
-    const onInputChange = event => {
-        props.onChange(event.target.value);
+const Editor = (props) => {
+
+    const handleType = text => {
+        props.onChange(text);
     };
-    return (
-        <form>
-        <textarea rows="15" cols="40" onChange={onInputChange}/>
-        </form>
-    );
+
+    //available themes: https://codemirror.net/demo/theme.html
+    //<textarea rows="15" cols="40" onChange={onInputChange}
+    
+            return (
+            <form>
+            <Markmirror
+                value = {props.value}
+                onChange = {handleType}
+                theme="dracula"/>
+            
+            </form>
+        );
 };
 
 export default class MarkdownPage extends React.Component {
@@ -31,7 +41,7 @@ export default class MarkdownPage extends React.Component {
     render(){
         return (
             <div className="row" >
-                <div className="col-lg-6" style={markdownStyle.md}><Editor  onChange={this.onInputChange}/></div>
+                <div className="col-lg-6" style={markdownStyle.md}><Editor  onChange={this.onInputChange} value = {this.state.value}/></div>
                 <div className="col-lg-6" style={markdownStyle.md}><ReactMarkdown source={this.state.value}/>            
                 </div>
             </div>
