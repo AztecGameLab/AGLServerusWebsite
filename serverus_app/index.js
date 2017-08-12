@@ -5,6 +5,7 @@ import { Router, browserHistory} from 'react-router';
 import routes from './routes';
 import firebase from 'firebase';
 import {StyleRoot} from 'radium';
+import stylesheet from  './styles/styles.css';
 
   const config = {
     apiKey: "AIzaSyD8wj5nBOAHoGGsKqqQo1lmvMRRIcWYaMc",

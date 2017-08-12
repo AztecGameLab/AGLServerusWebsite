@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import Markmirror from 'react-markmirror';
-import Codemirror from 'codemirror';
 import firebase from 'firebase';
 import axios from 'axios';
 import MarkdownCard from './MarkdownCard';
+
 
 const Editor = (props) => {
     const handleType = text => {
@@ -17,7 +17,7 @@ const Editor = (props) => {
     return (
         <form>
             <Markmirror
-                theme="dracula,dark" 
+                theme="dark,material"
                 value={props.value}
                 onChange={handleType}
                 />
@@ -28,10 +28,10 @@ const Editor = (props) => {
 export default class MarkdownPage extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.storage = firebase.storage();
         this.state = {
-            data: [],
+            postData: [],
             value: '# hello',
             title: ''
         };
@@ -43,21 +43,21 @@ export default class MarkdownPage extends React.Component {
 
     componentDidMount() {
         var that = this;
-        this.folderRef = this.storage.ref('markdown/');        
-        this.folderRef.getDownloadURL().then(function (url) {
-            axios.get(url).then(function (response) {
-                var data = [response.data];
-                that.setState({
-                    data: data
+        var postUrlRef = firebase.database().ref('postURL');
+
+        postUrlRef.on('value', function (snapshot) {
+            Object.values(snapshot.val()).map(function (value) {
+                axios.get(value).then(function (response) {
+                    var data = [response.data];
+                    that.setState(prevState => ({
+                        postData: prevState.postData.concat(data)
+                    }));
                 });
             });
-        }).catch(function (error) {
-            console.log(error);
         });
     }
 
     markdownFile(value, idx) {
-        console.log(value);
         return (
             <div key={idx} >
                 <MarkdownCard value = {value}/>
@@ -66,12 +66,8 @@ export default class MarkdownPage extends React.Component {
     }
 
     sendToFB() {
-
+        var that = this;
         var now = new Date().toDateString();
-        var metadata = {
-            contentType: 'application/json'
-        };
-
         var data = {
             title: this.state.title,
             date: now,
@@ -79,8 +75,13 @@ export default class MarkdownPage extends React.Component {
         };
         var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
         this.pathRef = this.storage.ref('markdown/' + data.title + '.json');        
-        this.pathRef.put(file, metadata).then(function (response) {
+        this.pathRef.put(file).then(function() {
             alert('Uploaded File');
+            that.pathRef.getDownloadURL().then(function (url) {
+                firebase.database().ref().child('/postURL').push(url);
+            }).catch(function (error) {
+                console.log(error);
+            });
         });
     }
 
@@ -93,7 +94,7 @@ export default class MarkdownPage extends React.Component {
     render() {
         return (
             <div>
-                {this.state.data.map(this.markdownFile)}
+                {this.state.postData.map(this.markdownFile)}
                 <div className="row col-lg-12">
                     <div className="col-lg-4">
                         <h3 style={markdownStyle.title} >New Game Post</h3>
