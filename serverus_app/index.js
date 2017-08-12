@@ -16,6 +16,8 @@ import {StyleRoot} from 'radium';
   };
 firebase.initializeApp(config);
 
+const storage = firebase.storage();
+
 ReactDOM.render (
     <StyleRoot style = {rootStyle}>
       <Router history = {browserHistory} routes = {routes} />
