@@ -3,7 +3,6 @@
     src: url('./timeburnerbold.ttf');
 }
 
-
 .bgimg {
     /* Background image */
     background-image: url('./forest.jpg');
@@ -23,30 +22,6 @@
     transition-duration: ".5s"
 }
 
-.alert {
-    padding: 20px;
-    background-color: #f44336;
-    color: white;
-    opacity: 1;
-    transition: opacity 0.6s;
-    margin-bottom: 15px;
-}
-
-.closebtn {
-    margin-left: 15px;
-    color: white;
-    font-weight: bold;
-    float: right;
-    font-size: 22px;
-    line-height: 20px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.closebtn:hover {
-    color: black;
-}
-
 /* Position text in the middle */
 .middle {
     position: absolute;
@@ -63,16 +38,6 @@
 p {
     color: lightgreen;
     padding: 10px;
-}
-
-.logo {
-    background: transparent;
-}
-
-/* Style the <hr> element */
-hr {
-    width: 85%;
-    color: white;
 }
 
 .form-group a{
