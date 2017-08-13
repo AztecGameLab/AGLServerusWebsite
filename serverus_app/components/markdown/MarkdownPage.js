@@ -20,7 +20,7 @@ const Editor = (props) => {
                 theme="dark,material"
                 value={props.value}
                 onChange={handleType}
-                />
+            />
         </form>
     );
 };
@@ -30,6 +30,7 @@ export default class MarkdownPage extends React.Component {
         super(props);
 
         this.storage = firebase.storage();
+        this.cardList;
         this.state = {
             postData: [],
             value: '# hello',
@@ -37,8 +38,7 @@ export default class MarkdownPage extends React.Component {
         };
         this.onInputChange = this.onInputChange.bind(this);
         this.sendToFB = this.sendToFB.bind(this);
-        this.markdownFile = this.markdownFile.bind(this);
-
+        this.loadMarkdownPosts = this.loadMarkdownPosts.bind(this);
     }
 
     componentDidMount() {
@@ -46,35 +46,61 @@ export default class MarkdownPage extends React.Component {
         var postUrlRef = firebase.database().ref('postURL');
 
         postUrlRef.on('value', function (snapshot) {
-            Object.values(snapshot.val()).map(function (value) {
+            that.setState({
+                postData: []
+            });
+            Object.keys(snapshot.val()).map(function (key, index) {
+                that.setState(prevState => ({
+                    postData: prevState.postData.concat({
+                        hashKey: key
+                    })
+                }));
+            });
+            Object.values(snapshot.val()).map(function (value, idx) {
                 axios.get(value).then(function (response) {
-                    var data = [response.data];
-                    that.setState(prevState => ({
-                        postData: prevState.postData.concat(data)
-                    }));
+                    var tempState = that.state.postData.slice();
+                    tempState[idx] = {
+                        hashKey: tempState[idx]["hashKey"],
+                        data: response.data
+                    };
+                    that.setState({
+                        postData: tempState
+                    });
                 });
             });
+
         });
     }
 
-    markdownFile(value, idx) {
-        return (
-            <div key={idx} >
-                <MarkdownCard value = {value}/>
-            </div>
-        );
+    /**
+     * Loads an individual blog posts
+     * @param value
+     * @returns {XML}
+     */
+    loadMarkdownPosts(value) {
+        if(value.data) {
+            return (
+                <div className="col-lg-4" key={value.hashKey} >
+                    <MarkdownCard value = {value.data}/>
+                </div>
+            );
+        }
     }
 
+    /**
+     * Send JSON to firebase storage and store url in database
+     */
     sendToFB() {
         var that = this;
-        var now = new Date().toDateString();
+        var now = new Date();
+        now= now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
         var data = {
             title: this.state.title,
             date: now,
             text: this.state.value
         };
         var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
-        this.pathRef = this.storage.ref('markdown/' + data.title + '.json');        
+        this.pathRef = this.storage.ref('markdown/' + data.title + '.json');
         this.pathRef.put(file).then(function() {
             alert('Uploaded File');
             that.pathRef.getDownloadURL().then(function (url) {
@@ -92,11 +118,14 @@ export default class MarkdownPage extends React.Component {
     }
 
     render() {
-        return (
+         return (
             <div>
-                {this.state.postData.map(this.markdownFile)}
+                <h1>Previous Blog Posts</h1>
+                <div className="col-lg-12" style={markdownStyle.slick}>
+                    {this.state.postData.map(this.loadMarkdownPosts)}
+                </div>
                 <div className="row col-lg-12">
-                    <div className="col-lg-4">
+                    <div className="col-lg-3">
                         <h3 style={markdownStyle.title} >New Game Post</h3>
                         <input type="text" placeholder="Enter a title..." onChange={event => this.setState({ title: event.target.value })} />
                     </div>
@@ -118,9 +147,12 @@ var markdownStyle = {
     },
     title: {
         width: '100%',
-        marginTop: '25px'
+        marginTop: '20px'
     },
     md: {
         display: 'inline-block'
+    },
+    slick: {
+        backgroundColor: 'gray'
     }
-}
+};

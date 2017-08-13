@@ -26,7 +26,6 @@
     "react-markmirror": "^0.4.16",
     "react-router": "^2.4.0",
     "react-router-dom": "^4.1.2",
-    "react-slick": "^0.14.11"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
