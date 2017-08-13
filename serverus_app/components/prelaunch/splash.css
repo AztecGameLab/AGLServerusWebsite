@@ -1,0 +1,89 @@
+@font-face {
+    font-family: horizonFont;
+    src: url('./timeburnerbold.ttf');
+}
+
+
+.bgimg {
+    /* Background image */
+    background-image: url('./forest.jpg');
+    /* Full-screen */
+    height: 100vh;
+    /* Center the background image */
+    background-position: center;
+    /* Scale and zoom in the image */
+    background-size: cover;
+    /* Add position: relative to enable absolutely positioned elements inside the image (place text) */
+    position: relative;
+    /* Add a white text color to all elements inside the .bgimg container */
+    color: white;
+    /* Add a font */
+    font-size: 35px;
+    font-family: horizonFont;
+    transition-duration: ".5s"
+}
+
+.alert {
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+    opacity: 1;
+    transition: opacity 0.6s;
+    margin-bottom: 15px;
+}
+
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
+
+/* Position text in the middle */
+.middle {
+    position: absolute;
+    background: black;
+    opacity: .75;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 20px;
+    border-radius: 25px;
+}
+
+p {
+    color: lightgreen;
+    padding: 10px;
+}
+
+.logo {
+    background: transparent;
+}
+
+/* Style the <hr> element */
+hr {
+    width: 85%;
+    color: white;
+}
+
+.form-group a{
+    font-family: horizonFont;
+    font-size: 40px; 
+    margin-right: 50px;  
+    transition-duration: .1s;
+}
+
+.form-group a:hover{
+    border-color: white;
+    border-style: solid;
+    border-width: 3px;
+}

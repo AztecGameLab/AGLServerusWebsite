@@ -24,7 +24,6 @@ export default class SignUpPage extends React.Component {
                 </form>
             </div>
 
-            dlsfjdsfljsdlfjkl
         );
         
     }
