@@ -5,7 +5,9 @@ const MarkdownCard = (props) => {
             <div style={blogCard.root}>
                 <h4 className="card-title">{props.value.title}</h4>
                 Created on {props.value.date}
-                <ReactMarkdown className="card-text" source={props.value.text}/>
+                <div style={blogCard}>
+                    <ReactMarkdown className="card-text" source={props.value.text}/>
+                </div>
                 <button className="btn btn-info">Edit Me</button>
             </div>
         );
@@ -13,6 +15,10 @@ const MarkdownCard = (props) => {
 
 var blogCard= {
     root: {
+        width: '100%',
+        height: '182px',
+        overflowY: 'auto',
+        display: 'block',
         backgroundColor: 'white',
         margin: '15px 0 15px 0',
         padding: '5px 0 15px 15px'

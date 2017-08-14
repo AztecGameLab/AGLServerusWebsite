@@ -30,7 +30,6 @@ export default class MarkdownPage extends React.Component {
         super(props);
 
         this.storage = firebase.storage();
-        this.cardList;
         this.state = {
             postData: [],
             value: '# hello',
@@ -93,7 +92,7 @@ export default class MarkdownPage extends React.Component {
     sendToFB() {
         var that = this;
         var now = new Date();
-        now= now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+        now = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
         var data = {
             title: this.state.title,
             date: now,

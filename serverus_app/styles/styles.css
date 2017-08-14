@@ -43,4 +43,8 @@
     text-decoration: underline !important;
     color: white !important;
   }
-  
+
+  /* Hide full screen */
+.markmirror__button--full {
+  display: none;
+}
