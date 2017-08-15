@@ -6,6 +6,7 @@ import routes from './routes';
 import firebase from 'firebase';
 import CountdownPage from './components/prelaunch/CountdownPage';
 import {StyleRoot} from 'radium';
+import stylesheet from  './styles/styles.css';
 
   const config = {
     apiKey: "AIzaSyD8wj5nBOAHoGGsKqqQo1lmvMRRIcWYaMc",

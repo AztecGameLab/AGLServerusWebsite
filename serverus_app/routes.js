@@ -7,6 +7,7 @@ import GamesPage from './components/games/GamesPage';
 import CompetitionsPage from './components/competitions/CompetitionsPage';
 import UsersPage from './components/users/UsersPage';
 import SignUpPage from './components/signup/SignUpPage';
+import MarkdownPage from './components/markdown/MarkdownPage';
 
 
 export default (
@@ -14,6 +15,7 @@ export default (
         <IndexRoute component = {HomePage} />
         <Route path = "about" component = {AboutPage} />
         <Route path = "games" component = {GamesPage}/>
+        <Route path = "markdown" component = {MarkdownPage}/>
         <Route path = "competitions" component={CompetitionsPage} />
         <Route path = "users" component={UsersPage} />
         <Route path = "signin" component={SignUpPage} />

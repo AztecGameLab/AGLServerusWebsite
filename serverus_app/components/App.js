@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 import Header from './common/Header';
 import SidebarNav from './common/SidebarNav';
 require('../../favicon.ico');
@@ -47,8 +47,3 @@ var AppStyle = {
         transitionTimingFunction: "ease-out" 
     }
 }
-
-App.propTypes = {
-    children: PropTypes.object
-};
-
