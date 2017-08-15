@@ -34,7 +34,7 @@ class CountdownPage extends React.Component {
                     <h1>August 28th, 2017</h1>
                     <p id="demo"></p>
                         <div className="form-group">
-                                <a href = "https://goo.gl/forms/QEilMKW3t5Re2VFY2" className="btn btn-outline-success btn-lrg button hvr-grow" > Notify Me!</a>
+                                <a href = "https://goo.gl/forms/QEilMKW3t5Re2VFY2" className="btn btn-outline-success btn-lrg" > Notify Me!</a>
                         </div>
                         Join Our  <a href="https://www.facebook.com/groups/1924130084493685/" className="fa fa-facebook"></a>acebook Group!
                 </div>

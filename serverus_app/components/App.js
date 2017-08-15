@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import Header from './common/Header';
 import SidebarNav from './common/SidebarNav';
+require('../../favicon.ico');
 
 export default class App extends React.Component{
 
