@@ -79,7 +79,7 @@ export default class MarkdownPage extends React.Component {
     loadMarkdownPosts(value) {
         if(value.data) {
             return (
-                <div className="col-lg-4" key={value.hashKey} >
+                <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4" key={value.hashKey} >
                     <MarkdownCard value = {value.data}/>
                 </div>
             );
@@ -120,8 +120,12 @@ export default class MarkdownPage extends React.Component {
          return (
             <div>
                 <h1>Previous Blog Posts</h1>
-                <div className="col-lg-12" style={markdownStyle.slick}>
-                    {this.state.postData.map(this.loadMarkdownPosts)}
+                <div className="container-fluid">
+                    <div className="row">
+                        <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12" style={markdownStyle.slick}>
+                            {this.state.postData.map(this.loadMarkdownPosts)}
+                        </div>
+                    </div>
                 </div>
                 <div className="row col-lg-12">
                     <div className="col-lg-3">
