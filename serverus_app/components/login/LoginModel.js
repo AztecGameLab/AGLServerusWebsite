@@ -115,6 +115,7 @@ class LoginModel extends Component {
               <label>Password</label>
               <input
                 placeholder='Password:'
+                type='password'
                 onChange={this.handlePasswordInput} />
             </Form.Field>
             </div>
