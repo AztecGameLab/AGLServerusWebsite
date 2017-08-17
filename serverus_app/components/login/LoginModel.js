@@ -84,46 +84,55 @@ class LoginModel extends Component {
   }
   render() {
     return (
-      <div>
-
-        <Modal dimmer={'blurring'} open={this.props.isOpen} onClose={this.props.close} size={'tiny'}>
+        <Modal style={modalStyle.size} dimmer={'blurring'} open={this.props.isOpen} onClose={this.props.close} size={'tiny'}>
           <Form>
+            <div style={modalStyle.spacing}>
             <Form.Field>
               <label>First Name</label>
               <input 
                 placeholder='First Name' 
                 onChange={this.handleFirstNameInput}/>
             </Form.Field>
+            </div>
+            <div style={modalStyle.spacing}>
             <Form.Field>
               <label>Last Name</label>
               <input 
                 placeholder='Last Name'
                 onChange={this.handleLastNameInput} />
             </Form.Field>
+            </div>
+            <div style={modalStyle.spacing}>
             <Form.Field>
               <label>Email</label>
               <input
                 placeholder='Email:'
                 onChange={this.handleEmailInput} />
             </Form.Field>
+            </div>
+            <div style={modalStyle.spacing}>
             <Form.Field>
               <label>Password</label>
               <input
                 placeholder='Password:'
                 onChange={this.handlePasswordInput} />
             </Form.Field>
+            </div>
+            <div style={modalStyle.spacing}>
             <Form.Field>
               <Checkbox label='I agree to the Terms and Conditions' />
             </Form.Field>
+            </div>
+            <div style={modalStyle.spacing}>
             <Button
               type='submit'
               onClick={this.onSubmission}>Create Account!</Button>
+              </div>
           </Form>
-          <Stepper steps={[{ title: 'Step One' }, { title: 'Step Two' }, { title: 'Step Three' }, { title: 'Step Four' }]} activeStep={1} />
-          <hr/>
-          {this.props.users.map(this.exampleTestUser)}
+          <Stepper steps={[{ title: 'Step One' }, { title: 'Step Two' }, { title: 'Step Three' }, { title: 'Step Four' }]} activeStep={0} />
+          {/* <hr/>
+          {this.props.users.map(this.exampleTestUser)} */}
         </Modal>
-      </div>
     )
   }
 }
@@ -144,3 +153,13 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginModel);
+
+var modalStyle = {
+  size: {
+    height: '75%',
+    overflow: 'auto'
+  },
+  spacing: {
+    margin: '15px'
+  }
+}
