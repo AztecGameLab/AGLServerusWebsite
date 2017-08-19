@@ -1,32 +1,38 @@
 import React, {PropTypes} from 'react';
-import Header from './common/Header';
 import SidebarNav from './common/SidebarNav';
+import HeaderMenu from './common/HeaderMenu';
+import LoginModel from './login/LoginModel';
 require('../../favicon.ico');
 
 export default class App extends React.Component{
 
-    state = {
-        navBarIsOn: false
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            modelIsOpen: false
+        };
+    this.openLogin = this.openLogin.bind(this);
+    this.closeLogin = this.closeLogin.bind(this);
+    }
 
-    openNav = () => {
-        this.setState(prevState => ({
-            navBarIsOn: !prevState.navBarIsOn
-        }));
-    };
+    openLogin() {
+        this.setState({
+            modelIsOpen: true
+        });
+    }
+    closeLogin() {
+        this.setState({
+            modelIsOpen: false
+        });
+    }
 
     render() {
-        const {
-            navBarIsOn
-        } = this.state;
-    
-        var currentStyle = navBarIsOn == true ? AppStyle.rootPushed : AppStyle.root;
         return (
             <div>
-            <SidebarNav navBarIsOn = {this.state.navBarIsOn}/>
-                <div style = {currentStyle}>
-                    <Header openNav = {this.openNav}/>
-                    {this.props.children}
+            <LoginModel isOpen = {this.state.modelIsOpen} close = {this.closeLogin}/>
+            <HeaderMenu showModel = {this.openLogin}/>
+                <div style = {AppStyle.root}>
+                    <SidebarNav navBarIsOn = {this.state.navBarIsOn} content ={this.props.children}/>
                 </div>
             </div>
         );
@@ -35,18 +41,12 @@ export default class App extends React.Component{
 
 var AppStyle = {
     root: {
-        padding: "16px",
         marginLeft: 0,
         transitionDuration:  ".2s", 
-        transitionTimingFunction: "ease-out" 
-    },
-    rootPushed: {
-        padding: "16px",
-        marginLeft: 250,
-        transitionDuration:  ".2s", 
-        transitionTimingFunction: "ease-out" 
+        transitionTimingFunction: "ease-out", 
+        height: "100vh"
     }
-}
+};
 
 App.propTypes = {
     children: PropTypes.object

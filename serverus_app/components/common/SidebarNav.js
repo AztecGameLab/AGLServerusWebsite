@@ -1,66 +1,41 @@
-import React from 'react';
-import {Link} from 'react-router';
+import React, { Component } from 'react';
+import { Sidebar, Segment, Button, Menu, Image, Icon, Header } from 'semantic-ui-react';
 
-const SidebarNav = (props) => {
-        var styleTogg = props.navBarIsOn == true ? sidebarStyle.rootOn : sidebarStyle.rootOff;
-        return (
-            <div style = {styleTogg}>
-                <Link 
-                    to = "about" 
-                    style = {sidebarStyle.menuElement}>
-                    About
-                </Link>
-                <Link 
-                    to = "games" 
-                    style = {sidebarStyle.menuElement}>
-                    Games
-                </Link>
-                
+class SidebarNav extends Component {
+
+  render() {
+    return (
+      <div>
+        <Sidebar.Pushable as={Segment}>
+          <Sidebar as={Menu} animation='push' width='thin' visible={true} icon='labeled' vertical inverted>
+            <Menu.Item name='home'>
+              <Icon name='home' />
+              Home
+            </Menu.Item>
+            <Menu.Item name='gamepad'>
+              <Icon name='gamepad' />
+              Games
+            </Menu.Item>
+            <Menu.Item name='camera'>
+              <Icon name='camera' />
+              Channels
+            </Menu.Item>
+          </Sidebar>
+          <Sidebar.Pusher>
+            <div style = {mainContent}>
+              <Segment raised inverted padded size={'massive'}>
+                {this.props.content}
+              </Segment>
             </div>
-        );
+          </Sidebar.Pusher>
+        </Sidebar.Pushable>
+      </div>
+    )
+  }
 }
 
-var sidebarStyle = {
-    rootOff: {
-        height: "100%",
-        width: 0,
-        position: "fixed",
-        zIndex: 1,
-        top: 0,
-        left: 0,
-        backgroundColor: "#111",
-        overflowX: "hidden",
-        transition: "0.5s",
-        paddingTop: "60px",
-        transitionDuration:  ".2s", 
-        transitionTimingFunction: "ease-out" 
-    },
-    rootOn: {
-        height: "100%",
-        width: 250,
-        position: "fixed",
-        zIndex: 1,
-        top: 0,
-        left: 0,
-        backgroundColor: "#111",
-        overflowX: "hidden",
-        transition: "0.5s",
-        paddingTop: "60px",
-        transitionDuration:  ".2s", 
-        transitionTimingFunction: "ease-out" 
-    },
-    menuElement: {
-        padding: "8px 8px 8px 32px",
-        textDecoration: "none",
-        fontDize: "25px",
-        color: "#818181",
-        display: "block",
-        transition: "0.3s",
+var mainContent = {
+  height: "100vh"
+};
 
-        ':hover': {
-            color: "#f1f1f1"
-        }
-    }
-
-}
 export default SidebarNav;
