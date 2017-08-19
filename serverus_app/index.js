@@ -7,6 +7,7 @@ import firebase from 'firebase';
 import { StyleRoot } from 'radium';
 import configureStore from './components/store/configureStore';
 import {Provider} from 'react-redux';
+import CountdownPage from './components/prelaunch/CountdownPage';
 
 const config = {
   apiKey: "AIzaSyD8wj5nBOAHoGGsKqqQo1lmvMRRIcWYaMc",
@@ -18,12 +19,26 @@ const config = {
 };
 firebase.initializeApp(config);
 
+//UNTIL AUGUST 28
+let mode = 'dev';
+
 const store = configureStore(); //can pass initial state (overrides default params in reducer)
 
 ReactDOM.render(
   <Provider store = {store}>
     <StyleRoot style={rootStyle}>
-      <Router history={browserHistory} routes={routes} />
+      {
+        function prelaunch(){
+          if(new Date().getMonth() + 1 >= 8 && new Date().getDate() >= 28 && new Date().getFullYear >= 2017){
+            mode = "Ayy lmao";
+          }
+          if(mode == 'dev'){
+            return <CountdownPage/>;
+          }else{
+            return <Router history={browserHistory} routes={routes} />;
+          }
+        }()
+      }
     </StyleRoot>
   </Provider>,
   document.getElementById('app')
@@ -31,6 +46,7 @@ ReactDOM.render(
 
 let rootStyle = {
   background: "#f7f7f7",
+  height: '100%',
   color: "#424242",
   padding: 0,
   margin: 0,
