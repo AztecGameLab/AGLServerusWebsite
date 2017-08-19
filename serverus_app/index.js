@@ -20,7 +20,7 @@ const config = {
 firebase.initializeApp(config);
 
 //UNTIL AUGUST 28
-let mode = 'dev';
+let mode = 'lol';
 
 const store = configureStore(); //can pass initial state (overrides default params in reducer)
 
