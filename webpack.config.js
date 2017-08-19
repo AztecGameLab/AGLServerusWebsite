@@ -18,19 +18,12 @@ devtool : "#source-map",
             { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
             { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ },
             { test: /\.css$/, loader: 'style-loader!css-loader'},
-            { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=25000'},
-            { test: /\.(woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' },
-            {
-          test: /\.(ico$|\.wav$|\.mp3)$/,
-          loader: 'file-loader?name=[name].[ext]'  // <-- retain original file name
-      }
+            { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=25000'}, 
+            { test: /\.(woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' } 
         ]
     },
     devServer: {
-    historyApiFallback: true,
-    compress: true,
-    disableHostCheck: true,
-    public: 'azgl-kdo.pagekite.me'
+    historyApiFallback: true
 },
     plugins: [HTMLWebpackPluginConfig]
 };
