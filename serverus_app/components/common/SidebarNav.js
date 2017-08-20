@@ -2,12 +2,27 @@ import React, { Component } from 'react';
 import { Sidebar, Segment, Button, Menu, Image, Icon, Header } from 'semantic-ui-react';
 
 class SidebarNav extends Component {
+  // state = { visible: false }
+
+  // toggleVisibility = () => {
+  //   this.setState(prevState =>({ visible: !prevState.visible }))
+  // };
+
+  // checkSidebarState = () => {
+  //   if (this.state.visible) {
+  //     this.setState({
+  //       visible: false
+  //     })
+  //   }
+  // };
 
   render() {
+    // const { visible } = this.state;
     return (
       <div>
+        {/* <Icon name="bars" onClick={this.toggleVisibility}></Icon> */}
         <Sidebar.Pushable as={Segment}>
-          <Sidebar as={Menu} animation='push' width='thin' visible={true} icon='labeled' vertical inverted>
+          <Sidebar as={Menu} animation='overlay' width='thin' visible={true} icon='labeled' vertical inverted>
             <Menu.Item name='home'>
               <Icon name='home' />
               Home
@@ -22,11 +37,7 @@ class SidebarNav extends Component {
             </Menu.Item>
           </Sidebar>
           <Sidebar.Pusher>
-            <div style = {mainContent}>
-              <Segment raised inverted padded size={'massive'}>
-                {this.props.content}
-              </Segment>
-            </div>
+            <div style = {mainContent}>{this.props.content}</div>
           </Sidebar.Pusher>
         </Sidebar.Pushable>
       </div>
@@ -35,7 +46,11 @@ class SidebarNav extends Component {
 }
 
 var mainContent = {
-  height: "100vh"
+  height: "100vh",
+  marginLeft: '150px',
+  backgroundColor: 'black',
+  color: 'white',
+  fontSize: '1.5em'
 };
 
 export default SidebarNav;

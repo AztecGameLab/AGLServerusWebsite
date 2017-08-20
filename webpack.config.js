@@ -29,8 +29,7 @@ devtool : "#source-map",
     devServer: {
     historyApiFallback: true,
     compress: true,
-    disableHostCheck: true,
-    public: 'azgl-kdo.pagekite.me'
+    disableHostCheck: true
 },
     plugins: [HTMLWebpackPluginConfig]
 };

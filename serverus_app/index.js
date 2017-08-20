@@ -8,6 +8,8 @@ import { StyleRoot } from 'radium';
 import configureStore from './components/store/configureStore';
 import {Provider} from 'react-redux';
 import CountdownPage from './components/prelaunch/CountdownPage';
+import stylesheet from  './styles/styles.css'; 
+
 
 const config = {
   apiKey: "AIzaSyD8wj5nBOAHoGGsKqqQo1lmvMRRIcWYaMc",

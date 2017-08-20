@@ -15,6 +15,7 @@ const MarkdownCard = (props) => {
 
 var blogCard= {
     root: {
+        color: 'black',
         width: '100%',
         height: '182px',
         overflowY: 'auto',

@@ -10,7 +10,7 @@ import {
 
 const HeaderMenu = (props) => {
     return (
-        <Segment inverted style = {{margin: 0}}>
+        <Segment inverted padded style = {{margin: 0}}>
             <Menu inverted pointing secondary>
                 <Container>
                     <Menu.Item as='a' active>Aztec Game Lab</Menu.Item>

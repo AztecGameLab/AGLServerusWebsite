@@ -22,7 +22,7 @@ export default HomePage;
 let homeStyle = {
     sideContainer: {
         display: 'flex',
-        'flex-direction': 'row',
+        'flexDirection': 'row',
         width: '100%'
     },
 
