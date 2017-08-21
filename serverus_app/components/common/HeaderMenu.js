@@ -14,6 +14,7 @@ const HeaderMenu = (props) => {
             <Menu inverted pointing secondary>
                 <Container>
                     <Menu.Item as='a' active>Aztec Game Lab</Menu.Item>
+                </Container>
                     <Menu.Menu position='right'>
                         <Menu.Item className='item'>
                             <Button inverted color='green'
@@ -24,7 +25,6 @@ const HeaderMenu = (props) => {
                                     onClick={props.showModel}>Sign Up</Button>
                         </Menu.Item>
                     </Menu.Menu>
-                </Container>
             </Menu>
         </Segment>
     );
