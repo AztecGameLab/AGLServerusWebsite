@@ -128,16 +128,19 @@ export default class MarkdownPage extends React.Component {
                     </div>
                 </div>
                 <div className="row col-lg-12">
-                    <div className="col-lg-3">
+                    <div className="col-lg-6">
                         <h3 style={markdownStyle.title} >New Game Post</h3>
                         <input type="text" placeholder="Enter a title..." onChange={event => this.setState({ title: event.target.value })} />
                     </div>
+                    <div className="col-lg-6"><h3 style={markdownStyle.title}>Actual Text Results</h3></div>
                 </div>
                 <div className="row col-lg-12">
-                    <div className="col-lg-6" style={markdownStyle.md}><Editor onChange={this.onInputChange} value={this.state.value} /></div>
-                    <div className="col-lg-6" style={markdownStyle.md}><ReactMarkdown source={this.state.value} />
-                        <button onClick={this.sendToFB}>Send</button>
+                    <div className="col-lg-6 col-sm-6" style={markdownStyle.md}><Editor onChange={this.onInputChange} value={this.state.value} /></div>
+                    <div className="col-lg-6 col-sm-6" style={markdownStyle.post} ><ReactMarkdown source={this.state.value} />
                     </div>
+                </div>
+                <div className="row col-lg-12 col-lg-offset-0">
+                    <button className="btn btn-success" onClick={this.sendToFB}>Submit</button>
                 </div>
             </div>
 
@@ -157,5 +160,10 @@ var markdownStyle = {
     },
     slick: {
         backgroundColor: 'gray'
+    },
+    post: {
+        backgroundColor: 'white',
+        color: 'black',
+        height: '122px',
     }
 };
