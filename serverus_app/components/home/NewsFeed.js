@@ -9,7 +9,9 @@ export default class NewsFeed extends React.Component{
         return(
             <div>
                 <h1>News Feed </h1>
-                <p>TODO Implement News feed widget.</p>
+                <div>
+                    <p>News Feed will be displayed here.</p>
+                </div>
             </div>
         );
     }
