@@ -37,9 +37,9 @@ export default class App extends React.Component{
     var modal;
         return (
             <div>
-            <LoginModel activeIndex = {this.state.activeIndex} isOpen = {this.state.modelIsOpen} close = {this.closeLogin} changeTab = {this.changeTabIndex}/>
                 <HeaderMenu showModel = {this.openLogin}></HeaderMenu>
                 <div style={AppStyle.mainContent}>{this.props.children}</div>
+                <LoginModel activeIndex = {this.state.activeIndex} isOpen = {this.state.modelIsOpen} close = {this.closeLogin} changeTab = {this.changeTabIndex}/>
             </div>
         );
     }
