@@ -37,22 +37,21 @@ export default class App extends React.Component{
     var modal;
         return (
             <div>
-            <HeaderMenu showModel = {this.openLogin}/>
-                <div style = {AppStyle.root}>
-                    <SidebarNav navBarIsOn = {this.state.navBarIsOn} content ={this.props.children}/>
-                </div>
             <LoginModel activeIndex = {this.state.activeIndex} isOpen = {this.state.modelIsOpen} close = {this.closeLogin} changeTab = {this.changeTabIndex}/>
+                <HeaderMenu showModel = {this.openLogin}></HeaderMenu>
+                <div style={AppStyle.mainContent}>{this.props.children}</div>
             </div>
         );
     }
 }
 
 var AppStyle = {
-    root: {
+
+    mainContent: {
+        color: 'white',
         marginLeft: 0,
-        transitionDuration:  ".2s", 
-        transitionTimingFunction: "ease-out", 
-        height: "100vh"
+        fontSize: '1.5em',
+        zIndex: 1
     }
 };
 
