@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import accounts from './createAccountReducer';
+import accounts from './loadAccountReducer';
 
 const rootReducer = combineReducers({
     accounts:accounts //now we can refer to this as state.accounts
