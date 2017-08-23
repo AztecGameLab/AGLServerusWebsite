@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import {Dropdown} from 'semantic-ui-react';
 import Markmirror from 'react-markmirror';
 import firebase from 'firebase';
 import stylesheet from  './markdown.css';
@@ -32,11 +33,17 @@ export default class MarkdownCreate extends React.Component {
 
         this.state = {
             value: '# hello\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n',
-            title: ''
+            title: '',
+            author: '',
+            category: '',
+            tags: []
         };
         this.storage = firebase.storage();
         this.onInputChange = this.onInputChange.bind(this);
         this.sendToFB = this.sendToFB.bind(this);
+
+        this.categoryOptions = [{key: 'News', value: 'News', text: 'News'},
+                                {key: 'Guide', value: 'Guide', text: 'Guide'}];
     }
 
     /**
@@ -85,6 +92,12 @@ export default class MarkdownCreate extends React.Component {
                     <div className="col-lg-6 col-sm-6" style={markdownStyle.post}>
                         <ReactMarkdown source={this.state.value}/>
                     </div>
+                </div>
+                <div>
+                    Category:
+                    <Dropdown placeholder="Category.." search selection options={this.categoryOptions} onChange={event => this.setState({category: event.target.category})}/>
+                    Tags:
+                    <input className="form-control" type="text" placeholder="Tags Here..."/>
                 </div>
                 <div className="row col-lg-12 col-lg-offset-0">
                     <button className="btn btn-success" onClick={this.sendToFB}>Submit</button>
