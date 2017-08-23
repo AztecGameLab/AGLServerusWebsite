@@ -10,7 +10,7 @@ export default class GamesFeed extends React.Component{
         return(
             <div>
                 <h1>Games Feed</h1>
-                <p>Games Feed will be displayed here.</p>
+                <p style={{color: 'lightgreen', padding: 10}}>Games Feed will be displayed here.</p>
             </div>
         );
     }

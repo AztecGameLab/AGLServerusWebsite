@@ -2,12 +2,14 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 const MarkdownCard = (props) => {
         return (
+            <div>
             <div style={blogCard.root}>
                 <h4 className="card-title">{props.value.title}</h4>
                 Created on {props.value.date}
                 <div style={blogCard}>
                     <ReactMarkdown className="card-text" source={props.value.text}/>
                 </div>
+            </div>
                 <button className="btn btn-info">Edit Me</button>
             </div>
         );
@@ -15,9 +17,10 @@ const MarkdownCard = (props) => {
 
 var blogCard= {
     root: {
+        textAlign: 'left',
         color: 'black',
         width: '100%',
-        height: '182px',
+        height: '500px',
         overflowY: 'auto',
         display: 'block',
         backgroundColor: 'white',

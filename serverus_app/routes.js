@@ -6,7 +6,8 @@ import AboutPage from './components/about/AboutPage';
 import GamesPage from './components/games/GamesPage';
 import CompetitionsPage from './components/competitions/CompetitionsPage';
 import UsersPage from './components/users/UsersPage';
-import MarkdownPage from './components/markdown/MarkdownPage';
+import MarkdownCreate from './components/markdown/MarkdownCreate';
+import MarkdownPage from './components/markdown/BlogPost';
 
 export default (
     <Route path = "/" component = {App}>
@@ -15,6 +16,7 @@ export default (
         <Route path = "games" component = {GamesPage}/>
         <Route path = "competitions" component={CompetitionsPage} />
         <Route path = "users" component={UsersPage} />
+        <Route path = "createpost" component = {MarkdownCreate}/>
         <Route path = "markdown" component = {MarkdownPage}/>
     </Route>
 );

@@ -1,0 +1,9 @@
+img.logo {
+    display: block;
+    margin: auto;
+    max-height: 100%;
+    max-width: 35%;
+}
+div.logo {
+    background-color: #991E20;
+}
