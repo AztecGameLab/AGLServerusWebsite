@@ -16,12 +16,13 @@ const HeaderMenu = (props) => {
                     <Menu.Item as='a' active>Aztec Game Lab</Menu.Item>
                     <Menu.Menu position='right'>
                         <Menu.Item className='item'>
-                            <Button inverted color='green'
-                                    onClick={props.showModel}>Login</Button>
-                        </Menu.Item>
-                        <Menu.Item>
-                            <Button inverted color='blue'
-                                    onClick={props.showModel}>Sign Up</Button>
+                            <Button.Group>
+                                <Button inverted color ='green'
+                                        onClick={()=>props.showModel(0)}>Login</Button>
+                                <Button.Or />
+                                <Button inverted color='blue'
+                                        onClick={() => props.showModel(1)}>Sign Up</Button>
+                            </Button.Group>
                         </Menu.Item>
                     </Menu.Menu>
                 </Container>
