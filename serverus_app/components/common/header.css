@@ -1,0 +1,113 @@
+body {
+    background-color: black;
+}
+/*############# Navigation Bar ################*/
+.navContainer {
+    font-family: Helvetica;
+    padding: 0;
+    overflow: hidden;
+    background-color: #212121;
+}
+.sticker > div {
+    z-index: 1000;
+}
+
+.navlink {
+    float: left;
+    overflow: hidden;
+    background-color: #212121;
+    text-align: center;
+}
+.navlink .ps-btn{
+    cursor: pointer;
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    background-color: inherit;
+    color: white;
+    padding: 14px 16px;
+}
+/*############# Navigation Bar ################*/
+
+/*############# Login/Signup Bar ################*/
+.navlink.user {
+    float: right;
+    overflow: hidden;
+    background-color: #212121;
+    text-align: center;
+}
+.navlink.user .ps-btn{
+    cursor: pointer;
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    background-color: inherit;
+    color: white;
+    padding: 14px 16px;
+}
+/*############# Login/Signup Bar ################*/
+
+/*############# Dropdown bar ################*/
+.ps-dropdown {
+    float: left;
+    overflow: hidden;
+    background-color: #212121;
+    text-align: center;
+}
+.ps-dropdown .ps-btn{
+    cursor: pointer;
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    background-color: inherit;
+    color: white;
+    padding: 14px 16px;
+}
+
+.dropdown-content {
+    display: none;
+    position: fixed;
+    margin-left: -15px;
+    background-color: #212121;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+.dropdown-content a {
+    color: white;
+    padding: 14px 16px;
+    text-decoration: none;
+    display: block;
+    margin-left: -15px;
+    margin-right: -15px;
+
+}
+/*############# Dropdown bar ################*/
+
+/*############# Hover Active elements ################*/
+
+.navlink:hover, .ps-dropdown:hover {background-color:#DF0000;}
+.dropdown-content a:hover {background-color: #DF0000;}
+.ps-dropdown:hover .dropdown-content {display: block;}
+.ps-dropdown:hover .ps-btn:active {background-color: black}
+.navlink:active {background-color: black}
+.dropdown-content a:active {background-color: black;}
+/*############# Hover Active elements ################*/
+
+/* Mobile adjustments*/
+@media screen and (max-width: 800px){
+    .navlink {float: none; text-align: center;}
+    .navlink.user {float: none; text-align: center;}
+    .ps-dropdown {float: none}
+    .col-xs-6.col-sm-6.col-md-7 .lot-percent {font-size: 32px; padding-bottom: 0px}
+    .logos {max-height: 32px; max-width: 32px}
+    .directionlink{display: inline-block}
+}

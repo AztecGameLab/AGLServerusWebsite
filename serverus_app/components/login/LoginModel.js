@@ -1,166 +1,43 @@
 import React, { Component } from 'react';
-import { Popup, Button, Header, Modal, Form, Checkbox } from 'semantic-ui-react';
-import Stepper from 'react-stepper-horizontal';
-import { connect } from 'react-redux';
-import * as accountActions from '../actions/accountActions';
-import { bindActionCreators } from 'redux';
-import firebase from 'firebase';
-
+import { Popup, Header, Modal, Tab} from 'semantic-ui-react';
+import SignUpForm from './SignUpForm';
+import LoginForm from './LoginForm';
 class LoginModel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newAccount: {
-        firstName: '',
-        lastName: '',
-        email: '',
-        password:''
-      }
+      activeIndex: 0
     };
-    this.handleFirstNameInput = this.handleFirstNameInput.bind(this);
-    this.handleLastNameInput = this.handleLastNameInput.bind(this);
-    this.handleEmailInput = this.handleEmailInput.bind(this);
-    this.handlePasswordInput = this.handlePasswordInput.bind(this);
-    this.onSubmission = this.onSubmission.bind(this);
-    this.exampleTestUser = this.exampleTestUser.bind(this);
+    this.handleTabChange = this.handleTabChange.bind(this);
+  }
 
+  handleTabChange(event, data){
+    this.props.changeTab(data.activeIndex);
   }
-  handleFirstNameInput(e) {
-    const newAccount = this.state.newAccount;
-    newAccount.firstName = e.target.value;
-    this.setState({
-      newAccount: newAccount
-    });
-  }
-  handleLastNameInput(e) {
-    const newAccount = this.state.newAccount;
-    newAccount.lastName = e.target.value;
-    this.setState({
-      newAccount: newAccount
-    });
-  }
-  handleEmailInput(e) {
-    const newAccount = this.state.newAccount;
-    newAccount.email = e.target.value;
-    this.setState({
-      newAccount: newAccount
-    });
-  }
-  handlePasswordInput(e) {
-    const newAccount = this.state.newAccount;
-    newAccount.password = e.target.value;
-    this.setState({
-      newAccount: newAccount
-    });
-  }
-  onSubmission() {
-    debugger;
-    var that = this;
-    this.props.actions.createAccount(this.state.newAccount);
-    const newUserData = this.state.newAccount;
-    debugger;
-    firebase.auth().createUserWithEmailAndPassword(newUserData.email, newUserData.password).catch(function(error) {
-      debugger;
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      alert(errorMessage);
-      // ...
-    });
-    //TODO: TURN new user's info (this.state.newAccount) into new userdata.txt containing user's info 
-    // Package the User UID from account creation as key and pair with download url for the userdata.txt
-  }
-  exampleTestUser(user, index) {
-    debugger;
-    return (
-      <div key = {index}> 
-        {user.firstName}
-        <hr/>
-        {user.lastName}
-        <hr/>
-        {user.email}
-      </div>
-    );
-  }
+  
   render() {
+  const panes = [
+    { menuItem: 'Login', render: () => <Tab.Pane attached={false} value = {0}>
+      <LoginForm/>
+    </Tab.Pane> },
+    { menuItem: 'Sign Up', render: () => <Tab.Pane attached={false} value = {1}>
+      <SignUpForm/>
+    </Tab.Pane> }
+  ];
+  console.log("active index change:" + this.props.activeIndex)
     return (
         <Modal style={modalStyle.size} dimmer={'blurring'} open={this.props.isOpen} onClose={this.props.close} size={'tiny'}>
-          <Form>
-            <div style={modalStyle.spacing}>
-            <Form.Field>
-              <label>First Name</label>
-              <input 
-                placeholder='First Name' 
-                onChange={this.handleFirstNameInput}/>
-            </Form.Field>
-            </div>
-            <div style={modalStyle.spacing}>
-            <Form.Field>
-              <label>Last Name</label>
-              <input 
-                placeholder='Last Name'
-                onChange={this.handleLastNameInput} />
-            </Form.Field>
-            </div>
-            <div style={modalStyle.spacing}>
-            <Form.Field>
-              <label>Email</label>
-              <input
-                placeholder='Email:'
-                onChange={this.handleEmailInput} />
-            </Form.Field>
-            </div>
-            <div style={modalStyle.spacing}>
-            <Form.Field>
-              <label>Password</label>
-              <input
-                placeholder='Password:'
-                type='password'
-                onChange={this.handlePasswordInput} />
-            </Form.Field>
-            </div>
-            <div style={modalStyle.spacing}>
-            <Form.Field>
-              <Checkbox label='I agree to the Terms and Conditions' />
-            </Form.Field>
-            </div>
-            <div style={modalStyle.spacing}>
-            <Button
-              type='submit'
-              onClick={this.onSubmission}>Create Account!</Button>
-              </div>
-          </Form>
-          <Stepper steps={[{ title: 'Step One' }, { title: 'Step Two' }, { title: 'Step Three' }, { title: 'Step Four' }]} activeStep={0} />
-          {/* <hr/>
-          {this.props.users.map(this.exampleTestUser)} */}
+           <Tab activeIndex = {this.props.activeIndex} menu={{ secondary: true, pointing: true }} panes={panes} onTabChange={(event,data)=>this.handleTabChange(event,data)}/>
         </Modal>
     )
   }
 }
 
-function mapStateToProps(state, ownProps) {
-    return {
-        users: state.accounts//this means i would like to access by this.props.users
-        // the data within the state of our store named by root reducer
-        // ownProps are the props of our component LoginModel
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        actions: bindActionCreators(accountActions,dispatch)
-        //this will go through the courseActions file and wrap with dispatch
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginModel);
+export default LoginModel;
 
 var modalStyle = {
   size: {
     height: '75%',
     overflow: 'auto'
-  },
-  spacing: {
-    margin: '15px'
   }
-}
+};

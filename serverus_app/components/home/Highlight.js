@@ -5,7 +5,7 @@ export default class Highlight extends React.Component{
         return(
             <div>
                 <h1>Highlight Reel</h1>
-                <p>Highlight reel goes here.</p>
+                <p style={{color: 'lightgreen', padding: 10}}>Highlight reel goes here.</p>
             </div>
         );
     }

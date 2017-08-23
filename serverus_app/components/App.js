@@ -9,15 +9,22 @@ export default class App extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            modelIsOpen: false
+            modelIsOpen: false,
+            activeIndex: 0
         };
     this.openLogin = this.openLogin.bind(this);
     this.closeLogin = this.closeLogin.bind(this);
+    this.changeTabIndex = this.changeTabIndex.bind(this);
     }
-
-    openLogin() {
+    openLogin(activeIndex) {
+        this.changeTabIndex(activeIndex);
         this.setState({
             modelIsOpen: true
+        });
+    }
+    changeTabIndex(activeIndex){
+        this.setState({
+            activeIndex:activeIndex
         });
     }
     closeLogin() {
@@ -27,24 +34,24 @@ export default class App extends React.Component{
     }
 
     render() {
+    var modal;
         return (
             <div>
-            <LoginModel isOpen = {this.state.modelIsOpen} close = {this.closeLogin}/>
-            <HeaderMenu showModel = {this.openLogin}/>
-                <div style = {AppStyle.root}>
-                    <SidebarNav navBarIsOn = {this.state.navBarIsOn} content ={this.props.children}/>
-                </div>
+                <HeaderMenu showModel = {this.openLogin}></HeaderMenu>
+                <div style={AppStyle.mainContent}>{this.props.children}</div>
+                <LoginModel activeIndex = {this.state.activeIndex} isOpen = {this.state.modelIsOpen} close = {this.closeLogin} changeTab = {this.changeTabIndex}/>
             </div>
         );
     }
 }
 
 var AppStyle = {
-    root: {
+
+    mainContent: {
+        color: 'white',
         marginLeft: 0,
-        transitionDuration:  ".2s", 
-        transitionTimingFunction: "ease-out", 
-        height: "100vh"
+        fontSize: '1.5em',
+        zIndex: 1
     }
 };
 
