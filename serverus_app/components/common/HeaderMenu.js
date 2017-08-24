@@ -20,8 +20,7 @@ const HeaderMenu = (props) => {
                         <Link to="/markdown">View My Blog Posts</Link>
                     </div>
                 </div>
-                {/* <div className="navlink user col-lg-1" ><Link to="/login"><button id="log-btn" type="button" className="ps-btn">Sign in</button></Link></div>
-                <div className="navlink user col-lg-1" ><Link to="/signup"><button className="ps-btn">Sign Up</button></Link></div> */}
+                <div style={{float: 'right', marginRight: 25}}>
                             <Button.Group>
                                 <Button inverted color ='green'
                                         onClick={()=>props.showModel(0)}>Login</Button>
@@ -29,9 +28,9 @@ const HeaderMenu = (props) => {
                                 <Button inverted color='blue'
                                         onClick={() => props.showModel(1)}>Sign Up</Button>
                             </Button.Group>
+                </div>
             </div>
             </Sticky>
         </div>);
-
 };
 export default HeaderMenu;

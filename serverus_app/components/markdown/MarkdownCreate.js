@@ -2,8 +2,10 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import Markmirror from 'react-markmirror';
 import firebase from 'firebase';
+import {connect} from 'react-redux';
+import * as accountActions from '../actions/accountActions';
+import {bindActionCreators} from 'redux';
 import stylesheet from  './markdown.css';
-
 
 const Editor = (props) => {
     const handleType = text => {
@@ -24,9 +26,7 @@ const Editor = (props) => {
     );
 };
 
-
-
-export default class MarkdownCreate extends React.Component {
+class MarkdownCreate extends React.Component {
     constructor(props) {
         super(props);
 
@@ -43,20 +43,24 @@ export default class MarkdownCreate extends React.Component {
      * Send JSON to firebase storage and store url in database
      */
     sendToFB() {
+        debugger;
         var that = this;
         var now = new Date();
         now = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
         var data = {
             title: this.state.title,
+            author: this.props.accounts[0].info.forumHandle,
             date: now,
             text: this.state.value
         };
         var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
-        this.pathRef = this.storage.ref('markdown/' + data.title + '.json');
+        this.pathRef = this.storage.ref('userData/' + this.props.accounts[0].uid + '/markdown/' + data.title + '.json');
         this.pathRef.put(file).then(function() {
             alert('Uploaded File');
+            var that2 = that;
             that.pathRef.getDownloadURL().then(function (url) {
-                firebase.database().ref().child('/postURL').push(url);
+                firebase.database().ref('/allMarkdown').push(url);
+                firebase.database().ref('/markdown/' + that2.props.accounts[0].uid).push(url);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -91,9 +95,19 @@ export default class MarkdownCreate extends React.Component {
                 </div>
             </div>
         );
-    }
+    }  
 }
 
+function mapStateToProps(state, ownProps) {
+    return {
+        accounts: state.accounts
+        //this means i would like to access by this.props.accounts
+        // the data within the state of our store named by root reducer
+        // ownProps are the props of our component CoursesPage
+    };
+}
+
+export default connect(mapStateToProps, null)(MarkdownCreate)
 
 var markdownStyle = {
     title: {

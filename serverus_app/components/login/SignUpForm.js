@@ -176,14 +176,14 @@ class SignUpForm extends Component {
       info: this.state.newAccount
     };
     var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
-    this.pathRef = firebase.storage().ref('newTestUsers/' + newUid + '.json');
+    this.pathRef = firebase.storage().ref('accountData/' + newUid + '.json');
     this.pathRef.put(file).then(function() {
       debugger;
-            alert('Uploaded New User to newTestUsers!');
+            alert('Uploaded New User to accountData Storage!');
             that.pathRef.getDownloadURL().then(function(url) {
               const newUid = firebase.auth().currentUser.uid;
               debugger;
-               firebase.database().ref('testUsers/' + newUid).set({
+               firebase.database().ref('accountData/' + newUid).set({
                   data:url 
                 });
                 //firebase.database().ref().child('/testUserURL').push(newUid:url);

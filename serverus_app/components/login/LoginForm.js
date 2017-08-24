@@ -30,22 +30,18 @@ class LoginForm extends Component {
     }
     handleSubmission() {
         var that = this;
-        debugger;
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(function(response) {
             var that2 = that;
             if (response){
-                var refString = 'testUsers/' + response.uid;
+                var refString = 'accountData/' + response.uid;
                 var userUrlRef = firebase.database().ref(refString);
-                debugger;
                 userUrlRef.on('value', function(snapshot) {
                     var that3 = that2;
-                    debugger;
                     axios.get(snapshot.val().data)
                     .then(function(response) {
                         var that4 = that3;
-                        debugger;
-                        that4.props.actions.loadAccount(response.data.info);
+                        that4.props.actions.loadAccount(response.data);
                         alert('User LOADED IN redux!!!');
                     })
                 })

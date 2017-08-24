@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react';
-import SidebarNav from './common/SidebarNav';
 import HeaderMenu from './common/HeaderMenu';
 import LoginModel from './login/LoginModel';
 require('../../favicon.ico');
