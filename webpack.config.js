@@ -9,8 +9,8 @@ const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
 module.exports = {
     entry: path.resolve(__dirname, 'serverus_app') + '/index.js',
     output: {
-        publicpath: path.resolve(__dirname, 'serverus_app') + '/dist/',
         path: path.resolve(__dirname, 'serverus_app') + '/dist/',
+        publicPath: '/',
         filename: 'index_bundle.js'
 },
 devtool : "#source-map",

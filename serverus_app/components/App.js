@@ -14,6 +14,7 @@ class App extends React.Component {
         super(props);
         this.state = {
             loggedIn: false,
+            signedUp: false,
             modelIsOpen: false,
             activeIndex: 0
         };
@@ -24,12 +25,14 @@ class App extends React.Component {
 
     componentWillMount() {
         var that = this;
+        this.isPageMounted = false;
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
-                var refString = 'accountData/' + user.uid;                
+                var refString = 'accountData/' + user.displayName;                
                 var userUrlRef = firebase.database().ref(refString);
                 userUrlRef.on('value', function(snapshot) {
                     var that2 = that;
+                    if (that2.state.modelIsOpen && that2.state.signedUp) return;
                     axios.get(snapshot.val().data)
                     .then(function(response) {
                         debugger;
@@ -66,7 +69,16 @@ class App extends React.Component {
             modelIsOpen: false
         });
     }
-
+    
+    signedUp = () => {
+        if(this.state.signedUp) {
+            window.location.reload();
+        } else {
+            this.setState({
+                signedUp: true
+            })
+        }
+    }
     signOut = () => {
         debugger;
         firebase.auth().signOut().then(function() {
@@ -89,7 +101,7 @@ class App extends React.Component {
             <div>
                 <HeaderMenu loggedIn={this.state.loggedIn} showModel={this.openLogin} signOut={this.signOut}></HeaderMenu>
                 <div style={AppStyle.mainContent}>{this.props.children}</div>
-                <LoginModel activeIndex={this.state.activeIndex} isOpen={this.state.modelIsOpen} close={this.closeLogin} changeTab={this.changeTabIndex} />
+                <LoginModel activeIndex={this.state.activeIndex} isOpen={this.state.modelIsOpen} close={this.closeLogin} changeTab={this.changeTabIndex} signedUp={this.signedUp}/>
             </div>
         );
     }

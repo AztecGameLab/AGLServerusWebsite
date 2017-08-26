@@ -22,6 +22,6 @@ export default (
         <Route path="users" component={UsersPage} />
         <Route path="createpost" component={MarkdownCreate} />
         <Route path="markdown" component={MarkdownPage} />
-        <Route path='/profile/:username' component={ProfilePage} />
+        <Route path='profile/:username' component={ProfilePage} />
     </Route>
 );
