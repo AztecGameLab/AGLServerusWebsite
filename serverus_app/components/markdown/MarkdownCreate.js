@@ -32,7 +32,10 @@ class MarkdownCreate extends React.Component {
 
         this.state = {
             value: '# hello\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n',
-            title: ''
+            title: '',
+            tags: [],
+            comments: [],
+
         };
         this.storage = firebase.storage();
         this.onInputChange = this.onInputChange.bind(this);
@@ -49,18 +52,19 @@ class MarkdownCreate extends React.Component {
         now = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
         var data = {
             title: this.state.title,
-            author: this.props.accounts[0].info.forumHandle,
+            author: this.props.accounts[0].info.username,
             date: now,
-            text: this.state.value
+            text: this.state.value,
+            tags: [],
         };
         var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
-        this.pathRef = this.storage.ref('userData/' + this.props.accounts[0].uid + '/markdown/' + data.title + '.json');
+        this.pathRef = this.storage.ref('userData/' + this.props.accounts[0].uid + '/articles/' + data.title + '.json');
         this.pathRef.put(file).then(function() {
             alert('Uploaded File');
             var that2 = that;
             that.pathRef.getDownloadURL().then(function (url) {
-                firebase.database().ref('/allMarkdown').push(url);
-                firebase.database().ref('/markdown/' + that2.props.accounts[0].uid).push(url);
+                firebase.database().ref('/allArticles').push(url);
+                firebase.database().ref('/articles/' + that2.props.accounts[0].uid).push(url);
             }).catch(function (error) {
                 console.log(error);
             });

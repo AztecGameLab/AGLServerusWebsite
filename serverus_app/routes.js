@@ -21,7 +21,7 @@ export default (
         <Route path="competitions" component={CompetitionsPage} />
         <Route path="users" component={UsersPage} />
         <Route path="createpost" component={MarkdownCreate} />
-        <Route path="markdown" component={MarkdownPage} />
-        <Route path='profile/:username' component={ProfilePage} />
+        <Route path="articles" component={MarkdownPage} />
+        <Route path='user/:username' component={ProfilePage} />
     </Route>
 );

@@ -23,7 +23,7 @@ export default class NewsFeed extends React.Component {
     }
     componentDidMount() {
         var that = this;
-        var markdownUrlRef = firebase.database().ref('allMarkdown/');
+        var markdownUrlRef = firebase.database().ref('allArticles/');
 
         markdownUrlRef.on('value', function (snapshot) {
             if (!snapshot.val() || !that.isPageMounted) return;

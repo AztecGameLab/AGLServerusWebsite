@@ -23,18 +23,19 @@ class SignUpForm extends Component {
         major: '',
         currentYear: '',
         //Optional Editable Later
-        rolesHats: '',
-        skillsTools: '',
-        forumHandle: '',
+        roles: [],
+        bio: '',
+        username: '',
         //Functional Attibutes
         flares: '',
-        badges: '',
+        badges: [],
         games: [
 
         ],
         groups: [
 
-        ]
+        ],
+        authLevel: false        
       }
     };
     //Essential Login Info (SignUpOne)
@@ -46,7 +47,7 @@ class SignUpForm extends Component {
     this.handleLastNameInput = this.handleLastNameInput.bind(this);
     this.handleMajorInput = this.handleMajorInput.bind(this);
     //Optional Infos (SignUpThree)
-    this.handleForumHandleInput = this.handleForumHandleInput.bind(this);
+    this.handleUsernameInput = this.handleUsernameInput.bind(this);
     this.onSubmission = this.onSubmission.bind(this);
     this.sendNewUserToFB = this.sendNewUserToFB.bind(this);
     //Navigation
@@ -108,9 +109,9 @@ class SignUpForm extends Component {
     });
   }
   //Optional Infos (SignUpThree)
-  handleForumHandleInput(e) {
+  handleUsernameInput(e) {
     const newAccount = this.state.newAccount;
-    newAccount.forumHandle = e.target.value;
+    newAccount.username = e.target.value;
     this.setState({
       newAccount: newAccount
     });
@@ -131,7 +132,7 @@ class SignUpForm extends Component {
         //Optional Editable Later
         rolesHats: '',
         skillsTools: '',
-        forumHandle: '',
+        username: '',
         //Functional Attibutes
         flares: '',
         badges: '',
@@ -140,7 +141,8 @@ class SignUpForm extends Component {
         ],
         groups: [
 
-        ]
+        ],
+        authLevel: false
       }
     });
     console.log("random USer:");
@@ -172,24 +174,25 @@ class SignUpForm extends Component {
     var that = this;
     debugger;
     var user = firebase.auth().currentUser;
+    console.log('CURRENT USER', user);
     var userUid = user.uid;
     var data = {
       uid: userUid,
       info: this.state.newAccount
     };
     var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
-    this.pathRef = firebase.storage().ref('accountData/' + data.forumHandle + '.json');
+    this.pathRef = firebase.storage().ref('accounts/' + data.info.username + '.json');
     user.updateProfile({
-      displayName: this.state.newAccount.forumHandle
+      displayName: this.state.newAccount.username
     }).then(function () {
       var that2 = that;
       that.pathRef.put(file).then(function () {
         debugger;
-        alert('Uploaded New User to accountData Storage!');
+        alert('Uploaded New User to accounts Storage!');
         that2.pathRef.getDownloadURL().then(function (url) {
-          const username = firebase.auth().currentUser.displayName;
+          var username = firebase.auth().currentUser.displayName;
           debugger;
-          firebase.database().ref('accountData/' + username).set({
+          firebase.database().ref('accounts/' + username).set({
             data: url
           });
           that2.props.signedUp();          
@@ -222,7 +225,7 @@ class SignUpForm extends Component {
         break;
       case 2:
         phase = <SignUpThree
-          handleForumHandleInput={this.handleForumHandleInput}
+          handleUsernameInput={this.handleUsernameInput}
           onSubmission={this.onSubmission}
           changePhase={this.changePhase}
           randomUser={this.randomUser} />

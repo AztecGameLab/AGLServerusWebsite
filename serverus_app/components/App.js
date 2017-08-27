@@ -28,7 +28,7 @@ class App extends React.Component {
         this.isPageMounted = false;
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
-                var refString = 'accountData/' + user.displayName;                
+                var refString = 'accounts/' + user.displayName;                
                 var userUrlRef = firebase.database().ref(refString);
                 userUrlRef.on('value', function(snapshot) {
                     var that2 = that;

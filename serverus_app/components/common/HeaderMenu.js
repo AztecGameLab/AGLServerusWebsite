@@ -21,13 +21,14 @@ const HeaderMenu = (props) => {
                     <div className="col-lg-2 ps-dropdown"><button className="ps-btn"><Icon name='newspaper' />Blog</button>
                         <div className="dropdown-content col-lg-2">
                             <Link to="/createpost">Create Blog Post</Link>
-                            <Link to="/markdown">View My Blog Posts</Link>
+                            <Link to="/articles">View My Blog Posts</Link>
                         </div>
                     </div>
                     <div>
                         {props.loggedIn ? <div>
                             <Dropdown style={HeaderStyle.dropdown} text='Profile' icon='user circle' floating labeled button className='icon'>
                                 <Dropdown.Menu>
+                                <Link to={'/user/' + props.accounts[0].info.username}><Dropdown.Item icon='user circle' text='My Account'/></Link>
                                     <Dropdown.Item icon='sign out' text='Sign out' onClick = {props.signOut} />
                                 </Dropdown.Menu>
                             </Dropdown>

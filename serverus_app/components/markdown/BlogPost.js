@@ -25,7 +25,7 @@ class BlogPost extends React.Component {
     componentDidMount() {
         if (!this.props.accounts[0]) return;
         var that = this;
-        var markdownUrlRef = firebase.database().ref('markdown/' + this.props.accounts[0].uid);
+        var markdownUrlRef = firebase.database().ref('articles/' + this.props.accounts[0].uid);
 
         markdownUrlRef.on('value', function (snapshot) {
             if (!that.isPageMounted) return;
