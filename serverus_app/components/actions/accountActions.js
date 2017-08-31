@@ -5,3 +5,10 @@ export function loadAccount(account) {
         account
     };
 }
+
+export function signOutAccount() {
+    debugger;
+    return {
+        type: 'SIGN_OUT'
+    }
+}

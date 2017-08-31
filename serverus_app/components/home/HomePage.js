@@ -6,13 +6,12 @@ import GamesFeed from './GamesFeed';
 class HomePage extends React.Component {
     render() {
         return (
-            <div>
+            <div className="container-fluid">
                 <h1>Welcome to the Aztec Game Lab!</h1>
                 <Highlight/>
-                <div style={homeStyle.sideContainer}>
-                    <NewsFeed style={homeStyle.sideStyle}/>
-                    <GamesFeed style={homeStyle.sideStyle}/>
-                </div>
+                <div className="row col-lg-12" style={homeStyle.sideContainer}></div>
+                <div className="row col-lg-12"><GamesFeed style={homeStyle.sideStyle}/></div>
+                <div className="row col-lg-12"><NewsFeed style={homeStyle.sideStyle}/></div>
             </div>
         );
     }

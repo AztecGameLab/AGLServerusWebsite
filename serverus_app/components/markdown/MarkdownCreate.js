@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import {Dropdown} from 'semantic-ui-react';
 import Markmirror from 'react-markmirror';
 import firebase from 'firebase';
+import {connect} from 'react-redux';
+import * as accountActions from '../actions/accountActions';
+import {bindActionCreators} from 'redux';
 import stylesheet from  './markdown.css';
-
 
 const Editor = (props) => {
     const handleType = text => {
@@ -25,45 +26,45 @@ const Editor = (props) => {
     );
 };
 
-
-
-export default class MarkdownCreate extends React.Component {
+class MarkdownCreate extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             value: '# hello\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n',
             title: '',
-            author: '',
-            category: '',
-            tags: []
+            tags: [],
+            comments: [],
+
         };
         this.storage = firebase.storage();
         this.onInputChange = this.onInputChange.bind(this);
         this.sendToFB = this.sendToFB.bind(this);
-
-        this.categoryOptions = [{key: 'News', value: 'News', text: 'News'},
-                                {key: 'Guide', value: 'Guide', text: 'Guide'}];
     }
 
     /**
      * Send JSON to firebase storage and store url in database
      */
     sendToFB() {
+        debugger;
         var that = this;
         var now = new Date();
         now = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
         var data = {
             title: this.state.title,
+            author: this.props.accounts[0].info.username,
             date: now,
-            text: this.state.value
+            text: this.state.value,
+            tags: [],
         };
         var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
-        this.pathRef = this.storage.ref('markdown/' + data.title + '.json');
+        this.pathRef = this.storage.ref('userData/' + this.props.accounts[0].uid + '/articles/' + data.title + '.json');
         this.pathRef.put(file).then(function() {
             alert('Uploaded File');
+            var that2 = that;
             that.pathRef.getDownloadURL().then(function (url) {
-                firebase.database().ref().child('/postURL').push(url);
+                firebase.database().ref('/allArticles').push(url);
+                firebase.database().ref('/articles/' + that2.props.accounts[0].uid).push(url);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -93,20 +94,24 @@ export default class MarkdownCreate extends React.Component {
                         <ReactMarkdown source={this.state.value}/>
                     </div>
                 </div>
-                <div>
-                    Category:
-                    <Dropdown placeholder="Category.." search selection options={this.categoryOptions} onChange={event => this.setState({category: event.target.category})}/>
-                    Tags:
-                    <input className="form-control" type="text" placeholder="Tags Here..."/>
-                </div>
                 <div className="row col-lg-12 col-lg-offset-0">
                     <button className="btn btn-success" onClick={this.sendToFB}>Submit</button>
                 </div>
             </div>
         );
-    }
+    }  
 }
 
+function mapStateToProps(state, ownProps) {
+    return {
+        accounts: state.accounts
+        //this means i would like to access by this.props.accounts
+        // the data within the state of our store named by root reducer
+        // ownProps are the props of our component CoursesPage
+    };
+}
+
+export default connect(mapStateToProps, null)(MarkdownCreate)
 
 var markdownStyle = {
     title: {

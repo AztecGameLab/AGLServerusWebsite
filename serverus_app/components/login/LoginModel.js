@@ -21,7 +21,7 @@ class LoginModel extends Component {
       <LoginForm/>
     </Tab.Pane> },
     { menuItem: 'Sign Up', render: () => <Tab.Pane attached={false} value = {1}>
-      <SignUpForm/>
+      <SignUpForm signedUp={this.props.signedUp}/>
     </Tab.Pane> }
   ];
   console.log("active index change:" + this.props.activeIndex)

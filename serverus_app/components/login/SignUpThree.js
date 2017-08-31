@@ -10,7 +10,7 @@ const SignUpThree = (props) => {
               <label>AGL Username</label>
               <input
                 placeholder='Username'
-                onChange={props.handleForumHandleInput} />
+                onChange={props.handleUsernameInput} />
             </Form.Field>
             </div>
             <div style={modalStyle.spacing}>

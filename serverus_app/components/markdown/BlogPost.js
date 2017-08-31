@@ -1,13 +1,17 @@
 import React from 'react';
 import firebase from 'firebase';
 import axios from 'axios';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as accountActions from '../actions/accountActions';
 import MarkdownCard from './MarkdownCard';
 
-export default class BlogPost extends React.Component {
+class BlogPost extends React.Component {
     constructor(props) {
         super(props);
 
         this.storage = firebase.storage();
+        this.isPageMounted = true;
         this.state = {
             postData: []
         };
@@ -15,11 +19,16 @@ export default class BlogPost extends React.Component {
         this.loadMarkdownPosts = this.loadMarkdownPosts.bind(this);
     }
 
+    componentWillUnmount() {
+        this.isPageMounted = false;
+    }
     componentDidMount() {
+        if (!this.props.accounts[0]) return;
         var that = this;
-        var postUrlRef = firebase.database().ref('postURL');
+        var markdownUrlRef = firebase.database().ref('articles/' + this.props.accounts[0].uid);
 
-        postUrlRef.on('value', function (snapshot) {
+        markdownUrlRef.on('value', function (snapshot) {
+            if (!that.isPageMounted) return;
             that.setState({
                 postData: []
             });
@@ -30,22 +39,24 @@ export default class BlogPost extends React.Component {
                     })
                 }));
             });
+            var values = [];
             Object.values(snapshot.val()).map(function (value, idx) {
-                axios.get(value).then(function (response) {
+                values.push(axios.get(value));
+            });
+            Promise.all(values).then(function(response) {
+                response.map(function(obj, i) {
                     var tempState = that.state.postData.slice();
-                    tempState[idx] = {
-                        hashKey: tempState[idx]["hashKey"],
-                        data: response.data
+                    tempState[i] = {
+                        hashKey: tempState[i]["hashKey"],
+                        data: obj.data
                     };
                     that.setState({
                         postData: tempState
                     });
                 });
-            });
-
+            }); 
         });
     }
-
     /**
      * Loads an individual blog posts
      * @param value
@@ -77,6 +88,16 @@ export default class BlogPost extends React.Component {
         );
     }
 }
+
+function mapStateToProps(state, ownProps) {
+    return {
+        accounts: state.accounts
+        //this means i would like to access by this.props.accounts
+        // the data within the state of our store named by root reducer
+        // ownProps are the props of our component CoursesPage
+    };
+}
+export default connect(mapStateToProps, null)(BlogPost)
 
 var markdownStyle = {
     textAlign: 'center'

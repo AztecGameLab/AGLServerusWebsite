@@ -23,18 +23,19 @@ class SignUpForm extends Component {
         major: '',
         currentYear: '',
         //Optional Editable Later
-        rolesHats: '',
-        skillsTools: '',
-        forumHandle: '',
+        roles: [],
+        bio: '',
+        username: '',
         //Functional Attibutes
         flares: '',
-        badges: '',
+        badges: [],
         games: [
 
         ],
         groups: [
 
-        ]
+        ],
+        authLevel: false        
       }
     };
     //Essential Login Info (SignUpOne)
@@ -46,7 +47,7 @@ class SignUpForm extends Component {
     this.handleLastNameInput = this.handleLastNameInput.bind(this);
     this.handleMajorInput = this.handleMajorInput.bind(this);
     //Optional Infos (SignUpThree)
-    this.handleForumHandleInput = this.handleForumHandleInput.bind(this);
+    this.handleUsernameInput = this.handleUsernameInput.bind(this);
     this.onSubmission = this.onSubmission.bind(this);
     this.sendNewUserToFB = this.sendNewUserToFB.bind(this);
     //Navigation
@@ -108,17 +109,17 @@ class SignUpForm extends Component {
     });
   }
   //Optional Infos (SignUpThree)
-  handleForumHandleInput(e) {
+  handleUsernameInput(e) {
     const newAccount = this.state.newAccount;
-    newAccount.forumHandle = e.target.value;
+    newAccount.username = e.target.value;
     this.setState({
       newAccount: newAccount
     });
   }
   //Debugger
-  randomUser(){
-    this.setState ({
-       newAccount: {
+  randomUser() {
+    this.setState({
+      newAccount: {
         //Essential Login Info
         email: "random" + Math.floor((Math.random() * 10000) + 1) + "@gmail.com",
         password: "random" + Math.floor((Math.random() * 300) + 1),
@@ -131,7 +132,7 @@ class SignUpForm extends Component {
         //Optional Editable Later
         rolesHats: '',
         skillsTools: '',
-        forumHandle: '',
+        username: '',
         //Functional Attibutes
         flares: '',
         badges: '',
@@ -140,9 +141,10 @@ class SignUpForm extends Component {
         ],
         groups: [
 
-        ]
+        ],
+        authLevel: false
       }
-      });
+    });
     console.log("random USer:");
     console.log(this.state.newAccount);
   }
@@ -151,46 +153,55 @@ class SignUpForm extends Component {
     const newUserData = this.state.newAccount;
     debugger;
     firebase.auth().createUserWithEmailAndPassword(newUserData.email, newUserData.password)
-    
-    .then(function() {
-      that.sendNewUserToFB()
-    })
-    
-    .catch(function (error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      alert(errorMessage);
-      // ...
-    });
+
+      .then(function () {
+        that.sendNewUserToFB()
+      })
+
+      .catch(function (error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        alert(errorMessage);
+        // ...
+      });
     //TODO: TURN new user's info (this.state.newAccount) into new userdata.txt containing user's info 
     // Package the User UID from account creation as key and pair with download url for the userdata.txt
   }
 
-  sendNewUserToFB(){
+  sendNewUserToFB() {
+    this.props.signedUp();
     var that = this;
     debugger;
-    const newUid = firebase.auth().currentUser.uid;
+    var user = firebase.auth().currentUser;
+    console.log('CURRENT USER', user);
+    var userUid = user.uid;
     var data = {
-      uid: newUid,
+      uid: userUid,
       info: this.state.newAccount
     };
     var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
-    this.pathRef = firebase.storage().ref('newTestUsers/' + newUid + '.json');
-    this.pathRef.put(file).then(function() {
-      debugger;
-            alert('Uploaded New User to newTestUsers!');
-            that.pathRef.getDownloadURL().then(function(url) {
-              const newUid = firebase.auth().currentUser.uid;
-              debugger;
-               firebase.database().ref('testUsers/' + newUid).set({
-                  data:url 
-                });
-                //firebase.database().ref().child('/testUserURL').push(newUid:url);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        });
+    this.pathRef = firebase.storage().ref('accounts/' + data.info.username + '.json');
+    user.updateProfile({
+      displayName: this.state.newAccount.username
+    }).then(function () {
+      var that2 = that;
+      that.pathRef.put(file).then(function () {
+        debugger;
+        alert('Uploaded New User to accounts Storage!');
+        that2.pathRef.getDownloadURL().then(function (url) {
+          var username = firebase.auth().currentUser.displayName;
+          debugger;
+          firebase.database().ref('accounts/' + username).set({
+            data: url
+          });
+          that2.props.signedUp();          
+          //firebase.database().ref().child('/testUserURL').push(newUid:url);
+        })
+      }).catch(function (error) {
+        console.log(error);
+      });
+    });
   }
 
   render() {
@@ -198,26 +209,26 @@ class SignUpForm extends Component {
     //Semantic UI transitions not working atm
     let phase;
     switch (this.state.currentPhase) {
-      case 0:  
+      case 0:
         phase = <SignUpOne
-            handleEmailInput={this.handleEmailInput}
-            handlePasswordInput={this.handlePasswordInput}
-            handleRedIDInput={this.handleRedIDInput}
-            changePhase={this.changePhase}/>;
+          handleEmailInput={this.handleEmailInput}
+          handlePasswordInput={this.handlePasswordInput}
+          handleRedIDInput={this.handleRedIDInput}
+          changePhase={this.changePhase} />;
         break;
-      case 1:  
+      case 1:
         phase = <SignUpTwo
-            handleFirstNameInput={this.handleFirstNameInput}
-            handleLastNameInput={this.handleLastNameInput}
-            handleMajorInput={this.handleMajorInput}
-            changePhase={this.changePhase}/>;
+          handleFirstNameInput={this.handleFirstNameInput}
+          handleLastNameInput={this.handleLastNameInput}
+          handleMajorInput={this.handleMajorInput}
+          changePhase={this.changePhase} />;
         break;
-      case 2:  
+      case 2:
         phase = <SignUpThree
-            handleForumHandleInput={this.handleForumHandleInput}
-            onSubmission = {this.onSubmission}
-            changePhase={this.changePhase}
-            randomUser = {this.randomUser}/>
+          handleUsernameInput={this.handleUsernameInput}
+          onSubmission={this.onSubmission}
+          changePhase={this.changePhase}
+          randomUser={this.randomUser} />
         break;
     }
     return (
@@ -227,11 +238,11 @@ class SignUpForm extends Component {
           transition="move-to-left-move-from-right"
           width={500}
           height={300}>
-            
+
           {phase}
-        
-          </ReactTransitions>
-        
+
+        </ReactTransitions>
+
         <Stepper steps={[{ title: 'Login Info' }, { title: 'Basic Info' }, { title: 'Confirm' }]} activeStep={this.state.currentPhase} />
 
       </Form>
