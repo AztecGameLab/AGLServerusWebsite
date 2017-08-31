@@ -18,7 +18,7 @@ class SignUpOne extends React.Component {
       passFilled: false,
       redIDFilled: false,
       buttonDisable: true,
-      email: ''
+      exisitngEmails: []
 
     };
     this.emailCheck = this.emailCheck.bind(this);
@@ -26,42 +26,45 @@ class SignUpOne extends React.Component {
     this.redIDCheck = this.redIDCheck.bind(this);
     this.formComplete = this.formComplete.bind(this);
   }
-  emailCheck(e) {
-    debugger;
-    this.setState({
-      email: e.target.value
-    });
-    var that = this;
+  componentWillMount() {
     var emailRef = firebase.database().ref('accounts/emails/');
-    //check if it already exists
-    //send off to email format checker
-    emailRef.on('value', function(snapshot) {
-      var that2 = that;
-      if(Object.values(snapshot.val()).includes(that.state.email)) {
-        // var emailLab = document.getElementById('emailLabel');
-        // emailLab.value = 'This email is taken!';
-        alert('email is taken son');
-        this.setState({
+    var that = this;
+    emailRef.on('value', function (snapshot) {
+      debugger;
+      that.setState({
+        existingEmails: Object.values(snapshot.val())
+      }, function () {
+        alert('existing emails loaded');
+      });
+    });
+  }
+  emailCheck(e) {
+    var that = this;
+    debugger;
+    for(var i in this.state.existingEmails){
+      if (this.state.existingEmails[i] == e.target.value) {
+        that.setState({
           emailFirstClick: true,
-          emailWarning: true
-        }, function() {
+          emailWarning: true,
+          emailTaken: true
+        }, function () {
           debugger;
-          var that3 = that2;
-          that3.formComplete();
+          that.formComplete();
         });
         return;
-      }
-    });
+    }
+  }
     if (EmailValidator.validate(e.target.value) == false) {
       this.setState({
         emailFirstClick: true,
-        emailWarning: true
+        emailWarning: true,
+        emailTaken: false
       }, function () {
         this.formComplete();
       });
       return;
     }
-    else {  
+    else {
       this.setState({
         emailFirstClick: true,
         emailWarning: false,
@@ -130,7 +133,7 @@ class SignUpOne extends React.Component {
   }
   formComplete() {
     debugger;
-    var warningsOn = (this.state.emailWarning || this.state.passwordWarning || this.state.redIDWarning);
+    var warningsOn = (this.state.emailWarning || this.state.passwordWarning || this.state.redIDWarning || this.state.emailTaken);
     var inputsFilled = (this.state.emailFilled && this.state.passFilled && this.state.redIDFilled);
     if (inputsFilled) {
       this.setState({
@@ -151,8 +154,9 @@ class SignUpOne extends React.Component {
               <Icon name='mail outline' />
               <input id='email' onChange={this.props.handleEmailInput} onBlur={this.emailCheck} />
               {this.state.emailWarning ?
-                this.state.emailFirstClick && <Label pointing='left' color='red'>Invalid Email</Label>
+                this.state.emailFirstClick && !this.state.emailTaken && <Label pointing='left' color='red'>Invalid Email</Label>
                 : this.state.emailFirstClick && <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label>}
+                {this.state.emailTaken && <Label pointing='left' color='red'>Email is already used</Label>}
             </Input>
           </Form.Field>
         </div>

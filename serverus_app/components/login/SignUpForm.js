@@ -181,7 +181,9 @@ class SignUpForm extends Component {
       uid: userUid,
       info: this.state.newAccount
     };
-    firebase.database().ref('accounts/emails').push(data.info.email);
+    firebase.database().ref('accounts/takenEmails').push(data.info.email); //Taken Emails
+    firebase.database().ref('accounts/takenRedIds').push(data.info.redId); //Taken RedIDs
+    firebase.database().ref('accounts/takenUsernames').push(data.info.username); //Taken Emails
     var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
     this.pathRef = firebase.storage().ref('accounts/' + data.info.username + '.json');
     user.updateProfile({

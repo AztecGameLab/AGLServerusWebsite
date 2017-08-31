@@ -30,3 +30,7 @@
   label {
     color: white !important;
   }
+
+  .ui.pointing.label {
+    line-height: 20px !important;
+  }
