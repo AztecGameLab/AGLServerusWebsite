@@ -18,3 +18,15 @@
   .fade-wait-height {
     transition: height .6s ease-in-out;
   }
+
+
+  .ui.inverted.red.menu {
+    background-color: transparent !important;
+  }
+
+  .ui.tab.active, .ui.tab.open {
+    background-color: transparent !important;
+  }
+  label {
+    color: white !important;
+  }

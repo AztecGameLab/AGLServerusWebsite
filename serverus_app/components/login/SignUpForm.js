@@ -7,7 +7,6 @@ import SignUpOne from './SignUpOne';
 import SignUpTwo from './SignUpTwo';
 import SignUpThree from './SignUpThree';
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
-import transitionStyle from './transition.css';
 
 class SignUpForm extends Component {
   constructor(props) {
@@ -207,7 +206,6 @@ class SignUpForm extends Component {
   }
 
   render() {
-    console.log(this.state.currentPhase == 0);
     //Semantic UI transitions not working atm
     let phase;
     switch (this.state.currentPhase) {
@@ -240,9 +238,6 @@ class SignUpForm extends Component {
           {phase}
         </ReactCSSTransitionReplace>
         
-
-        <Stepper steps={[{ title: 'Login Info' }, { title: 'Basic Info' }, { title: 'Confirm' }]} activeStep={this.state.currentPhase} />
-
       </Form>
     );
   }
