@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as accountActions from './actions/accountActions';
 import HeaderMenu from './common/HeaderMenu';
+import Footer from './common/Footer';
 import LoginModel from './login/LoginModel';
 require('../../favicon.ico');
 
@@ -100,7 +101,9 @@ class App extends React.Component {
         return (
             <div>
                 <HeaderMenu loggedIn={this.state.loggedIn} showModel={this.openLogin} signOut={this.signOut}></HeaderMenu>
+                <Footer name={'john'}/>
                 <div style={AppStyle.mainContent}>{this.props.children}</div>
+                
                 <LoginModel activeIndex={this.state.activeIndex} isOpen={this.state.modelIsOpen} close={this.closeLogin} changeTab={this.changeTabIndex} signedUp={this.signedUp}/>
             </div>
         );
