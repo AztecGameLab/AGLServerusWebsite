@@ -54,7 +54,6 @@ class LoginForm extends Component {
         var errorMessage = error.message;
         // ...
         });
-    
     }
     loginRandom(){
         this.setState({
