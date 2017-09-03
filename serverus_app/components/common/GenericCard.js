@@ -4,6 +4,10 @@ import {Link} from 'react-router';
 
 //This Is the template for a generic card.
 //This is intended as a read only slot. 
+/*
+The Expected incoming schema should look like this
+
+*/
 export default class GenericCard extends React.Component{
     constructor(props){
         super(props);
@@ -16,6 +20,8 @@ export default class GenericCard extends React.Component{
             date: props.date,
             author: props.author,
             ratings: props.ratings,
+            roles: "",
+            showRoles: false,
             showRatings: (props.type === 'b') ? true : false,
             viewCount: props.viewCount,
             showViewCount: (props.type === 'b' || props.type === 't') ? true : false, 
@@ -54,6 +60,9 @@ export default class GenericCard extends React.Component{
                         <div class="meta">
                             {this.state.author}
                             {this.state.date}
+                            <div visible={this.state.showRoles}>
+                                Role: {this.state.roles}
+                            </div>
                         </div>
                         <div class="description">
                             {this.state.descrip}

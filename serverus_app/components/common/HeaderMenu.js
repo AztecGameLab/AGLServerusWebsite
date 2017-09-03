@@ -57,9 +57,8 @@ var HeaderStyle = {
         display: 'block',
         width: '200px',
         height: 'auto'
-    }
-
-}
+    },
+};
 function mapStateToProps(state, ownProps) {
     return {
         accounts: state.accounts

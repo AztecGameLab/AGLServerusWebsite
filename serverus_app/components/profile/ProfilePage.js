@@ -1,4 +1,5 @@
 import React from 'react';
+import {Icon} from 'semantic-ui-react';
 import firebase from 'firebase';
 import axios from 'axios';
 
@@ -17,7 +18,7 @@ export default class ProfilePage extends React.Component {
         var userRef = firebase.database().ref('accounts/' + this.props.routeParams.username);
         userRef.on('value', function (snapshot) {
             if (!snapshot.val()) {
-                alert('No user found');
+                //alert('No user found');
                 return;
             } else {
                 console.log(snapshot.val());
@@ -40,13 +41,23 @@ export default class ProfilePage extends React.Component {
                 <div>
                     Hello my name is {this.state.data.info.firstName} {this.state.data.info.lastName}
                 </div>
-
-
-
-
-
-                    : null}
+                    : <div style={ProfilePageStyle.NotFound}>
+                        <Icon name="warning sign" />
+                        <h1>User Not Found</h1>    
+                    </div>}
             </div>
         );
     }
 }
+
+var ProfilePageStyle = {
+    NotFound:{
+        display: "block",
+        margin: "auto",
+        width: "50%",
+        border: "2px dotted white",
+        top: "50%",
+        left: "50%",
+        justifyContent: "centered"
+    }
+};
