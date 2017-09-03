@@ -101,9 +101,8 @@ class App extends React.Component {
         return (
             <div>
                 <HeaderMenu loggedIn={this.state.loggedIn} showModel={this.openLogin} signOut={this.signOut}></HeaderMenu>
-                <Footer name={'john'}/>
                 <div style={AppStyle.mainContent}>{this.props.children}</div>
-                
+                <Footer/>
                 <LoginModel activeIndex={this.state.activeIndex} isOpen={this.state.modelIsOpen} close={this.closeLogin} changeTab={this.changeTabIndex} signedUp={this.signedUp}/>
             </div>
         );
