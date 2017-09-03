@@ -1,7 +1,14 @@
-export function createAccount(newAccount) {
+export function loadAccount(account) {
     debugger;
     return {
-        type: 'CREATE_ACCOUNT', 
-        newAccount
+        type: 'LOAD_ACCOUNT', 
+        account
     };
+}
+
+export function signOutAccount() {
+    debugger;
+    return {
+        type: 'SIGN_OUT'
+    }
 }

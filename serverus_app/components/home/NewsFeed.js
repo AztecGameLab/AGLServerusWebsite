@@ -1,18 +1,109 @@
 import React from 'react';
+import firebase from 'firebase';
+import axios from 'axios';
+import Slider from 'react-slick';
+import MarkdownCard from '../markdown/MarkdownCard';
 
-//Displays the most recently published News/Blog posts.
-export default class NewsFeed extends React.Component{
-    constructor(props){
+export default class NewsFeed extends React.Component {
+    constructor(props) {
         super(props);
+
+        this.storage = firebase.storage();
+        this.isPageMounted = true;
+        this.noPostLoaded = 0;
+        this.state = {
+            postData: []
+        };
+
+        this.loadMarkdownPosts = this.loadMarkdownPosts.bind(this);
     }
-    render(){
-        return(
+
+    componentWillUnmount() {
+        this.isPageMounted = false;
+    }
+    componentDidMount() {
+        var that = this;
+        var markdownUrlRef = firebase.database().ref('allArticles/');
+
+        markdownUrlRef.on('value', function (snapshot) {
+            if (!snapshot.val() || !that.isPageMounted) return;
+            that.setState({
+                postData: []
+            });
+            Object.keys(snapshot.val()).reverse().map(function (key, index) {
+                that.setState(prevState => ({
+                    postData: prevState.postData.concat({
+                        hashKey: key
+                    })
+                }));
+            });
+            var values = [];
+            Object.values(snapshot.val()).reverse().map(function (value, idx) {
+                values.push(axios.get(value));
+            });
+            Promise.all(values).then(function (response) {
+                that.noPostLoaded++;
+                // Only store 10 most recent posts
+                for (var i = 0; response.length < 10 ? i < response.length : i <= 10; i++) {
+                    var tempState = that.state.postData.slice();
+                    tempState[i] = {
+                        hashKey: tempState[i]["hashKey"],
+                        data: response[i].data
+                    };
+                    that.setState({
+                        postData: tempState
+                    });
+                }
+            });
+        });
+    }
+
+    /**
+     * Loads an individual blog posts
+     * @param value
+     * @returns {XML}
+     */
+    loadMarkdownPosts = (value) => {
+        if (value.data) {
+            return (
+                <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4" key={value.hashKey} >
+                    <MarkdownCard value={value.data} />
+                </div>
+            );
+        }
+    }
+
+    render() {
+        var settings = {
+            dots: true,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 2,
+            slidesToScroll: 1
+        };
+        var val = 0;
+        if (this.state.postData.length > 0) {
+            this.state.postData.map(function(obj, i) {
+                if (obj.data) {
+                    val++;
+                }
+            })
+        }
+        var mdPost = (val >= this.noPostLoaded && val > 0) ? this.state.postData.map(this.loadMarkdownPosts) : null
+        return (
             <div>
                 <h1>News Feed </h1>
-                <div>
-                    <p>News Feed will be displayed here.</p>
+                <div className="container-fluid">
+                    <div className="row">
+                        {mdPost ? <Slider className="col-lg-12 col-md-12 col-sm-12 col-xs-12" {...settings}>{mdPost}</Slider> : null}
+                    </div>
                 </div>
             </div>
         );
     }
 }
+
+var markdownStyle = {
+    textAlign: 'center',
+    backgroundColor: 'gray'
+};
