@@ -26,6 +26,7 @@ class HeaderMenu extends React.Component {
                     <Menu stackable inverted pointing >
                         <Menu.Item active={activeItem === 'home'} onClick={this.handleItemClick} as={Link} to='/'><Image style={HeaderStyle.logo} src={logo} /></Menu.Item>
                         <Menu.Item name='games' active={activeItem === 'games'} onClick={this.handleItemClick} as={Link} to='/games'><Icon name='gamepad' />Games</Menu.Item>
+                        <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon name='users'/>Users</Menu.Item>
                         <Dropdown item text="Articles">
                             <Dropdown.Menu>
                                 <Dropdown.Item icon='edit' as={Link} to='/createpost' text="Create Article" />
