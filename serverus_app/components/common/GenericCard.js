@@ -11,22 +11,22 @@ The Expected incoming schema should look like this
 export default class GenericCard extends React.Component{
     constructor(props){
         super(props);
-
+        debugger;
         //Iniitialize state variables
         this.state = {
-            title: props.title,
-            type: props.type,
-            descrip: props.descrip,
-            date: props.date,
-            author: props.author,
-            ratings: props.ratings,
+            title: props.value.title,
+            type: props.value.type,
+            descrip: props.value.descrip,
+            date: props.value.date,
+            author: props.value.author,
+            ratings: props.value.ratings,
             roles: "",
             showRoles: false,
-            showRatings: (props.type === 'b') ? true : false,
-            viewCount: props.viewCount,
-            showViewCount: (props.type === 'b' || props.type === 't') ? true : false, 
-            tags: props.tags,
-            url: prosp.url
+            showRatings: (props.value.type === 'b') ? true : false,
+            viewCount: props.value.viewCount,
+            showViewCount: (props.value.type === 'b' || props.value.type === 't') ? true : false, 
+            tags: props.value.tags,
+            url: props.value.url
         };
 
         this.toggleUserFavorited = this.toggleUserFavorited.bind(this);
@@ -49,20 +49,17 @@ export default class GenericCard extends React.Component{
                         User IconHere
                         <div class="ui raised segment">
                         if(this.state.type==='b'){
-                            <a class="ui ribbon label">{this.type}</a>
+                            <a class="ui ribbon label">{this.state.type}</a>
                         }
                         </div>
                     </div>
-                    <div class="content right floated">
+                    <div className="content">
                         <div class="header">
                             {this.state.title}
                         </div>
                         <div class="meta">
                             {this.state.author}
                             {this.state.date}
-                            <div visible={this.state.showRoles}>
-                                Role: {this.state.roles}
-                            </div>
                         </div>
                         <div class="description">
                             {this.state.descrip}
@@ -78,6 +75,6 @@ export default class GenericCard extends React.Component{
 }
 
 //CSS Styling
-let CardStyle={
+var CardStyle={
 
 };

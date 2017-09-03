@@ -22,14 +22,24 @@ export default class UserDirectory extends React.Component{
     }
 
     componentDidMount(){
-
+        let dummyData = this.state.userData;
+        let exampleUserSchema = {
+            type: 'u',
+            title: 'genericEric',
+            descrip: 'I am a very lonely developer',
+            date: Date.now(),
+            author: 'genericEric',
+            roles: 'CodeMonkey',
+        };
+        dummyData.push(exampleUserSchema);
+        this.setState( { userData: dummyData } );
     }
 
     //Loads User Cards into Directory. URL should be gotten from firebase.
-    loadUserCards(){
+    loadUserCards(value){
         return(
             <div>
-                This is a test.
+                <GenericCard value={value}/>
             </div>
         );
     }
@@ -40,7 +50,7 @@ export default class UserDirectory extends React.Component{
                 <h2 style={UserDirStyle._header}>This is the User Directory</h2>
                 <div className="container-fluid">
                     <div className="row">
-                        {this.loadUserCards}
+                        {this.state.userData.map(this.loadUserCards)}
                     </div>
                 </div>
             </div>
