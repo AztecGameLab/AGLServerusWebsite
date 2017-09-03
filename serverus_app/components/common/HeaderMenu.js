@@ -34,17 +34,17 @@ class HeaderMenu extends React.Component {
                         </Dropdown>
                         {this.props.loggedIn ?
                             <Menu.Menu position='right'>
-                                <Dropdown name='Profile' icon='user circle' onClick={() => this.props.showModel(0)}>
+                                <Dropdown item trigger={<div><Icon name="user circle"></Icon>Welcome {this.props.accounts[0].info.firstName + ' ' + this.props.accounts[0].info.lastName + '!'}</div>} icon={null} style={HeaderStyle.profile}>
                                     <Dropdown.Menu>
-                                        <Dropdown.Item icon='sign out' text='Sign out' onClick={props.signOut} />
+                                        <Dropdown.Item as={Link} to={'/user/' + this.props.accounts[0].info.username} icon='user circle' text='My Account'/>
+                                        <Dropdown.Item icon='sign out' text='Sign out' onClick={this.props.signOut} />
                                     </Dropdown.Menu>
                                 </Dropdown>
-                                <Menu.Item name='LogOut' onClick={this.props.signOut}></Menu.Item>
                             </Menu.Menu>
                             :
                             <Menu.Menu position='right'>
-                                <Menu.Item name='Login' onClick={() => this.props.showModel(0)}></Menu.Item>
-                                <Menu.Item name='SignUp' onClick={() => this.props.showModel(1)}></Menu.Item>
+                                <Menu.Item name='Login' onClick={() => this.props.showModel(0)} ></Menu.Item>
+                                <Menu.Item name='SignUp' onClick={() => this.props.showModel(1)} style={HeaderStyle.profile}></Menu.Item>
                             </Menu.Menu>}
                     </Menu>
                 </Sticky>
@@ -56,8 +56,10 @@ var HeaderStyle = {
         display: 'block',
         width: '200px',
         height: 'auto'
+    },
+    profile: {
+        paddingRight: 30
     }
-
 }
 function mapStateToProps(state, ownProps) {
     return {

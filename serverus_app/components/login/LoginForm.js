@@ -99,7 +99,8 @@ var modalStyle = {
   spacing: {
     margin: '15px',
     width: "100%",
-    display: "block"
+    display: "block",
+    color: 'black'
   }
 };
 
