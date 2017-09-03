@@ -1,6 +1,10 @@
 #footer {
     background-color: #212121;
     color: white;
+    bottom: 0;
+    position: absolute;
+    margin: 0;
+    padding: 0;
     z-index: -1;
 }
 #footer {

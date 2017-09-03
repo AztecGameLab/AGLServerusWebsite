@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'react-router';
 import { Button, Icon, Image } from 'semantic-ui-react'
 import styles from './footer.css';
 
