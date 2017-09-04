@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Form, Checkbox, Grid, Input, Icon } from 'semantic-ui-react';
+import { Button, Form, Checkbox, Grid, Input, Icon, Dropdown } from 'semantic-ui-react';
+import majorOptions from '../common/majorOptions';
 
 class SignUpTwo extends React.Component {
   constructor(props){
@@ -21,7 +22,7 @@ class SignUpTwo extends React.Component {
   }
 
   firstNameCheck(e) {
-    if(e.target.value.length > 0) {
+    if(e.target.value.length > 0 && e.target.value.length < 50) {
       this.setState({
         firstNameFirstClick: true,
         firstNameFilled: true
@@ -31,7 +32,7 @@ class SignUpTwo extends React.Component {
     }
   }
   lastNameCheck(e) {
-    if(e.target.value.length > 0) {
+    if(e.target.value.length > 0 && e.target.value.length < 50) {
       this.setState({
         lasttNameFirstClick: true,
         lastNameFilled: true
@@ -41,7 +42,9 @@ class SignUpTwo extends React.Component {
     }
   }
   majorCheck(e) {
-    if(e.target.value.length > 0) {
+    this.props.handleMajorInput(e);
+    debugger;
+    if(e.target.textContent.length > 0) {
       this.setState({
         majorFirstClick: true,
         majorFilled: true
@@ -83,10 +86,7 @@ class SignUpTwo extends React.Component {
         <div style={modalStyle.spacing}>
           <Form.Field>
             <label>Major</label>
-            <Input placeholder='Major' iconPosition='left'>
-              <Icon name='student' />
-              <input onChange={this.props.handleMajorInput} onBlur = {this.majorCheck}/>
-            </Input>
+            <Dropdown placeholder='Major' search selection options={majorOptions} onChange={this.majorCheck}/>
           </Form.Field>
         </div>
         <div style={modalStyle.spacing}>

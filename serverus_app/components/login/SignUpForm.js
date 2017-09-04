@@ -14,29 +14,30 @@ class SignUpForm extends Component {
     this.state = {
       currentPhase: 0,
       newAccount: {
-        //Essential Login Info
+        //Login Info
         email: '',
         password: '',
-        redId: '',
-        //Basic User Info
+        //Basic Info
         firstName: '',
         lastName: '',
+        redId: '',
         major: '',
-        currentYear: '',
-        //Optional Editable Later
-        roles: [],
-        bio: '',
+        dateJoined: '',
+        school: 'San Diego State University',
+        //AGL Info
         username: '',
-        //Functional Attibutes
-        flares: '',
+        roles : [],
+        bio: '',
+        flare: '',
+        goodBoyPoints: 0,
+        //Collections
         badges: [],
-        games: [
-
-        ],
-        groups: [
-
-        ],
-        authLevel: false        
+        games: [],
+        showcase: [],
+        bookmarked: [],
+        groups: [],
+        activities: [],
+        authLevel: 0  
       }
     };
     //Essential Login Info (SignUpOne)
@@ -47,6 +48,7 @@ class SignUpForm extends Component {
     this.handleFirstNameInput = this.handleFirstNameInput.bind(this);
     this.handleLastNameInput = this.handleLastNameInput.bind(this);
     this.handleMajorInput = this.handleMajorInput.bind(this);
+    this.handleRolesInput = this.handleRolesInput.bind(this);
     //Optional Infos (SignUpThree)
     this.handleUsernameInput = this.handleUsernameInput.bind(this);
     this.onSubmission = this.onSubmission.bind(this);
@@ -58,7 +60,6 @@ class SignUpForm extends Component {
   }
   //Sign Up Nav
   changePhase(value) {
-    //debugger;
     const current = this.state.currentPhase;
     this.setState({
       currentPhase: current + value
@@ -66,8 +67,11 @@ class SignUpForm extends Component {
   }
   //Essential Login Info (SignUpOne)
   handleEmailInput(e) {
+    var now = new Date();
+    now = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
     const newAccount = this.state.newAccount;
     newAccount.email = e.target.value;
+    newAccount.dateJoined = now;
     this.setState({
       newAccount: newAccount
     });
@@ -104,15 +108,24 @@ class SignUpForm extends Component {
   }
   handleMajorInput(e) {
     const newAccount = this.state.newAccount;
-    newAccount.major = e.target.value;
+    newAccount.major = e.target.textContent;
     this.setState({
       newAccount: newAccount
     });
   }
   //Optional Infos (SignUpThree)
   handleUsernameInput(e) {
+    debugger;
     const newAccount = this.state.newAccount;
     newAccount.username = e.target.value;
+    this.setState({
+      newAccount: newAccount
+    });
+  }
+
+  handleRolesInput(e, { value }) {
+    const newAccount = this.state.newAccount;
+    newAccount.roles = value;
     this.setState({
       newAccount: newAccount
     });
@@ -150,6 +163,10 @@ class SignUpForm extends Component {
     console.log(this.state.newAccount);
   }
   onSubmission() {
+    debugger;
+    this.setState({
+      loading: true
+    });
     var that = this;
     const newUserData = this.state.newAccount;
     debugger;
@@ -191,7 +208,6 @@ class SignUpForm extends Component {
     }).then(function () {
       var that2 = that;
       that.pathRef.put(file).then(function () {
-        debugger;
         alert('Uploaded New User to accounts Storage!');
         that2.pathRef.getDownloadURL().then(function (url) {
           var username = firebase.auth().currentUser.displayName;
@@ -228,10 +244,12 @@ class SignUpForm extends Component {
         break;
       case 2:
         phase = <SignUpThree key = '2'
-          handleForumHandleInput={this.handleForumHandleInput}
+          handleUsernameInput={this.handleUsernameInput}
           onSubmission={this.onSubmission}
           changePhase={this.changePhase}
-          randomUser={this.randomUser} />
+          randomUser={this.randomUser} 
+          loading = {this.state.loading}
+          handleRolesInput = {this.handleRolesInput}/>
         break;
     }
     return (

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button, Form, Checkbox } from 'semantic-ui-react';
+import { Button, Form, Checkbox, Input, Icon } from 'semantic-ui-react';
 import firebase from 'firebase';
 import {connect} from 'react-redux';
 import * as accountActions from '../actions/accountActions';
@@ -11,7 +11,8 @@ class LoginForm extends Component {
         super(props);
         this.state = {
             email:'',
-            password:''
+            password:'',
+            loading: false
         };
         this.handleEmailInput = this.handleEmailInput.bind(this);
         this.handlePasswordInput = this.handlePasswordInput.bind(this);
@@ -30,6 +31,9 @@ class LoginForm extends Component {
     }
     handleSubmission() {
         var that = this;
+        this.setState({
+            loading:true
+        });
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(function(response) {
             var that2 = that;
@@ -43,15 +47,15 @@ class LoginForm extends Component {
                         var that4 = that3;
                         that4.props.actions.loadAccount(response.data);
                         alert('User LOADED IN redux!!!');
-                    })
-                })
+                    });
+                });
             }
-
         })
         .catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
+        alert(errorMessage);
         // ...
         });
     }
@@ -66,30 +70,32 @@ class LoginForm extends Component {
         return (
             <div>
                 <div style={modalStyle.spacing}>
-                <Form.Field>
-                <label>Email</label>
-                <input
-                    placeholder='Email:'
-                    onChange={this.handleEmailInput} />
-                </Form.Field>
+                    <Form.Field>
+                        <label>Email</label>
+                            <Input inverted placeholder='Email:' iconPosition = 'left'> 
+                                <Icon name='mail outline' />
+                                <input onChange={this.handleEmailInput} />
+                            </Input>
+                    </Form.Field>
                 </div>
                 <div style={modalStyle.spacing}>
-                <Form.Field>
-                <label>Password</label>
-                <input
-                    placeholder='Password:'
-                    type='password'
-                    onChange={this.handlePasswordInput} />
-                </Form.Field>
+                    <Form.Field>
+                        <label>Password</label>
+                        <Input inverted placeholder='Password' iconPosition='left'>
+                        <Icon name='unlock alternate' />
+                        <input
+                            type='password'
+                            onChange={this.handlePasswordInput} />
+                        </Input>
+                    </Form.Field>
                 </div>
-                <Form.Field>
-                    <Button onClick = {this.handleSubmission}>
-                        LOGIN
+                <div style={modalStyle.spacing}>
+                    <Button fluid color='green' size='massive' disabled={this.state.buttonDisable}
+                        onClick={this.handleSubmission}
+                        loading={this.state.loading}>
+                            Login
                     </Button>
-                    <Button onClick = {this.loginRandom}>
-                        LOAD RANDOM USER
-                    </Button>
-                </Form.Field>
+                </div>
             </div>
         );
     }
