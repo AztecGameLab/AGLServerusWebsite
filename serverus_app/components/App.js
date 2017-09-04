@@ -114,7 +114,6 @@ function mapDispatchToProps(dispatch){
 }
 
 var AppStyle = {
-
     mainContent: {
         color: 'white',
         marginLeft: 0,
