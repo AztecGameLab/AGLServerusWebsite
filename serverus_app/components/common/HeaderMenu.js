@@ -21,32 +21,35 @@ class HeaderMenu extends React.Component {
         let logo = require('./AGL_banner_white_border_subtraction.jpg');
         const { activeItem } = this.state
         return (
-            <div className="row" style={HeaderStyle.header}>
-                <Menu stackable inverted pointing >
-                    <Menu.Item active={activeItem === 'home'} onClick={this.handleItemClick} as={Link} to='/'><Image style={HeaderStyle.logo} src={logo} /></Menu.Item>
-                    <Menu.Item name='games' active={activeItem === 'games'} onClick={this.handleItemClick} as={Link} to='/games'><Icon name='gamepad' />Games</Menu.Item>
-                    <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon name='checked calendar' />Calendar</Menu.Item>
-                    <Dropdown item text="Articles">
-                        <Dropdown.Menu>
-                            <Dropdown.Item icon='edit' as={Link} to='/createpost' text="Create Article" />
-                            <Dropdown.Item icon="newspaper" as={Link} to='/articles' text="View my articles" />
-                        </Dropdown.Menu>
-                    </Dropdown>
-                    {this.props.loggedIn ?
-                        <Menu.Menu position='right'>
-                            <Dropdown item trigger={<div><Icon name="dashboard"></Icon>Welcome {this.props.accounts[0].info.firstName + ' ' + this.props.accounts[0].info.lastName + '!'}</div>} icon={null} style={HeaderStyle.profile}>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item as={Link} to={'/user/' + this.props.accounts[0].info.username} icon='user circle' text='My Account' />
-                                    <Dropdown.Item icon='sign out' text='Sign out' onClick={this.props.signOut} />
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </Menu.Menu>
-                        :
-                        <Menu.Menu position='right'>
-                            <Menu.Item name='Login' onClick={() => this.props.showModel(0)} ></Menu.Item>
-                            <Menu.Item name='SignUp' onClick={() => this.props.showModel(1)} style={HeaderStyle.profile}></Menu.Item>
-                        </Menu.Menu>}
-                </Menu>
+            <div className="row">
+                <Sticky className="sticker" style={{ zIndex: 1000 }}>
+                    <Menu stackable inverted pointing >
+                        <Menu.Item active={activeItem === 'home'} onClick={this.handleItemClick} as={Link} to='/'><Image style={HeaderStyle.logo} src={logo} /></Menu.Item>
+                        <Menu.Item name='games' active={activeItem === 'games'} onClick={this.handleItemClick} as={Link} to='/games'><Icon name='gamepad' />Games</Menu.Item>
+                        <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon name='users'/>Users</Menu.Item>
+                        <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon name='checked calendar' />Calendar</Menu.Item>  
+                        <Dropdown item text="Articles">
+                            <Dropdown.Menu>
+                                <Dropdown.Item icon='edit' as={Link} to='/createpost' text="Create Article" />
+                                <Dropdown.Item icon="newspaper" as={Link} to='/articles' text="View my articles" />
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        {this.props.loggedIn ?
+                            <Menu.Menu position='right'>
+                                <Dropdown item trigger={<div><Icon name="dashboard"></Icon>Welcome {this.props.accounts[0].info.firstName + ' ' + this.props.accounts[0].info.lastName + '!'}</div>} icon={null} style={HeaderStyle.profile}>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item as={Link} to={'/user/' + this.props.accounts[0].info.username} icon='user circle' text='My Account' />
+                                        <Dropdown.Item icon='sign out' text='Sign out' onClick={props.signOut} />
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Menu.Menu>
+                            :
+                            <Menu.Menu position='right'>
+                                <Menu.Item name='Login' onClick={() => this.props.showModel(0)}></Menu.Item>
+                                <Menu.Item name='SignUp' onClick={() => this.props.showModel(1)}></Menu.Item>
+                            </Menu.Menu>}
+                    </Menu>
+                </Sticky>
             </div>);
     }
 };
