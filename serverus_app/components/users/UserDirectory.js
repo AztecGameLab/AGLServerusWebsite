@@ -32,6 +32,15 @@ export default class UserDirectory extends React.Component{
             roles: 'CodeMonkey',
         };
         dummyData.push(exampleUserSchema);
+        let exampleUserSchema2 = {
+            type: 'b',
+            title: 'SampleBlogPost',
+            descrip: 'I am a Happy Dev',
+            date: Date.now().toString(),
+            author: 'genericEric',
+            roles: 'CodeMonkey',
+        };
+        dummyData.push(exampleUserSchema2)
         this.setState( { userData: dummyData } );
     }
 

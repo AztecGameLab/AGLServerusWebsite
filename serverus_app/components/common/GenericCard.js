@@ -1,6 +1,6 @@
-import {Card} from 'semantic-ui-react';
+import { Card, Label, Segment, Divider, Grid, Image } from 'semantic-ui-react';
 import React from 'react';
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 
 //This Is the template for a generic card.
 //This is intended as a read only slot. 
@@ -8,10 +8,9 @@ import {Link} from 'react-router';
 The Expected incoming schema should look like this
 
 */
-export default class GenericCard extends React.Component{
-    constructor(props){
+class GenericCard extends React.Component {
+    constructor(props) {
         super(props);
-        debugger;
         //Iniitialize state variables
         this.state = {
             title: props.value.title,
@@ -24,7 +23,7 @@ export default class GenericCard extends React.Component{
             showRoles: false,
             showRatings: (props.value.type === 'b') ? true : false,
             viewCount: props.value.viewCount,
-            showViewCount: (props.value.type === 'b' || props.value.type === 't') ? true : false, 
+            showViewCount: (props.value.type === 'b' || props.value.type === 't') ? true : false,
             tags: props.value.tags,
             url: props.value.url
         };
@@ -33,48 +32,72 @@ export default class GenericCard extends React.Component{
     }
 
     //Toggles if the user has favorited a card or not... Should call back to the json. 
-    toggleUserFavorited(e){
-        this.setState({favorited: e.target.value});
+    toggleUserFavorited(e) {
+        this.setState({ favorited: e.target.value });
         //Some Firebase shit to update the this value.
     }
 
-    render(){
+    colorSolver(typeString){
+        if(typeString==='u')
+            return 'red';
+        else if(typeString==='b')
+            return 'blue';
+        else if(typeString==='g')
+            return 'green';
+        else if(typeString==='t')
+            return 'yellow';
+    }
+
+    textSolver(typeChar){
+        if(typeChar==='u')
+            return 'User';
+        else if(typeChar==='g')
+            return 'Game';
+        else if(typeChar==='t')
+            return 'Team';
+        else if(typeChar==='b')
+            return 'Blog';
+    }
+
+    render() {
         let ratingsVisible = this.state.showRatings;
         let viewsVisible = this.state.showViewCount;
-
-        return(
+        let profilePic = require('./demoProfileImage.jpg');
+        let color = this.colorSolver(this.state.type);
+        let ribbonName = this.textSolver(this.state.type);
+        return (
             <div id="GenericCardContainer">
-                <div class="card">
-                    <div>
-                        User IconHere
-                        <div class="ui raised segment">
-                        if(this.state.type==='b'){
-                            <a class="ui ribbon label">{this.state.type}</a>
-                        }
-                        </div>
-                    </div>
-                    <div className="content">
-                        <div class="header">
-                            {this.state.title}
-                        </div>
-                        <div class="meta">
-                            {this.state.author}
-                            {this.state.date}
-                        </div>
-                        <div class="description">
-                            {this.state.descrip}
-                        </div>
-                        <div>
-                            Tags: {this.state.tags}
-                        </div>
-                    </div>
-                </div>
+                <Card>
+                    <Card.Content>
+                        <Grid columns={2} stretched>
+                            <Grid.Column>
+                            <Image 
+                            fluid
+                            label={{as:'a', color: color, content: ribbonName, ribbon:true}}
+                            src={profilePic}
+                            />
+                            </Grid.Column>
+                            <Divider vertical></Divider>
+                            <Grid.Column>
+                                <div style={CardStyle.Main}>
+                                    <h2>{this.state.title}</h2>    
+                                    <h5>{this.state.date}</h5>
+                                    <h4><p>{this.state.descrip}</p></h4>                      
+                                </div>
+                            </Grid.Column>
+                            </Grid>
+                    </Card.Content>
+                </Card>
             </div>
         );
     }
 }
 
 //CSS Styling
-var CardStyle={
-
+var CardStyle = {
+    Main: {
+        color: "#000000"
+    }
 };
+
+export default GenericCard;

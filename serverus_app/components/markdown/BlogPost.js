@@ -22,7 +22,6 @@ class BlogPost extends React.Component {
     componentWillUnmount() {
         this.isPageMounted = false;
     }
-    
     componentDidMount() {
         if (!this.props.accounts[0]) return;
         var that = this;
