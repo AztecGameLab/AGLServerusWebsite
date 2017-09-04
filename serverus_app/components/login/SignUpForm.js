@@ -6,6 +6,7 @@ import ReactTransitions from 'react-transitions';
 import SignUpOne from './SignUpOne';
 import SignUpTwo from './SignUpTwo';
 import SignUpThree from './SignUpThree';
+import ReactCSSTransitionReplace from 'react-css-transition-replace';
 
 class SignUpForm extends Component {
   constructor(props) {
@@ -180,6 +181,9 @@ class SignUpForm extends Component {
       uid: userUid,
       info: this.state.newAccount
     };
+    firebase.database().ref('accounts/takenEmails').push(data.info.email); //Taken Emails
+    firebase.database().ref('accounts/takenRedIds').push(data.info.redId); //Taken RedIDs
+    firebase.database().ref('accounts/takenUsernames').push(data.info.username); //Taken Emails
     var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
     this.pathRef = firebase.storage().ref('accounts/' + data.info.username + '.json');
     user.updateProfile({
@@ -195,7 +199,7 @@ class SignUpForm extends Component {
           firebase.database().ref('accounts/' + username).set({
             data: url
           });
-          that2.props.signedUp();          
+          that2.props.signedUp();
           //firebase.database().ref().child('/testUserURL').push(newUid:url);
         })
       }).catch(function (error) {
@@ -205,27 +209,26 @@ class SignUpForm extends Component {
   }
 
   render() {
-    console.log(this.state.currentPhase == 0);
     //Semantic UI transitions not working atm
     let phase;
     switch (this.state.currentPhase) {
       case 0:
-        phase = <SignUpOne
+        phase = <SignUpOne key = '0'
           handleEmailInput={this.handleEmailInput}
           handlePasswordInput={this.handlePasswordInput}
           handleRedIDInput={this.handleRedIDInput}
           changePhase={this.changePhase} />;
         break;
       case 1:
-        phase = <SignUpTwo
+        phase = <SignUpTwo key = '1'
           handleFirstNameInput={this.handleFirstNameInput}
           handleLastNameInput={this.handleLastNameInput}
           handleMajorInput={this.handleMajorInput}
           changePhase={this.changePhase} />;
         break;
       case 2:
-        phase = <SignUpThree
-          handleUsernameInput={this.handleUsernameInput}
+        phase = <SignUpThree key = '2'
+          handleForumHandleInput={this.handleForumHandleInput}
           onSubmission={this.onSubmission}
           changePhase={this.changePhase}
           randomUser={this.randomUser} />
@@ -233,18 +236,11 @@ class SignUpForm extends Component {
     }
     return (
       <Form>
-
-        <ReactTransitions
-          transition="move-to-left-move-from-right"
-          width={500}
-          height={300}>
-
+        <ReactCSSTransitionReplace transitionName="fade-wait" 
+          transitionEnterTimeout={1000} transitionLeaveTimeout={1000}>
           {phase}
-
-        </ReactTransitions>
-
-        <Stepper steps={[{ title: 'Login Info' }, { title: 'Basic Info' }, { title: 'Confirm' }]} activeStep={this.state.currentPhase} />
-
+        </ReactCSSTransitionReplace>
+        
       </Form>
     );
   }

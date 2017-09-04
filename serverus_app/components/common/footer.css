@@ -1,0 +1,24 @@
+#footer {
+    background-color: #212121;
+    color: white;
+    bottom: 0;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    z-index: -1;
+}
+#footer {
+    width: 100%;
+    height: 100px;
+}
+#footer-right {
+    float: right;
+    height: 100%;
+    width: auto;
+}
+#footer-right-top {
+    padding: 5px;
+}
+#footer-right-bottom {
+    padding: 5px;
+}
