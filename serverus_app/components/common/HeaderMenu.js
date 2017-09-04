@@ -26,6 +26,7 @@ class HeaderMenu extends React.Component {
                     <Menu stackable inverted pointing >
                         <Menu.Item active={activeItem === 'home'} onClick={this.handleItemClick} as={Link} to='/'><Image style={HeaderStyle.logo} src={logo} /></Menu.Item>
                         <Menu.Item name='games' active={activeItem === 'games'} onClick={this.handleItemClick} as={Link} to='/games'><Icon name='gamepad' />Games</Menu.Item>
+                        <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon name='checked calendar' />Calendar</Menu.Item>
                         <Dropdown item text="Articles">
                             <Dropdown.Menu>
                                 <Dropdown.Item icon='edit' as={Link} to='/createpost' text="Create Article" />
@@ -34,7 +35,7 @@ class HeaderMenu extends React.Component {
                         </Dropdown>
                         {this.props.loggedIn ?
                             <Menu.Menu position='right'>
-                                <Dropdown item trigger={<div><Icon name="user circle"></Icon>Welcome {this.props.accounts[0].info.firstName + ' ' + this.props.accounts[0].info.lastName + '!'}</div>} icon={null} style={HeaderStyle.profile}>
+                                <Dropdown item trigger={<div><Icon name="dashboard"></Icon>Welcome {this.props.accounts[0].info.firstName + ' ' + this.props.accounts[0].info.lastName + '!'}</div>} icon={null} style={HeaderStyle.profile}>
                                     <Dropdown.Menu>
                                         <Dropdown.Item as={Link} to={'/user/' + this.props.accounts[0].info.username} icon='user circle' text='My Account'/>
                                         <Dropdown.Item icon='sign out' text='Sign out' onClick={this.props.signOut} />
