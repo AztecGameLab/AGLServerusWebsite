@@ -19,7 +19,7 @@ class SignUpOne extends React.Component {
       redIDFilled: false,
       buttonDisable: true,
       redIDTaken: false,
-      exisitngEmails: [],
+      existingEmails: [],
       existingRedIDs: []
 
     };
@@ -33,7 +33,6 @@ class SignUpOne extends React.Component {
     var that = this;
     emailRef.on('value', function (snapshot) {
       if (snapshot.val()) {
-        debugger;
         that.setState({
           existingEmails: Object.values(snapshot.val())
         });
@@ -42,7 +41,6 @@ class SignUpOne extends React.Component {
     var redIDRef = firebase.database().ref('accounts/takenRedIds/');
     redIDRef.on('value', function (snapshot) {
       if (snapshot.val()) {
-        debugger;
         that.setState({
           existingRedIDs: Object.values(snapshot.val())
         });
@@ -51,7 +49,6 @@ class SignUpOne extends React.Component {
   }
   emailCheck(e) {
     var that = this;
-    debugger;
     for (var i in this.state.existingEmails) {
       if (this.state.existingEmails[i] == e.target.value) {
         that.setState({
@@ -60,7 +57,6 @@ class SignUpOne extends React.Component {
           emailFilled: true,
           emailTaken: true
         }, function () {
-          debugger;
           that.formComplete();
         });
         return;
@@ -123,7 +119,6 @@ class SignUpOne extends React.Component {
   redIDCheck(e) {
     this.props.handleRedIDInput(e);
     var that = this;
-    debugger;
     for (var i in this.state.existingRedIDs) {
       if (this.state.existingRedIDs[i] == e.target.value) {
         that.setState({
@@ -131,7 +126,6 @@ class SignUpOne extends React.Component {
           redIDWarning: true,
           redIDTaken: true
         }, function () {
-          debugger;
           that.formComplete();
         });
         return;
@@ -152,7 +146,7 @@ class SignUpOne extends React.Component {
       });
       return;
     }
-    else {
+    else if (e.target.value.length > 9) {
       this.setState({
         redIDFirstClick: true,
         redIDWarning: true,
@@ -160,11 +154,18 @@ class SignUpOne extends React.Component {
       }, function () {
         this.formComplete();
       });
-      return;
+    }
+    else if (e.target.value == "" || e.target.value.length < 9) {
+      this.setState({
+        redIDFirstClick: false,
+        redIDWarning: true,
+        redIDTaken: false
+      }, function () {
+        this.formComplete();
+      });
     }
   }
   formComplete() {
-    debugger;
     var warningsOn = (this.state.emailWarning || this.state.passwordWarning || this.state.redIDWarning || this.state.emailTaken || this.state.redIDTaken);
     var inputsFilled = (this.state.emailFilled && this.state.passFilled && this.state.redIDFilled);
     if (inputsFilled) {
@@ -212,7 +213,7 @@ class SignUpOne extends React.Component {
               <input id='red' onChange={this.redIDCheck} />
               {this.state.redIDWarning ?
                 this.state.redIDFirstClick && !this.state.redIDTaken && <Label color='red' pointing='left'>Incorrect Red ID</Label>
-                : this.state.redIDFirstClick && <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label>}
+                : this.state.redIDFirstClick ? <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label> : null}
               {this.state.redIDTaken && <Label pointing='left' color='red'>Red ID is already used</Label>}
             </Input>
           </Form.Field>
@@ -238,7 +239,7 @@ var modalStyle = {
   spacing: {
     margin: '15px',
     width: "100%",
-    display: "block"
+    display: "block",
   }
 };
 

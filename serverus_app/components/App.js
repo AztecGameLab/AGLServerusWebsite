@@ -36,7 +36,6 @@ class App extends React.Component {
                     if (that2.state.modelIsOpen && that2.state.signedUp) return;
                     axios.get(snapshot.val().data)
                     .then(function(response) {
-                        debugger;
                         var that3 = that2;
                         that3.props.actions.loadAccount(response.data);
                         alert('User LOADED IN redux!!!');
@@ -81,7 +80,6 @@ class App extends React.Component {
         }
     }
     signOut = () => {
-        debugger;
         firebase.auth().signOut().then(function() {
             alert('USER SIGNED OUT!!');
         }).catch(function(error) {

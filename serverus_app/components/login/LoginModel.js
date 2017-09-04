@@ -68,10 +68,10 @@ var modalStyle = {
     display: 'block',
     maxWidth:'400px',
     maxHeight:'200px',
-    width: 'auto',
+    width: '100%',
     height: 'auto',
     position: 'relative',
-    top: '50%',
+    top: '175px',
     transform: 'translateY(-50%)'
 
   },

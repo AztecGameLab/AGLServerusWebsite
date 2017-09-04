@@ -13,7 +13,6 @@ export default class ProfilePage extends React.Component {
 
     componentWillMount() {
         var that = this;
-        debugger;
         console.log(this.props.routeParams.username);
         var userRef = firebase.database().ref('accounts/' + this.props.routeParams.username);
         userRef.on('value', function (snapshot) {
@@ -24,7 +23,6 @@ export default class ProfilePage extends React.Component {
                 console.log(snapshot.val());
                 axios.get(snapshot.val().data).then(function (response) {
                     var that2 = that;
-                    debugger;
                     that2.setState({
                         data: response.data
                     });

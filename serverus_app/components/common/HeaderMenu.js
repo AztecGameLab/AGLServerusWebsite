@@ -21,8 +21,7 @@ class HeaderMenu extends React.Component {
         let logo = require('./AGL_banner_white_border_subtraction.jpg');
         const { activeItem } = this.state
         return (
-            <div className="row">
-                <Sticky className="sticker" style={{ zIndex: 1000 }}>
+            <div className="row" style={HeaderStyle.header}> 
                     <Menu stackable inverted pointing >
                         <Menu.Item active={activeItem === 'home'} onClick={this.handleItemClick} as={Link} to='/'><Image style={HeaderStyle.logo} src={logo} /></Menu.Item>
                         <Menu.Item name='games' active={activeItem === 'games'} onClick={this.handleItemClick} as={Link} to='/games'><Icon name='gamepad' />Games</Menu.Item>
@@ -39,17 +38,16 @@ class HeaderMenu extends React.Component {
                                 <Dropdown item trigger={<div><Icon name="dashboard"></Icon>Welcome {this.props.accounts[0].info.firstName + ' ' + this.props.accounts[0].info.lastName + '!'}</div>} icon={null} style={HeaderStyle.profile}>
                                     <Dropdown.Menu>
                                         <Dropdown.Item as={Link} to={'/user/' + this.props.accounts[0].info.username} icon='user circle' text='My Account' />
-                                        <Dropdown.Item icon='sign out' text='Sign out' onClick={props.signOut} />
+                                        <Dropdown.Item icon='sign out' text='Sign out' onClick={this.props.signOut} />
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </Menu.Menu>
                             :
                             <Menu.Menu position='right'>
                                 <Menu.Item name='Login' onClick={() => this.props.showModel(0)}></Menu.Item>
-                                <Menu.Item name='SignUp' onClick={() => this.props.showModel(1)}></Menu.Item>
+                                <Menu.Item name='SignUp' onClick={() => this.props.showModel(1)}  style={HeaderStyle.profile}></Menu.Item>
                             </Menu.Menu>}
                     </Menu>
-                </Sticky>
             </div>);
     }
 };

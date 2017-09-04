@@ -46,7 +46,6 @@ class MarkdownCreate extends React.Component {
      * Send JSON to firebase storage and store url in database
      */
     sendToFB() {
-        debugger;
         var that = this;
         var now = new Date();
         now = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();

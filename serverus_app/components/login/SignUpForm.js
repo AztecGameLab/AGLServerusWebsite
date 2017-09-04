@@ -115,7 +115,6 @@ class SignUpForm extends Component {
   }
   //Optional Infos (SignUpThree)
   handleUsernameInput(e) {
-    debugger;
     const newAccount = this.state.newAccount;
     newAccount.username = e.target.value;
     this.setState({
@@ -163,13 +162,11 @@ class SignUpForm extends Component {
     console.log(this.state.newAccount);
   }
   onSubmission() {
-    debugger;
     this.setState({
       loading: true
     });
     var that = this;
     const newUserData = this.state.newAccount;
-    debugger;
     firebase.auth().createUserWithEmailAndPassword(newUserData.email, newUserData.password)
 
       .then(function () {
@@ -190,7 +187,6 @@ class SignUpForm extends Component {
   sendNewUserToFB() {
     this.props.signedUp();
     var that = this;
-    debugger;
     var user = firebase.auth().currentUser;
     console.log('CURRENT USER', user);
     var userUid = user.uid;
@@ -211,12 +207,14 @@ class SignUpForm extends Component {
         alert('Uploaded New User to accounts Storage!');
         that2.pathRef.getDownloadURL().then(function (url) {
           var username = firebase.auth().currentUser.displayName;
-          debugger;
           firebase.database().ref('accounts/' + username).set({
             data: url
           });
           that2.props.signedUp();
           //firebase.database().ref().child('/testUserURL').push(newUid:url);
+          this.setState({
+            loading: false
+          });
         })
       }).catch(function (error) {
         console.log(error);
@@ -263,13 +261,5 @@ class SignUpForm extends Component {
     );
   }
 }
-
-var modalStyle = {
-  spacing: {
-    margin: '15px',
-    width: "100%",
-    display: "block"
-  }
-};
 
 export default SignUpForm;

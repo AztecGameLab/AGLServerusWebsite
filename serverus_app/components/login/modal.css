@@ -1,3 +1,6 @@
+.ui.form .field>label {
+  font-size: 1em !important;
+}
 .fade-wait-leave {
     opacity: 1;
   }

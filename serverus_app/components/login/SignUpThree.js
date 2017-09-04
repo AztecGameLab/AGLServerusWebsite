@@ -27,7 +27,6 @@ class SignUpThree extends React.Component {
     var that = this;
     emailRef.on('value', function (snapshot) {
       if (snapshot.val()) {
-        debugger;
         that.setState({
           existingUsernames: Object.values(snapshot.val())
         });
@@ -42,12 +41,10 @@ class SignUpThree extends React.Component {
     }, function() {
       that.formComplete();
     });
-    debugger;
     console.log(value + '' + 'xD');
   }
 
   usernameCheck(e) {
-    debugger;
     var that = this;
     this.props.handleUsernameInput(e);
     if (e.target.value.length > 0 && e.target.value.length < 20) {
@@ -58,7 +55,6 @@ class SignUpThree extends React.Component {
             usernameTaken: true,
             usernameLimit: false
           }, function () {
-            debugger;
             that.formComplete();
           });
           return;
@@ -69,7 +65,6 @@ class SignUpThree extends React.Component {
         usernameTaken: false,
         usernameLimit: false
       }, function () {
-        debugger;
         that.formComplete();
       });
       return;
@@ -80,14 +75,12 @@ class SignUpThree extends React.Component {
         usernameTaken: false,
         usernameLimit: true
       }, function () {
-        debugger;
         that.formComplete();
       });
       return;
     }
   }
   termsAccepted(e) {
-    debugger;
     let prevChecked = this.state.termsAccepted;
     this.setState({
       termsAccepted: !prevChecked
@@ -96,7 +89,6 @@ class SignUpThree extends React.Component {
     });
   }
   formComplete() {
-    debugger;
     var isTaken = this.state.usernameTaken || this.state.usernameLimit;
     var inputsFilled = this.state.usernameFilled && this.state.rolesSelected.length > 0;
     var termsAccepted = this.state.termsAccepted;
@@ -136,7 +128,7 @@ class SignUpThree extends React.Component {
           <Form.Field>
             <label>AGL Username</label>
             <Input placeholder='Username' iconPosition='left'>
-              <Icon name='new pied piper' />
+              <Icon name='new pied piper'/>
               <input onChange={this.usernameCheck} />
               {this.state.usernameTaken && <Label pointing='left' color='red'>Username is already taken</Label>}
               {this.state.usernameLimit && <Label pointing='left' color='red'>Username is too long!</Label>}
@@ -166,10 +158,9 @@ class SignUpThree extends React.Component {
               <Grid.Column floated='right' width={10}>
                 <Button fluid color='green' size='massive' disabled={this.state.buttonDisable}
                   onClick={this.props.onSubmission}
-                  loading={this.props.loading}
-                >
-
+                  loading={this.props.loading}>
                   Join Aztec Game Lab!
+                  {/* {this.state.buttonDisable && !this.props.loading ? 'Join Aztec Game Lab!' : 'Thanks for signing up!' } */}
 
                 </Button>
               </Grid.Column>

@@ -43,7 +43,6 @@ class SignUpTwo extends React.Component {
   }
   majorCheck(e) {
     this.props.handleMajorInput(e);
-    debugger;
     if(e.target.textContent.length > 0) {
       this.setState({
         majorFirstClick: true,
@@ -54,7 +53,6 @@ class SignUpTwo extends React.Component {
     }
   }
   formComplete() {
-    debugger;
     var inputsFilled = (this.state.firstNameFilled && this.state.lastNameFilled && this.state.majorFilled);
     if(inputsFilled){
       this.setState({

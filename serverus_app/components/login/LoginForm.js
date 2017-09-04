@@ -12,7 +12,8 @@ class LoginForm extends Component {
         this.state = {
             email:'',
             password:'',
-            loading: false
+            loading: false,
+            loaded: false
         };
         this.handleEmailInput = this.handleEmailInput.bind(this);
         this.handlePasswordInput = this.handlePasswordInput.bind(this);
@@ -38,7 +39,7 @@ class LoginForm extends Component {
         .then(function(response) {
             var that2 = that;
             if (response){
-                var refString = 'accountData/' + response.uid;
+                var refString = 'accounts/' + response.displayName;
                 var userUrlRef = firebase.database().ref(refString);
                 userUrlRef.on('value', function(snapshot) {
                     var that3 = that2;
@@ -46,7 +47,11 @@ class LoginForm extends Component {
                     .then(function(response) {
                         var that4 = that3;
                         that4.props.actions.loadAccount(response.data);
-                        alert('User LOADED IN redux!!!');
+                        that4.setState({
+                            loading: false,
+                            loaded: true
+                        });
+                        setTimeout(window.location.reload(), 1000);
                     });
                 });
             }
@@ -67,12 +72,13 @@ class LoginForm extends Component {
         alert('Logged in random!');
     }
     render() {
+        var loggedIn = !this.state.loaded || !this.state.email || !this.state.password ? false: true;
         return (
             <div>
                 <div style={modalStyle.spacing}>
                     <Form.Field>
                         <label>Email</label>
-                            <Input inverted placeholder='Email:' iconPosition = 'left'> 
+                            <Input inverted placeholder='Email' iconPosition='left' style={{width: '100%'}}> 
                                 <Icon name='mail outline' />
                                 <input onChange={this.handleEmailInput} />
                             </Input>
@@ -81,7 +87,7 @@ class LoginForm extends Component {
                 <div style={modalStyle.spacing}>
                     <Form.Field>
                         <label>Password</label>
-                        <Input inverted placeholder='Password' iconPosition='left'>
+                        <Input inverted placeholder='Password' iconPosition='left' style={{width: '100%'}}>
                         <Icon name='unlock alternate' />
                         <input
                             type='password'
@@ -93,7 +99,8 @@ class LoginForm extends Component {
                     <Button fluid color='green' size='massive' disabled={this.state.buttonDisable}
                         onClick={this.handleSubmission}
                         loading={this.state.loading}>
-                            Login
+                            {/* Login */}
+                            {loggedIn ? 'Signed In!' : 'Login' }
                     </Button>
                 </div>
             </div>
