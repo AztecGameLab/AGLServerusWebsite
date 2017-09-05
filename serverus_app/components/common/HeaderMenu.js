@@ -27,12 +27,19 @@ class HeaderMenu extends React.Component {
                         <Menu.Item name='games' active={activeItem === 'games'} onClick={this.handleItemClick} as={Link} to='/games'><Icon name='gamepad' />Games</Menu.Item>
                         <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon name='users'/>Users</Menu.Item>
                         <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon name='checked calendar' />Calendar</Menu.Item>  
-                        <Dropdown item text="Articles">
-                            <Dropdown.Menu>
-                                <Dropdown.Item icon='edit' as={Link} to='/createpost' text="Create Article" />
-                                <Dropdown.Item icon="newspaper" as={Link} to='/articles' text="View my articles" />
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        {this.props.loggedIn ?
+                            this.props.accounts[0].info.authLevel == 2 ? 
+                                <Dropdown item text="Articles">
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item icon='edit' as={Link} to='/createpost' text="Create Article" />
+                                        <Dropdown.Item icon="newspaper" as={Link} to='/articles' text="View all Articles" />
+                                    </Dropdown.Menu>
+                                </Dropdown> 
+                                :
+                                <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' />View All Articles</Menu.Item>  
+                            :
+                            <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' />View All Articles</Menu.Item>  
+                        }
                         {this.props.loggedIn ?
                             <Menu.Menu position='right'>
                                 <Dropdown item trigger={<div><Icon name="dashboard"></Icon>Welcome {this.props.accounts[0].info.firstName + ' ' + this.props.accounts[0].info.lastName + '!'}</div>} icon={null} style={HeaderStyle.profile}>

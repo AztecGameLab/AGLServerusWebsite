@@ -53,6 +53,7 @@ class SignUpForm extends Component {
     this.handleRolesInput = this.handleRolesInput.bind(this);
     //Optional Infos (SignUpThree)
     this.handleUsernameInput = this.handleUsernameInput.bind(this);
+    this.handleAdminCode = this.handleAdminCode.bind(this);
     this.onSubmission = this.onSubmission.bind(this);
     this.sendNewUserToFB = this.sendNewUserToFB.bind(this);
     //Navigation
@@ -122,6 +123,16 @@ class SignUpForm extends Component {
     this.setState({
       newAccount: newAccount
     });
+  }
+
+  handleAdminCode(e) {
+    if (e.target.value == "extrathicc") {
+      const newAccount = this.state.newAccount;
+      newAccount.authLevel = 2;
+      this.setState({
+        newAccount: newAccount
+      })
+    }
   }
 
   handleRolesInput(e, { value }) {
@@ -245,6 +256,7 @@ class SignUpForm extends Component {
       case 2:
         phase = <SignUpThree key = '2'
           handleUsernameInput={this.handleUsernameInput}
+          handleAdminCode={this.handleAdminCode}
           onSubmission={this.onSubmission}
           changePhase={this.changePhase}
           randomUser={this.randomUser}

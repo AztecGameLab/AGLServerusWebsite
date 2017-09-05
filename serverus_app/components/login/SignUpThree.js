@@ -18,6 +18,7 @@ class SignUpThree extends React.Component {
       rolesSelected: []
     };
     this.usernameCheck = this.usernameCheck.bind(this);
+    this.adminCheck = this.adminCheck.bind(this);
     this.formComplete = this.formComplete.bind(this);
     this.termsAccepted = this.termsAccepted.bind(this);
     this.rolesCheck = this.rolesCheck.bind(this);
@@ -70,6 +71,15 @@ class SignUpThree extends React.Component {
       });
       return;
     }
+    else if (e.target.value == "") {
+      this.setState({
+        usernameFilled: false,
+        usernameTaken: false,
+        usernameLimit: false
+      }, function () {
+        that.formComplete();
+      });
+    }
     else {
       this.setState({
         usernameFilled: true,
@@ -78,9 +88,13 @@ class SignUpThree extends React.Component {
       }, function () {
         that.formComplete();
       });
-      return;
     }
   }
+
+  adminCheck(e) {
+    this.props.handleAdminCode(e);
+  }
+
   termsAccepted(e) {
     let prevChecked = this.state.termsAccepted;
     this.setState({
@@ -134,6 +148,15 @@ class SignUpThree extends React.Component {
               <input onChange={this.usernameCheck} />
               {this.state.usernameTaken && <Label pointing='left' color='red'>Username is already taken</Label>}
               {this.state.usernameLimit && <Label pointing='left' color='red'>Username is too long!</Label>}
+            </Input>
+          </Form.Field>
+        </div>
+        <div style={modalStyle.spacing}>
+          <Form.Field>
+            <label>If you are an admin please type your code</label>
+            <Input placeholder='passcode' iconPosition='left'>
+              <Icon name='lock' />
+              <input onBlur={this.adminCheck} type='password'/>
             </Input>
           </Form.Field>
         </div>

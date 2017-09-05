@@ -161,9 +161,18 @@ class SignUpOne extends React.Component {
         this.formComplete();
       });
     }
-    else if (e.target.value == "" || e.target.value.length < 9) {
+    else if ((e.target.value == "" || e.target.value.length < 9) && !specialMatches) {
       this.setState({
         redIDFirstClick: false,
+        redIDWarning: false,
+        redIDTaken: false
+      }, function () {
+        this.formComplete();
+      });
+    }
+    else {
+      this.setState({
+        redIDFirstClick: true,
         redIDWarning: true,
         redIDTaken: false
       }, function () {
