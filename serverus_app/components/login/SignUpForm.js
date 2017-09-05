@@ -6,36 +6,40 @@ import ReactTransitions from 'react-transitions';
 import SignUpOne from './SignUpOne';
 import SignUpTwo from './SignUpTwo';
 import SignUpThree from './SignUpThree';
+import ReactCSSTransitionReplace from 'react-css-transition-replace';
 
 class SignUpForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentPhase: 0,
+      created: false,
+      loading: false,
       newAccount: {
-        //Essential Login Info
+        //Login Info
         email: '',
         password: '',
-        redId: '',
-        //Basic User Info
+        //Basic Info
         firstName: '',
         lastName: '',
+        redId: '',
         major: '',
-        currentYear: '',
-        //Optional Editable Later
-        roles: [],
-        bio: '',
+        dateJoined: '',
+        school: 'San Diego State University',
+        //AGL Info
         username: '',
-        //Functional Attibutes
-        flares: '',
+        roles : [],
+        bio: '',
+        flare: '',
+        goodBoyPoints: 0,
+        //Collections
         badges: [],
-        games: [
-
-        ],
-        groups: [
-
-        ],
-        authLevel: false        
+        games: [],
+        showcase: [],
+        bookmarked: [],
+        groups: [],
+        activities: [],
+        authLevel: 0  
       }
     };
     //Essential Login Info (SignUpOne)
@@ -46,6 +50,7 @@ class SignUpForm extends Component {
     this.handleFirstNameInput = this.handleFirstNameInput.bind(this);
     this.handleLastNameInput = this.handleLastNameInput.bind(this);
     this.handleMajorInput = this.handleMajorInput.bind(this);
+    this.handleRolesInput = this.handleRolesInput.bind(this);
     //Optional Infos (SignUpThree)
     this.handleUsernameInput = this.handleUsernameInput.bind(this);
     this.onSubmission = this.onSubmission.bind(this);
@@ -57,7 +62,6 @@ class SignUpForm extends Component {
   }
   //Sign Up Nav
   changePhase(value) {
-    //debugger;
     const current = this.state.currentPhase;
     this.setState({
       currentPhase: current + value
@@ -65,8 +69,11 @@ class SignUpForm extends Component {
   }
   //Essential Login Info (SignUpOne)
   handleEmailInput(e) {
+    var now = new Date();
+    now = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
     const newAccount = this.state.newAccount;
     newAccount.email = e.target.value;
+    newAccount.dateJoined = now;
     this.setState({
       newAccount: newAccount
     });
@@ -103,7 +110,7 @@ class SignUpForm extends Component {
   }
   handleMajorInput(e) {
     const newAccount = this.state.newAccount;
-    newAccount.major = e.target.value;
+    newAccount.major = e.target.textContent;
     this.setState({
       newAccount: newAccount
     });
@@ -112,6 +119,14 @@ class SignUpForm extends Component {
   handleUsernameInput(e) {
     const newAccount = this.state.newAccount;
     newAccount.username = e.target.value;
+    this.setState({
+      newAccount: newAccount
+    });
+  }
+
+  handleRolesInput(e, { value }) {
+    const newAccount = this.state.newAccount;
+    newAccount.roles = value;
     this.setState({
       newAccount: newAccount
     });
@@ -149,9 +164,11 @@ class SignUpForm extends Component {
     console.log(this.state.newAccount);
   }
   onSubmission() {
+    this.setState({
+      loading: true
+    });
     var that = this;
     const newUserData = this.state.newAccount;
-    debugger;
     firebase.auth().createUserWithEmailAndPassword(newUserData.email, newUserData.password)
 
       .then(function () {
@@ -172,7 +189,6 @@ class SignUpForm extends Component {
   sendNewUserToFB() {
     this.props.signedUp();
     var that = this;
-    debugger;
     var user = firebase.auth().currentUser;
     console.log('CURRENT USER', user);
     var userUid = user.uid;
@@ -180,6 +196,9 @@ class SignUpForm extends Component {
       uid: userUid,
       info: this.state.newAccount
     };
+    firebase.database().ref('accounts/takenEmails').push(data.info.email); //Taken Emails
+    firebase.database().ref('accounts/takenRedIds').push(data.info.redId); //Taken RedIDs
+    firebase.database().ref('accounts/takenUsernames').push(data.info.username); //Taken Emails
     var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
     this.pathRef = firebase.storage().ref('accounts/' + data.info.username + '.json');
     user.updateProfile({
@@ -187,15 +206,16 @@ class SignUpForm extends Component {
     }).then(function () {
       var that2 = that;
       that.pathRef.put(file).then(function () {
-        debugger;
-        alert('Uploaded New User to accounts Storage!');
         that2.pathRef.getDownloadURL().then(function (url) {
           var username = firebase.auth().currentUser.displayName;
-          debugger;
           firebase.database().ref('accounts/' + username).set({
             data: url
           });
-          that2.props.signedUp();          
+          that2.setState({
+            loading: false,
+            created: true
+          });
+          that2.props.signedUp();
           //firebase.database().ref().child('/testUserURL').push(newUid:url);
         })
       }).catch(function (error) {
@@ -205,57 +225,44 @@ class SignUpForm extends Component {
   }
 
   render() {
-    console.log(this.state.currentPhase == 0);
     //Semantic UI transitions not working atm
     let phase;
     switch (this.state.currentPhase) {
       case 0:
-        phase = <SignUpOne
+        phase = <SignUpOne key = '0'
           handleEmailInput={this.handleEmailInput}
           handlePasswordInput={this.handlePasswordInput}
           handleRedIDInput={this.handleRedIDInput}
           changePhase={this.changePhase} />;
         break;
       case 1:
-        phase = <SignUpTwo
+        phase = <SignUpTwo key = '1'
           handleFirstNameInput={this.handleFirstNameInput}
           handleLastNameInput={this.handleLastNameInput}
           handleMajorInput={this.handleMajorInput}
           changePhase={this.changePhase} />;
         break;
       case 2:
-        phase = <SignUpThree
+        phase = <SignUpThree key = '2'
           handleUsernameInput={this.handleUsernameInput}
           onSubmission={this.onSubmission}
           changePhase={this.changePhase}
-          randomUser={this.randomUser} />
+          randomUser={this.randomUser}
+          created={this.state.created} 
+          loading = {this.state.loading}
+          handleRolesInput = {this.handleRolesInput}/>
         break;
     }
     return (
       <Form>
-
-        <ReactTransitions
-          transition="move-to-left-move-from-right"
-          width={500}
-          height={300}>
-
+        <ReactCSSTransitionReplace transitionName="fade-wait" 
+          transitionEnterTimeout={1000} transitionLeaveTimeout={1000}>
           {phase}
-
-        </ReactTransitions>
-
-        <Stepper steps={[{ title: 'Login Info' }, { title: 'Basic Info' }, { title: 'Confirm' }]} activeStep={this.state.currentPhase} />
-
+        </ReactCSSTransitionReplace>
+        
       </Form>
     );
   }
 }
-
-var modalStyle = {
-  spacing: {
-    margin: '15px',
-    width: "100%",
-    display: "block"
-  }
-};
 
 export default SignUpForm;

@@ -1,9 +1,16 @@
-img.logo {
-    display: block;
-    margin: auto;
-    max-height: 100%;
-    max-width: 35%;
+.ui.menu>.item:first-child {
+    max-width: 200px;
+    padding: 0;
+    margin-left: 15px;
+    background-color: black;   
 }
-div.logo {
-    background-color: #991E20;
+.ui.menu .dropdown.item .menu {
+    background-color: black;
+}
+.ui.menu .ui.dropdown .menu>.item {
+    color: white !important;
+}
+.ui.menu .dropdown.item .menu>.item:hover {
+    background-color: #414141 !important;   
+    color: white !important     
 }
