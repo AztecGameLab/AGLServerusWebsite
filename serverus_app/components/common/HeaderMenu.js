@@ -18,12 +18,12 @@ class HeaderMenu extends React.Component {
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
     render() {
-        let logo = require('./AGL_banner_white_border_subtraction.jpg');
+        let logo = require('../login/blacklogo.png');
         const { activeItem } = this.state
         return (
             <div className="row" style={HeaderStyle.header}> 
                     <Menu stackable inverted pointing >
-                        <Menu.Item active={activeItem === 'home'} onClick={this.handleItemClick} as={Link} to='/'><Image style={HeaderStyle.logo} src={logo} /></Menu.Item>
+                        <Menu.Item className="logo" active={activeItem === 'home'} onClick={this.handleItemClick} as={Link} to='/'><Image style={HeaderStyle.logo} src={logo} /></Menu.Item>
                         <Menu.Item name='games' active={activeItem === 'games'} onClick={this.handleItemClick} as={Link} to='/games'><Icon name='gamepad' />Games</Menu.Item>
                         <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon name='users'/>Users</Menu.Item>
                         <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon name='checked calendar' />Calendar</Menu.Item>  
@@ -37,7 +37,7 @@ class HeaderMenu extends React.Component {
                             <Menu.Menu position='right'>
                                 <Dropdown item trigger={<div><Icon name="dashboard"></Icon>Welcome {this.props.accounts[0].info.firstName + ' ' + this.props.accounts[0].info.lastName + '!'}</div>} icon={null} style={HeaderStyle.profile}>
                                     <Dropdown.Menu>
-                                        <Dropdown.Item as={Link} to={'/user/' + this.props.accounts[0].info.username} icon='user circle' text='My Account' />
+                                        <Dropdown.Item as={Link} to={'/u/' + this.props.accounts[0].info.username} icon='user circle' text='My Account' />
                                         <Dropdown.Item icon='sign out' text='Sign out' onClick={this.props.signOut} />
                                     </Dropdown.Menu>
                                 </Dropdown>
@@ -58,9 +58,8 @@ var HeaderStyle = {
         zIndex: 2000
     },
     logo: {
-        display: 'block',
-        width: '200px',
-        height: 'auto'
+        maxWidth: 150,
+        maxHeight: '100%'
     },
     profile: {
         paddingRight: 30

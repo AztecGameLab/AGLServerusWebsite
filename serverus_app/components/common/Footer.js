@@ -11,10 +11,11 @@ const Footer = (props) => {
             <Image style={FooterStyle.sdsuImage} src='https://newscenter.sdsu.edu/brand/images/primary2color.gif' />
             <div id="footer-right">
                 <div id="footer-right-top">
-                    <Icon name='mail outline'/> Contact us at <a href='mailto:aztecgamelab@gmail.com'>aztecgamelab@gmail.com</a>
+                    <Icon name='mail outline'/> Contact us at: <a href='mailto:aztecgamelab@gmail.com'>aztecgamelab@gmail.com</a>
                 </div>
                 <div id="footer-right-bottom">
                     <Icon name='share alternate'/> Follow us on&nbsp;
+                    <Button icon color='instagram' circular compact><Icon name='instagram'/></Button>
                     <Button icon color='facebook' circular compact><Icon name='facebook f'/></Button>
                     <Button icon color='twitter' circular compact><Icon name='twitter' /></Button>
                     <Button icon color='youtube' circular compact><Icon name='youtube' /></Button>
@@ -27,13 +28,13 @@ var FooterStyle = {
     logo: {
         display: 'block',
         width: 'auto',
-        height: '100%',
+        maxHeight: '100%',
         float: 'left',
     },
     sdsuImage: {
         display: 'block',
         width: 'auto',
-        height: '100%',
+        maxHeight: '100%',
         float: 'right',
     },
 }

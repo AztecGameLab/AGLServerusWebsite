@@ -13,6 +13,8 @@ class SignUpForm extends Component {
     super(props);
     this.state = {
       currentPhase: 0,
+      created: false,
+      loading: false,
       newAccount: {
         //Login Info
         email: '',
@@ -204,17 +206,17 @@ class SignUpForm extends Component {
     }).then(function () {
       var that2 = that;
       that.pathRef.put(file).then(function () {
-        alert('Uploaded New User to accounts Storage!');
         that2.pathRef.getDownloadURL().then(function (url) {
           var username = firebase.auth().currentUser.displayName;
           firebase.database().ref('accounts/' + username).set({
             data: url
           });
+          that2.setState({
+            loading: false,
+            created: true
+          });
           that2.props.signedUp();
           //firebase.database().ref().child('/testUserURL').push(newUid:url);
-          this.setState({
-            loading: false
-          });
         })
       }).catch(function (error) {
         console.log(error);
@@ -245,7 +247,8 @@ class SignUpForm extends Component {
           handleUsernameInput={this.handleUsernameInput}
           onSubmission={this.onSubmission}
           changePhase={this.changePhase}
-          randomUser={this.randomUser} 
+          randomUser={this.randomUser}
+          created={this.state.created} 
           loading = {this.state.loading}
           handleRolesInput = {this.handleRolesInput}/>
         break;

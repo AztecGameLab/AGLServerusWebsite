@@ -20,8 +20,7 @@ class SignUpOne extends React.Component {
       buttonDisable: true,
       redIDTaken: false,
       existingEmails: [],
-      existingRedIDs: []
-
+      existingRedIDs: [],
     };
     this.emailCheck = this.emailCheck.bind(this);
     this.passwordCheck = this.passwordCheck.bind(this);
@@ -32,6 +31,7 @@ class SignUpOne extends React.Component {
     var emailRef = firebase.database().ref('accounts/takenEmails/');
     var that = this;
     emailRef.on('value', function (snapshot) {
+      if (that.props.isLeaving) return;
       if (snapshot.val()) {
         that.setState({
           existingEmails: Object.values(snapshot.val())
@@ -40,6 +40,7 @@ class SignUpOne extends React.Component {
     });
     var redIDRef = firebase.database().ref('accounts/takenRedIds/');
     redIDRef.on('value', function (snapshot) {
+      if (that.props.isLeaving) return;
       if (snapshot.val()) {
         that.setState({
           existingRedIDs: Object.values(snapshot.val())
@@ -62,7 +63,17 @@ class SignUpOne extends React.Component {
         return;
       }
     }
-    if (EmailValidator.validate(e.target.value) == false) {
+    if (e.target.value == "") {
+      this.setState({
+        emailFirstClick: false,
+        emailWarning: false,
+        emailFilled: false,
+        emailTaken: false
+      }, function () {
+        this.formComplete()
+      });
+    }
+    else if (EmailValidator.validate(e.target.value) == false) {
       this.setState({
         emailFirstClick: true,
         emailWarning: true,
@@ -71,7 +82,6 @@ class SignUpOne extends React.Component {
       }, function () {
         this.formComplete();
       });
-      return;
     }
     else {
       this.setState({
@@ -104,7 +114,6 @@ class SignUpOne extends React.Component {
       }, function () {
         this.formComplete();
       });
-      return;
     }
     else {
       this.setState({
@@ -113,7 +122,6 @@ class SignUpOne extends React.Component {
       }, function () {
         this.formComplete();
       });
-      return;
     }
   }
   redIDCheck(e) {
@@ -128,7 +136,6 @@ class SignUpOne extends React.Component {
         }, function () {
           that.formComplete();
         });
-        return;
       }
     }
     let passString = e.target.value;
@@ -144,7 +151,6 @@ class SignUpOne extends React.Component {
       }, function () {
         this.formComplete();
       });
-      return;
     }
     else if (e.target.value.length > 9) {
       this.setState({
@@ -188,7 +194,7 @@ class SignUpOne extends React.Component {
               <input id='email' onChange={this.props.handleEmailInput} onBlur={this.emailCheck} />
               {this.state.emailWarning ?
                 this.state.emailFirstClick && !this.state.emailTaken && <Label pointing='left' color='red'>Invalid Email</Label>
-                : this.state.emailFirstClick && <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label>}
+                : this.state.emailFirstClick ? <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label> : null}
               {this.state.emailTaken && <Label pointing='left' color='red'>Email is already used</Label>}
             </Input>
           </Form.Field>

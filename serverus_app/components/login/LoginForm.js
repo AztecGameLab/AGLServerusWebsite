@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import { Button, Form, Checkbox, Input, Icon } from 'semantic-ui-react';
 import firebase from 'firebase';
-import {connect} from 'react-redux';
-import * as accountActions from '../actions/accountActions';
-import {bindActionCreators} from 'redux';
+// import {connect} from 'react-redux';
+// import * as accountActions from '../actions/accountActions';
+// import {bindActionCreators} from 'redux';
 import axios from 'axios';
 
 class LoginForm extends Component {
@@ -13,12 +13,12 @@ class LoginForm extends Component {
             email:'',
             password:'',
             loading: false,
-            loaded: false
+            loaded: false,
+            error: false
         };
         this.handleEmailInput = this.handleEmailInput.bind(this);
         this.handlePasswordInput = this.handlePasswordInput.bind(this);
         this.handleSubmission = this.handleSubmission.bind(this);
-        this.loginRandom = this.loginRandom.bind(this);
     }
     handleEmailInput(e) {
         this.setState({
@@ -46,35 +46,33 @@ class LoginForm extends Component {
                     axios.get(snapshot.val().data)
                     .then(function(response) {
                         var that4 = that3;
-                        that4.props.actions.loadAccount(response.data);
+                        // that4.props.actions.loadAccount(response.data);
                         that4.setState({
                             loading: false,
                             loaded: true
                         });
-                        setTimeout(window.location.reload(), 1000);
+                        window.location.reload();
                     });
                 });
             }
         })
         .catch(function(error) {
+        var that2 = that;
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
         alert(errorMessage);
+        that2.setState({
+            error: true,
+            loading: false
+        });
         // ...
         });
-    }
-    loginRandom(){
-        this.setState({
-            email: 'antsinmyeyesJohnson@gmail.com',
-            password: 'fridgesforsale'
-        },this.handleSubmission());
-        alert('Logged in random!');
     }
     render() {
         var loggedIn = !this.state.loaded || !this.state.email || !this.state.password ? false: true;
         return (
-            <div>
+            <Form onSubmit={this.handleSubmission}>
                 <div style={modalStyle.spacing}>
                     <Form.Field>
                         <label>Email</label>
@@ -97,13 +95,11 @@ class LoginForm extends Component {
                 </div>
                 <div style={modalStyle.spacing}>
                     <Button fluid color='green' size='massive' disabled={this.state.buttonDisable}
-                        onClick={this.handleSubmission}
                         loading={this.state.loading}>
-                            {/* Login */}
-                            {loggedIn ? 'Signed In!' : 'Login' }
+                            {loggedIn ? 'Signed In!' : this.state.error ? 'Invalid username or password! Try Again!': 'Login' }
                     </Button>
                 </div>
-            </div>
+            </Form>
         );
     }
 }
@@ -117,11 +113,12 @@ var modalStyle = {
   }
 };
 
-function mapDispatchToProps(dispatch){
-    return {
-        actions: bindActionCreators(accountActions,dispatch)
-        //this will go through the courseActions file and wrap with dispatch
-    };
-}
+// function mapDispatchToProps(dispatch){
+//     return {
+//         actions: bindActionCreators(accountActions,dispatch)
+//         //this will go through the courseActions file and wrap with dispatch
+//     };
+// }
 
-export default connect(null, mapDispatchToProps)(LoginForm);
+// export default connect(null, mapDispatchToProps)(LoginForm);
+export default LoginForm;

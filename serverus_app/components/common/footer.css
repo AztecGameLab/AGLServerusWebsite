@@ -9,12 +9,10 @@
 }
 #footer {
     width: 100%;
-    height: 100px;
+    height: 75px;
 }
 #footer-right {
     float: right;
-    height: 100%;
-    width: auto;
 }
 #footer-right-top {
     padding: 5px;

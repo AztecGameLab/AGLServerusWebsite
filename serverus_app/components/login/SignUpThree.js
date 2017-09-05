@@ -23,9 +23,10 @@ class SignUpThree extends React.Component {
     this.rolesCheck = this.rolesCheck.bind(this);
   }
   componentWillMount() {
-    var emailRef = firebase.database().ref('accounts/takenUsernames/');
+    var usernameRef = firebase.database().ref('accounts/takenUsernames/');
     var that = this;
-    emailRef.on('value', function (snapshot) {
+    usernameRef.on('value', function (snapshot) {
+      if (that.props.isLeaving) return;
       if (snapshot.val()) {
         that.setState({
           existingUsernames: Object.values(snapshot.val())
@@ -122,6 +123,7 @@ class SignUpThree extends React.Component {
     }
   }
   render() {
+    var created = !this.props.created ? false: true;    
     return (
       <div>
         <div style={modalStyle.spacing}>
@@ -159,8 +161,7 @@ class SignUpThree extends React.Component {
                 <Button fluid color='green' size='massive' disabled={this.state.buttonDisable}
                   onClick={this.props.onSubmission}
                   loading={this.props.loading}>
-                  Join Aztec Game Lab!
-                  {/* {this.state.buttonDisable && !this.props.loading ? 'Join Aztec Game Lab!' : 'Thanks for signing up!' } */}
+                  {created ? 'Thanks for Signing Up!' : 'Join Aztec Game Lab!' }
 
                 </Button>
               </Grid.Column>
