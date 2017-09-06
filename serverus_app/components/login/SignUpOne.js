@@ -20,7 +20,7 @@ class SignUpOne extends React.Component {
       buttonDisable: true,
       redIDTaken: false,
       existingEmails: [],
-      existingRedIDs: [],
+      existingRedIDs: []
     };
     this.emailCheck = this.emailCheck.bind(this);
     this.passwordCheck = this.passwordCheck.bind(this);
@@ -49,6 +49,8 @@ class SignUpOne extends React.Component {
     });
   }
   emailCheck(e) {
+    debugger;
+    var profileArray = this.profileIcons;
     var that = this;
     for (var i in this.state.existingEmails) {
       if (this.state.existingEmails[i] == e.target.value) {

@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Button, Form, Checkbox, Input, Icon, Grid, Label, Dropdown } from 'semantic-ui-react';
 import roles from '../common/roleOptions';
+import profileIcons from '../common/profileIconOptions';
+import {Image, CloudinaryContext, Transformation} from 'cloudinary-react';
+import axios from 'axios';
 
 class SignUpThree extends React.Component {
   constructor(props) {
@@ -9,13 +12,14 @@ class SignUpThree extends React.Component {
     this.state = {
       usernameFilled: false,
       usernameLimit: false,
-      rolesFilled:'',
+      rolesFilled: '',
       usernameTaken: false,
       buttonDisable: true,
       existingUsernames: '',
       loading: false,
       termsAccepted: false,
-      rolesSelected: []
+      rolesSelected: [],
+      profileIcons: []
     };
     this.usernameCheck = this.usernameCheck.bind(this);
     this.adminCheck = this.adminCheck.bind(this);
@@ -34,13 +38,20 @@ class SignUpThree extends React.Component {
         });
       }
     });
+    axios.get('http://res.cloudinary.com/aztecgamelab-com/image/list/profileSmall.json')
+      .then(res => {
+        console.log(res.data.resources);
+        this.setState({
+          profileIcons: res.data.resources
+        });
+      });
   }
   rolesCheck(e, { value }) {
     this.props.handleRolesInput(e, { value });
     var that = this;
     this.setState({
-      rolesSelected:value
-    }, function() {
+      rolesSelected: value
+    }, function () {
       that.formComplete();
     });
     console.log(value + '' + 'xD');
@@ -131,40 +142,51 @@ class SignUpThree extends React.Component {
     }
     else {
       this.setState({
-        buttonDisable:  true
+        buttonDisable: true
       });
       return;
     }
   }
   render() {
-    var created = !this.props.created ? false: true;    
+    var created = !this.props.created ? false : true;
     return (
+      <CloudinaryContext cloudName = 'aztecgamelab-com'>
       <div>
         <div style={modalStyle.spacing}>
-          <Form.Field>
-            <label>AGL Username</label>
-            <Input placeholder='Username' iconPosition='left'>
-              <Icon name='new pied piper'/>
-              <input onChange={this.usernameCheck} />
-              {this.state.usernameTaken && <Label pointing='left' color='red'>Username is already taken</Label>}
-              {this.state.usernameLimit && <Label pointing='left' color='red'>Username is too long!</Label>}
-            </Input>
-          </Form.Field>
-        </div>
-        <div style={modalStyle.spacing}>
-          <Form.Field>
-            <label>If you are an admin please type your code</label>
-            <Input placeholder='passcode' iconPosition='left'>
-              <Icon name='lock' />
-              <input onBlur={this.adminCheck} type='password'/>
-            </Input>
-          </Form.Field>
+          <Grid divided = 'vertically'>
+            <Grid.Row columns = {2}>
+              <Grid.Column width = {3} floated = 'left'>
+                <Label color='green' ribbon>Choose a profile picture!</Label>
+                  <Image publicId = 'ProfileIconsSmall/022-flask.png'>
+                    <Transformation  width="64" crop="scale" />
+                  </Image>
+              </Grid.Column>
+              <Grid.Column width = {11} floated = 'right'>
+                <Form.Field>
+                  <label>AGL Username</label>
+                  <Input placeholder='Username' iconPosition='left'>
+                    <Icon name='new pied piper' />
+                    <input onChange={this.usernameCheck} />
+                    {this.state.usernameTaken && <Label pointing='left' color='red'>Username is already taken</Label>}
+                    {this.state.usernameLimit && <Label pointing='left' color='red'>Username is too long!</Label>}
+                  </Input>
+                </Form.Field>
+                <Form.Field>
+                <label>If you are an admin please type your code</label>
+                <Input placeholder='passcode' iconPosition='left'>
+                  <Icon name='lock' />
+                  <input onBlur={this.adminCheck} type='password' />
+                </Input>
+              </Form.Field>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </div>
         <div style={modalStyle.spacing}>
           <Form.Field>
             <label>Roles Interested In:</label>
-              <Dropdown placeholder = 'Roles' fluid multiple selection options={roles} 
-                        value={this.state.rolesSelected} onChange={this.rolesCheck} />
+            <Dropdown placeholder='Roles' fluid multiple selection options={roles}
+              value={this.state.rolesSelected} onChange={this.rolesCheck} />
           </Form.Field>
         </div>
         <div style={{ padding: '20px' }}>
@@ -184,7 +206,7 @@ class SignUpThree extends React.Component {
                 <Button fluid color='green' size='massive' disabled={this.state.buttonDisable}
                   onClick={this.props.onSubmission}
                   loading={this.props.loading}>
-                  {created ? 'Thanks for Signing Up!' : 'Join Aztec Game Lab!' }
+                  {created ? 'Thanks for Signing Up!' : 'Join Aztec Game Lab!'}
 
                 </Button>
               </Grid.Column>
@@ -192,6 +214,7 @@ class SignUpThree extends React.Component {
           </div>
         </div>
       </div>
+      </CloudinaryContext>
     );
   }
 }

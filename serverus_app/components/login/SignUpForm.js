@@ -39,7 +39,8 @@ class SignUpForm extends Component {
         bookmarked: [],
         groups: [],
         activities: [],
-        authLevel: 0  
+        authLevel: 0,
+        showcaseImage: ''  
       }
     };
     //Essential Login Info (SignUpOne)
