@@ -10,8 +10,7 @@ import MarkdownCreate from './components/markdown/MarkdownCreate';
 import MarkdownPage from './components/markdown/BlogPost';
 import UserDirectory from './components/users/UserDirectory';
 import ProfilePage from './components/profile/ProfilePage';
-import Calendar from './components/calendar/Calendar';
-
+import Calendar from './components/Calendar/Calendar'
 
 
 export default (
