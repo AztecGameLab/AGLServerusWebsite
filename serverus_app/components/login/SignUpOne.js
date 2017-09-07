@@ -49,7 +49,7 @@ class SignUpOne extends React.Component {
     });
   }
   emailCheck(e) {
-    debugger;
+
     var profileArray = this.profileIcons;
     var that = this;
     for (var i in this.state.existingEmails) {

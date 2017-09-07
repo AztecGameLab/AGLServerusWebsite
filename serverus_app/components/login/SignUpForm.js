@@ -127,7 +127,7 @@ class SignUpForm extends Component {
   }
 
   handleAdminCode(e) {
-    if (e.target.value == "extrathicc") {
+    if (e.target.value == "乇乂ㄒ尺卂 ㄒ卄丨匚匚") {
       const newAccount = this.state.newAccount;
       newAccount.authLevel = 2;
       this.setState({
