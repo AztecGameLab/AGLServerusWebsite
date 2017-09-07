@@ -9,25 +9,22 @@ class IconPicker extends Component {
         this.state = {
             open: false,
             loading: true,
-            profileIcons: [],
-            keysTaken:[],
-            loaded: false
+            profileIcons: []
         };
+        //this.mountCount = 0;
         this.mapIcons = this.mapIcons.bind(this);
     }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        debugger;
-        console.log("Next Props: ", nextProps);
-        console.log("Next State: ", nextState);
-        if (!nextState.profileIcons.length > 0 && !this.state.loaded) {
-            return false;
-        }
-        else return true;
-    }
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     debugger;
+    //     console.log('weve done this this' + this.mountCount + 'times');
+    //     this.mountCount++;
+    //     if (this.mountCount > 3) {
+    //         return false;
+    //     } 
+    //     return true;
+    // }
     componentDidMount() {
         var that = this;
-        debugger;
         axios.get('http://res.cloudinary.com/aztecgamelab-com/image/list/profileSmall.json')
             .then(res => {
                 debugger;
@@ -37,23 +34,16 @@ class IconPicker extends Component {
                     loading: false
                 });
             });
-        debugger;
     }
-    componentDidUpdate() {
-        if (this.state.profileIcons.length > 0) {
-            this.setState({
-                loaded: true
-        });
-    }
-}
-    mapIcons(data){
+
+    mapIcons(data, idx) {
         debugger;
-        if (data){
-            console.log('creating component');
-            return(
-                <Grid.Column key={data.publicId}>
+        if (data && this.state.profileIcons.indexOf(data.public_id) == -1) {
+            console.log('creating component' + data.public_id);
+            return (
+                <Grid.Column key={data.public_id}>
                     <CloudinaryContext cloudName='aztecgamelab-com' >
-                        <Image publicId={data.publicId} >
+                        <Image publicId={data.public_id} >
                             <Transformation width='64' height='64' crop="scale" />
                         </Image>
                     </CloudinaryContext>
@@ -64,31 +54,42 @@ class IconPicker extends Component {
 
     render() {
         return (
-            <Modal basic size='small'
-                trigger={
-                    <div>
-                        <CloudinaryContext cloudName='aztecgamelab-com'>
-                            <Label color='green' ribbon>Choose a profile picture!</Label>
-                            <Image publicId={this.props.startingIcon}>
-                                <Transformation width={this.props.startingWidth} height={this.props.startingHeight} crop="scale" />
-                            </Image>
-                        </CloudinaryContext>
-                    </div>
-                }>
-                <Modal.Content>
-                    <Modal.Header>The Aztec Game Lab Zoo:</Modal.Header>
-                    <div>
-                        <Grid columns={4} padded>
-                            {
-                                this.state.profileIcons.map((data) => this.mapIcons(data))
-                            }
-                         </Grid>   
-                         {this.state.loading && <Loader key={2} inverted>Loading</Loader>}
-                        
-                    </div>
-                </Modal.Content>
-            </Modal>
+                this.state.profileIcons.length > 0 ?
+                    <Modal basic size='small'
+                        style = {IconStyle.size}
+                        trigger={
+                            <div>
+                                <CloudinaryContext cloudName='aztecgamelab-com'>
+                                    <Label color='green' ribbon>Choose a profile picture!</Label>
+                                    <Image publicId={this.props.startingIcon}>
+                                        <Transformation width={this.props.startingWidth} height={this.props.startingHeight} crop="scale" />
+                                    </Image>
+                                </CloudinaryContext>
+                            </div>
+                        }>
+                        <Modal.Content>
+                            <div>
+                                <Modal.Header>The Aztec Game Lab Zoo:</Modal.Header>
+                                <Grid columns={5} padded>
+                                    {
+                                        this.state.profileIcons.map((data, idx) => this.mapIcons(data))
+                                    }
+                                </Grid>
+                            </div>
+                        </Modal.Content>
+                    </Modal>
+                    :
+                    <Loader key={2} inverted>Loading</Loader>
         );
+    }
+}
+
+const IconStyle = {
+    size: {
+        overflow: 'auto',
+        transform: 'translateY(15%)',
+        position: 'absolute',
+        height: '100%'
     }
 }
 
