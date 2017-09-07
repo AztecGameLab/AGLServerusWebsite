@@ -11,18 +11,22 @@ class IconPicker extends Component {
             loading: true,
             profileIcons: []
         };
-        //this.mountCount = 0;
+        
         this.mapIcons = this.mapIcons.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.iconPicked = this.iconPicked.bind(this);
+        this.handleOpen = this.handleOpen.bind(this);
     }
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     debugger;
-    //     console.log('weve done this this' + this.mountCount + 'times');
-    //     this.mountCount++;
-    //     if (this.mountCount > 3) {
-    //         return false;
-    //     } 
-    //     return true;
-    // }
+    handleClose(){
+        this.setState({ open: false });
+    }
+    handleOpen(){
+         this.setState({ open: true });
+    }
+    iconPicked(e) {
+        this.props.handleProfileInput(e);
+        this.handleClose();
+    }
     componentDidMount() {
         var that = this;
         axios.get('http://res.cloudinary.com/aztecgamelab-com/image/list/profileSmall.json')
@@ -39,14 +43,11 @@ class IconPicker extends Component {
     mapIcons(data, idx) {
         debugger;
         if (data && this.state.profileIcons.indexOf(data.public_id) == -1) {
-            console.log('creating component' + data.public_id);
             return (
-                <Grid.Column key={data.public_id}>
-                    <CloudinaryContext cloudName='aztecgamelab-com' >
-                        <Image publicId={data.public_id} >
+                <Grid.Column key={data.public_id} onClick = {(e) => this.iconPicked(e)}>
+                        <Image publicId={data.public_id} key = {data.public_id} name = {data.public_id} >
                             <Transformation width='64' height='64' crop="scale" />
                         </Image>
-                    </CloudinaryContext>
                 </Grid.Column>
             );
         }
@@ -57,8 +58,10 @@ class IconPicker extends Component {
                 this.state.profileIcons.length > 0 ?
                     <Modal basic size='small'
                         style = {IconStyle.size}
+                        open = {this.state.open}
+                        onClose={this.handleClose}
                         trigger={
-                            <div>
+                            <div onClick = {this.handleOpen}>
                                 <CloudinaryContext cloudName='aztecgamelab-com'>
                                     <Label color='green' ribbon>Choose a profile picture!</Label>
                                     <Image publicId={this.props.startingIcon}>
@@ -70,11 +73,13 @@ class IconPicker extends Component {
                         <Modal.Content>
                             <div>
                                 <Modal.Header>The Aztec Game Lab Zoo:</Modal.Header>
+                                <CloudinaryContext cloudName='aztecgamelab-com'>
                                 <Grid columns={5} padded>
                                     {
                                         this.state.profileIcons.map((data, idx) => this.mapIcons(data))
                                     }
                                 </Grid>
+                                </CloudinaryContext>
                             </div>
                         </Modal.Content>
                     </Modal>

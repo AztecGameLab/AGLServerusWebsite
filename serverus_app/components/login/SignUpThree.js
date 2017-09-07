@@ -151,7 +151,10 @@ class SignUpThree extends React.Component {
               <Grid divided='vertically'>
                 <Grid.Row columns={2}>
                   <Grid.Column width={3} floated='left'>
-                    <IconPicker startingIcon='ProfileIconsSmall/022-flask.png' startingWidth="64" startingHeight="64" />
+                    <IconPicker startingIcon= {this.props.startingIcon} 
+                                startingWidth="64" 
+                                startingHeight="64" 
+                                handleProfileInput = {this.props.handleProfileInput}/>
                   </Grid.Column>
                   <Grid.Column width={11} floated='right'>
                     <Form.Field>
