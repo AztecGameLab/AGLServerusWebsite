@@ -13,6 +13,7 @@ class SignUpForm extends Component {
     super(props);
     this.state = {
       currentPhase: 0,
+      startingIcon: 'ProfileIconsSmall/022-flask.png',
       created: false,
       loading: false,
       newAccount: {
@@ -39,7 +40,8 @@ class SignUpForm extends Component {
         bookmarked: [],
         groups: [],
         activities: [],
-        authLevel: 0  
+        authLevel: 0,
+        showcaseImage: 'ProfileIconsSmall/022-flask.png'
       }
     };
     //Essential Login Info (SignUpOne)
@@ -53,8 +55,10 @@ class SignUpForm extends Component {
     this.handleRolesInput = this.handleRolesInput.bind(this);
     //Optional Infos (SignUpThree)
     this.handleUsernameInput = this.handleUsernameInput.bind(this);
+    this.handleAdminCode = this.handleAdminCode.bind(this);
     this.onSubmission = this.onSubmission.bind(this);
     this.sendNewUserToFB = this.sendNewUserToFB.bind(this);
+    this.handleProfileInput = this.handleProfileInput.bind(this);
     //Navigation
     this.changePhase = this.changePhase.bind(this);
     //Debugger
@@ -124,11 +128,30 @@ class SignUpForm extends Component {
     });
   }
 
+  handleAdminCode(e) {
+    if (e.target.value == "乇乂ㄒ尺卂 ㄒ卄丨匚匚") {
+      const newAccount = this.state.newAccount;
+      newAccount.authLevel = 2;
+      this.setState({
+        newAccount: newAccount
+      })
+    }
+  }
+
   handleRolesInput(e, { value }) {
     const newAccount = this.state.newAccount;
     newAccount.roles = value;
     this.setState({
       newAccount: newAccount
+    });
+  }
+  handleProfileInput(e) {
+    debugger;
+    const newAccount = this.state.newAccount;
+    newAccount.showcaseImage = e.target.name;
+    this.setState({
+      newAccount: newAccount,
+      startingIcon: e.target.name
     });
   }
   //Debugger
@@ -245,12 +268,15 @@ class SignUpForm extends Component {
       case 2:
         phase = <SignUpThree key = '2'
           handleUsernameInput={this.handleUsernameInput}
+          handleAdminCode={this.handleAdminCode}
           onSubmission={this.onSubmission}
           changePhase={this.changePhase}
           randomUser={this.randomUser}
           created={this.state.created} 
           loading = {this.state.loading}
-          handleRolesInput = {this.handleRolesInput}/>
+          handleRolesInput = {this.handleRolesInput}
+          handleProfileInput = {this.handleProfileInput}
+          startingIcon = {this.state.startingIcon}/>
         break;
     }
     return (

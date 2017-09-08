@@ -29,7 +29,7 @@ class CountdownPage extends React.Component {
         return (
             <div className="bgimg">
                 <div className="middle">
-                    <img src={require('./logo.png')} />
+                    <img className = 'agl' src={require('./logo.png')} />
                     <h2>Official Launch: September 4th, 2017 </h2>
                     <p id="demo" className = 'demo'></p>
                     <h1> We are creating a game development community at SDSU! </h1>

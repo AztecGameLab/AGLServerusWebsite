@@ -56,6 +56,6 @@ var ProfilePageStyle = {
         border: "2px dotted white",
         top: "50%",
         left: "50%",
-        justifyContent: "centered"
+        textAlign: 'center'
     }
 };
