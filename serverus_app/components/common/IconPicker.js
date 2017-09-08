@@ -63,7 +63,6 @@ class IconPicker extends Component {
                             }>
                         <Modal.Content style={{background: 'black'}}>
                                     <Modal.Header>The Aztec Game Lab Zoo:</Modal.Header>
-                                    <CloudinaryContext cloudName='aztecgamelab-com'>
                                     <Grid columns={5} padded>
                                         {this.state.profileIcons.map((data, idx) => this.mapIcons(data))}
                                     </Grid>
