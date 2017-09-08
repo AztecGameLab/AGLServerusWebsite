@@ -11,75 +11,52 @@ class IconPicker extends Component {
             loading: true,
             profileIcons: []
         };
-        //this.mountCount = 0;
         this.mapIcons = this.mapIcons.bind(this);
     }
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     debugger;
-    //     console.log('weve done this this' + this.mountCount + 'times');
-    //     this.mountCount++;
-    //     if (this.mountCount > 3) {
-    //         return false;
-    //     } 
-    //     return true;
-    // }
+
     componentDidMount() {
         var that = this;
         axios.get('http://res.cloudinary.com/aztecgamelab-com/image/list/profileSmall.json')
             .then(res => {
-                debugger;
-                console.log(res.data.resources);
                 that.setState({
                     profileIcons: res.data.resources,
                     loading: false
                 });
             });
     }
-
     mapIcons(data, idx) {
-        debugger;
         if (data && this.state.profileIcons.indexOf(data.public_id) == -1) {
-            console.log('creating component' + data.public_id);
             return (
                 <Grid.Column key={data.public_id}>
-                    <CloudinaryContext cloudName='aztecgamelab-com' >
-                        <Image publicId={data.public_id} >
-                            <Transformation width='64' height='64' crop="scale" />
-                        </Image>
-                    </CloudinaryContext>
+                    <Image key={data.public_id} publicId={data.public_id} />
                 </Grid.Column>
             );
         }
     }
 
     render() {
-        return (
-                this.state.profileIcons.length > 0 ?
-                    <Modal basic size='small'
-                        style = {IconStyle.size}
-                        trigger={
-                            <div>
-                                <CloudinaryContext cloudName='aztecgamelab-com'>
-                                    <Label color='green' ribbon>Choose a profile picture!</Label>
-                                    <Image publicId={this.props.startingIcon}>
-                                        <Transformation width={this.props.startingWidth} height={this.props.startingHeight} crop="scale" />
-                                    </Image>
-                                </CloudinaryContext>
-                            </div>
-                        }>
-                        <Modal.Content>
-                            <div>
-                                <Modal.Header>The Aztec Game Lab Zoo:</Modal.Header>
-                                <Grid columns={5} padded>
-                                    {
-                                        this.state.profileIcons.map((data, idx) => this.mapIcons(data))
-                                    }
-                                </Grid>
-                            </div>
-                        </Modal.Content>
-                    </Modal>
-                    :
-                    <Loader key={2} inverted>Loading</Loader>
+        return (this.state.profileIcons.length > 0 ?
+            <CloudinaryContext cloudName='aztecgamelab-com'>
+                <Modal basic size='small'
+                    style={IconStyle.size}
+                    trigger={
+                        <div>
+                            <Label color='green' ribbon>Choose a profile picture!</Label>
+                            <Image publicId={this.props.startingIcon} />
+                        </div>
+                    }>
+                    <Modal.Content style={{background: 'black'}}>
+                        <div>
+                            <Modal.Header>The Aztec Game Lab Zoo:</Modal.Header>
+                            <Grid columns={5} padded>
+                                {this.state.profileIcons.map((data, idx) => this.mapIcons(data))}
+                            </Grid>
+                        </div>
+                    </Modal.Content>
+                </Modal>
+            </CloudinaryContext>
+            :
+            <Loader key={2} inverted>Loading</Loader>
         );
     }
 }
