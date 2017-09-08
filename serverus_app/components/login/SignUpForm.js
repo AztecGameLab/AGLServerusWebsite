@@ -13,6 +13,7 @@ class SignUpForm extends Component {
     super(props);
     this.state = {
       currentPhase: 0,
+      startingIcon: 'ProfileIconsSmall/022-flask.png',
       created: false,
       loading: false,
       newAccount: {
@@ -40,7 +41,7 @@ class SignUpForm extends Component {
         groups: [],
         activities: [],
         authLevel: 0,
-        showcaseImage: ''  
+        showcaseImage: 'ProfileIconsSmall/022-flask.png'
       }
     };
     //Essential Login Info (SignUpOne)
@@ -57,6 +58,7 @@ class SignUpForm extends Component {
     this.handleAdminCode = this.handleAdminCode.bind(this);
     this.onSubmission = this.onSubmission.bind(this);
     this.sendNewUserToFB = this.sendNewUserToFB.bind(this);
+    this.handleProfileInput = this.handleProfileInput.bind(this);
     //Navigation
     this.changePhase = this.changePhase.bind(this);
     //Debugger
@@ -141,6 +143,15 @@ class SignUpForm extends Component {
     newAccount.roles = value;
     this.setState({
       newAccount: newAccount
+    });
+  }
+  handleProfileInput(e) {
+    debugger;
+    const newAccount = this.state.newAccount;
+    newAccount.showcaseImage = e.target.name;
+    this.setState({
+      newAccount: newAccount,
+      startingIcon: e.target.name
     });
   }
   //Debugger
@@ -263,7 +274,9 @@ class SignUpForm extends Component {
           randomUser={this.randomUser}
           created={this.state.created} 
           loading = {this.state.loading}
-          handleRolesInput = {this.handleRolesInput}/>
+          handleRolesInput = {this.handleRolesInput}
+          handleProfileInput = {this.handleProfileInput}
+          startingIcon = {this.state.startingIcon}/>
         break;
     }
     return (
