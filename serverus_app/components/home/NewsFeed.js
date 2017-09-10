@@ -3,6 +3,7 @@ import firebase from 'firebase';
 import axios from 'axios';
 import Slider from 'react-slick';
 import MarkdownCard from '../markdown/MarkdownCard';
+import GenericCard from '../common/GenericCard';
 
 export default class NewsFeed extends React.Component {
     constructor(props) {
@@ -25,7 +26,7 @@ export default class NewsFeed extends React.Component {
         var that = this;
         var markdownUrlRef = firebase.database().ref('allArticles/');
 
-        markdownUrlRef.on('value', function (snapshot) {
+        markdownUrlRef.once('value', function (snapshot) {
             if (!snapshot.val() || !that.isPageMounted) return;
             that.setState({
                 postData: []
@@ -67,7 +68,7 @@ export default class NewsFeed extends React.Component {
         if (value.data) {
             return (
                 <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4" key={value.hashKey} >
-                    <MarkdownCard value={value.data} />
+                    <GenericCard value={value.data} />
                 </div>
             );
         }
@@ -78,7 +79,7 @@ export default class NewsFeed extends React.Component {
             dots: true,
             infinite: true,
             speed: 500,
-            slidesToShow: 2,
+            slidesToShow: 3,
             slidesToScroll: 1
         };
         var val = 0;

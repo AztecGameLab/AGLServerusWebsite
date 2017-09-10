@@ -1,11 +1,13 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
 import Markmirror from 'react-markmirror';
+import { Dropdown, Icon } from 'semantic-ui-react';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import * as accountActions from '../actions/accountActions';
 import { bindActionCreators } from 'redux';
 import stylesheet from './markdown.css';
+import GenericCard from '../common/GenericCard';
+
 
 const Editor = (props) => {
     const handleType = text => {
@@ -31,16 +33,65 @@ class MarkdownCreate extends React.Component {
         super(props);
 
         this.state = {
-            admin: false,
-            value: '# hello\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n',
-            title: '',
-            tags: [],
+            text: '# hello\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n',
+            title: 'Blog Title...',
+            date: new Date().toDateString(),
+            tags: [{ text: '#extra', value: 'extra' }, { text: '#thicc', value: 'thicc' }],
             comments: [],
+            selectedTags: [],
+            type: {}
         };
         this.storage = firebase.storage();
         this.onInputChange = this.onInputChange.bind(this);
         this.sendToFB = this.sendToFB.bind(this);
+        this.handleAddition = this.handleAddition.bind(this);
+        this.handleTags = this.handleTags.bind(this);
+        this.buttonDisable = this.buttonDisable.bind(this);
     }
+
+    componentWillMount() {
+        switch (this.props.routeParams.type) {
+            case 'announcement':
+                this.setState({
+                    type: { text: "Announcement", id: 'red'}
+                });
+            break;
+            case 'game':
+                this.setState({
+                    type: { text: "Game", id: 'green'}
+                });
+            break;
+            case 'tutorial':
+                this.setState({
+                    type: { text: "Tutorial", id: 'blue'}
+                });
+            break;
+            default: break;
+        }
+    }
+
+
+    handleAddition = (e, { value }) => {
+        var counter = 0;
+        this.state.tags.forEach(item => {
+            if (item.value == value)
+                return counter++;
+        });
+        if (counter < 1) {
+            this.setState({
+                tags: [{ text: '#' + value, value }, ...this.state.tags],
+            })
+        }
+    }
+
+    handleTags = (e, { value }) => this.setState({ selectedTags: value });
+
+    buttonDisable = () => {
+        if (this.state.title == "Blog Title..." || this.state.title == "") {
+            return true;
+        } else return false;
+    }
+
     /**
      * Send JSON to firebase storage and store url in database
      */
@@ -53,7 +104,8 @@ class MarkdownCreate extends React.Component {
             author: this.props.accounts[0].info.username,
             date: now,
             text: this.state.value,
-            tags: [],
+            tags: this.state.selectedTags,
+            type: this.state.type
         };
         var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
         this.pathRef = this.storage.ref('userData/' + this.props.accounts[0].uid + '/articles/' + data.title + '.json');
@@ -71,31 +123,46 @@ class MarkdownCreate extends React.Component {
 
     onInputChange(md) {
         this.setState({
-            value: md
+            text: md
         });
     }
     render() {
+        var { currentValue } = this.state;
         var loggedIn = this.props.accounts[0] ? this.props.accounts[0].info.authLevel == 2 ? true : false : false
         return (
             <div style={{ backgroundColor: 'black' }}>
                 {loggedIn ? <div>
                     <div className="row col-lg-12">
-                        <div className="col-lg-6">
-                            <h3 style={markdownStyle.title}>New Game Post</h3>
-                            <input className="form-control" type="text" placeholder="Enter a title..." onChange={event => this.setState({ title: event.target.value })} />
+                        <div className="col-lg-6 col-sm-12"><h1 style={markdownStyle.title}>Create a new {this.props.routeParams.type}</h1>
+                            <input style={markdownStyle.inputTitle} className="form-control" type="text" placeholder="Blog title..." onChange={event => this.setState({ title: event.target.value })} />
+                            <div style={markdownStyle.md}>
+                                <Editor onChange={this.onInputChange} value={this.state.text} />
+                            </div>
                         </div>
-                        <div className="col-lg-6"><h3 style={markdownStyle.title}>Actual Text Results</h3></div>
+                        <div className="col-lg-6 col-sm-12"><h1 style={markdownStyle.title}>Preview post</h1></div>
+                        <div className="col-lg-6 col-sm-12" style={markdownStyle.post}>
+                            <GenericCard value={this.state} user={this.props.accounts[0]}/>
+                        </div>
                     </div>
                     <div className="row col-lg-12">
-                        <div className="col-lg-6 col-sm-6" style={markdownStyle.md}>
-                            <Editor onChange={this.onInputChange} value={this.state.value} />
+                        <div style={markdownStyle.tags} className="col-lg-6">
+                            <Dropdown
+                                options={this.state.tags}
+                                placeholder='Add a tag...'
+                                additionLabel={<Icon name="hashtag" />}
+                                search
+                                selection
+                                fluid
+                                multiple
+                                allowAdditions
+                                value={this.state.selectedTags}
+                                onAddItem={this.handleAddition}
+                                onChange={this.handleTags}
+                            />
                         </div>
-                        <div className="col-lg-6 col-sm-6" style={markdownStyle.post}>
-                            <ReactMarkdown source={this.state.value} />
+                        <div style={markdownStyle.button} className="col-lg-6">
+                            <button className="btn btn-success" disabled={this.buttonDisable()} onClick={this.sendToFB}>Create Post!</button>
                         </div>
-                    </div>
-                    <div className="row col-lg-12 col-lg-offset-0">
-                        <button className="btn btn-success" onClick={this.sendToFB}>Submit</button>
                     </div>
                 </div> : <div>You need admin privileges in order to create posts</div>}
             </div>
@@ -119,13 +186,26 @@ var markdownStyle = {
         width: '100%',
         marginTop: '20px'
     },
+    inputTitle: {
+        padding: '20px 15px',
+        fontSize: '1em'
+    },
     md: {
-        display: 'inline-block'
+        display: 'inline-block',
+        width: '100%'
     },
     post: {
-        paddingTop: 60,
-        backgroundColor: 'white',
+        marginTop: 15,
         color: 'black',
-        height: 460
+    },
+    tags: {
+        marginLeft: 0,
+        marginTop: 15
+    },
+    button: {
+        marginLeft: 0,
+        marginTop: 15,
+        display: 'flex',
+        justifyContent: 'flex-end'
     }
 };

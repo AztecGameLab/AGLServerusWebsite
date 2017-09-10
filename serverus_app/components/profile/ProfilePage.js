@@ -52,6 +52,7 @@ var ProfilePageStyle = {
     NotFound:{
         display: "block",
         margin: "auto",
+        marginTop: '15%',
         width: "50%",
         border: "2px dotted white",
         top: "50%",

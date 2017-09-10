@@ -20,7 +20,7 @@ export default (
         <Route path="about" component={AboutPage} />
         <Route path="games" component={GamesPage} />
         <Route path="competitions" component={CompetitionsPage} />
-        <Route path="createpost" component={MarkdownCreate} />
+        <Route path="create/:type" component={MarkdownCreate} />
         <Route path="articles" component={MarkdownPage} />
         <Route path="calendar" component={Calendar} />
         <Route path="u" component={UserDirectory}/>
