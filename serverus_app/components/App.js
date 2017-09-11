@@ -39,7 +39,6 @@ class App extends React.Component {
                     .then(function(response) {
                         var that3 = that2;
                         that3.props.actions.loadAccount(response.data);
-                        alert('User LOADED IN redux!!!');
                     }).then(function() {
                         var that3 = that2;
                         that3.setState ({

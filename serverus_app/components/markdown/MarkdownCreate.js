@@ -34,18 +34,28 @@ class MarkdownCreate extends React.Component {
 
         this.state = {
             text: '# hello\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n',
-            title: 'Blog Title...',
+            title: 'Title...',
             date: new Date().toDateString(),
             tags: [{ text: '#extra', value: 'extra' }, { text: '#thicc', value: 'thicc' }],
             comments: [],
             selectedTags: [],
-            type: {}
+            type: {},
+            image: {
+                src: null,
+                allowZoomOut: true,
+                width: 600,
+                height: 350,
+                scale: 1
+            }
         };
         this.storage = firebase.storage();
         this.onInputChange = this.onInputChange.bind(this);
         this.sendToFB = this.sendToFB.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.handleTags = this.handleTags.bind(this);
+        this.handleNewImage = this.handleNewImage.bind(this);
+        this.handleScale = this.handleScale.bind(this);
+        this.handleAllowZoomOut = this.handleAllowZoomOut.bind(this);
         this.buttonDisable = this.buttonDisable.bind(this);
     }
 
@@ -53,23 +63,22 @@ class MarkdownCreate extends React.Component {
         switch (this.props.routeParams.type) {
             case 'announcement':
                 this.setState({
-                    type: { text: "Announcement", id: 'red'}
+                    type: { text: "Announcement", id: 'red' }
                 });
-            break;
+                break;
             case 'game':
                 this.setState({
-                    type: { text: "Game", id: 'green'}
+                    type: { text: "Game", id: 'green' }
                 });
-            break;
+                break;
             case 'tutorial':
                 this.setState({
-                    type: { text: "Tutorial", id: 'blue'}
+                    type: { text: "Tutorial", id: 'blue' }
                 });
-            break;
+                break;
             default: break;
         }
     }
-
 
     handleAddition = (e, { value }) => {
         var counter = 0;
@@ -86,8 +95,30 @@ class MarkdownCreate extends React.Component {
 
     handleTags = (e, { value }) => this.setState({ selectedTags: value });
 
+
+    handleNewImage = e => {
+        const currentState = Object.assign({}, this.state.image);
+        currentState.src = e.target.files[0];
+        this.setState({
+            image: currentState
+        });
+    }
+    handleScale = e => {
+        const scale = parseFloat(e.target.value)
+        const currentState = Object.assign({}, this.state.image);
+        currentState.scale = scale;
+        this.setState({ image: currentState });
+    }
+
+    handleAllowZoomOut = ({ target: { checked: allowZoomOut } }) => {
+        const currentState = Object.assign({}, this.state.image);
+        currentState.allowZoomOut = allowZoomOut;
+        this.setState({ image: currentState });
+    }
+
+
     buttonDisable = () => {
-        if (this.state.title == "Blog Title..." || this.state.title == "") {
+        if (this.state.title == "Title..." || this.state.title == "") {
             return true;
         } else return false;
     }
@@ -103,8 +134,8 @@ class MarkdownCreate extends React.Component {
             title: this.state.title,
             author: this.props.accounts[0].info.username,
             date: now,
-            text: this.state.value,
-            tags: this.state.selectedTags,
+            text: this.state.text,
+            selectedTags: this.state.selectedTags,
             type: this.state.type
         };
         var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
@@ -134,14 +165,14 @@ class MarkdownCreate extends React.Component {
                 {loggedIn ? <div>
                     <div className="row col-lg-12">
                         <div className="col-lg-6 col-sm-12"><h1 style={markdownStyle.title}>Create a new {this.props.routeParams.type}</h1>
-                            <input style={markdownStyle.inputTitle} className="form-control" type="text" placeholder="Blog title..." onChange={event => this.setState({ title: event.target.value })} />
+                            <input style={markdownStyle.inputTitle} className="form-control" type="text" placeholder="Title..." onChange={event => this.setState({ title: event.target.value })} />
                             <div style={markdownStyle.md}>
                                 <Editor onChange={this.onInputChange} value={this.state.text} />
                             </div>
                         </div>
                         <div className="col-lg-6 col-sm-12"><h1 style={markdownStyle.title}>Preview post</h1></div>
                         <div className="col-lg-6 col-sm-12" style={markdownStyle.post}>
-                            <GenericCard value={this.state} user={this.props.accounts[0]}/>
+                            <GenericCard value={this.state} user={this.props.accounts[0].info.username} edit={true} />
                         </div>
                     </div>
                     <div className="row col-lg-12">
@@ -160,6 +191,32 @@ class MarkdownCreate extends React.Component {
                                 onChange={this.handleTags}
                             />
                         </div>
+                        {this.state.type.text == 'Game' ?
+                            <div style={{ color: 'white', marginTop: 5}} className="col-lg-6" >
+                                <input name='newImage' type='file' onChange={this.handleNewImage} />
+                                <br />
+                                {'Scaling Mode: '}
+                                <input
+                                    style={{ color: 'black'}}
+                                    name='allowZoomOut'
+                                    type='checkbox'
+                                    onChange={this.handleAllowZoomOut}
+                                    checked={this.state.image.allowZoomOut}
+                                />
+                                <br />
+                                <br />
+                                Zoom:
+                                    <input
+                                    name='scale'
+                                    type='range'
+                                    onChange={this.handleScale}
+                                    min={this.state.image.allowZoomOut ? '0.1' : '1'}
+                                    max='2'
+                                    step='0.01'
+                                    defaultValue='1'
+                                />
+                            </div> : null}
+
                         <div style={markdownStyle.button} className="col-lg-6">
                             <button className="btn btn-success" disabled={this.buttonDisable()} onClick={this.sendToFB}>Create Post!</button>
                         </div>

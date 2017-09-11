@@ -19,15 +19,12 @@ export default class NewsFeed extends React.Component {
         this.loadMarkdownPosts = this.loadMarkdownPosts.bind(this);
     }
 
-    componentWillUnmount() {
-        this.isPageMounted = false;
-    }
     componentDidMount() {
         var that = this;
         var markdownUrlRef = firebase.database().ref('allArticles/');
 
         markdownUrlRef.once('value', function (snapshot) {
-            if (!snapshot.val() || !that.isPageMounted) return;
+            if (!snapshot.val()) return;
             that.setState({
                 postData: []
             });
