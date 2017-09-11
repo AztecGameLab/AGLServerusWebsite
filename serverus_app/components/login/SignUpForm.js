@@ -8,18 +8,21 @@ import SignUpTwo from './SignUpTwo';
 import SignUpThree from './SignUpThree';
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 
+const http = require('http');
+
 class SignUpForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentPhase: 0,
-      startingIcon: 'ProfileIconsSmall/022-flask.png',
+      startingIcon: 'ProfileIconsSmall/033-flask.png',
       created: false,
       loading: false,
       newAccount: {
         //Login Info
         email: '',
         password: '',
+        securityCode:'',
         //Basic Info
         firstName: '',
         lastName: '',
@@ -41,7 +44,11 @@ class SignUpForm extends Component {
         groups: [],
         activities: [],
         authLevel: 0,
-        showcaseImage: 'ProfileIconsSmall/022-flask.png'
+        showcaseImage: 'ProfileIconsSmall/033-flask.png',
+        facebookLink: 'https://www.facebook.com/',
+        twitterLink :'https://twitter.com/',
+        instagramUser: '',
+        linkedInLink:'https://www.linkedin.com/in/'
       }
     };
     //Essential Login Info (SignUpOne)
@@ -129,13 +136,14 @@ class SignUpForm extends Component {
   }
 
   handleAdminCode(e) {
+    const newAccount = this.state.newAccount;
+    newAccount.securityCode = e.target.value;
     if (e.target.value == "乇乂ㄒ尺卂 ㄒ卄丨匚匚") {
-      const newAccount = this.state.newAccount;
       newAccount.authLevel = 2;
-      this.setState({
-        newAccount: newAccount
-      })
     }
+    this.setState({
+      newAccount: newAccount
+    });
   }
 
   handleRolesInput(e, { value }) {
@@ -195,7 +203,25 @@ class SignUpForm extends Component {
     firebase.auth().createUserWithEmailAndPassword(newUserData.email, newUserData.password)
 
       .then(function () {
-        that.sendNewUserToFB()
+        that.sendNewUserToFB();
+        // //TODO Send to AWS to dispatch email. 
+        // let postBody = {
+        //   message: "Test"
+        // };
+
+        // let request = http.request({
+        //   hostname: "localhost",
+        //   port: "3000",
+        //   path: "api/dispatchAuthenticationEmail",
+        //   headers: {
+        //     'Content-Type' : 'application/json',
+        //     'Content-Length' : Buffer.byteLength(postBody)
+        //   }
+        // });
+        // request.end(postBody);
+        // request.on('response', function(){
+        //   //Handle Response info here. 
+        // });
       })
 
       .catch(function (error) {

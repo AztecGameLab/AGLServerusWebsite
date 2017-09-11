@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button, Form, Checkbox, Input, Icon } from 'semantic-ui-react';
+import { Button, Form, Checkbox, Input, Icon, Label } from 'semantic-ui-react';
 import firebase from 'firebase';
 // import {connect} from 'react-redux';
 // import * as accountActions from '../actions/accountActions';
@@ -93,6 +93,12 @@ class LoginForm extends Component {
                         </Input>
                     </Form.Field>
                 </div>
+                <div style={modalStyle.forgot}>  
+                    <Label as='a' color = 'blue' href = 'https://goo.gl/forms/Lfxp7iaOZ49nk9Xm1'>
+                    <Icon name='question circle' />  
+                    Forgot your username or password?
+                    </Label>
+                </div>
                 <div style={modalStyle.spacing}>
                     <Button fluid color='green' size='massive' disabled={this.state.buttonDisable}
                         loading={this.state.loading}>
@@ -110,6 +116,10 @@ var modalStyle = {
     width: "100%",
     display: "block",
     color: 'black'
+  },
+  forgot: {
+      color: 'white',
+      textAlign: 'right'
   }
 };
 

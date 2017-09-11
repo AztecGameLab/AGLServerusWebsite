@@ -1,8 +1,5 @@
 .ui.menu>.item:first-child {
-    max-width: 200px;
-    padding: 0;
     margin-left: 15px;
-    background-color: black;   
 }
 .ui.menu .dropdown.item .menu {
     background-color: black;

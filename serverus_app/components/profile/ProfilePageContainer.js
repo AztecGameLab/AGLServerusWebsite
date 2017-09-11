@@ -13,7 +13,15 @@ export default class ProfilePageContainer extends React.Component {
         };
         //bind edits to data here!
     }
-
+    handleProfileInput(e) {
+        debugger;
+        const newAccount = this.state.profileObject;
+        newAccount.info.showcaseImage = e.target.name;
+        this.setState({
+          profileObject: newAccount,
+          startingIcon: e.target.name
+        });
+      }
     componentWillMount() {
         var that = this;
         console.log(this.props.routeParams.username);

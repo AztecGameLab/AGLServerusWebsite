@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Modal, Label, Loader, Grid } from 'semantic-ui-react';
+import { Icon, Modal, Label, Loader, Grid, Button } from 'semantic-ui-react';
 import { Image, CloudinaryContext, Transformation } from 'cloudinary-react';
 import axios from 'axios';
 
@@ -9,7 +9,8 @@ class IconPicker extends Component {
         this.state = {
             open: false,
             loading: true,
-            profileIcons: []
+            profileIcons: [],
+            editEnabled: true
         };
         
         this.mapIcons = this.mapIcons.bind(this);
@@ -21,7 +22,9 @@ class IconPicker extends Component {
         this.setState({ open: false });
     }
     handleOpen(){
-         this.setState({ open: true });
+        if(this.state.editEnabled){
+            this.setState({ open: true });
+        }
     }
     iconPicked(e) {
         this.props.handleProfileInput(e);
@@ -29,9 +32,8 @@ class IconPicker extends Component {
     }
     componentDidMount() {
         var that = this;
-        axios.get('http://res.cloudinary.com/aztecgamelab-com/image/list/profileSmall.json')
+        axios.get('http://res.cloudinary.com/aztecgamelab-com/image/list/smallIcons.json')
             .then(res => {
-                debugger;
                 console.log(res.data.resources);
                 that.setState({
                     profileIcons: res.data.resources,
@@ -41,12 +43,10 @@ class IconPicker extends Component {
     }
 
     mapIcons(data, idx) {
-        debugger;
         if (data && this.state.profileIcons.indexOf(data.public_id) == -1) {
             return (
                 <Grid.Column key={data.public_id} onClick = {(e) => this.iconPicked(e)}>
                         <Image publicId={data.public_id} key = {data.public_id} name = {data.public_id} >
-                            <Transformation width='64' height='64' crop="scale" />
                         </Image>
                 </Grid.Column>
             );
@@ -56,17 +56,18 @@ class IconPicker extends Component {
     render() {
         return (
                 this.state.profileIcons.length > 0 ?
-                    <Modal basic size='small'
+                    <Modal size='small'
                         style = {IconStyle.size}
                         open = {this.state.open}
                         onClose={this.handleClose}
                         trigger={
-                            <div onClick = {this.handleOpen}>
+                            <div style = {picker.starting}>
                                 <CloudinaryContext cloudName='aztecgamelab-com'>
-                                    <Label color='green' ribbon>Choose a profile picture!</Label>
                                     <Image publicId={this.props.startingIcon}>
-                                        <Transformation width={this.props.startingWidth} height={this.props.startingHeight} crop="scale" />
                                     </Image>
+                                    <div style = {picker.pickButton}>
+                                    {this.props.editEnabled && <Button primary onClick = {this.handleOpen}>Pick a profile avatar!</Button>}
+                                    </div>
                                 </CloudinaryContext>
                             </div>
                         }>
@@ -89,6 +90,18 @@ class IconPicker extends Component {
     }
 }
 
+var picker= {
+    starting: {
+        textAlign: 'center',
+        padding: '15px 0',
+        top: '0'
+    },
+    pickButton: {
+        marginTop: '8px'
+    }
+
+};
+
 const IconStyle = {
     size: {
         overflow: 'auto',
@@ -96,6 +109,6 @@ const IconStyle = {
         position: 'absolute',
         height: '100%'
     }
-}
+};
 
 export default IconPicker;
