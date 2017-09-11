@@ -2,10 +2,10 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import Markmirror from 'react-markmirror';
 import firebase from 'firebase';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import * as accountActions from '../actions/accountActions';
-import {bindActionCreators} from 'redux';
-import stylesheet from  './markdown.css';
+import { bindActionCreators } from 'redux';
+import stylesheet from './markdown.css';
 
 const Editor = (props) => {
     const handleType = text => {
@@ -31,17 +31,16 @@ class MarkdownCreate extends React.Component {
         super(props);
 
         this.state = {
+            admin: false,
             value: '# hello\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n',
             title: '',
             tags: [],
             comments: [],
-
         };
         this.storage = firebase.storage();
         this.onInputChange = this.onInputChange.bind(this);
         this.sendToFB = this.sendToFB.bind(this);
     }
-
     /**
      * Send JSON to firebase storage and store url in database
      */
@@ -58,7 +57,7 @@ class MarkdownCreate extends React.Component {
         };
         var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
         this.pathRef = this.storage.ref('userData/' + this.props.accounts[0].uid + '/articles/' + data.title + '.json');
-        this.pathRef.put(file).then(function() {
+        this.pathRef.put(file).then(function () {
             alert('Uploaded File');
             var that2 = that;
             that.pathRef.getDownloadURL().then(function (url) {
@@ -76,29 +75,32 @@ class MarkdownCreate extends React.Component {
         });
     }
     render() {
+        var loggedIn = this.props.accounts[0] ? this.props.accounts[0].info.authLevel == 2 ? true : false : false
         return (
-            <div style={{backgroundColor: 'black'}}>
-                <div className="row col-lg-12">
-                    <div className="col-lg-6">
-                        <h3 style={markdownStyle.title}>New Game Post</h3>
-                        <input className="form-control" type="text" placeholder="Enter a title..." onChange={event => this.setState({title: event.target.value})}/>
+            <div style={{ backgroundColor: 'black' }}>
+                {loggedIn ? <div>
+                    <div className="row col-lg-12">
+                        <div className="col-lg-6">
+                            <h3 style={markdownStyle.title}>New Game Post</h3>
+                            <input className="form-control" type="text" placeholder="Enter a title..." onChange={event => this.setState({ title: event.target.value })} />
+                        </div>
+                        <div className="col-lg-6"><h3 style={markdownStyle.title}>Actual Text Results</h3></div>
                     </div>
-                    <div className="col-lg-6"><h3 style={markdownStyle.title}>Actual Text Results</h3></div>
-                </div>
-                <div className="row col-lg-12">
-                    <div className="col-lg-6 col-sm-6" style={markdownStyle.md}>
-                        <Editor onChange={this.onInputChange} value={this.state.value}/>
+                    <div className="row col-lg-12">
+                        <div className="col-lg-6 col-sm-6" style={markdownStyle.md}>
+                            <Editor onChange={this.onInputChange} value={this.state.value} />
+                        </div>
+                        <div className="col-lg-6 col-sm-6" style={markdownStyle.post}>
+                            <ReactMarkdown source={this.state.value} />
+                        </div>
                     </div>
-                    <div className="col-lg-6 col-sm-6" style={markdownStyle.post}>
-                        <ReactMarkdown source={this.state.value}/>
+                    <div className="row col-lg-12 col-lg-offset-0">
+                        <button className="btn btn-success" onClick={this.sendToFB}>Submit</button>
                     </div>
-                </div>
-                <div className="row col-lg-12 col-lg-offset-0">
-                    <button className="btn btn-success" onClick={this.sendToFB}>Submit</button>
-                </div>
+                </div> : <div>You need admin privileges in order to create posts</div>}
             </div>
         );
-    }  
+    }
 }
 
 function mapStateToProps(state, ownProps) {

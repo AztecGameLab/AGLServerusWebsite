@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import { Button, Form, Checkbox, Input, Icon, Grid, Label, Dropdown } from 'semantic-ui-react';
+import { Button, Form, Checkbox, Input, Icon, Grid, Label, Dropdown, Modal } from 'semantic-ui-react';
 import roles from '../common/roleOptions';
+import profileIcons from '../common/profileIconOptions';
+import { Image, CloudinaryContext, Transformation } from 'cloudinary-react';
+import axios from 'axios';
+import IconPicker from '../common/IconPicker';
 
 class SignUpThree extends React.Component {
   constructor(props) {
@@ -9,15 +13,17 @@ class SignUpThree extends React.Component {
     this.state = {
       usernameFilled: false,
       usernameLimit: false,
-      rolesFilled:'',
+      rolesFilled: '',
       usernameTaken: false,
       buttonDisable: true,
-      existingUsernames: '',
+      existingUsernames: [],
       loading: false,
       termsAccepted: false,
-      rolesSelected: []
+      rolesSelected: [],
+      firebaseLoaded: false,
     };
     this.usernameCheck = this.usernameCheck.bind(this);
+    this.adminCheck = this.adminCheck.bind(this);
     this.formComplete = this.formComplete.bind(this);
     this.termsAccepted = this.termsAccepted.bind(this);
     this.rolesCheck = this.rolesCheck.bind(this);
@@ -25,11 +31,11 @@ class SignUpThree extends React.Component {
   componentWillMount() {
     var usernameRef = firebase.database().ref('accounts/takenUsernames/');
     var that = this;
-    usernameRef.on('value', function (snapshot) {
-      if (that.props.isLeaving) return;
+    usernameRef.once('value', function (snapshot) {
       if (snapshot.val()) {
         that.setState({
-          existingUsernames: Object.values(snapshot.val())
+          existingUsernames: Object.values(snapshot.val()),
+          firebaseLoaded: true
         });
       }
     });
@@ -38,8 +44,8 @@ class SignUpThree extends React.Component {
     this.props.handleRolesInput(e, { value });
     var that = this;
     this.setState({
-      rolesSelected:value
-    }, function() {
+      rolesSelected: value
+    }, function () {
       that.formComplete();
     });
     console.log(value + '' + 'xD');
@@ -70,6 +76,15 @@ class SignUpThree extends React.Component {
       });
       return;
     }
+    else if (e.target.value == "") {
+      this.setState({
+        usernameFilled: false,
+        usernameTaken: false,
+        usernameLimit: false
+      }, function () {
+        that.formComplete();
+      });
+    }
     else {
       this.setState({
         usernameFilled: true,
@@ -78,9 +93,13 @@ class SignUpThree extends React.Component {
       }, function () {
         that.formComplete();
       });
-      return;
     }
   }
+
+  adminCheck(e) {
+    this.props.handleAdminCode(e);
+  }
+
   termsAccepted(e) {
     let prevChecked = this.state.termsAccepted;
     this.setState({
@@ -117,62 +136,84 @@ class SignUpThree extends React.Component {
     }
     else {
       this.setState({
-        buttonDisable:  true
+        buttonDisable: true
       });
       return;
     }
   }
   render() {
-    var created = !this.props.created ? false: true;    
-    return (
-      <div>
-        <div style={modalStyle.spacing}>
-          <Form.Field>
-            <label>AGL Username</label>
-            <Input placeholder='Username' iconPosition='left'>
-              <Icon name='new pied piper'/>
-              <input onChange={this.usernameCheck} />
-              {this.state.usernameTaken && <Label pointing='left' color='red'>Username is already taken</Label>}
-              {this.state.usernameLimit && <Label pointing='left' color='red'>Username is too long!</Label>}
-            </Input>
-          </Form.Field>
-        </div>
-        <div style={modalStyle.spacing}>
-          <Form.Field>
-            <label>Roles Interested In:</label>
-              <Dropdown placeholder = 'Roles' fluid multiple selection options={roles} 
-                        value={this.state.rolesSelected} onChange={this.rolesCheck} />
-          </Form.Field>
-        </div>
-        <div style={{ padding: '20px' }}>
-          <Form.Field>
-            <Checkbox label='I agree to the Terms and Conditions' onClick={this.termsAccepted} />
-            <hr />
-            These terms and conditions can be found   <a href='https://docs.google.com/document/d/1R6tGpquyGkJQlrIz-iO-xCoMH5pjsymbRFWiCd6qYQ4/edit?usp=sharing'> here</a>
-          </Form.Field>
-          <div style={modalStyle.spacing}>
-            <Grid>
-              <Grid.Column floated='left' width={1}>
-                <Button circular icon size='big' onClick={() => this.props.changePhase(-1)}>
-                  <Icon name='angle double left' />
-                </Button>
-              </Grid.Column>
-              <Grid.Column floated='right' width={10}>
-                <Button fluid color='green' size='massive' disabled={this.state.buttonDisable}
-                  onClick={this.props.onSubmission}
-                  loading={this.props.loading}>
-                  {created ? 'Thanks for Signing Up!' : 'Join Aztec Game Lab!' }
+    if (this.state.firebaseLoaded) {
+      var created = !this.props.created ? false : true;
+      return (
+        <CloudinaryContext cloudName='aztecgamelab-com'>
+          <div>
+            <div style={modalStyle.spacing}>
+              <Grid divided='vertically'>
+                <Grid.Row columns={2}>
+                  <Grid.Column width={3} floated='left'>
+                    <IconPicker startingIcon= {this.props.startingIcon} 
+                                startingWidth="64" 
+                                startingHeight="64" 
+                                handleProfileInput = {this.props.handleProfileInput}/>
+                  </Grid.Column>
+                  <Grid.Column width={11} floated='right'>
+                    <Form.Field>
+                      <label>AGL Username</label>
+                      <Input placeholder='Username' iconPosition='left'>
+                        <Icon name='new pied piper' />
+                        <input onChange={this.usernameCheck} />
+                        {this.state.usernameTaken && <Label pointing='left' color='red'>Username is already taken</Label>}
+                        {this.state.usernameLimit && <Label pointing='left' color='red'>Username is too long!</Label>}
+                      </Input>
+                    </Form.Field>
+                    <Form.Field>
+                      <label>If you are an admin please type your code</label>
+                      <Input placeholder='passcode' iconPosition='left'>
+                        <Icon name='lock' />
+                        <input onBlur={this.adminCheck} type='password' />
+                      </Input>
+                    </Form.Field>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </div>
+            <div style={modalStyle.spacing}>
+              <Form.Field>
+                <label>Roles Interested In:</label>
+                <Dropdown placeholder='Roles' fluid multiple selection options={roles}
+                  value={this.state.rolesSelected} onChange={this.rolesCheck} />
+              </Form.Field>
+            </div>
+            <div style={{ padding: '5px' }}>
+              <Form.Field>
+                <Checkbox label='I agree to the Terms and Conditions' onClick={this.termsAccepted} />
+                <hr />
+                AGL terms and conditions can be found:   <a href='https://docs.google.com/document/d/1R6tGpquyGkJQlrIz-iO-xCoMH5pjsymbRFWiCd6qYQ4/edit?usp=sharing'> here</a>
+              </Form.Field>
+              <div style={modalStyle.spacing}>
+                <Grid>
+                  <Grid.Column floated='left' width={1}>
+                    <Button circular icon size='big' onClick={() => this.props.changePhase(-1)}>
+                      <Icon name='angle double left' />
+                    </Button>
+                  </Grid.Column>
+                  <Grid.Column floated='right' width={10}>
+                    <Button fluid color='green' size='massive' disabled={this.state.buttonDisable}
+                      onClick={this.props.onSubmission}
+                      loading={this.props.loading}>
+                      {created ? 'Thanks for Signing Up!' : 'Join Aztec Game Lab!'}
 
-                </Button>
-              </Grid.Column>
-            </Grid>
+                    </Button>
+                  </Grid.Column>
+                </Grid>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    );
+        </CloudinaryContext>
+      );
+    } else return null;
   }
 }
-//disabled={this.state.buttonDisable}
 var modalStyle = {
   spacing: {
     margin: '15px',
