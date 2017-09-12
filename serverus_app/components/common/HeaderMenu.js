@@ -62,7 +62,7 @@ var HeaderStyle = {
     header: {
         position: 'sticky',
         top: 0,
-        zIndex: 2000
+        zIndex: 1
     },
     logo: {
         maxWidth: 150,

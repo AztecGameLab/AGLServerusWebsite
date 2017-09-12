@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import { Button, Form, Checkbox, Input, Icon, Grid, Label, Dropdown, Modal } from 'semantic-ui-react';
+import { Button, Form, Checkbox, Input, Icon, Grid, Label, Dropdown, Modal, Popup } from 'semantic-ui-react';
 import roles from '../common/roleOptions';
 import profileIcons from '../common/profileIconOptions';
 import { Image, CloudinaryContext, Transformation } from 'cloudinary-react';
@@ -150,15 +150,18 @@ class SignUpThree extends React.Component {
             <div style={modalStyle.spacing}>
               <Grid divided='vertically'>
                 <Grid.Row columns={2}>
-                  <Grid.Column width={3} floated='left'>
+                  <Grid.Column width={5} >
                     <IconPicker startingIcon= {this.props.startingIcon} 
-                                startingWidth="64" 
-                                startingHeight="64" 
-                                handleProfileInput = {this.props.handleProfileInput}/>
+                                handleProfileInput = {this.props.handleProfileInput}
+                                editEnabled = {true}/>
                   </Grid.Column>
-                  <Grid.Column width={11} floated='right'>
+                  <Grid.Column width={11} >
                     <Form.Field>
-                      <label>AGL Username</label>
+                      <Popup
+                        trigger={<label>AGL Username</label>}
+                        content='This will be your display username and how others see you!'
+                        inverted
+                      />
                       <Input placeholder='Username' iconPosition='left'>
                         <Icon name='new pied piper' />
                         <input onChange={this.usernameCheck} />
@@ -167,9 +170,13 @@ class SignUpThree extends React.Component {
                       </Input>
                     </Form.Field>
                     <Form.Field>
-                      <label>If you are an admin please type your code</label>
-                      <Input placeholder='passcode' iconPosition='left'>
-                        <Icon name='lock' />
+                      <Popup
+                        trigger={<label>Enter a 6 digit Security PIN:</label>}
+                        content='Please make sure to keep this safe and secure!'
+                        inverted
+                      />
+                      <Input placeholder='Passcode' iconPosition='left'>
+                        <Icon name='numbered list' />
                         <input onBlur={this.adminCheck} type='password' />
                       </Input>
                     </Form.Field>

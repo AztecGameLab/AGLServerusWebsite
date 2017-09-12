@@ -32,7 +32,7 @@ class LoginModel extends Component {
       }
     ];
     return (
-      <Modal basic style={modalStyle.size} dimmer={'blurring'}open={this.props.isOpen} onClose={this.props.close} size='large'>
+      <Modal basic style={modalStyle.size} dimmer={true}open={this.props.isOpen} onClose={this.props.close} size='large'>
       <Segment.Group horizontal style = {modalStyle.box}>
           <Segment style = {modalStyle.iconSection}>
           <Image src= {logo}  shape='rounded' style = {modalStyle.logo}/>

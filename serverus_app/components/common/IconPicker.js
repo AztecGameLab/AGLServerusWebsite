@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Modal, Label, Loader, Grid } from 'semantic-ui-react';
+import { Icon, Modal, Label, Loader, Grid, Button } from 'semantic-ui-react';
 import { Image, CloudinaryContext, Transformation } from 'cloudinary-react';
 import axios from 'axios';
 
@@ -9,7 +9,8 @@ class IconPicker extends Component {
         this.state = {
             open: false,
             loading: true,
-            profileIcons: []
+            profileIcons: [],
+            editEnabled: true
         };
         
         this.mapIcons = this.mapIcons.bind(this);
@@ -21,7 +22,9 @@ class IconPicker extends Component {
         this.setState({ open: false });
     }
     handleOpen(){
-         this.setState({ open: true });
+        if(this.state.editEnabled){
+            this.setState({ open: true });
+        }
     }
     iconPicked(e) {
         this.props.handleProfileInput(e);
@@ -29,7 +32,7 @@ class IconPicker extends Component {
     }
     componentDidMount() {
         var that = this;
-        axios.get('http://res.cloudinary.com/aztecgamelab-com/image/list/profileSmall.json')
+        axios.get('http://res.cloudinary.com/aztecgamelab-com/image/list/smallIcons.json')
             .then(res => {
                 that.setState({
                     profileIcons: res.data.resources,
@@ -40,8 +43,9 @@ class IconPicker extends Component {
     mapIcons(data, idx) {
         if (data && this.state.profileIcons.indexOf(data.public_id) == -1) {
             return (
-                <Grid.Column key={data.public_id}>
-                    <Image key={data.public_id} publicId={data.public_id} />
+                <Grid.Column key={data.public_id} onClick = {(e) => this.iconPicked(e)}>
+                        <Image publicId={data.public_id} key = {data.public_id} name = {data.public_id} >
+                        </Image>
                 </Grid.Column>
             );
         }
@@ -50,30 +54,51 @@ class IconPicker extends Component {
     render() {
         return (
                 this.state.profileIcons.length > 0 ?
-                    <CloudinaryContext cloudName='aztecgamelab-com'>
-                        <Modal basic size='small'
-                            style = {IconStyle.size}
-                            open = {this.state.open}
-                            onClose={this.handleClose}
-                            trigger={
-                                <div onClick = {this.handleOpen}>
-                                        <Label color='green' ribbon>Choose a profile picture!</Label>
-                                        <Image publicId={this.props.startingIcon}/>
-                                </div>
-                            }>
-                        <Modal.Content style={{background: 'black'}}>
-                                    <Modal.Header>The Aztec Game Lab Zoo:</Modal.Header>
-                                    <Grid columns={5} padded>
-                                        {this.state.profileIcons.map((data, idx) => this.mapIcons(data))}
-                                    </Grid>
-                            </Modal.Content>
-                        </Modal>
-                    </CloudinaryContext>
+                    <Modal size='small'
+                        style = {IconStyle.size}
+                        open = {this.state.open}
+                        onClose={this.handleClose}
+                        trigger={
+                            <div style = {picker.starting}>
+                                <CloudinaryContext cloudName='aztecgamelab-com'>
+                                    <Image publicId={this.props.startingIcon}>
+                                    </Image>
+                                    <div style = {picker.pickButton}>
+                                    {this.props.editEnabled && <Button primary onClick = {this.handleOpen}>Pick a profile avatar!</Button>}
+                                    </div>
+                                </CloudinaryContext>
+                            </div>
+                        }>
+                        <Modal.Content>
+                            <div>
+                                <Modal.Header>The Aztec Game Lab Zoo:</Modal.Header>
+                                <CloudinaryContext cloudName='aztecgamelab-com'>
+                                <Grid columns={5} padded>
+                                    {
+                                        this.state.profileIcons.map((data, idx) => this.mapIcons(data))
+                                    }
+                                </Grid>
+                                </CloudinaryContext>
+                            </div>
+                        </Modal.Content>
+                    </Modal>
                     :
                     <Loader key={2} inverted>Loading</Loader>
         );
     }
 }
+
+var picker= {
+    starting: {
+        textAlign: 'center',
+        padding: '15px 0',
+        top: '0'
+    },
+    pickButton: {
+        marginTop: '8px'
+    }
+
+};
 
 const IconStyle = {
     size: {
@@ -82,6 +107,6 @@ const IconStyle = {
         position: 'absolute',
         height: '100%'
     }
-}
+};
 
 export default IconPicker;
