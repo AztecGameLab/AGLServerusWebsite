@@ -112,3 +112,5 @@ body {
     .logos {max-height: 32px; max-width: 32px}
     .directionlink{display: inline-block}
 }
+
+a, a:hover, a:active, a:visited { color: white; }

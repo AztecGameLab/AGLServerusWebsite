@@ -25,8 +25,10 @@ class HeaderMenu extends React.Component {
                     <Menu stackable inverted  >
                         <Menu.Item className="logo" active={activeItem === 'home'} onClick={this.handleItemClick} as={Link} to='/'><Image style={HeaderStyle.logo} src={logo} /></Menu.Item>
                         <Menu.Item name='games' active={activeItem === 'games'} onClick={this.handleItemClick} as={Link} to='/games'><Icon size = 'big' name='gamepad' />Games</Menu.Item>
+                        <Menu.Item name='competitions' active={activeItem === 'competitions'} onClick={this.handleItemClick} as={Link} to='/competitions'><Icon size = 'big' name='trophy' />Competitions</Menu.Item>                          
                         <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon size = 'big' name='users'/>Users</Menu.Item>
-                        <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon size = 'big' name='checked calendar' />Calendar</Menu.Item>  
+                        <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon size = 'big' name='checked calendar' />Calendar</Menu.Item>
+                        <Menu.Item name='about' active={activeItem === 'about'} onClick={this.handleItemClick} as={Link} to='/about'><Icon size = 'big' name='info circle' />About Us</Menu.Item>  
                         {this.props.loggedIn ?
                             this.props.accounts[0].info.authLevel == 2 ? 
                                 <Dropdown item text="Articles">
