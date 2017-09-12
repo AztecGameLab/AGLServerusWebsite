@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button, Form, Checkbox, Input, Icon, Label } from 'semantic-ui-react';
+import { Button, Form, Checkbox, Input, Icon, Label, Message } from 'semantic-ui-react';
 import firebase from 'firebase';
 // import {connect} from 'react-redux';
 // import * as accountActions from '../actions/accountActions';
@@ -61,10 +61,10 @@ class LoginForm extends Component {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
-        alert(errorMessage);
         that2.setState({
             error: true,
-            loading: false
+            loading: false,
+            errMessage: errorMessage
         });
         // ...
         });
@@ -102,9 +102,13 @@ class LoginForm extends Component {
                 <div style={modalStyle.spacing}>
                     <Button fluid color='green' size='massive' disabled={this.state.buttonDisable}
                         loading={this.state.loading}>
-                            {loggedIn ? 'Signed In!' : this.state.error ? 'Invalid username or password! Try Again!': 'Login' }
+                            Login!
                     </Button>
                 </div>
+                {this.state.error && <Message negative>
+                    <Message.Header>Sorry, authentification failed</Message.Header>
+                        <p>{this.state.errMessage}</p>
+                </Message>}
             </Form>
         );
     }
