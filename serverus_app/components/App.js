@@ -7,6 +7,7 @@ import * as accountActions from './actions/accountActions';
 import HeaderMenu from './common/HeaderMenu';
 import Footer from './common/Footer';
 import LoginModel from './login/LoginModel';
+import tags from './common/tags.css'
 require('../../favicon.ico');
 
 class App extends React.Component {
@@ -33,13 +34,11 @@ class App extends React.Component {
                 var userUrlRef = firebase.database().ref(refString);
                 userUrlRef.on('value', function(snapshot) {
                     var that2 = that;
-                    if (that2.state.modelIsOpen && that2.state.signedUp) return;
+                    if (that2.state.modelIsOpen) return;
                     axios.get(snapshot.val().data)
                     .then(function(response) {
-                        debugger;
                         var that3 = that2;
                         that3.props.actions.loadAccount(response.data);
-                        alert('User LOADED IN redux!!!');
                     }).then(function() {
                         var that3 = that2;
                         that3.setState ({
@@ -81,23 +80,17 @@ class App extends React.Component {
         }
     }
     signOut = () => {
-        debugger;
-        firebase.auth().signOut().then(function() {
-            alert('USER SIGNED OUT!!');
-        }).catch(function(error) {
+        firebase.auth().signOut().then(window.location.reload())
+        .catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
             // ...
         })
         this.props.actions.signOutAccount();
-        this.setState({
-            loggedIn: false
-        });
     }
 
     render() {
-        // var header = this.state.loggedIn == true ? true : false;
         return (
             <div>
                 <HeaderMenu loggedIn={this.state.loggedIn} showModel={this.openLogin} signOut={this.signOut}></HeaderMenu>
@@ -116,7 +109,6 @@ function mapDispatchToProps(dispatch){
 }
 
 var AppStyle = {
-
     mainContent: {
         color: 'white',
         marginLeft: 0,

@@ -86,3 +86,20 @@ function mapStateToProps(state, ownProps) {
     };
 }
 7. Congrats! Access the user object at anytime in your component by using this.props.accounts!
+
+```javascript
+How to make components:
+//Use functional components if you dont need a state! This is highly preferred, dont make classes willy nilly
+//functional component example!
+const ExampleComponent = (props) => {
+    return (
+        <div>
+            A component can only return one element so wrap everything in a div!
+            A functional component has no state, only props! Props are handed in so you can access it with...
+            {props.randomVariableYouGaveExampleComponent} <-- you can use js anytime you want with brackets
+        </div>
+    );
+};
+
+export default ExampleFooter;
+```

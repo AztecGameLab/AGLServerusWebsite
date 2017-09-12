@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, Checkbox, Input, Icon, Grid, Segment, Label } from 'semantic-ui-react';
+import { Button, Form, Checkbox, Input, Icon, Grid, Segment, Label, Popup } from 'semantic-ui-react';
 import * as EmailValidator from 'email-validator';
 import firebase from 'firebase';
 
@@ -18,8 +18,9 @@ class SignUpOne extends React.Component {
       passFilled: false,
       redIDFilled: false,
       buttonDisable: true,
-      exisitngEmails: []
-
+      redIDTaken: false,
+      existingEmails: [],
+      existingRedIDs: []
     };
     this.emailCheck = this.emailCheck.bind(this);
     this.passwordCheck = this.passwordCheck.bind(this);
@@ -27,48 +28,69 @@ class SignUpOne extends React.Component {
     this.formComplete = this.formComplete.bind(this);
   }
   componentWillMount() {
-    var emailRef = firebase.database().ref('accounts/emails/');
+    var emailRef = firebase.database().ref('accounts/takenEmails/');
     var that = this;
     emailRef.on('value', function (snapshot) {
-      debugger;
-      that.setState({
-        existingEmails: Object.values(snapshot.val())
-      }, function () {
-        alert('existing emails loaded');
-      });
+      if (that.props.isLeaving) return;
+      if (snapshot.val()) {
+        that.setState({
+          existingEmails: Object.values(snapshot.val())
+        });
+      }
+    });
+    var redIDRef = firebase.database().ref('accounts/takenRedIds/');
+    redIDRef.on('value', function (snapshot) {
+      if (that.props.isLeaving) return;
+      if (snapshot.val()) {
+        that.setState({
+          existingRedIDs: Object.values(snapshot.val())
+        });
+      }
     });
   }
   emailCheck(e) {
+
+    var profileArray = this.profileIcons;
     var that = this;
-    debugger;
-    for(var i in this.state.existingEmails){
+    for (var i in this.state.existingEmails) {
       if (this.state.existingEmails[i] == e.target.value) {
         that.setState({
           emailFirstClick: true,
           emailWarning: true,
+          emailFilled: true,
           emailTaken: true
         }, function () {
-          debugger;
           that.formComplete();
         });
         return;
+      }
     }
-  }
-    if (EmailValidator.validate(e.target.value) == false) {
+    if (e.target.value == "") {
+      this.setState({
+        emailFirstClick: false,
+        emailWarning: false,
+        emailFilled: false,
+        emailTaken: false
+      }, function () {
+        this.formComplete()
+      });
+    }
+    else if (EmailValidator.validate(e.target.value) == false) {
       this.setState({
         emailFirstClick: true,
         emailWarning: true,
+        emailFilled: true,
         emailTaken: false
       }, function () {
         this.formComplete();
       });
-      return;
     }
     else {
       this.setState({
         emailFirstClick: true,
         emailWarning: false,
-        emailFilled: true
+        emailFilled: true,
+        emailTaken: false
       }, function () {
         this.formComplete()
       });
@@ -92,48 +114,76 @@ class SignUpOne extends React.Component {
         passwordWarning: false,
         passFilled: true
       }, function () {
-        this.formComplete()
+        this.formComplete();
       });
-      return;
     }
     else {
       this.setState({
         passwordFirstClick: true,
         passwordWarning: true
       }, function () {
-        this.formComplete()
+        this.formComplete();
       });
-      return;
     }
   }
   redIDCheck(e) {
-    debugger;
+    this.props.handleRedIDInput(e);
+    var that = this;
+    for (var i in this.state.existingRedIDs) {
+      if (this.state.existingRedIDs[i] == e.target.value) {
+        that.setState({
+          redIDFirstClick: true,
+          redIDWarning: true,
+          redIDTaken: true
+        }, function () {
+          that.formComplete();
+        });
+      }
+    }
     let passString = e.target.value;
-    let numMatches = passString.match(/[0-9]/g);
+    let numMatches = passString.match(/[0-9]/g); 
+    let specialMatches = passString.match(/\D/g); 
     let numCount = numMatches ? numMatches.length : 0;
-    if (numCount == 9) {
+    if (numCount == 9 && specialMatches == null) {
       this.setState({
         redIDFirstClick: true,
         redIDWarning: false,
-        redIDFilled: true
+        redIDFilled: true,
+        redIDTaken: false
       }, function () {
-        this.formComplete()
+        this.formComplete();
       });
-      return;
+    }
+    else if (e.target.value.length > 9) {
+      this.setState({
+        redIDFirstClick: true,
+        redIDWarning: true,
+        redIDTaken: false
+      }, function () {
+        this.formComplete();
+      });
+    }
+    else if ((e.target.value == "" || e.target.value.length < 9) && !specialMatches) {
+      this.setState({
+        redIDFirstClick: false,
+        redIDWarning: false,
+        redIDTaken: false
+      }, function () {
+        this.formComplete();
+      });
     }
     else {
       this.setState({
         redIDFirstClick: true,
-        redIDWarning: true
+        redIDWarning: true,
+        redIDTaken: false
       }, function () {
-        this.formComplete()
+        this.formComplete();
       });
-      return;
     }
   }
   formComplete() {
-    debugger;
-    var warningsOn = (this.state.emailWarning || this.state.passwordWarning || this.state.redIDWarning || this.state.emailTaken);
+    var warningsOn = (this.state.emailWarning || this.state.passwordWarning || this.state.redIDWarning || this.state.emailTaken || this.state.redIDTaken);
     var inputsFilled = (this.state.emailFilled && this.state.passFilled && this.state.redIDFilled);
     if (inputsFilled) {
       this.setState({
@@ -149,23 +199,31 @@ class SignUpOne extends React.Component {
       <div>
         <div style={modalStyle.spacing}>
           <Form.Field>
-            <label>Email</label>
-            <Input inverted placeholder='Email' iconPosition='left'>
+                <Popup
+                  trigger={<label>Email</label>}
+                  content='This is where your emails and verification will be sent!'
+                  inverted
+                />
+              <Input inverted placeholder='Email' iconPosition='left'>
               <Icon name='mail outline' />
               <input id='email' onChange={this.props.handleEmailInput} onBlur={this.emailCheck} />
               {this.state.emailWarning ?
                 this.state.emailFirstClick && !this.state.emailTaken && <Label pointing='left' color='red'>Invalid Email</Label>
-                : this.state.emailFirstClick && <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label>}
-                {this.state.emailTaken && <Label pointing='left' color='red'>Email is already used</Label>}
+                : this.state.emailFirstClick ? <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label> : null}
+              {this.state.emailTaken && <Label pointing='left' color='red'>Email is already used</Label>}
             </Input>
           </Form.Field>
         </div>
         <div style={modalStyle.spacing}>
           <Form.Field>
-            <label>Password</label>
-            <Input inverted placeholder='Password' iconPosition='left'>
+              <Popup
+                trigger={<label>Password</label>}
+                content='Make sure to have 6+ characters with an uppercase and lowercase letter!'
+                inverted
+              />
+              <Input inverted placeholder='Password' iconPosition='left'>
               <Icon name='lock' />
-              <input id='pass' onChange={this.props.handlePasswordInput} onBlur={this.passwordCheck} type='password' />
+              <input id='pass' onChange={this.props.handlePasswordInput} onChange={this.passwordCheck} type='password' />
               {this.state.passwordWarning ?
                 this.state.passwordFirstClick && <Label color='red' pointing='left'>Password needs 6+ characters, a number and uppercase letter</Label>
                 : this.state.passwordFirstClick && <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label>}
@@ -177,10 +235,11 @@ class SignUpOne extends React.Component {
             <label>Red ID</label>
             <Input inverted placeholder="Red ID" iconPosition='left'>
               <Icon name='shield' />
-              <input id='red' onChange={this.props.handleRedIDInput} onBlur={this.redIDCheck} />
+              <input id='red' onChange={this.redIDCheck} />
               {this.state.redIDWarning ?
-                this.state.redIDFirstClick && <Label color='red' pointing='left'>Incorrect Red ID</Label>
-                : this.state.redIDFirstClick && <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label>}
+                this.state.redIDFirstClick && !this.state.redIDTaken && <Label color='red' pointing='left'>Incorrect Red ID</Label>
+                : this.state.redIDFirstClick ? <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label> : null}
+              {this.state.redIDTaken && <Label pointing='left' color='red'>Red ID is already used</Label>}
             </Input>
           </Form.Field>
         </div>

@@ -5,16 +5,14 @@
     position: absolute;
     margin: 0;
     padding: 0;
-    z-index: -1;
+    z-index: 0;
 }
 #footer {
     width: 100%;
-    height: 100px;
+    height: 75px;
 }
 #footer-right {
     float: right;
-    height: 100%;
-    width: auto;
 }
 #footer-right-top {
     padding: 5px;

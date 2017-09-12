@@ -10,7 +10,7 @@ body {
     background-color: #212121;
 }
 .sticker > div {
-    z-index: 1000;
+  /*  z-index: 1000; */
 }
 
 .navlink {
@@ -80,7 +80,7 @@ body {
     margin-left: -15px;
     background-color: #212121;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1000;
+    z-index: 0;
     width: 16.91%;    
 }
 .dropdown-content a {

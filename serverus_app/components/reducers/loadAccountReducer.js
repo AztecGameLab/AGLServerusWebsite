@@ -1,7 +1,6 @@
 export default function loadAccountReducer(state = [], action) {
     switch(action.type) {
         case 'LOAD_ACCOUNT':
-            debugger;
             //incorrect mutate of state
             //state.push(action.course);
             //return state;
@@ -13,7 +12,6 @@ export default function loadAccountReducer(state = [], action) {
             //Object.assign to create a deep copy of the new user passed in
             //together it makes brand new state
         case 'SIGN_OUT':
-            debugger;
             return state = [];
         default:
             return state; 

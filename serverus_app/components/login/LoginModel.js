@@ -32,7 +32,7 @@ class LoginModel extends Component {
       }
     ];
     return (
-      <Modal basic style={modalStyle.size} dimmer={'blurring'}open={this.props.isOpen} onClose={this.props.close} size='large'>
+      <Modal basic style={modalStyle.size} dimmer={true}open={this.props.isOpen} onClose={this.props.close} size='large'>
       <Segment.Group horizontal style = {modalStyle.box}>
           <Segment style = {modalStyle.iconSection}>
           <Image src= {logo}  shape='rounded' style = {modalStyle.logo}/>
@@ -57,7 +57,7 @@ var modalStyle = {
     position: 'absolute'
   },
   box : {
-    backgroundColor:'rgba(0,0,0,0.75)',
+    backgroundColor:'rgba(0,0,0,0.80)',
     border: 'none',
     boxShadow: '3px 3px 5px black',
     color: '#fff',
@@ -68,10 +68,10 @@ var modalStyle = {
     display: 'block',
     maxWidth:'400px',
     maxHeight:'200px',
-    width: 'auto',
+    width: '100%',
     height: 'auto',
     position: 'relative',
-    top: '50%',
+    top: '175px',
     transform: 'translateY(-50%)'
 
   },

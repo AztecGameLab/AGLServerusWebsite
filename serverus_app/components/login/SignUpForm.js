@@ -8,35 +8,47 @@ import SignUpTwo from './SignUpTwo';
 import SignUpThree from './SignUpThree';
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 
+const http = require('http');
+
 class SignUpForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentPhase: 0,
+      startingIcon: 'ProfileIconsSmall/033-flask.png',
+      created: false,
+      loading: false,
       newAccount: {
-        //Essential Login Info
+        //Login Info
         email: '',
         password: '',
-        redId: '',
-        //Basic User Info
+        securityCode:'',
+        //Basic Info
         firstName: '',
         lastName: '',
+        redId: '',
         major: '',
-        currentYear: '',
-        //Optional Editable Later
-        roles: [],
-        bio: '',
+        dateJoined: '',
+        school: 'San Diego State University',
+        //AGL Info
         username: '',
-        //Functional Attibutes
-        flares: '',
+        roles : [],
+        bio: '',
+        flare: '',
+        goodBoyPoints: 0,
+        //Collections
         badges: [],
-        games: [
-
-        ],
-        groups: [
-
-        ],
-        authLevel: false        
+        games: [],
+        showcase: [],
+        bookmarked: [],
+        groups: [],
+        activities: [],
+        authLevel: 0,
+        showcaseImage: 'ProfileIconsSmall/033-flask.png',
+        facebookLink: 'https://www.facebook.com/',
+        twitterLink :'https://twitter.com/',
+        instagramUser: '',
+        linkedInLink:'https://www.linkedin.com/in/'
       }
     };
     //Essential Login Info (SignUpOne)
@@ -47,10 +59,13 @@ class SignUpForm extends Component {
     this.handleFirstNameInput = this.handleFirstNameInput.bind(this);
     this.handleLastNameInput = this.handleLastNameInput.bind(this);
     this.handleMajorInput = this.handleMajorInput.bind(this);
+    this.handleRolesInput = this.handleRolesInput.bind(this);
     //Optional Infos (SignUpThree)
     this.handleUsernameInput = this.handleUsernameInput.bind(this);
+    this.handleAdminCode = this.handleAdminCode.bind(this);
     this.onSubmission = this.onSubmission.bind(this);
     this.sendNewUserToFB = this.sendNewUserToFB.bind(this);
+    this.handleProfileInput = this.handleProfileInput.bind(this);
     //Navigation
     this.changePhase = this.changePhase.bind(this);
     //Debugger
@@ -58,7 +73,6 @@ class SignUpForm extends Component {
   }
   //Sign Up Nav
   changePhase(value) {
-    //debugger;
     const current = this.state.currentPhase;
     this.setState({
       currentPhase: current + value
@@ -66,8 +80,11 @@ class SignUpForm extends Component {
   }
   //Essential Login Info (SignUpOne)
   handleEmailInput(e) {
+    var now = new Date();
+    now = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
     const newAccount = this.state.newAccount;
     newAccount.email = e.target.value;
+    newAccount.dateJoined = now;
     this.setState({
       newAccount: newAccount
     });
@@ -104,7 +121,7 @@ class SignUpForm extends Component {
   }
   handleMajorInput(e) {
     const newAccount = this.state.newAccount;
-    newAccount.major = e.target.value;
+    newAccount.major = e.target.textContent;
     this.setState({
       newAccount: newAccount
     });
@@ -115,6 +132,34 @@ class SignUpForm extends Component {
     newAccount.username = e.target.value;
     this.setState({
       newAccount: newAccount
+    });
+  }
+
+  handleAdminCode(e) {
+    const newAccount = this.state.newAccount;
+    newAccount.securityCode = e.target.value;
+    if (e.target.value == "乇乂ㄒ尺卂 ㄒ卄丨匚匚") {
+      newAccount.authLevel = 2;
+    }
+    this.setState({
+      newAccount: newAccount
+    });
+  }
+
+  handleRolesInput(e, { value }) {
+    const newAccount = this.state.newAccount;
+    newAccount.roles = value;
+    this.setState({
+      newAccount: newAccount
+    });
+  }
+  handleProfileInput(e) {
+    debugger;
+    const newAccount = this.state.newAccount;
+    newAccount.showcaseImage = e.target.name;
+    this.setState({
+      newAccount: newAccount,
+      startingIcon: e.target.name
     });
   }
   //Debugger
@@ -150,13 +195,33 @@ class SignUpForm extends Component {
     console.log(this.state.newAccount);
   }
   onSubmission() {
+    this.setState({
+      loading: true
+    });
     var that = this;
     const newUserData = this.state.newAccount;
-    debugger;
     firebase.auth().createUserWithEmailAndPassword(newUserData.email, newUserData.password)
 
       .then(function () {
-        that.sendNewUserToFB()
+        that.sendNewUserToFB();
+        // //TODO Send to AWS to dispatch email. 
+        // let postBody = {
+        //   message: "Test"
+        // };
+
+        // let request = http.request({
+        //   hostname: "localhost",
+        //   port: "3000",
+        //   path: "api/dispatchAuthenticationEmail",
+        //   headers: {
+        //     'Content-Type' : 'application/json',
+        //     'Content-Length' : Buffer.byteLength(postBody)
+        //   }
+        // });
+        // request.end(postBody);
+        // request.on('response', function(){
+        //   //Handle Response info here. 
+        // });
       })
 
       .catch(function (error) {
@@ -173,7 +238,6 @@ class SignUpForm extends Component {
   sendNewUserToFB() {
     this.props.signedUp();
     var that = this;
-    debugger;
     var user = firebase.auth().currentUser;
     console.log('CURRENT USER', user);
     var userUid = user.uid;
@@ -191,13 +255,14 @@ class SignUpForm extends Component {
     }).then(function () {
       var that2 = that;
       that.pathRef.put(file).then(function () {
-        debugger;
-        alert('Uploaded New User to accounts Storage!');
         that2.pathRef.getDownloadURL().then(function (url) {
           var username = firebase.auth().currentUser.displayName;
-          debugger;
           firebase.database().ref('accounts/' + username).set({
             data: url
+          });
+          that2.setState({
+            loading: false,
+            created: true
           });
           that2.props.signedUp();
           //firebase.database().ref().child('/testUserURL').push(newUid:url);
@@ -228,10 +293,16 @@ class SignUpForm extends Component {
         break;
       case 2:
         phase = <SignUpThree key = '2'
-          handleForumHandleInput={this.handleForumHandleInput}
+          handleUsernameInput={this.handleUsernameInput}
+          handleAdminCode={this.handleAdminCode}
           onSubmission={this.onSubmission}
           changePhase={this.changePhase}
-          randomUser={this.randomUser} />
+          randomUser={this.randomUser}
+          created={this.state.created} 
+          loading = {this.state.loading}
+          handleRolesInput = {this.handleRolesInput}
+          handleProfileInput = {this.handleProfileInput}
+          startingIcon = {this.state.startingIcon}/>
         break;
     }
     return (
@@ -245,13 +316,5 @@ class SignUpForm extends Component {
     );
   }
 }
-
-var modalStyle = {
-  spacing: {
-    margin: '15px',
-    width: "100%",
-    display: "block"
-  }
-};
 
 export default SignUpForm;

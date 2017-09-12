@@ -6,12 +6,11 @@ import GamesFeed from './GamesFeed';
 class HomePage extends React.Component {
     render() {
         return (
-            <div className="container-fluid">
+            <div className="container-fluid" style={homeStyle.margin} >
                 <h1>Welcome to the Aztec Game Lab!</h1>
-                <Highlight/>
-                <div className="row col-lg-12" style={homeStyle.sideContainer}></div>
+                <div className="row col-lg-12"><NewsFeed style={homeStyle.sideStyle}/></div>  
                 <div className="row col-lg-12"><GamesFeed style={homeStyle.sideStyle}/></div>
-                <div className="row col-lg-12"><NewsFeed style={homeStyle.sideStyle}/></div>
+                <Highlight/>
             </div>
         );
     }
@@ -19,12 +18,9 @@ class HomePage extends React.Component {
 export default HomePage;
 
 let homeStyle = {
-    sideContainer: {
-        display: 'flex',
-        'flexDirection': 'row',
-        width: '100%'
+    margin: {
+        paddingLeft: 30
     },
-
     sideStyle: {
         display: "inline-block"
     }
