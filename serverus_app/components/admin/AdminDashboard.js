@@ -12,19 +12,18 @@ import {
 import AdminHome from './AdminHome';
 import AdminEmail from './AdminEmail';
 import AdminWriter from './AdminWriter';
+import styles from './admin.css';
 
 export default class AdminDashboard extends React.Component {
     constructor(props) {
         super(props);
-
-        this.testMenuItemClicked = this.testMenuItemClicked.bind(this);
     }
-    
+
     render() {
         const panes = [
-            { menuItem: {icon: 'home', content: 'Home' }, render: () => <Tab.Pane><AdminHome/></Tab.Pane> },
-            { menuItem: {content: 'Writer', icon: 'book'}, render: () => <Tab.Pane><AdminWriter/></Tab.Pane> },
-            { menuItem: {content: 'Email', icon: 'mail'}, render: () => <Tab.Pane><AdminEmail/></Tab.Pane> },
+            { menuItem: {icon: 'home', content: 'Home' }, render: () => <Tab.Pane className = 'adminPane'><AdminHome/></Tab.Pane> },
+            { menuItem: {content: 'Writer', icon: 'book'}, render: () => <Tab.Pane className='adminPane'><AdminWriter/></Tab.Pane> },
+            { menuItem: {content: 'Email', icon: 'mail'}, render: () => <Tab.Pane className='adminPane'><AdminEmail/></Tab.Pane> },
         ]
         return (
             <div>

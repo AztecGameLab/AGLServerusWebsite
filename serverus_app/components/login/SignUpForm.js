@@ -205,24 +205,26 @@ class SignUpForm extends Component {
 
       .then(function () {
         that.sendNewUserToFB();
-        // //TODO Send to AWS to dispatch email. 
-        // let postBody = {
-        //   message: "Test"
-        // };
+        //TODO Send to AWS to dispatch email. 
+        debugger;
+        let postBody = {
+          firstName: newUserData.firstName,
+          lastName: newUserData.lastName,
+          username: newUserData.username,
+          email: newUserData.email
+        };
 
-        // let request = http.request({
-        //   hostname: "localhost",
-        //   port: "3000",
-        //   path: "api/dispatchAuthenticationEmail",
-        //   headers: {
-        //     'Content-Type' : 'application/json',
-        //     'Content-Length' : Buffer.byteLength(postBody)
-        //   }
-        // });
-        // request.end(postBody);
-        // request.on('response', function(){
-        //   //Handle Response info here. 
-        // });
+        let request = http.request({
+          hostname: "localhost",
+          port: "3000",
+          path: "/api/dispatchNewEmail",
+          headers: {
+            'Content-Type' : 'application/json',
+            'Content-Length' : Buffer.byteLength(postBody)
+          }
+        });
+        request.end(JSON.stringify(postBody));
+        request.on('data', console.log);
       })
 
       .catch(function (error) {
