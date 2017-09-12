@@ -31,7 +31,7 @@ class HeaderMenu extends React.Component {
                             this.props.accounts[0].info.authLevel == 2 ? 
                                 <Dropdown item text="Articles">
                                     <Dropdown.Menu>
-                                        <Dropdown.Item icon='edit' as={Link} to='/createpost' text="Create Article" />
+                                        <Dropdown.Item icon='edit' as={Link} to='/create/announcement' text="Create Article" />
                                         <Dropdown.Item icon="newspaper" as={Link} to='/articles' text="View all Articles" />
                                     </Dropdown.Menu>
                                 </Dropdown> 

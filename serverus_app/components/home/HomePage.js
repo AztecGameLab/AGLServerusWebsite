@@ -8,9 +8,9 @@ class HomePage extends React.Component {
         return (
             <div className="container-fluid" style={homeStyle.margin} >
                 <h1>Welcome to the Aztec Game Lab!</h1>
-                <Highlight/>
-                <div className="row col-lg-12"><GamesFeed style={homeStyle.sideStyle}/></div>
                 <div className="row col-lg-12"><NewsFeed style={homeStyle.sideStyle}/></div>  
+                <div className="row col-lg-12"><GamesFeed style={homeStyle.sideStyle}/></div>
+                <Highlight/>
             </div>
         );
     }

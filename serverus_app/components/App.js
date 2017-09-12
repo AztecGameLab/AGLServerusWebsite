@@ -7,6 +7,7 @@ import * as accountActions from './actions/accountActions';
 import HeaderMenu from './common/HeaderMenu';
 import Footer from './common/Footer';
 import LoginModel from './login/LoginModel';
+import tags from './common/tags.css'
 require('../../favicon.ico');
 
 class App extends React.Component {
@@ -38,7 +39,6 @@ class App extends React.Component {
                     .then(function(response) {
                         var that3 = that2;
                         that3.props.actions.loadAccount(response.data);
-                        alert('User LOADED IN redux!!!');
                     }).then(function() {
                         var that3 = that2;
                         that3.setState ({

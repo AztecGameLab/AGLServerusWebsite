@@ -21,6 +21,7 @@
     "firebase": "^3.7.5",
     "radium": "^0.19.3",
     "react": "^15.3.0",
+    "react-avatar-editor": "^10.2.1",
     "react-css-transition-replace": "^2.2.1",
     "react-dom": "^15.6.0",
     "react-markdown": "^2.5.0",
