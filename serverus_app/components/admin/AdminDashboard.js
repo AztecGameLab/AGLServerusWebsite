@@ -6,8 +6,12 @@ import {
     Container,
     Segment,
     Header,
-    Menu
+    Menu,
+    Tab
 } from 'semantic-ui-react';
+import AdminHome from './AdminHome';
+import AdminEmail from './AdminEmail';
+import AdminWriter from './AdminWriter';
 
 export default class AdminDashboard extends React.Component {
     constructor(props) {
@@ -15,29 +19,18 @@ export default class AdminDashboard extends React.Component {
 
         this.testMenuItemClicked = this.testMenuItemClicked.bind(this);
     }
-
-    testMenuItemClicked(){
-        console.log("Clicked!");
-    }
-
+    
     render() {
+        const panes = [
+            { menuItem: {icon: 'home', content: 'Home' }, render: () => <Tab.Pane><AdminHome/></Tab.Pane> },
+            { menuItem: {content: 'Writer', icon: 'book'}, render: () => <Tab.Pane><AdminWriter/></Tab.Pane> },
+            { menuItem: {content: 'Email', icon: 'mail'}, render: () => <Tab.Pane><AdminEmail/></Tab.Pane> },
+        ]
         return (
             <div>
-                <Grid columns={2} stretched>
-                    <Grid.Column width={3} stretched style={{minHeight: "100%"}}>
-                        <Segment raised>
-                            <Header>Admin Actions</Header>
-                            <Menu vertical fluid>
-                                <Menu.Item name="Write Blog Post" icon="book" onClick={this.testMenuItemClicked}/>
-                                <Menu.Item name="Manage Users" icon="users"/>
-                                <Menu.Item name="Dispatch Email" icon="mail"/>
-                            </Menu>
-                        </Segment>
-                    </Grid.Column>
-                    <Grid.Column>
-                        Right Content
-                    </Grid.Column>
-                </Grid>
+                <Segment raised>
+                    <Tab menu={{ fluid: true, vertical: true }} panes={panes} />
+                </Segment>
             </div>
         );
     }

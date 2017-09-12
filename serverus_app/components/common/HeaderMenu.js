@@ -29,19 +29,22 @@ class HeaderMenu extends React.Component {
                     <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon name='checked calendar' />Calendar</Menu.Item>
                     {this.props.loggedIn ?
                         this.props.accounts[0].info.authLevel == 2 ?
-                            <div>
                                 <Dropdown item text="Articles">
                                     <Dropdown.Menu>
                                         <Dropdown.Item icon='edit' as={Link} to='/create/announcement' text="Create Article" />
                                         <Dropdown.Item icon="newspaper" as={Link} to='/articles' text="View all Articles" />
                                     </Dropdown.Menu>
                                 </Dropdown>
-                                <Menu.Item to='/admin'><Icon name="server"/>Admin</Menu.Item>
-                            </div>
                             :
                             <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' />View All Articles</Menu.Item>
                         :
                         <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' />View All Articles</Menu.Item>
+                    }
+                    { this.props.loggedIn ? 
+                        this.props.accounts[0].info.authLevel == 2 ? 
+                            <Menu.Item name="admin" active={activeItem==='admin'} onClick={this.handleItemClick} as={Link} to="/admin"><Icon name="dashboard"/>Dashboard</Menu.Item>
+                            : <div/>
+                            : <div/>
                     }
                     {this.props.loggedIn ?
                         <Menu.Menu position='right'>
