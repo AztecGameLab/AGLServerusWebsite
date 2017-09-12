@@ -1,53 +1,58 @@
 import React from 'react';
-import {Link} from 'react-router';
-import { Button, Icon, Image } from 'semantic-ui-react'
-import styles from './footer.css';
+import { Link } from 'react-router';
+import { Button, Icon, Grid } from 'semantic-ui-react';
 
-class Footer extends React.Component {
-    constructor(props){
-        super(props);
-        this.RedirectToHellSite = this.RedirectToHellSite.bind(this);
-    }
-
-    RedirectToHellSite(e){
-        window.location.href= "https://www.sdsu.edu/";
-    }
-
-    render(){
-        let logo = require('./../login/blacklogo.png');
-        return (
-            <div id="footer">
-                <Image style={FooterStyle.logo} src={logo} />
-                <Image style={FooterStyle.sdsuImage} src='https://newscenter.sdsu.edu/brand/images/primary2color.gif' onClick={this.RedirectToHellSite}/>
-                <div id="footer-right">
-                    <div id="footer-right-top">
-                        <Icon name='mail outline'/> Contact us at: <a href='mailto:aztecgamelab@gmail.com'>aztecgamelab@gmail.com</a>
-                    </div>
-                    <div id="footer-right-bottom">
-                        <Icon name='share alternate'/> Follow us on&nbsp;
-                        <Button icon color='instagram' circular compact as='a' href="https://www.instagram.com/aztecgamelab/"><Icon name='instagram'/></Button>
-                        <Button icon color='facebook' circular compact as='a' href="https://facebook.com"><Icon name='facebook f'/></Button>
-                        <Button icon color='twitter' circular compact as='a' href="https://twitter.com/AztecGameLab"><Icon name='twitter' /></Button>
-                        <Button icon color='youtube' circular compact><Icon name='youtube' /></Button>
-                    </div>
+const Footer = (props) => {
+    return (
+        <div style={FooterStyle.footer}>
+            <Grid centered divided inverted >
+                <Grid.Row>
+                    <h1>Aztec Game Lab</h1>
+                </Grid.Row>
+                <Grid.Row>
+                <div style={FooterStyle.spacing}>
+                    <Button icon color='instagram' circular  as='a' href="https://www.instagram.com/aztecgamelab/"><Icon name='instagram' /></Button>
                 </div>
-            </div>
-        );
-    }
+                <div style={FooterStyle.spacing}>
+                    <Button icon color='facebook' circular  as='a' href="https://www.facebook.com/groups/aztecgamelab/"><Icon name='facebook f' /></Button>
+                </div>
+                <div style={FooterStyle.spacing}>
+                    <Button icon color='twitter' circular  as='a' href="https://twitter.com/AztecGameLab"><Icon name='twitter' /></Button>
+                </div>
+                </Grid.Row>
+                <Grid.Row textAlign='center'>
+                    <Grid.Column width = {2}>
+                        <a href='https://docs.google.com/document/d/1R6tGpquyGkJQlrIz-iO-xCoMH5pjsymbRFWiCd6qYQ4/edit?usp=sharing'> Terms & Conditions </a>
+                    </Grid.Column>
+                    <Grid.Column width = {2}> 
+                        <a href='http://www.cs.sdsu.edu/'> San Diego State University</a>
+                    </Grid.Column>
+                    <Grid.Column width = {2}> 
+                        <Icon name = 'copyright'> </Icon>AztecGameLab 2017 
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
+        </div>
+
+    );
 };
+
 var FooterStyle = {
-    logo: {
-        display: 'block',
-        width: 'auto',
-        maxHeight: '100%',
-        float: 'left',
+    footer: {
+        backgroundColor: ' #1b1c1d',
+        color: 'white',
+        bottom: 0,
+        position: 'fixed',
+        margin: 0,
+        zIndex: 0,
+        width: '100%',
+        padding: '20px'
+
     },
-    sdsuImage: {
-        display: 'block',
-        width: 'auto',
-        maxHeight: '100%',
-        float: 'right',
-    },
+    spacing: {
+        marginLeft: '15px'
+    }
+
 }
 
 export default Footer;
