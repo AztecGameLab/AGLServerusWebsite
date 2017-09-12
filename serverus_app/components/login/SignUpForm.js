@@ -15,6 +15,7 @@ class SignUpForm extends Component {
     super(props);
     this.state = {
       currentPhase: 0,
+      error: false,
       startingIcon: 'ProfileIconsSmall/033-flask.png',
       created: false,
       loading: false,
@@ -265,10 +266,16 @@ class SignUpForm extends Component {
             created: true
           });
           that2.props.signedUp();
+          var that3 = that2;
           //firebase.database().ref().child('/testUserURL').push(newUid:url);
         })
       }).catch(function (error) {
         console.log(error);
+        that2.setState({
+          errorMessage: error.errorMessage,
+          error: true
+        });
+        
       });
     });
   }
@@ -302,7 +309,9 @@ class SignUpForm extends Component {
           loading = {this.state.loading}
           handleRolesInput = {this.handleRolesInput}
           handleProfileInput = {this.handleProfileInput}
-          startingIcon = {this.state.startingIcon}/>
+          startingIcon = {this.state.startingIcon}
+          error = {this.state.error}
+          errorMessage = {this.state.errorMessage}/>
         break;
     }
     return (

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import { Button, Form, Checkbox, Input, Icon, Grid, Label, Dropdown, Modal, Popup } from 'semantic-ui-react';
+import { Button, Form, Checkbox, Input, Icon, Grid, Label, Dropdown, Modal, Popup, Message } from 'semantic-ui-react';
 import roles from '../common/roleOptions';
 import profileIcons from '../common/profileIconOptions';
 import { Image, CloudinaryContext, Transformation } from 'cloudinary-react';
@@ -20,7 +20,7 @@ class SignUpThree extends React.Component {
       loading: false,
       termsAccepted: false,
       rolesSelected: [],
-      firebaseLoaded: false,
+      securityCodeFilled: false
     };
     this.usernameCheck = this.usernameCheck.bind(this);
     this.adminCheck = this.adminCheck.bind(this);
@@ -34,8 +34,7 @@ class SignUpThree extends React.Component {
     usernameRef.once('value', function (snapshot) {
       if (snapshot.val()) {
         that.setState({
-          existingUsernames: Object.values(snapshot.val()),
-          firebaseLoaded: true
+          existingUsernames: Object.values(snapshot.val())
         });
       }
     });
@@ -48,12 +47,12 @@ class SignUpThree extends React.Component {
     }, function () {
       that.formComplete();
     });
-    console.log(value + '' + 'xD');
   }
 
   usernameCheck(e) {
     var that = this;
     this.props.handleUsernameInput(e);
+    console.log(e.target.value)
     if (e.target.value.length > 0 && e.target.value.length < 20) {
       for (var i in this.state.existingUsernames) {
         if (this.state.existingUsernames[i] == e.target.value) {
@@ -98,6 +97,11 @@ class SignUpThree extends React.Component {
 
   adminCheck(e) {
     this.props.handleAdminCode(e);
+    this.setState({
+      securityCodeFilled: true
+    }, function () {
+      this.formComplete();
+    });
   }
 
   termsAccepted(e) {
@@ -110,7 +114,7 @@ class SignUpThree extends React.Component {
   }
   formComplete() {
     var isTaken = this.state.usernameTaken || this.state.usernameLimit;
-    var inputsFilled = this.state.usernameFilled && this.state.rolesSelected.length > 0;
+    var inputsFilled = this.state.usernameFilled && (this.state.rolesSelected.length > 0) && this.state.securityCodeFilled;
     var termsAccepted = this.state.termsAccepted;
     if (inputsFilled) {
       if (!isTaken) {
@@ -142,10 +146,7 @@ class SignUpThree extends React.Component {
     }
   }
   render() {
-    if (this.state.firebaseLoaded) {
-      var created = !this.props.created ? false : true;
       return (
-        <CloudinaryContext cloudName='aztecgamelab-com'>
           <div>
             <div style={modalStyle.spacing}>
               <Grid divided='vertically'>
@@ -205,20 +206,24 @@ class SignUpThree extends React.Component {
                     </Button>
                   </Grid.Column>
                   <Grid.Column floated='right' width={10}>
-                    <Button fluid color='green' size='massive' disabled={this.state.buttonDisable}
+                    {<Button fluid color='green' size='massive' 
                       onClick={this.props.onSubmission}
-                      loading={this.props.loading}>
-                      {created ? 'Thanks for Signing Up!' : 'Join Aztec Game Lab!'}
+                      loading={this.props.loading}
+                      disabled = {this.state.buttonDisable}>
+                      <Icon  size = 'large' name = 'flask'/>
+                      Welcome!
 
-                    </Button>
+                    </Button>}
+                    {this.state.error && <Message negative>
+                      <Message.Header>Sorry, authentification failed</Message.Header>
+                          <p>{this.prop.errorMessage}</p>
+                  </Message>}
                   </Grid.Column>
                 </Grid>
               </div>
             </div>
           </div>
-        </CloudinaryContext>
       );
-    } else return null;
   }
 }
 var modalStyle = {

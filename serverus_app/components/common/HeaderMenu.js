@@ -22,11 +22,11 @@ class HeaderMenu extends React.Component {
         const { activeItem } = this.state
         return (
             <div className="row" style={HeaderStyle.header}> 
-                    <Menu stackable inverted pointing >
+                    <Menu stackable inverted  >
                         <Menu.Item className="logo" active={activeItem === 'home'} onClick={this.handleItemClick} as={Link} to='/'><Image style={HeaderStyle.logo} src={logo} /></Menu.Item>
-                        <Menu.Item name='games' active={activeItem === 'games'} onClick={this.handleItemClick} as={Link} to='/games'><Icon name='gamepad' />Games</Menu.Item>
-                        <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon name='users'/>Users</Menu.Item>
-                        <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon name='checked calendar' />Calendar</Menu.Item>  
+                        <Menu.Item name='games' active={activeItem === 'games'} onClick={this.handleItemClick} as={Link} to='/games'><Icon size = 'big' name='gamepad' />Games</Menu.Item>
+                        <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon size = 'big' name='users'/>Users</Menu.Item>
+                        <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon size = 'big' name='checked calendar' />Calendar</Menu.Item>  
                         {this.props.loggedIn ?
                             this.props.accounts[0].info.authLevel == 2 ? 
                                 <Dropdown item text="Articles">
@@ -36,9 +36,9 @@ class HeaderMenu extends React.Component {
                                     </Dropdown.Menu>
                                 </Dropdown> 
                                 :
-                                <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' />View All Articles</Menu.Item>  
+                                <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon size = 'big' name='newspaper' />View All Articles</Menu.Item>  
                             :
-                            <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' />View All Articles</Menu.Item>  
+                            <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon size = 'big' name='newspaper' />View All Articles</Menu.Item>  
                         }
                         {this.props.loggedIn ?
                             <Menu.Menu position='right'>
@@ -51,8 +51,8 @@ class HeaderMenu extends React.Component {
                             </Menu.Menu>
                             :
                             <Menu.Menu position='right'>
-                                <Menu.Item name='Login' onClick={() => this.props.showModel(0)}></Menu.Item>
-                                <Menu.Item name='SignUp' onClick={() => this.props.showModel(1)}  style={HeaderStyle.profile}></Menu.Item>
+                                <Menu.Item name='Login' onClick={() => this.props.showModel(0)}> <Icon size = 'big' name='sign in'/>Login! </Menu.Item>
+                                <Menu.Item name='SignUp' onClick={() => this.props.showModel(1)}  style={HeaderStyle.profile}> <Icon size = 'big' name='signup'/> Sign Up!</Menu.Item>
                             </Menu.Menu>}
                     </Menu>
             </div>);
