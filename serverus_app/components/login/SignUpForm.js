@@ -205,24 +205,27 @@ class SignUpForm extends Component {
 
       .then(function () {
         that.sendNewUserToFB();
-        // //TODO Send to AWS to dispatch email. 
-        // let postBody = {
-        //   message: "Test"
-        // };
+        //TODO Send to AWS to dispatch email. 
+        debugger;
+        let postBody = JSON.stringify({
+          firstName: newUserData.firstName,
+          lastName: newUserData.lastName,
+          username: newUserData.username,
+          email: newUserData.email
+        });
 
-        // let request = http.request({
-        //   hostname: "localhost",
-        //   port: "3000",
-        //   path: "api/dispatchAuthenticationEmail",
-        //   headers: {
-        //     'Content-Type' : 'application/json',
-        //     'Content-Length' : Buffer.byteLength(postBody)
-        //   }
-        // });
-        // request.end(postBody);
-        // request.on('response', function(){
-        //   //Handle Response info here. 
-        // });
+        let request = http.request({
+          hostname: 'ec2-13-59-179-171.us-east-2.compute.amazonaws.com',
+          port: "3000",
+          method: 'POST',
+          path: "/api/dispatchNewEmail",
+          headers: {
+            'Content-Type' : 'application/json',
+            'Content-Length' : Buffer.byteLength(postBody)
+          }
+        });
+        request.end(postBody);
+        request.on('data', console.log);
       })
 
       .catch(function (error) {
@@ -246,9 +249,9 @@ class SignUpForm extends Component {
       uid: userUid,
       info: this.state.newAccount
     };
-    firebase.database().ref('accounts/takenEmails').push(data.info.email); //Taken Emails
-    firebase.database().ref('accounts/takenRedIds').push(data.info.redId); //Taken RedIDs
-    firebase.database().ref('accounts/takenUsernames').push(data.info.username); //Taken Emails
+    firebase.database().ref('takenEmails').push(data.info.email); //Taken Emails
+    firebase.database().ref('takenRedIds').push(data.info.redId); //Taken RedIDs
+    firebase.database().ref('takenUsernames').push(data.info.username); //Taken Emails
     var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
     this.pathRef = firebase.storage().ref('accounts/' + data.info.username + '.json');
     user.updateProfile({

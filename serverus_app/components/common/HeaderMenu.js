@@ -36,27 +36,33 @@ class HeaderMenu extends React.Component {
                                         <Dropdown.Item icon='edit' as={Link} to='/create/announcement' text="Create Article" />
                                         <Dropdown.Item icon="newspaper" as={Link} to='/articles' text="View all Articles" />
                                     </Dropdown.Menu>
-                                </Dropdown> 
-                                :
-                                <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon size = 'big' name='newspaper' />View All Articles</Menu.Item>  
-                            :
-                            <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon size = 'big' name='newspaper' />View All Articles</Menu.Item>  
-                        }
-                        {this.props.loggedIn ?
-                            <Menu.Menu position='right'>
-                                <Dropdown item trigger={<div><Icon name="dashboard"></Icon>Welcome {this.props.accounts[0].info.firstName + ' ' + this.props.accounts[0].info.lastName + '!'}</div>} icon={null} style={HeaderStyle.profile}>
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item as={Link} to={'/u/' + this.props.accounts[0].info.username} icon='user circle' text='My Account' />
-                                        <Dropdown.Item icon='sign out' text='Sign out' onClick={this.props.signOut} />
-                                    </Dropdown.Menu>
                                 </Dropdown>
-                            </Menu.Menu>
                             :
-                            <Menu.Menu position='right'>
-                                <Menu.Item name='Login' onClick={() => this.props.showModel(0)}> <Icon size = 'big' name='sign in'/>Login! </Menu.Item>
-                                <Menu.Item name='SignUp' onClick={() => this.props.showModel(1)}  style={HeaderStyle.profile}> <Icon size = 'big' name='signup'/> Sign Up!</Menu.Item>
-                            </Menu.Menu>}
-                    </Menu>
+                            <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' />View All Articles</Menu.Item>
+                        :
+                        <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' />View All Articles</Menu.Item>
+                    }
+                    { this.props.loggedIn ? 
+                        this.props.accounts[0].info.authLevel == 2 ? 
+                            <Menu.Item name="admin" active={activeItem==='admin'} onClick={this.handleItemClick} as={Link} to="/admin"><Icon name="dashboard"/>Dashboard</Menu.Item>
+                            : <div/>
+                            : <div/>
+                    }
+                    {this.props.loggedIn ?
+                        <Menu.Menu position='right'>
+                            <Dropdown item trigger={<div><Icon name="dashboard"></Icon>Welcome {this.props.accounts[0].info.firstName + ' ' + this.props.accounts[0].info.lastName + '!'}</div>} icon={null} style={HeaderStyle.profile}>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item as={Link} to={'/u/' + this.props.accounts[0].info.username} icon='user circle' text='My Account' />
+                                    <Dropdown.Item icon='sign out' text='Sign out' onClick={this.props.signOut} />
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </Menu.Menu>
+                        :
+                        <Menu.Menu position='right'>
+                            <Menu.Item name='Login' onClick={() => this.props.showModel(0)}></Menu.Item>
+                            <Menu.Item name='SignUp' onClick={() => this.props.showModel(1)} style={HeaderStyle.profile}></Menu.Item>
+                        </Menu.Menu>}
+                </Menu>
             </div>);
     }
 };

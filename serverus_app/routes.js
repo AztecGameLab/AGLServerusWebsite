@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import firebase from 'firebase';
 import App from './components/App';
+import AdminDashboard from './components/admin/AdminDashboard';
 import HomePage from './components/home/HomePage';
 import AboutPage from './components/about/AboutPage';
 import GamesPage from './components/games/GamesPage';
@@ -16,6 +17,7 @@ import Calendar from './components/Calendar/Calendar'
 export default (
     <Route path="/" component={App}>
         <IndexRoute component={HomePage} />
+        <Route path="admin" component={AdminDashboard}/>
         <Route path="about" component={AboutPage} />
         <Route path="games" component={GamesPage} />
         <Route path="competitions" component={CompetitionsPage} />
