@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Icon, Modal, Label, Loader, Grid, Button } from 'semantic-ui-react';
-import { Image, CloudinaryContext, Transformation } from 'cloudinary-react';
+import { Image, CloudinaryContext} from 'cloudinary-react';
 import axios from 'axios';
 
 class IconPicker extends Component {

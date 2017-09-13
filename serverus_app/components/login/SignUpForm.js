@@ -9,6 +9,7 @@ import SignUpThree from './SignUpThree';
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 
 const http = require('http');
+const md5 = require('md5');
 
 class SignUpForm extends Component {
   constructor(props) {
@@ -34,16 +35,17 @@ class SignUpForm extends Component {
         //AGL Info
         username: '',
         roles : [],
-        bio: '',
+        bio: 'hi, im new!',
         flare: '',
         goodBoyPoints: 0,
         //Collections
-        badges: [],
+        badges: ['Badges/sprout.png'],
         games: [],
         showcase: [],
         bookmarked: [],
         groups: [],
         activities: [],
+        friends:[],
         authLevel: 0,
         showcaseImage: 'ProfileIconsSmall/033-flask.png',
         facebookLink: 'https://www.facebook.com/',
@@ -69,8 +71,6 @@ class SignUpForm extends Component {
     this.handleProfileInput = this.handleProfileInput.bind(this);
     //Navigation
     this.changePhase = this.changePhase.bind(this);
-    //Debugger
-    this.randomUser = this.randomUser.bind(this);
   }
   //Sign Up Nav
   changePhase(value) {
@@ -86,6 +86,10 @@ class SignUpForm extends Component {
     const newAccount = this.state.newAccount;
     newAccount.email = e.target.value;
     newAccount.dateJoined = now;
+    if(new Date().getFullYear() == 2017){
+      newAccount.badges[0] = 'Badges/sprout.png';
+      
+    }
     this.setState({
       newAccount: newAccount
     });
@@ -163,45 +167,14 @@ class SignUpForm extends Component {
       startingIcon: e.target.name
     });
   }
-  //Debugger
-  randomUser() {
-    this.setState({
-      newAccount: {
-        //Essential Login Info
-        email: "random" + Math.floor((Math.random() * 10000) + 1) + "@gmail.com",
-        password: "random" + Math.floor((Math.random() * 300) + 1),
-        redId: "random" + Math.floor((Math.random() * 900) + 1),
-        //Basic User Info
-        firstName: "random" + Math.floor((Math.random() * 180) + 1),
-        lastName: "random" + Math.floor((Math.random() * 1200) + 1),
-        major: "random" + Math.floor((Math.random() * 9000) + 1),
-        currentYear: "random" + Math.floor((Math.random() * 420) + 1),
-        //Optional Editable Later
-        rolesHats: '',
-        skillsTools: '',
-        username: '',
-        //Functional Attibutes
-        flares: '',
-        badges: '',
-        games: [
 
-        ],
-        groups: [
-
-        ],
-        authLevel: false
-      }
-    });
-    console.log("random USer:");
-    console.log(this.state.newAccount);
-  }
   onSubmission() {
     this.setState({
       loading: true
     });
     var that = this;
     const newUserData = this.state.newAccount;
-    firebase.auth().createUserWithEmailAndPassword(newUserData.email, newUserData.password)
+    firebase.auth().createUserWithEmailAndPassword(newUserData.email, md5(newUserData.password))
 
       .then(function () {
         that.sendNewUserToFB();

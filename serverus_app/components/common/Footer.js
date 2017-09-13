@@ -42,7 +42,6 @@ var FooterStyle = {
         backgroundColor: ' #1b1c1d',
         color: 'white',
         bottom: 0,
-        position: 'fixed',
         margin: 0,
         zIndex: 0,
         width: '100%',

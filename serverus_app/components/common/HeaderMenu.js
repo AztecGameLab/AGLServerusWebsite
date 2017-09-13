@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import firebase from 'firebase';
-import { Button, Dropdown, Icon, Image, Menu } from 'semantic-ui-react';
+import { Button, Dropdown, Icon, Image, Menu, Popup } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as accountActions from '../actions/accountActions';
@@ -24,8 +24,18 @@ class HeaderMenu extends React.Component {
             <div className="row" style={HeaderStyle.header}> 
                     <Menu stackable inverted  >
                         <Menu.Item className="logo" active={activeItem === 'home'} onClick={this.handleItemClick} as={Link} to='/'><Image style={HeaderStyle.logo} src={logo} /></Menu.Item>
-                        <Menu.Item name='games' active={activeItem === 'games'} onClick={this.handleItemClick} as={Link} to='/games'><Icon size = 'big' name='gamepad' />Games</Menu.Item>
-                        <Menu.Item name='competitions' active={activeItem === 'competitions'} onClick={this.handleItemClick} as={Link} to='/competitions'><Icon size = 'big' name='trophy' />Competitions</Menu.Item>                          
+                        <Popup
+                            trigger={<Menu.Item disabled name='games' active={activeItem === 'games'} ><Icon size = 'big' name='gamepad' />Games</Menu.Item>}
+                            content='Game Submission Coming Soon!'
+                            inverted
+                            size = 'large'
+                        />
+                        <Popup
+                            trigger={<Menu.Item disabled name='competitions' active={activeItem === 'competitions'} ><Icon size = 'big' name='trophy' />Competitions</Menu.Item> }
+                            content='First Competition Coming Soon!'
+                            inverted
+                            size = 'large'
+                        />                        
                         <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon size = 'big' name='users'/>Users</Menu.Item>
                         <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon size = 'big' name='checked calendar' />Calendar</Menu.Item>
                         <Menu.Item name='about' active={activeItem === 'about'} onClick={this.handleItemClick} as={Link} to='/about'><Icon size = 'big' name='info circle' />About Us</Menu.Item>  
