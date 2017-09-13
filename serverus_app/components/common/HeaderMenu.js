@@ -48,9 +48,9 @@ class HeaderMenu extends React.Component {
                                     </Dropdown.Menu>
                                 </Dropdown>
                             :
-                            <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' />View All Articles</Menu.Item>
+                            <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' size = 'big'/>View All Articles</Menu.Item>
                         :
-                        <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' />View All Articles</Menu.Item>
+                        <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' size = 'big'/>View All Articles</Menu.Item>
                     }
                     { this.props.loggedIn ? 
                         this.props.accounts[0].info.authLevel == 2 ? 
@@ -69,8 +69,8 @@ class HeaderMenu extends React.Component {
                         </Menu.Menu>
                         :
                         <Menu.Menu position='right'>
-                            <Menu.Item name='Login' onClick={() => this.props.showModel(0)}></Menu.Item>
-                            <Menu.Item name='SignUp' onClick={() => this.props.showModel(1)} style={HeaderStyle.profile}></Menu.Item>
+                            <Menu.Item onClick={() => this.props.showModel(0)}><Icon name = 'sign in' size = 'big'/> Sign Up!</Menu.Item>
+                            <Menu.Item onClick={() => this.props.showModel(1)} style={HeaderStyle.profile}><Icon name = 'signup' size = 'big'/> Sign Up!</Menu.Item>
                         </Menu.Menu>}
                 </Menu>
             </div>);
