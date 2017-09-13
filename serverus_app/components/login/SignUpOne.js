@@ -28,7 +28,7 @@ class SignUpOne extends React.Component {
     this.formComplete = this.formComplete.bind(this);
   }
   componentWillMount() {
-    var emailRef = firebase.database().ref('accounts/takenEmails/');
+    var emailRef = firebase.database().ref('takenEmails/');
     var that = this;
     emailRef.on('value', function (snapshot) {
       if (that.props.isLeaving) return;
@@ -38,7 +38,7 @@ class SignUpOne extends React.Component {
         });
       }
     });
-    var redIDRef = firebase.database().ref('accounts/takenRedIds/');
+    var redIDRef = firebase.database().ref('takenRedIds/');
     redIDRef.on('value', function (snapshot) {
       if (that.props.isLeaving) return;
       if (snapshot.val()) {
@@ -95,7 +95,6 @@ class SignUpOne extends React.Component {
         this.formComplete()
       });
     }
-    console.log(e.target.value);
   }
   passwordCheck(e) {
     let passString = e.target.value;
@@ -223,7 +222,7 @@ class SignUpOne extends React.Component {
               />
               <Input inverted placeholder='Password' iconPosition='left'>
               <Icon name='lock' />
-              <input id='pass' onChange={this.props.handlePasswordInput} onChange={this.passwordCheck} type='password' />
+              <input id='pass' onChange={this.props.handlePasswordInput} onBlur={this.passwordCheck} type='password' />
               {this.state.passwordWarning ?
                 this.state.passwordFirstClick && <Label color='red' pointing='left'>Password needs 6+ characters, a number and uppercase letter</Label>
                 : this.state.passwordFirstClick && <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label>}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Icon, Modal, Label, Loader, Grid, Button } from 'semantic-ui-react';
-import { Image, CloudinaryContext, Transformation } from 'cloudinary-react';
+import { Image, CloudinaryContext} from 'cloudinary-react';
 import axios from 'axios';
 
 class IconPicker extends Component {
@@ -34,14 +34,12 @@ class IconPicker extends Component {
         var that = this;
         axios.get('http://res.cloudinary.com/aztecgamelab-com/image/list/smallIcons.json')
             .then(res => {
-                console.log(res.data.resources);
                 that.setState({
                     profileIcons: res.data.resources,
                     loading: false
                 });
             });
     }
-
     mapIcons(data, idx) {
         if (data && this.state.profileIcons.indexOf(data.public_id) == -1) {
             return (

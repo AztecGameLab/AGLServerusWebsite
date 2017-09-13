@@ -9,12 +9,14 @@ import SignUpThree from './SignUpThree';
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 
 const http = require('http');
+const md5 = require('md5');
 
 class SignUpForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentPhase: 0,
+      error: false,
       startingIcon: 'ProfileIconsSmall/033-flask.png',
       created: false,
       loading: false,
@@ -33,16 +35,17 @@ class SignUpForm extends Component {
         //AGL Info
         username: '',
         roles : [],
-        bio: '',
+        bio: 'hi, im new!',
         flare: '',
         goodBoyPoints: 0,
         //Collections
-        badges: [],
+        badges: ['Badges/sprout.png'],
         games: [],
         showcase: [],
         bookmarked: [],
         groups: [],
         activities: [],
+        friends:[],
         authLevel: 0,
         showcaseImage: 'ProfileIconsSmall/033-flask.png',
         facebookLink: 'https://www.facebook.com/',
@@ -68,8 +71,6 @@ class SignUpForm extends Component {
     this.handleProfileInput = this.handleProfileInput.bind(this);
     //Navigation
     this.changePhase = this.changePhase.bind(this);
-    //Debugger
-    this.randomUser = this.randomUser.bind(this);
   }
   //Sign Up Nav
   changePhase(value) {
@@ -85,6 +86,10 @@ class SignUpForm extends Component {
     const newAccount = this.state.newAccount;
     newAccount.email = e.target.value;
     newAccount.dateJoined = now;
+    if(new Date().getFullYear() == 2017){
+      newAccount.badges[0] = 'Badges/sprout.png';
+      
+    }
     this.setState({
       newAccount: newAccount
     });
@@ -162,66 +167,38 @@ class SignUpForm extends Component {
       startingIcon: e.target.name
     });
   }
-  //Debugger
-  randomUser() {
-    this.setState({
-      newAccount: {
-        //Essential Login Info
-        email: "random" + Math.floor((Math.random() * 10000) + 1) + "@gmail.com",
-        password: "random" + Math.floor((Math.random() * 300) + 1),
-        redId: "random" + Math.floor((Math.random() * 900) + 1),
-        //Basic User Info
-        firstName: "random" + Math.floor((Math.random() * 180) + 1),
-        lastName: "random" + Math.floor((Math.random() * 1200) + 1),
-        major: "random" + Math.floor((Math.random() * 9000) + 1),
-        currentYear: "random" + Math.floor((Math.random() * 420) + 1),
-        //Optional Editable Later
-        rolesHats: '',
-        skillsTools: '',
-        username: '',
-        //Functional Attibutes
-        flares: '',
-        badges: '',
-        games: [
 
-        ],
-        groups: [
-
-        ],
-        authLevel: false
-      }
-    });
-    console.log("random USer:");
-    console.log(this.state.newAccount);
-  }
   onSubmission() {
     this.setState({
       loading: true
     });
     var that = this;
     const newUserData = this.state.newAccount;
-    firebase.auth().createUserWithEmailAndPassword(newUserData.email, newUserData.password)
+    firebase.auth().createUserWithEmailAndPassword(newUserData.email, md5(newUserData.password))
 
       .then(function () {
         that.sendNewUserToFB();
-        // //TODO Send to AWS to dispatch email. 
-        // let postBody = {
-        //   message: "Test"
-        // };
+        //TODO Send to AWS to dispatch email. 
+        debugger;
+        let postBody = JSON.stringify({
+          firstName: newUserData.firstName,
+          lastName: newUserData.lastName,
+          username: newUserData.username,
+          email: newUserData.email
+        });
 
-        // let request = http.request({
-        //   hostname: "localhost",
-        //   port: "3000",
-        //   path: "api/dispatchAuthenticationEmail",
-        //   headers: {
-        //     'Content-Type' : 'application/json',
-        //     'Content-Length' : Buffer.byteLength(postBody)
-        //   }
-        // });
-        // request.end(postBody);
-        // request.on('response', function(){
-        //   //Handle Response info here. 
-        // });
+        let request = http.request({
+          hostname: 'ec2-13-59-179-171.us-east-2.compute.amazonaws.com',
+          port: "3000",
+          method: 'POST',
+          path: "/api/dispatchNewEmail",
+          headers: {
+            'Content-Type' : 'application/json',
+            'Content-Length' : Buffer.byteLength(postBody)
+          }
+        });
+        request.end(postBody);
+        request.on('data', console.log);
       })
 
       .catch(function (error) {
@@ -245,9 +222,9 @@ class SignUpForm extends Component {
       uid: userUid,
       info: this.state.newAccount
     };
-    firebase.database().ref('accounts/takenEmails').push(data.info.email); //Taken Emails
-    firebase.database().ref('accounts/takenRedIds').push(data.info.redId); //Taken RedIDs
-    firebase.database().ref('accounts/takenUsernames').push(data.info.username); //Taken Emails
+    firebase.database().ref('takenEmails').push(data.info.email); //Taken Emails
+    firebase.database().ref('takenRedIds').push(data.info.redId); //Taken RedIDs
+    firebase.database().ref('takenUsernames').push(data.info.username); //Taken Emails
     var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
     this.pathRef = firebase.storage().ref('accounts/' + data.info.username + '.json');
     user.updateProfile({
@@ -265,10 +242,16 @@ class SignUpForm extends Component {
             created: true
           });
           that2.props.signedUp();
+          var that3 = that2;
           //firebase.database().ref().child('/testUserURL').push(newUid:url);
         })
       }).catch(function (error) {
         console.log(error);
+        that2.setState({
+          errorMessage: error.errorMessage,
+          error: true
+        });
+        
       });
     });
   }
@@ -302,7 +285,9 @@ class SignUpForm extends Component {
           loading = {this.state.loading}
           handleRolesInput = {this.handleRolesInput}
           handleProfileInput = {this.handleProfileInput}
-          startingIcon = {this.state.startingIcon}/>
+          startingIcon = {this.state.startingIcon}
+          error = {this.state.error}
+          errorMessage = {this.state.errorMessage}/>
         break;
     }
     return (

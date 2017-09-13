@@ -27,7 +27,7 @@ class SignUpTwo extends React.Component {
         firstNameFirstClick: true,
         firstNameFilled: true
       }, function() {
-        this.formComplete()
+        this.formComplete();
       });
     }
   }
@@ -37,7 +37,7 @@ class SignUpTwo extends React.Component {
         lasttNameFirstClick: true,
         lastNameFilled: true
       }, function() {
-        this.formComplete()
+        this.formComplete();
       });
     }
   }
@@ -48,7 +48,7 @@ class SignUpTwo extends React.Component {
         majorFirstClick: true,
         majorFilled: true
       }, function () {
-        this.formComplete()
+        this.formComplete();
       });
     }
   }
