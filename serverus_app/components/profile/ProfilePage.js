@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, CloudinaryContext } from 'cloudinary-react';
-import { Grid, Icon, Card, Tab, Button, List, Popup, Feed } from 'semantic-ui-react';
+import { Grid, Icon, Card, Tab, Button, List, Popup, Feed, Dropdown, TextArea, Input } from 'semantic-ui-react';
 import IconPicker from '../common/IconPicker';
 import roles from '../common/roleOptions';
 import badgeDescriptions from '../common/badgeOptions';
@@ -63,8 +63,7 @@ const ProfilePage = (props) => {
                         <IconPicker
                             startingIcon={imageLarge(userData.showcaseImage)}
                             handleProfileInput={props.handleProfileInput}
-                            editEnabled={false} />
-
+                            editEnabled={props.editMode} />
                         <Card.Content>
                             <Card.Header>
                                 {userData.firstName + ' ' + userData.lastName}
@@ -95,9 +94,13 @@ const ProfilePage = (props) => {
 
                         <Card.Content>
                             <Card.Header>
-
                                 <Feed>
-                                    {roleMapper(userData.roles)}
+                                    {props.editMode ? 
+                                        <Dropdown 
+                                            placeholder='Roles' 
+                                            fluid multiple selection options={roles}
+                                            value={props.rolesSelected} 
+                                            onChange={props.handleRolesInput} /> : roleMapper(userData.roles)}
                                 </Feed>
                             </Card.Header>
                         </Card.Content>
@@ -108,10 +111,20 @@ const ProfilePage = (props) => {
                             </CloudinaryContext>
                         </Card.Content>
                         <Card.Content extra>
-                            <Button circular color='facebook' icon='facebook' href={''} />
-                            <Button circular color='twitter' icon='twitter' href={''} />
-                            <Button circular color='linkedin' icon='linkedin' href={''} />
-                            <Button circular color='instagram' icon='instagram' href={''} />
+                            {props.editMode ? 
+                            <div style = {{fontSize: '15px'}}>
+                            <Input icon = 'facebook' label='http://facebook.com/' placeholder='username' />
+                            <Input icon = 'facebook' label='http://facebook.com/' placeholder='username' />
+                            <Input icon = 'facebook' label='http://facebook.com/' placeholder='username' />
+                            </div>
+                            :
+                            <div>
+                                <Button circular color='facebook' icon='facebook' href={''} />
+                                <Button circular color='twitter' icon='twitter' href={''} />
+                                <Button circular color='linkedin' icon='linkedin' href={''} />
+                                <Button circular color='instagram' icon='instagram' href={''} />
+                            </div>
+                        }
                         </Card.Content>
                     </Card>
                 </Grid.Column>
@@ -126,7 +139,21 @@ const ProfilePage = (props) => {
                         <Card.Content>
                             <Card.Description>
                                 <Icon name='quote left' size = 'small' />
-                                {userData.bio} hi there georgie 
+                                {props.editMode ? 
+                                    <div>
+                                        <TextArea 
+                                            style = {{width: '100%'}} 
+                                            placeholder='Hi tell us about yourself! :)' 
+                                            onChange = {props.handleBioInput}/>
+                                        <Button 
+                                            onClick = {props.handleBioSubmission} 
+                                            fluid 
+                                            icon = 'save' 
+                                            color = 'green' 
+                                            content = 'Save My bio' 
+                                            size = 'small'/>
+                                    </div>
+                                    : userData.bio}
                                 <Icon name='quote right' size = 'small'/>
                             </Card.Description>
                         </Card.Content>
@@ -182,9 +209,27 @@ const ProfilePage = (props) => {
                     </Card>
                 </Grid.Column>
                 <Grid.Column width={2} fluid>
-                    <Button fluid icon = 'edit' color = 'blue' content = 'Edit My Profile!' size = 'medium'/>
-                    <hr/>
-                    <Button fluid icon = 'save' color = 'green' content = 'Save My Changes!' size = 'medium'/>
+                    {
+                    props.yourAccount && 
+                    <div>
+                        <Button 
+                            fluid 
+                            onClick = {props.editModeOn} 
+                            icon = 'edit' 
+                            color = 'blue' 
+                            content = 'Edit My Profile!' 
+                            size = 'medium'/>
+                        <hr/>
+                        <Button 
+                            disabled = {!props.editMode} 
+                            onClick = {props.editModeOff} 
+                            fluid 
+                            icon = 'save' 
+                            color = 'green' 
+                            content = 'Save My Changes!' 
+                            size = 'medium'/>
+                    </div>
+                    }
                 </Grid.Column>
             </Grid>
         </div>
