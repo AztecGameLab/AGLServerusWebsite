@@ -54,7 +54,7 @@ class UserCard extends React.Component {
             objectList.push(rolesOptions.find(role => role.value === userRole));
         });
         return (objectList.map((role, idx) =>
-            <Icon key={idx} color="grey" name={role.icon} style={{ marginRight: 25 }} />
+            <Icon key={idx} color="grey" name={role.icon} style={{ marginRight: 20 }} />
         ));
     };
 
