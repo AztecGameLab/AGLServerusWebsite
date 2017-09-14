@@ -69,7 +69,7 @@ class HeaderMenu extends React.Component {
                         </Menu.Menu>
                         :
                         <Menu.Menu position='right'>
-                            <Menu.Item onClick={() => this.props.showModel(0)}><Icon name = 'sign in' size = 'big'/> Sign Up!</Menu.Item>
+                            <Menu.Item onClick={() => this.props.showModel(0)}><Icon name = 'sign in' size = 'big'/> Login!</Menu.Item>
                             <Menu.Item onClick={() => this.props.showModel(1)} style={HeaderStyle.profile}><Icon name = 'signup' size = 'big'/> Sign Up!</Menu.Item>
                         </Menu.Menu>}
                 </Menu>
