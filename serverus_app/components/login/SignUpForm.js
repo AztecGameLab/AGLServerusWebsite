@@ -174,7 +174,8 @@ class SignUpForm extends Component {
     });
     var that = this;
     const newUserData = this.state.newAccount;
-    firebase.auth().createUserWithEmailAndPassword(newUserData.email, md5(newUserData.password))
+    let hashPass = md5(newUserData.password);
+    firebase.auth().createUserWithEmailAndPassword(newUserData.email, hashPass)
 
       .then(function () {
         that.sendNewUserToFB();
@@ -222,6 +223,7 @@ class SignUpForm extends Component {
       uid: userUid,
       info: this.state.newAccount
     };
+    data.info.password = md5(data.info.password);
     firebase.database().ref('takenEmails').push(data.info.email); //Taken Emails
     firebase.database().ref('takenRedIds').push(data.info.redId); //Taken RedIDs
     firebase.database().ref('takenUsernames').push(data.info.username); //Taken Emails
