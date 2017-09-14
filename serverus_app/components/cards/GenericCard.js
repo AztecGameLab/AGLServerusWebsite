@@ -1,6 +1,10 @@
 import { Card, Label, Divider, Grid, Image, Icon } from 'semantic-ui-react';
 import React from 'react';
 import { Link } from 'react-router';
+import firebase from 'firebase';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as accountActions from '../actions/accountActions';
 import ReactMarkdown from 'react-markdown';
 import AvatarEditor from 'react-avatar-editor';
 
@@ -16,13 +20,46 @@ class GenericCard extends React.Component {
 
         this.state = {
             favorited: false,
+            loggedIn: false,
         }
         this.toggleUserFavorited = this.toggleUserFavorited.bind(this);
     }
 
+    componentWillUpdate(nextProps, nextState) {
+        if (nextProps.accounts[0] && !nextState.loggedIn) {
+            this.setState({
+                loggedIn: true,
+                favorited: nextProps.accounts[0].info.bookmarked.includes(this.props.keyUrl)
+            })
+        }
+        return true;
+    }
     //Toggles if the user has favorited a card or not... Should call back to the json. 
     toggleUserFavorited() {
+        var that = this;
         const previousState = this.state.favorited;
+        
+        var info = this.props.accounts[0].info;
+        if (!previousState) {
+            if(!info.bookmarked.includes(this.props.keyUrl))
+                info.bookmarked.push(this.props.keyUrl);
+        } else {
+            info.bookmarked.splice(info.bookmarked.indexOf(this.props.keyUrl));
+        }
+        var data = {
+            uid: this.props.accounts[0].uid,
+            info: this.props.accounts[0].info
+        };
+        var file = new Blob([JSON.stringify(data)], { type: 'application/json' });        
+        var pathRef = firebase.storage().ref('accounts/' + data.info.username + '.json');
+        pathRef.put(file).then(function () {
+            pathRef.getDownloadURL().then(function (url) {
+                var username = firebase.auth().currentUser.displayName;
+                firebase.database().ref('accounts/' + username).set({
+                    data: url
+                });
+            });
+        });
         this.setState({
             favorited: !previousState
         });
@@ -31,6 +68,7 @@ class GenericCard extends React.Component {
     render() {
         let profilePic = require('./demoProfileImage.jpg');
         let favorited = this.props.edit ? false : this.state.favorited;
+        let loggedIn = this.props.accounts[0] ? true : null;
         return (
             <div id="GenericCardContainer">
                 {this.props.value.type.text == 'Announcement' || this.props.value.type.text == 'Tutorial' ?
@@ -46,12 +84,13 @@ class GenericCard extends React.Component {
                                 <Divider vertical></Divider>
                                 <Grid.Column>
                                     <div style={CardStyle.Main}>
-                                        {favorited ? <Icon style={{ float: 'right' }} name="star" onClick={this.toggleUserFavorited}></Icon>
+                                        {loggedIn ? favorited ? <Icon style={{ float: 'right' }} name="star" onClick={this.toggleUserFavorited}></Icon>
                                             :
-                                            <Icon style={{ float: 'right' }} name="empty star" onClick={this.toggleUserFavorited}></Icon>}
+                                            <Icon style={{ float: 'right' }} name="empty star" onClick={this.toggleUserFavorited}></Icon> : null}
+
                                         <h2>{this.props.value.title}</h2>
-                                        {this.props.edit ?<h5>Created by: {this.props.user}</h5>:
-                                        <h5>Created by: {this.props.value.author}</h5>}
+                                        {this.props.edit ? <h5>Created by: {this.props.user}</h5> :
+                                            <h5>Created by: {this.props.value.author}</h5>}
                                         <h5>{this.props.value.date}</h5>
                                         <ReactMarkdown source={this.props.value.text} />
                                     </div>
@@ -100,7 +139,7 @@ class GenericCard extends React.Component {
                                                 </div>
                                                 <div style={{ padding: 0 }} className="col-lg-12">
                                                     {this.props.edit ? <div style={{ fontSize: '0.75em', color: 'gray' }}>{this.props.user}</div> :
-                                                    <div style={{ fontSize: '0.75em', color: 'gray' }}>{this.props.value.author}</div>}
+                                                        <div style={{ fontSize: '0.75em', color: 'gray' }}>{this.props.value.author}</div>}
                                                     <div style={{ fontWeight: 'bold' }}>{this.props.value.title}</div>
                                                     <ReactMarkdown source={this.props.value.text} />
                                                 </div>
@@ -121,7 +160,16 @@ class GenericCard extends React.Component {
     }
 }
 
-export default GenericCard;
+function mapStateToProps(state, ownProps) {
+    return {
+        accounts: state.accounts
+        //this means i would like to access by this.props.accounts
+        // the data within the state of our store named by root reducer
+        // ownProps are the props of our component CoursesPage
+    };
+}
+
+export default connect(mapStateToProps, null)(GenericCard);
 
 //CSS Styling
 var CardStyle = {

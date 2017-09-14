@@ -91,8 +91,8 @@ export default class UserDirectory extends React.Component {
                     </Grid>
                 </Menu>
                 <div className="container-fluid">
-                    <div className="row col-lg-12 col-lg-offset-1">
-                        <div className="col-lg-10" >
+                    <div className="row col-lg-12 col-lg-offset-1" style={UserDirStyle.grid}>
+                        <div className="col-lg-10" style={UserDirStyle.grid}>
                             <Grid columns={3} >
                                 {this.state.userData.map((user, idx) => {
                                     return <Grid.Column key={idx}><UserCard user={user}></UserCard></Grid.Column>
@@ -109,6 +109,9 @@ export default class UserDirectory extends React.Component {
 let UserDirStyle = {
     _header: {
         textAlign: "center"
+    },
+    grid: {
+        paddingLeft: 0
     },
     menu: {
         width: '100%',
