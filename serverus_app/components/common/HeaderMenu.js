@@ -4,8 +4,6 @@ import firebase from 'firebase';
 import { Button, Dropdown, Icon, Menu, Popup } from 'semantic-ui-react';
 import {Image, CloudinaryContext} from 'cloudinary-react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as accountActions from '../actions/accountActions';
 import styles from './header.css';
 import logo from './logo.css';
 
@@ -17,7 +15,6 @@ class HeaderMenu extends React.Component {
 
     }
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-
     render() {
         let logo = require('../login/blacklogo.png');
         const { activeItem } = this.state

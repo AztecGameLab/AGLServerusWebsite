@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, CloudinaryContext } from 'cloudinary-react';
-import { Grid, Icon, Card, Tab, Button, List, Popup, Feed } from 'semantic-ui-react';
+import { Grid, Icon, Card, Tab, Button, List, Popup, Feed, Dropdown, TextArea, Input } from 'semantic-ui-react';
 import IconPicker from '../common/IconPicker';
 import roles from '../common/roleOptions';
 import badgeDescriptions from '../common/badgeOptions';
@@ -63,8 +63,7 @@ const ProfilePage = (props) => {
                         <IconPicker
                             startingIcon={imageLarge(userData.showcaseImage)}
                             handleProfileInput={props.handleProfileInput}
-                            editEnabled={false} />
-
+                            editEnabled={props.editMode} />
                         <Card.Content>
                             <Card.Header>
                                 {userData.firstName + ' ' + userData.lastName}
@@ -95,9 +94,13 @@ const ProfilePage = (props) => {
 
                         <Card.Content>
                             <Card.Header>
-
                                 <Feed>
-                                    {roleMapper(userData.roles)}
+                                    {props.editMode ? 
+                                        <Dropdown 
+                                            placeholder='Roles' 
+                                            fluid multiple selection options={roles}
+                                            value={props.rolesSelected} 
+                                            onChange={props.handleRolesInput} /> : roleMapper(userData.roles)}
                                 </Feed>
                             </Card.Header>
                         </Card.Content>
@@ -108,10 +111,33 @@ const ProfilePage = (props) => {
                             </CloudinaryContext>
                         </Card.Content>
                         <Card.Content extra>
-                            <Button circular color='facebook' icon='facebook' href={''} />
-                            <Button circular color='twitter' icon='twitter' href={''} />
-                            <Button circular color='linkedin' icon='linkedin' href={''} />
-                            <Button circular color='instagram' icon='instagram' href={''} />
+                            {props.editMode ? 
+                            <div>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleFacebook}>
+                                <Icon name='facebook' />
+                                <input />
+                            </Input>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleTwitter}>
+                                <Icon name='twitter' />
+                                <input />
+                            </Input>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleLinkedIn}>
+                                <Icon name='linkedin' />
+                                <input />
+                            </Input>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleInstagram}>
+                                <Icon name='instagram' />
+                                <input />
+                            </Input>
+                            </div>
+                            :
+                            <div>
+                                <Button disabled = {userData.facebookLink.length == 25} circular color='facebook' icon='facebook' href={userData.facebookLink} />
+                                <Button disabled = {userData.twitterLink.length == 20} circular color='twitter' icon='twitter' href={userData.twitterLink} />
+                                <Button disabled = {userData.linkedInLink.length == 28} circular color='linkedin' icon='linkedin' href={userData.linkedInLink} />
+                                <Button disabled = {userData.instagramUser.length == 26} circular color='instagram' icon='instagram' href={userData.instagramUser} />                                
+                            </div>
+                        }
                         </Card.Content>
                     </Card>
                 </Grid.Column>
@@ -120,13 +146,30 @@ const ProfilePage = (props) => {
                         <Card.Content>
                             <Card.Header>
                                 <Icon name = 'street view' size = 'huge' color = 'teal'/> About Me!
+                                {props.loggedIn && 
+                                    <Popup 
+                                        content='Add friend!' 
+                                        trigger={<Button 
+                                                    floated = 'right' 
+                                                    size = 'massive' 
+                                                    circular icon="add user" 
+                                                    color="blue" />
+                                                }/>}
                             </Card.Header>
                         </Card.Content>
 
                         <Card.Content>
                             <Card.Description>
                                 <Icon name='quote left' size = 'small' />
-                                {userData.bio} hi there georgie 
+                                {props.editMode ? 
+                                    <div>
+                                        <TextArea 
+                                            style = {profileEdit.bio} 
+                                            placeholder='Hi tell us about yourself! :)' 
+                                            onChange = {props.handleBioInput}
+                                            value = {props.bio}/>
+                                    </div>
+                                    : userData.bio}
                                 <Icon name='quote right' size = 'small'/>
                             </Card.Description>
                         </Card.Content>
@@ -182,13 +225,43 @@ const ProfilePage = (props) => {
                     </Card>
                 </Grid.Column>
                 <Grid.Column width={2} fluid>
-                    <Button fluid icon = 'edit' color = 'blue' content = 'Edit My Profile!' size = 'medium'/>
-                    <hr/>
-                    <Button fluid icon = 'save' color = 'green' content = 'Save My Changes!' size = 'medium'/>
+                    {
+                    props.yourAccount && 
+                    <div>
+                        <Button 
+                            fluid 
+                            onClick = {props.editModeOn} 
+                            icon = 'edit' 
+                            color = 'blue' 
+                            content = 'Edit My Profile!' 
+                            size = 'medium'/>
+                        <hr/>
+                        <Button 
+                            disabled = {!props.editMode} 
+                            onClick = {props.editModeOff} 
+                            fluid 
+                            icon = 'save' 
+                            color = 'green' 
+                            content = 'Save My Changes!' 
+                            size = 'medium'/>
+                    </div>
+                    }
                 </Grid.Column>
             </Grid>
         </div>
     );
+};
+
+
+var profileEdit = {
+    bio: {
+        width: '100%',
+        padding: '10px',
+        borderRadius: '10px',
+        borderStyle: 'solid',
+        borderWidth: '2px',
+        borderColor: 'green'
+    }
 };
 
 /*

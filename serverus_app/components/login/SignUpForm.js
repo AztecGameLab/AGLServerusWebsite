@@ -43,12 +43,13 @@ class SignUpForm extends Component {
         bookmarked: [],
         groups: [],
         activities: [],
+        verificationHash: '',
         friends:[],
         authLevel: 0,
         showcaseImage: 'ProfileIconsSmall/033-flask.png',
         facebookLink: 'https://www.facebook.com/',
         twitterLink :'https://twitter.com/',
-        instagramUser: '',
+        instagramUser: 'https://instagram.com/',
         linkedInLink:'https://www.linkedin.com/in/'
       }
     };
@@ -222,6 +223,7 @@ class SignUpForm extends Component {
       info: this.state.newAccount
     };
     data.info.password = md5(data.info.password);
+    data.info.verificationHash = md5(data.info.username);
     firebase.database().ref('takenEmails').push(data.info.email); //Taken Emails
     firebase.database().ref('takenRedIds').push(data.info.redId); //Taken RedIDs
     firebase.database().ref('takenUsernames').push(data.info.username); //Taken Emails
