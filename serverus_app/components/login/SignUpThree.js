@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Button, Form, Checkbox, Input, Icon, Grid, Label, Dropdown, Modal, Popup, Message } from 'semantic-ui-react';
-import roles from '../common/roleOptions';
+import roleOptions from '../common/roleOptions.json';
 import profileIcons from '../common/profileIconOptions';
 import { Image, CloudinaryContext, Transformation } from 'cloudinary-react';
 import axios from 'axios';
@@ -188,7 +188,7 @@ class SignUpThree extends React.Component {
             <div style={modalStyle.spacing}>
               <Form.Field>
                 <label>Roles Interested In:</label>
-                <Dropdown placeholder='Roles' fluid multiple selection options={roles}
+                <Dropdown placeholder='Roles' fluid multiple selection options={roleOptions.roles}
                   value={this.state.rolesSelected} onChange={this.rolesCheck} />
               </Form.Field>
             </div>

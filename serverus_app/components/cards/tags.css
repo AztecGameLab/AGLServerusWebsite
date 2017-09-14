@@ -103,3 +103,10 @@ btn-arrow-right,
 .ui.card>.content .star.icon {
     color: #ffb70a;
 }
+
+.selectedIcon {
+    background: black;
+}
+.unselectedIcon {
+    background: #1b1c1d;
+}
