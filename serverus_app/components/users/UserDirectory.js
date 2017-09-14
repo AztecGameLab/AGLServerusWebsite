@@ -12,7 +12,6 @@ export default class UserDirectory extends React.Component {
     constructor(props) {
         super(props);
         this.storage = firebase.storage();
-        // this.isPageMounted = true;
 
         this.state = {
             roles: {
@@ -25,12 +24,12 @@ export default class UserDirectory extends React.Component {
                 'Programmer': [],
                 "Sound Designer": [],
                 "Voice Acting": [],
-                "Writer": [],
+                "Writer": []
             },
-            userData: []
+            userData: [],
+            selected: []
         }
         this.findUserCard = this.findUserCard.bind(this);
-        this.loadUserCards = this.loadUserCards.bind(this);
     }
 
     componentWillMount() {
@@ -47,6 +46,7 @@ export default class UserDirectory extends React.Component {
                     const currentState = that.state;
                     response.map(result => {
                         currentState.userData.push(result.data);
+                        currentState.selected.push('selectedIcon');
                         result.data.info.roles.forEach(role => {
                             currentState.roles[role].push(result.data);
                         });
@@ -61,18 +61,31 @@ export default class UserDirectory extends React.Component {
     }
 
     //Loads User Cards into Directory. URL should be gotten from firebase.
-    findUserCard(text) {
-        var previousState = this.state;
-        previousState.userData.push(this.state.roles[text]);
+    findUserCard(role, idx) {
+        var { selected } = this.state;
+        var { userData } = this.state;
+        if (selected[idx] == 'unselectedIcon') {
+            selected[idx] = 'selectedIcon';
+            this.state.roles[role].forEach(user => {
+                userData.push(user);
+            });
+        } else {
+            selected[idx] = 'unselectedIcon';
+            var active = userData.filter(user => {
+                return user.info.roles.includes(role);
+            });
+            console.log(active);
+            debugger;
+            if (active.length > 0) {
+                active.forEach(user => {
+                    userData.splice(userData.indexOf(user), 1);
+                });
+            }
+        }
         this.setState({
-            userData: previousState.userData
+            selected: selected,
+            userData: userData
         });
-    }
-    loadUserCards(role, idx) {
-        debugger;
-        return role.map((user, idx) => {
-            return (<Grid.Column key={idx}><UserCard user={user} /></Grid.Column>)
-        })
     }
 
     render() {
@@ -85,7 +98,10 @@ export default class UserDirectory extends React.Component {
                     <Grid columns={12} style={UserDirStyle.menu}>
                         <Grid.Column />
                         {RoleOptions.roles.map((role, idx) => {
-                            return (<Grid.Column key={idx}><br /><Icon link size="huge" color="teal" name={role.icon} onClick={() => this.findUserCard(role.text, )} /><br />{role.text + 's'}</Grid.Column>)
+                            return (<Grid.Column className={this.state.selected[idx]}
+                                key={idx} style={{ marginTop: 15, marginBottom: 15, cursor:"pointer"}}
+                                onClick={() => this.findUserCard(role.text, idx)} >
+                                <br /><Icon link size="huge" color="teal" name={role.icon} /><br />{role.text + 's'}</Grid.Column>)
                         })}
                         <Grid.Column />
                     </Grid>
