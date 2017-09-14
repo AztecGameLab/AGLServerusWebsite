@@ -57,7 +57,7 @@ class UserCard extends React.Component {
             <Icon key={idx} color="grey" name={role.icon} style={{ marginRight: 25 }} />
         ));
     };
-    
+
 
     render() {
         let friend = this.state.friend;
@@ -86,19 +86,17 @@ class UserCard extends React.Component {
                                     <Card.Content>
                                         <Card.Description>
                                             <Icon name='quote left' size='small' />
-                                            {this.props.user.info.bio} hi there georgie
-                                <Icon name='quote right' size='small' />
+                                            {this.props.user.info.bio.substring(200)}
+                                            <Icon name='quote right' size='small' />
                                         </Card.Description>
                                     </Card.Content>
                                 </div>
                             </Grid.Column>
                             <Grid.Column width={2} style={{ paddingRight: 0, height: 69 }}>
-                                {loggedIn ? friend ? <Popup content='Remove that bitch' trigger={<Button circular icon="remove user" color="red" onClick={this.toggleAddFriend} />}/> :
-                                <Popup content='Add friend!' trigger={<Button circular icon="add user" color="blue" onClick={this.toggleAddFriend} />}/> : null}
+                                {loggedIn ? friend ? <Popup content='Remove that bitch' trigger={<Button circular icon="remove user" color="red" onClick={this.toggleAddFriend} />} /> :
+                                    <Popup content='Add friend!' trigger={<Button circular icon="add user" color="blue" onClick={this.toggleAddFriend} />} /> : null}
                             </Grid.Column>
-                            <div style={CardStyle.gridTag}>
-                                {this.roleMapper(this.props.user.info.roles)}
-                            </div>
+                            {this.roleMapper(this.props.user.info.roles)}
                         </Grid>
                     </Card.Content>
                 </Card>
@@ -132,7 +130,4 @@ var CardStyle = {
         paddingRight: 25,
         paddingLeft: 16
     },
-    gridTag: {
-        marginLeft: 15,
-    }
 }

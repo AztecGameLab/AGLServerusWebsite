@@ -14,19 +14,9 @@ export default class UserDirectory extends React.Component {
         this.storage = firebase.storage();
 
         this.state = {
-            roles: {
-                "2D Artist": [],
-                "3D Artist": [],
-                "Business & Management": [],
-                "Graphic Designer": [],
-                'Level Designer': [],
-                "Musician": [],
-                'Programmer': [],
-                "Sound Designer": [],
-                "Voice Acting": [],
-                "Writer": []
-            },
             userData: [],
+            showUsers: [],
+            selectedRoles: [],
             selected: []
         }
         this.findUserCard = this.findUserCard.bind(this);
@@ -46,10 +36,8 @@ export default class UserDirectory extends React.Component {
                     const currentState = that.state;
                     response.map(result => {
                         currentState.userData.push(result.data);
-                        currentState.selected.push('selectedIcon');
-                        result.data.info.roles.forEach(role => {
-                            currentState.roles[role].push(result.data);
-                        });
+                        currentState.showUsers.push(result.data);
+                        currentState.selected.push('unselectedIcon');
                     });
                     that.setState({
                         roles: currentState.roles,
@@ -62,29 +50,38 @@ export default class UserDirectory extends React.Component {
 
     //Loads User Cards into Directory. URL should be gotten from firebase.
     findUserCard(role, idx) {
-        var { selected } = this.state;
-        var { userData } = this.state;
+        var { selected, selectedRoles, userData} = this.state;
+        let tempUsers = [];
         if (selected[idx] == 'unselectedIcon') {
             selected[idx] = 'selectedIcon';
-            this.state.roles[role].forEach(user => {
-                userData.push(user);
+            selectedRoles.push(role);
+            userData.map(user => {
+                selectedRoles.forEach(sRole => {
+                    if (user.info.roles.includes(sRole)) {
+                        if(!tempUsers.includes(user))
+                            tempUsers.push(user);
+                    }
+                });
             });
         } else {
             selected[idx] = 'unselectedIcon';
-            var active = userData.filter(user => {
-                return user.info.roles.includes(role);
-            });
-            console.log(active);
-            debugger;
-            if (active.length > 0) {
-                active.forEach(user => {
-                    userData.splice(userData.indexOf(user), 1);
+            selectedRoles.splice(selectedRoles.indexOf(role),1);
+            userData.map(user => {
+                selectedRoles.forEach(sRole => {
+                    if (user.info.roles.includes(sRole)) {
+                        if(!tempUsers.includes(user))
+                            tempUsers.push(user);
+                    }
                 });
-            }
+            });
+        }
+        if (selectedRoles.length == 0) {
+            tempUsers = userData;
         }
         this.setState({
             selected: selected,
-            userData: userData
+            showUsers: tempUsers,
+            selectedRoles: selectedRoles
         });
     }
 
@@ -93,30 +90,31 @@ export default class UserDirectory extends React.Component {
         var { userData } = this.state;
         return (
             <div>
-                <h2 style={UserDirStyle._header}>This is the User Directory</h2>
+                <br/>
                 <Menu stackable inverted>
                     <Grid columns={12} style={UserDirStyle.menu}>
                         <Grid.Column />
                         {RoleOptions.roles.map((role, idx) => {
                             return (<Grid.Column className={this.state.selected[idx]}
-                                key={idx} style={{ marginTop: 15, marginBottom: 15, cursor:"pointer"}}
+                                key={idx} style={{ marginTop: 15, marginBottom: 15, cursor: "pointer" }}
                                 onClick={() => this.findUserCard(role.text, idx)} >
                                 <br /><Icon link size="huge" color="teal" name={role.icon} /><br />{role.text + 's'}</Grid.Column>)
                         })}
                         <Grid.Column />
                     </Grid>
                 </Menu>
+                <br/>
                 <div className="container-fluid">
                     <div className="row col-lg-12 col-lg-offset-1" style={UserDirStyle.grid}>
                         <div className="col-lg-10" style={UserDirStyle.grid}>
                             <Grid columns={3} >
-                                {this.state.userData.map((user, idx) => {
+                                {this.state.showUsers.map((user, idx) => {
                                     return <Grid.Column key={idx}><UserCard user={user}></UserCard></Grid.Column>
                                 })}
                             </Grid>
                         </div>
                     </div>
-                </div>
+                </div><br/>
             </div>
         );
     }
