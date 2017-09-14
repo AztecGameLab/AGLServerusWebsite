@@ -112,17 +112,30 @@ const ProfilePage = (props) => {
                         </Card.Content>
                         <Card.Content extra>
                             {props.editMode ? 
-                            <div style = {{fontSize: '15px'}}>
-                            <Input icon = 'facebook' label='http://facebook.com/' placeholder='username' />
-                            <Input icon = 'facebook' label='http://facebook.com/' placeholder='username' />
-                            <Input icon = 'facebook' label='http://facebook.com/' placeholder='username' />
+                            <div>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleFacebook}>
+                                <Icon name='facebook' />
+                                <input />
+                            </Input>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleTwitter}>
+                                <Icon name='twitter' />
+                                <input />
+                            </Input>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleLinkedIn}>
+                                <Icon name='linkedin' />
+                                <input />
+                            </Input>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleInstagram}>
+                                <Icon name='instagram' />
+                                <input />
+                            </Input>
                             </div>
                             :
                             <div>
-                                <Button circular color='facebook' icon='facebook' href={''} />
-                                <Button circular color='twitter' icon='twitter' href={''} />
-                                <Button circular color='linkedin' icon='linkedin' href={''} />
-                                <Button circular color='instagram' icon='instagram' href={''} />
+                                <Button disabled = {userData.facebookLink.length == 25} circular color='facebook' icon='facebook' href={userData.facebookLink} />
+                                <Button disabled = {userData.twitterLink.length == 20} circular color='twitter' icon='twitter' href={userData.twitterLink} />
+                                <Button disabled = {userData.linkedInLink.length == 28} circular color='linkedin' icon='linkedin' href={userData.linkedInLink} />
+                                <Button disabled = {userData.instagramUser.length == 26} circular color='instagram' icon='instagram' href={userData.instagramUser} />                                
                             </div>
                         }
                         </Card.Content>
@@ -133,6 +146,15 @@ const ProfilePage = (props) => {
                         <Card.Content>
                             <Card.Header>
                                 <Icon name = 'street view' size = 'huge' color = 'teal'/> About Me!
+                                {props.loggedIn && 
+                                    <Popup 
+                                        content='Add friend!' 
+                                        trigger={<Button 
+                                                    floated = 'right' 
+                                                    size = 'massive' 
+                                                    circular icon="add user" 
+                                                    color="blue" />
+                                                }/>}
                             </Card.Header>
                         </Card.Content>
 
@@ -142,16 +164,10 @@ const ProfilePage = (props) => {
                                 {props.editMode ? 
                                     <div>
                                         <TextArea 
-                                            style = {{width: '100%'}} 
+                                            style = {profileEdit.bio} 
                                             placeholder='Hi tell us about yourself! :)' 
-                                            onChange = {props.handleBioInput}/>
-                                        <Button 
-                                            onClick = {props.handleBioSubmission} 
-                                            fluid 
-                                            icon = 'save' 
-                                            color = 'green' 
-                                            content = 'Save My bio' 
-                                            size = 'small'/>
+                                            onChange = {props.handleBioInput}
+                                            value = {props.bio}/>
                                     </div>
                                     : userData.bio}
                                 <Icon name='quote right' size = 'small'/>
@@ -234,6 +250,18 @@ const ProfilePage = (props) => {
             </Grid>
         </div>
     );
+};
+
+
+var profileEdit = {
+    bio: {
+        width: '100%',
+        padding: '10px',
+        borderRadius: '10px',
+        borderStyle: 'solid',
+        borderWidth: '2px',
+        borderColor: 'green'
+    }
 };
 
 /*

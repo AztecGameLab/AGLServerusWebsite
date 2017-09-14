@@ -15,16 +15,23 @@ class ProfilePageContainer extends React.Component {
             loggedIn: false,
             yourAccount: false,
             rolesSelected: [],
-            bio:''
+            bio:'',
+            facebookLink:'',
+            twitterLink:'',
+            linkedinLink:'',
+            instagramLink:''
+
         };
         //bind edits to data here!
         this.editModeOn = this.editModeOn.bind(this);
         this.editModeOff = this.editModeOff.bind(this);
         this.handleProfileInput = this.handleProfileInput.bind(this);
         this.handleRolesInput = this.handleRolesInput.bind(this);
-        this.handleBioInput = this.handleBioInput.bind(this);
-        this.handleBioSubmission = this.handleBioSubmission.bind(this);
-        
+        this.handleBioInput = this.handleBioInput.bind(this);    
+        this.handleFacebook = this.handleFacebook.bind(this);    
+        this.handleTwitter = this.handleTwitter.bind(this); 
+        this.handleLinkedIn= this.handleLinkedIn.bind(this); 
+        this.handleInstagram = this.handleInstagram.bind(this); 
     }
     editModeOn() {
         this.setState({
@@ -33,8 +40,16 @@ class ProfilePageContainer extends React.Component {
     }
 
     editModeOff() {
+        let editedProfile = this.state.profileObject;
+        editedProfile.info.bio = this.state.bio;
+        editedProfile.info.facebookLink = editedProfile.info.facebookLink + this.state.facebookLink;
+        editedProfile.info.twitterLink = editedProfile.info.twitterLink + this.state.twitterLink;
+        editedProfile.info.linkedInLink = editedProfile.info.linkedInLink + this.state.linkedinLink;
+        editedProfile.info.instagramUser = editedProfile.info.instagramUser + this.state.instagramLink;
+        debugger;
         this.setState({
-            editMode: false
+            editMode: false,
+            profileObject: editedProfile
         });
     }
     handleProfileInput(e) {
@@ -52,20 +67,34 @@ class ProfilePageContainer extends React.Component {
             profileObject: yourAccount
         });
     }
-    handleBioInput(e, data) {
-        this.setState({
-            bio: e.target.value
-        });
-    }
-    handleBioSubmission(){
-        debugger;
+    handleBioInput(e) {
         const yourAccount = this.state.profileObject;
-        yourAccount.info.bio = this.state.bio;
+        yourAccount.info.bio = e.target.value
         this.setState({
+            bio: e.target.value,
             profileObject: yourAccount
         });
     }
-
+    handleFacebook(e) {
+        this.setState({
+            facebookLink: e.target.value
+        });
+    }
+    handleTwitter(e) {
+        this.setState({
+            twitterLink: e.target.value
+        });
+    }
+    handleLinkedIn(e) {
+        this.setState({
+            linkedinLink: e.target.value
+        });
+    }
+    handleInstagram(e) {
+        this.setState({
+            instagramLink: e.target.value
+        });
+    }
     componentWillMount() {
         var that = this;
         console.log(this.props.routeParams.username);
@@ -89,7 +118,8 @@ class ProfilePageContainer extends React.Component {
                                                 that.setState({
                                                     loggedIn: true,
                                                     yourAccount: true,
-                                                    rolesSelected: that.state.profileObject.info.roles
+                                                    rolesSelected: that.state.profileObject.info.roles,
+                                                    bio: that.state.profileObject.info.bio
                                                 });
                                             }
                                         }
@@ -121,7 +151,11 @@ class ProfilePageContainer extends React.Component {
                     handleRolesInput = {this.handleRolesInput}
                     rolesSelected = {this.state.rolesSelected}
                     handleBioInput = {this.handleBioInput}
-                    handleBioSubmission = {this.handleBioSubmission}/>
+                    bio = {this.state.bio}
+                    handleFacebook = {this.handleFacebook}
+                    handleTwitter = {this.handleTwitter}
+                    handleLinkedIn = {this.handleLinkedIn}
+                    handleInstagram = {this.handleInstagram}/>
             );
         }
         else if (this.state.notFound) {
