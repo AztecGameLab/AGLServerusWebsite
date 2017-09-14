@@ -29,7 +29,7 @@ class SignUpThree extends React.Component {
     this.rolesCheck = this.rolesCheck.bind(this);
   }
   componentWillMount() {
-    var usernameRef = firebase.database().ref('accounts/takenUsernames/');
+    var usernameRef = firebase.database().ref('takenUsernames/');
     var that = this;
     usernameRef.once('value', function (snapshot) {
       if (snapshot.val()) {

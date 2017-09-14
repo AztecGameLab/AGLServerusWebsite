@@ -28,7 +28,7 @@ class SignUpOne extends React.Component {
     this.formComplete = this.formComplete.bind(this);
   }
   componentWillMount() {
-    var emailRef = firebase.database().ref('accounts/takenEmails/');
+    var emailRef = firebase.database().ref('takenEmails/');
     var that = this;
     emailRef.on('value', function (snapshot) {
       if (that.props.isLeaving) return;
@@ -38,7 +38,7 @@ class SignUpOne extends React.Component {
         });
       }
     });
-    var redIDRef = firebase.database().ref('accounts/takenRedIds/');
+    var redIDRef = firebase.database().ref('takenRedIds/');
     redIDRef.on('value', function (snapshot) {
       if (that.props.isLeaving) return;
       if (snapshot.val()) {

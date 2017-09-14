@@ -6,6 +6,8 @@ import firebase from 'firebase';
 // import {bindActionCreators} from 'redux';
 import axios from 'axios';
 
+const md5 = require('md5');
+
 class LoginForm extends Component {
     constructor(props){
         super(props);
@@ -35,7 +37,7 @@ class LoginForm extends Component {
         this.setState({
             loading:true
         });
-        firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+        firebase.auth().signInWithEmailAndPassword(this.state.email, md5(this.state.password))
         .then(function(response) {
             var that2 = that;
             if (response){

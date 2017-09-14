@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import firebase from 'firebase';
-import { Button, Dropdown, Icon, Image, Menu } from 'semantic-ui-react';
+import { Button, Dropdown, Icon, Image, Menu, Popup } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as accountActions from '../actions/accountActions';
@@ -21,14 +21,26 @@ class HeaderMenu extends React.Component {
         let logo = require('../login/blacklogo.png');
         const { activeItem } = this.state
         return (
-            <div className="row" style={HeaderStyle.header}>
-                <Menu stackable inverted pointing >
-                    <Menu.Item className="logo" active={activeItem === 'home'} onClick={this.handleItemClick} as={Link} to='/'><Image style={HeaderStyle.logo} src={logo} /></Menu.Item>
-                    <Menu.Item name='games' active={activeItem === 'games'} onClick={this.handleItemClick} as={Link} to='/games'><Icon name='gamepad' />Games</Menu.Item>
-                    <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon name='users' />Users</Menu.Item>
-                    <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon name='checked calendar' />Calendar</Menu.Item>
-                    {this.props.loggedIn ?
-                        this.props.accounts[0].info.authLevel == 2 ?
+            <div className="row" style={HeaderStyle.header}> 
+                    <Menu stackable inverted  >
+                        <Menu.Item className="logo" active={activeItem === 'home'} onClick={this.handleItemClick} as={Link} to='/'><Image style={HeaderStyle.logo} src={logo} /></Menu.Item>
+                        <Popup
+                            trigger={<Menu.Item disabled name='games' active={activeItem === 'games'} ><Icon size = 'big' name='gamepad' />Games</Menu.Item>}
+                            content='Game Submission Coming Soon!'
+                            inverted
+                            size = 'large'
+                        />
+                        <Popup
+                            trigger={<Menu.Item disabled name='competitions' active={activeItem === 'competitions'} ><Icon size = 'big' name='trophy' />Competitions</Menu.Item> }
+                            content='First Competition Coming Soon!'
+                            inverted
+                            size = 'large'
+                        />                        
+                        <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon size = 'big' name='users'/>Users</Menu.Item>
+                        <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon size = 'big' name='checked calendar' />Calendar</Menu.Item>
+                        <Menu.Item name='about' active={activeItem === 'about'} onClick={this.handleItemClick} as={Link} to='/about'><Icon size = 'big' name='info circle' />About Us</Menu.Item>  
+                        {this.props.loggedIn ?
+                            this.props.accounts[0].info.authLevel == 2 ? 
                                 <Dropdown item text="Articles">
                                     <Dropdown.Menu>
                                         <Dropdown.Item icon='edit' as={Link} to='/create/announcement' text="Create Article" />
@@ -36,9 +48,9 @@ class HeaderMenu extends React.Component {
                                     </Dropdown.Menu>
                                 </Dropdown>
                             :
-                            <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' />View All Articles</Menu.Item>
+                            <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' size = 'big'/>View All Articles</Menu.Item>
                         :
-                        <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' />View All Articles</Menu.Item>
+                        <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' size = 'big'/>View All Articles</Menu.Item>
                     }
                     { this.props.loggedIn ? 
                         this.props.accounts[0].info.authLevel == 2 ? 
@@ -57,8 +69,8 @@ class HeaderMenu extends React.Component {
                         </Menu.Menu>
                         :
                         <Menu.Menu position='right'>
-                            <Menu.Item name='Login' onClick={() => this.props.showModel(0)}></Menu.Item>
-                            <Menu.Item name='SignUp' onClick={() => this.props.showModel(1)} style={HeaderStyle.profile}></Menu.Item>
+                            <Menu.Item onClick={() => this.props.showModel(0)}><Icon name = 'sign in' size = 'big'/> Login!</Menu.Item>
+                            <Menu.Item onClick={() => this.props.showModel(1)} style={HeaderStyle.profile}><Icon name = 'signup' size = 'big'/> Sign Up!</Menu.Item>
                         </Menu.Menu>}
                 </Menu>
             </div>);
