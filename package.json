@@ -32,8 +32,6 @@
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^4.0.8",
     "react-slick": "^0.14.11",
-    "react-stepper-horizontal": "^1.0.9",
-    "react-transitions": "^1.0.0",
     "redux": "^3.7.2",
     "redux-immutable-state-invariant": "^2.0.0",
     "semantic-ui-react": "^0.71.5",

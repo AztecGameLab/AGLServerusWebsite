@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Button, Form, Checkbox, Transition, Grid } from 'semantic-ui-react';
-import Stepper from 'react-stepper-horizontal';
-import ReactTransitions from 'react-transitions';
 import SignUpOne from './SignUpOne';
 import SignUpTwo from './SignUpTwo';
 import SignUpThree from './SignUpThree';

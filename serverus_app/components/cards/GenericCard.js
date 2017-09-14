@@ -1,4 +1,4 @@
-import { Card, Label, Segment, Divider, Grid, Image, Icon } from 'semantic-ui-react';
+import { Card, Label, Divider, Grid, Image, Icon } from 'semantic-ui-react';
 import React from 'react';
 import { Link } from 'react-router';
 import ReactMarkdown from 'react-markdown';

@@ -7,7 +7,7 @@ import * as accountActions from './actions/accountActions';
 import HeaderMenu from './common/HeaderMenu';
 import Footer from './common/Footer';
 import LoginModel from './login/LoginModel';
-import tags from './common/tags.css'
+import tags from './cards/tags.css'
 require('../../favicon.ico');
 
 class App extends React.Component {
