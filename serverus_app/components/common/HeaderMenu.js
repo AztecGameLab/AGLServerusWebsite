@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 import firebase from 'firebase';
-import { Button, Dropdown, Icon, Image, Menu, Popup } from 'semantic-ui-react';
+import { Button, Dropdown, Icon, Menu, Popup } from 'semantic-ui-react';
+import {Image, CloudinaryContext} from 'cloudinary-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as accountActions from '../actions/accountActions';
@@ -22,8 +23,14 @@ class HeaderMenu extends React.Component {
         const { activeItem } = this.state
         return (
             <div className="row" style={HeaderStyle.header}> 
+            <CloudinaryContext cloudName='aztecgamelab-com'>
                     <Menu stackable inverted  >
-                        <Menu.Item className="logo" active={activeItem === 'home'} onClick={this.handleItemClick} as={Link} to='/'><Image style={HeaderStyle.logo} src={logo} /></Menu.Item>
+                        <Menu.Item className="logo" active={activeItem === 'home'} onClick={this.handleItemClick} as={Link} to='/'>
+                                <div >
+                                    <Image publicId="WebsiteAssets/blacklogo.png" >
+                                    </Image>
+                                </div>
+                        </Menu.Item>
                         <Popup
                             trigger={<Menu.Item disabled name='games' active={activeItem === 'games'} ><Icon size = 'big' name='gamepad' />Games</Menu.Item>}
                             content='Game Submission Coming Soon!'
@@ -38,7 +45,7 @@ class HeaderMenu extends React.Component {
                         />                        
                         <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon size = 'big' name='users'/>Users</Menu.Item>
                         <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon size = 'big' name='checked calendar' />Calendar</Menu.Item>
-                        <Menu.Item name='about' active={activeItem === 'about'} onClick={this.handleItemClick} as={Link} to='/about'><Icon size = 'big' name='info circle' />About Us</Menu.Item>  
+                        <Menu.Item name='about' active={activeItem === 'about'} onClick={this.handleItemClick} as={Link} to='/about'><Icon size = 'big' name='send outline' />About Us</Menu.Item>  
                         {this.props.loggedIn ?
                             this.props.accounts[0].info.authLevel == 2 ? 
                                 <Dropdown item text="Articles">
@@ -60,7 +67,16 @@ class HeaderMenu extends React.Component {
                     }
                     {this.props.loggedIn ?
                         <Menu.Menu position='right'>
-                            <Dropdown item trigger={<div><Icon name="dashboard"></Icon>Welcome {this.props.accounts[0].info.firstName + ' ' + this.props.accounts[0].info.lastName + '!'}</div>} icon={null} style={HeaderStyle.profile}>
+                            <Dropdown item trigger=
+                            {
+                                <div>
+                                <div style = {HeaderStyle.profilePic}>
+                                    <Image publicId= {this.props.accounts[0].info.showcaseImage}>
+                                    </Image>
+                                </div>
+                                Welcome {this.props.accounts[0].info.firstName + ' ' + this.props.accounts[0].info.lastName + '!'}
+                                </div>
+                            } icon={null} style={HeaderStyle.profile}>
                                 <Dropdown.Menu>
                                     <Dropdown.Item as={Link} to={'/u/' + this.props.accounts[0].info.username} icon='user circle' text='My Account' />
                                     <Dropdown.Item icon='sign out' text='Sign out' onClick={this.props.signOut} />
@@ -73,6 +89,7 @@ class HeaderMenu extends React.Component {
                             <Menu.Item onClick={() => this.props.showModel(1)} style={HeaderStyle.profile}><Icon name = 'signup' size = 'big'/> Sign Up!</Menu.Item>
                         </Menu.Menu>}
                 </Menu>
+                </CloudinaryContext>
             </div>);
     }
 };
@@ -88,6 +105,10 @@ var HeaderStyle = {
     },
     profile: {
         paddingRight: 30
+    },
+    profilePic: {
+        padding: '20px',
+        width: '42px'
     }
 }
 function mapStateToProps(state, ownProps) {
