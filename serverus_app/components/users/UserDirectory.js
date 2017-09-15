@@ -26,7 +26,7 @@ export default class UserDirectory extends React.Component {
     componentWillMount() {
         var that = this;
         var accountRef = firebase.database().ref('accounts');
-        accountRef.on('value', function (snapshot) {
+        accountRef.once('value', function (snapshot) {
             if (snapshot.val()) {
                 var promises = [];
                 let accountObjects = snapshot.val();

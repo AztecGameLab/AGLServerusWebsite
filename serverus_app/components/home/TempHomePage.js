@@ -12,12 +12,12 @@ export default class TempHome extends React.Component {
         return (
             <div style={{ color: 'black' }}>
                 <Segment basic style={{ minHeight: "700px" }}>
-                    <Image src="http://res.cloudinary.com/aztecgamelab-com/image/upload/v1505454116/bg_qgt59c.jpg" />
+                    <Image src="https://res.cloudinary.com/aztecgamelab-com/image/upload/v1505454116/bg_qgt59c.jpg" />
                 </Segment>
                 <Segment basic style={ContentStyle.Default}>
                 <Segment basic style={{color:'white'}}>
                 <div style={ContentStyle.Card}>
-                    <h1>Interested in joining our Exective Board</h1>
+                    <h1>Interested in joining our Executive Board</h1>
                     <p>
                         <h3>Interested in helping run one of the most unique clubs on campus? We are looking for more people to help run this club. If you are interested, click the button below and APPLY!</h3>
                     </p>

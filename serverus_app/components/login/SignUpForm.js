@@ -6,7 +6,7 @@ import SignUpTwo from './SignUpTwo';
 import SignUpThree from './SignUpThree';
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 
-const http = require('http');
+const http = require('https');
 const md5 = require('md5');
 
 class SignUpForm extends Component {
@@ -184,24 +184,25 @@ class SignUpForm extends Component {
 
       .then(function () {
         that.sendNewUserToFB();
-        //TODO Send to AWS to dispatch email. 
         let postBody = JSON.stringify({
           email: newUserData.email,
           fName: newUserData.firstName
         });
 
         let request = http.request({
-          hostname: 'ec2-13-59-179-171.us-east-2.compute.amazonaws.com',
-          port: "4000",
+          hostname: 'https://us-central1-serverus-15f25.cloudfunctions.net',
           method: 'POST',
-          path: "/api/testHTMLEmail",
+          path: '/testPost',
           headers: {
             'Content-Type' : 'application/json',
             'Content-Length' : Buffer.byteLength(postBody)
           }
         });
         request.end(postBody);
-        request.on('data', console.log);
+        request.on('response', (response) =>{
+          console.log(response);
+          debugger;
+        });
       })
 
       .catch(function (error) {
