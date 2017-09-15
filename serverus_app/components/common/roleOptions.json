@@ -19,7 +19,7 @@
             "text": "2D Artist",
             "value": "2D Artist",
             "description": "Draw traditional art for characters and backgrounds!",
-            "icon": "pencil"
+            "icon": "paint brush"
         },
         {
             "key": "3ART",
@@ -40,7 +40,7 @@
             "text": "Writer",
             "value": "Writer",
             "description": "Write stories and narratives for games!",
-            "icon": "write square"
+            "icon": "pencil"
         },
         {
             "key": "BUSN",

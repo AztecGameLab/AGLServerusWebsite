@@ -19,7 +19,8 @@ class ProfilePageContainer extends React.Component {
             facebookLink:'',
             twitterLink:'',
             linkedinLink:'',
-            instagramLink:''
+            instagramLink:'',
+            slackUser:''
 
         };
         //bind edits to data here!
@@ -32,6 +33,7 @@ class ProfilePageContainer extends React.Component {
         this.handleTwitter = this.handleTwitter.bind(this); 
         this.handleLinkedIn= this.handleLinkedIn.bind(this); 
         this.handleInstagram = this.handleInstagram.bind(this); 
+        this.handleSlack = this.handleSlack.bind(this); 
     }
     editModeOn() {
         this.setState({
@@ -46,7 +48,6 @@ class ProfilePageContainer extends React.Component {
         editedProfile.info.twitterLink = editedProfile.info.twitterLink + this.state.twitterLink;
         editedProfile.info.linkedInLink = editedProfile.info.linkedInLink + this.state.linkedinLink;
         editedProfile.info.instagramUser = editedProfile.info.instagramUser + this.state.instagramLink;
-        debugger;
         this.setState({
             editMode: false,
             profileObject: editedProfile
@@ -95,6 +96,15 @@ class ProfilePageContainer extends React.Component {
             instagramLink: e.target.value
         });
     }
+    handleSlack(e) {
+        debugger;
+        const yourAccount = this.state.profileObject;
+        yourAccount.info.slack = e.target.value
+        this.setState({
+            slackUser: e.target.value,
+            profileObject: yourAccount
+        });
+    }
     componentWillMount() {
         var that = this;
         console.log(this.props.routeParams.username);
@@ -122,12 +132,17 @@ class ProfilePageContainer extends React.Component {
                                                     bio: that.state.profileObject.info.bio
                                                 });
                                             }
+                                            else {
+                                                that.setState({
+                                                    loggedIn: true
+                                                });
+                                            }       
                                         }
                                         else {
-                                            that.setState({
-                                                loggedIn: true
-                                            });
-                                        }           
+                                            that.setSTate({
+                                                loggedIn: false
+                                            })
+                                        }    
                                     });
                                 });
                     }
@@ -155,7 +170,9 @@ class ProfilePageContainer extends React.Component {
                     handleFacebook = {this.handleFacebook}
                     handleTwitter = {this.handleTwitter}
                     handleLinkedIn = {this.handleLinkedIn}
-                    handleInstagram = {this.handleInstagram}/>
+                    handleInstagram = {this.handleInstagram}
+                    handleSlack = {this.handleSlack}
+                    slackUser = {this.state.slackUser}/>
             );
         }
         else if (this.state.notFound) {

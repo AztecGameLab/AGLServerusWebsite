@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Image, CloudinaryContext } from 'cloudinary-react';
-import { Grid, Icon, Card, Tab, Button, List, Popup, Feed, Dropdown, TextArea, Input } from 'semantic-ui-react';
+import { Grid, Icon, Card, Tab, Button, List, Popup, Feed, Dropdown, TextArea, Input, Label } from 'semantic-ui-react';
 import IconPicker from '../common/IconPicker';
-import roles from '../common/roleOptions';
+import roles2 from '../common/roleOptions2';
 import badgeDescriptions from '../common/badgeOptions';
 
 //DATA IS IN userData!! userData.firstName for example
 const ProfilePage = (props) => {
     const userData = props.profileObject.info;
-    const roleOptions = roles;
+    const roleOptions = roles2;
     const badgeDescriptions = badgeDescriptions;
 
     const imageLarge = (originalLink) => {
@@ -55,6 +55,7 @@ const ProfilePage = (props) => {
 
     return (
         <div>
+        <br/><br/>
             <Grid columns={4} inverted padded>
                 <Grid.Column width={1}>
                 </Grid.Column>
@@ -71,6 +72,22 @@ const ProfilePage = (props) => {
                             <Card.Meta>
                                 <Icon name='at' /> {userData.username}
                             </Card.Meta>
+                            <br/>
+                            {props.editMode ? 
+                                <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleSlack} value = {props.slackUser}>
+                                    <Icon name='slack' />
+                                    <input />
+                                </Input>
+                            :
+                            <Popup
+                                trigger={
+                                    <Label basic color = 'black' as='a'>
+                                        <Icon name='slack' size = 'large'/> Slack
+                                    </Label>}
+                                header={'Slack Username'}
+                                content={'@ ' + props.slackUser}
+                            />
+                            }
                         </Card.Content>
 
                         <Card.Content>
@@ -98,7 +115,7 @@ const ProfilePage = (props) => {
                                     {props.editMode ? 
                                         <Dropdown 
                                             placeholder='Roles' 
-                                            fluid multiple selection options={roles}
+                                            fluid multiple selection options={roles2}
                                             value={props.rolesSelected} 
                                             onChange={props.handleRolesInput} /> : roleMapper(userData.roles)}
                                 </Feed>
@@ -146,7 +163,7 @@ const ProfilePage = (props) => {
                         <Card.Content>
                             <Card.Header>
                                 <Icon name = 'street view' size = 'huge' color = 'teal'/> About Me!
-                                {props.loggedIn && 
+                                {(props.loggedIn && !props.yourAccount) && 
                                     <Popup 
                                         content='Add friend!' 
                                         trigger={<Button 
@@ -164,10 +181,12 @@ const ProfilePage = (props) => {
                                 {props.editMode ? 
                                     <div>
                                         <TextArea 
+                                            maxLength = "300"
                                             style = {profileEdit.bio} 
                                             placeholder='Hi tell us about yourself! :)' 
                                             onChange = {props.handleBioInput}
                                             value = {props.bio}/>
+                                            <div>{"Word Count: " + props.bio.length + " (must be less than 300 characters)"}</div>
                                     </div>
                                     : userData.bio}
                                 <Icon name='quote right' size = 'small'/>
@@ -182,7 +201,7 @@ const ProfilePage = (props) => {
 
                         <Card.Content>
                             <Card.Description>
-                                add a game here!
+                                Game submission coming soon!
                             </Card.Description>
                         </Card.Content>
 
@@ -194,7 +213,7 @@ const ProfilePage = (props) => {
 
                         <Card.Content>
                             <Card.Description>
-                                add a soundtrack here!
+                                Art submission coming soon!
                             </Card.Description>
                         </Card.Content>
 
@@ -206,7 +225,7 @@ const ProfilePage = (props) => {
 
                         <Card.Content>
                             <Card.Description>
-                                add a game here!
+                                Music submission coming soon!
                             </Card.Description>
                         </Card.Content>
 
@@ -218,7 +237,7 @@ const ProfilePage = (props) => {
 
                         <Card.Content>
                             <Card.Description>
-                                friends here, they'll float too
+                                {userData.friends == 0 && <div>Add a friend! </div>}
                             </Card.Description>
                         </Card.Content>
                         <hr />
@@ -248,6 +267,7 @@ const ProfilePage = (props) => {
                     }
                 </Grid.Column>
             </Grid>
+            <br/><br/><br/>
         </div>
     );
 };

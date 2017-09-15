@@ -50,7 +50,9 @@ class SignUpForm extends Component {
         facebookLink: 'https://www.facebook.com/',
         twitterLink :'https://twitter.com/',
         instagramUser: 'https://instagram.com/',
-        linkedInLink:'https://www.linkedin.com/in/'
+        linkedInLink:'https://www.linkedin.com/in/',
+        slackUser:'',
+        inbox:[]
       }
     };
     //Essential Login Info (SignUpOne)

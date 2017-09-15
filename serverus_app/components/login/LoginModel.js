@@ -57,8 +57,10 @@ var modalStyle = {
     position: 'absolute'
   },
   box : {
-    backgroundColor:'rgba(0,0,0,0.80)',
-    border: 'none',
+    backgroundColor:'rgba(0,0,0,0.85)',
+    borderStyle: 'solid',
+    borderColor: 'white',
+    borderWidth: '1px',
     boxShadow: '3px 3px 5px black',
     color: '#fff',
     borderRadius: '20px',

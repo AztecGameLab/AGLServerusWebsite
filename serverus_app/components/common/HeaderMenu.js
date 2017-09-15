@@ -45,17 +45,15 @@ class HeaderMenu extends React.Component {
                                 </div>
                         </Menu.Item>
                         <Popup
-                            trigger={<Menu.Item disabled name='games' active={activeItem === 'games'} ><Icon size = 'big' name='gamepad' />Games</Menu.Item>}
-                            content='Game Submission Coming Soon!'
-                            inverted
-                            size = 'large'
-                        />
-                        <Popup
                             trigger={<Menu.Item disabled name='competitions' active={activeItem === 'competitions'} ><Icon size = 'big' name='trophy' />Competitions</Menu.Item> }
                             content='First Competition Coming Soon!'
-                            inverted
                             size = 'large'
-                        />                        
+                        />          
+                        <Popup
+                            trigger={<Menu.Item disabled name='games' active={activeItem === 'games'} ><Icon size = 'big' name='gamepad' />Games</Menu.Item>}
+                            content='Game Submissions Coming Soon!'
+                            size = 'large'
+                        />              
                         <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon size = 'big' name='users'/>Users</Menu.Item>
                         <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon size = 'big' name='checked calendar' />Calendar</Menu.Item>
                         <Menu.Item name='about' active={activeItem === 'about'} onClick={this.handleItemClick} as={Link} to='/about'><Icon size = 'big' name='send outline' />About Us</Menu.Item>  
@@ -80,7 +78,7 @@ class HeaderMenu extends React.Component {
                     }
                     {this.state.loggedIn ?
                         <Menu.Menu position='right'>
-                            <Dropdown item trigger=
+                            <Dropdown floating item trigger=
                             {
                                 <div>
                                 <div style = {HeaderStyle.profilePic}>

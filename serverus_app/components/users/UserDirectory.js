@@ -20,6 +20,7 @@ export default class UserDirectory extends React.Component {
             selected: []
         }
         this.findUserCard = this.findUserCard.bind(this);
+        this.roleFix = this.roleFix.bind(this);
     }
 
     componentWillMount() {
@@ -84,7 +85,17 @@ export default class UserDirectory extends React.Component {
             selectedRoles: selectedRoles
         });
     }
-
+    roleFix(roleText){
+        if(roleText.slice(-3) == 'ing'){
+            return roleText = roleText.slice(0, -3) + 'ors';
+        }
+        else if (roleText.slice(-2) == 'nt'){
+            return roleText;
+        }
+        else {
+            return roleText + 's';
+        }
+    }
     render() {
         var { roles } = this.state;
         var { userData } = this.state;
@@ -98,7 +109,9 @@ export default class UserDirectory extends React.Component {
                             return (<Grid.Column className={this.state.selected[idx]}
                                 key={idx} style={{ marginTop: 15, marginBottom: 15, cursor: "pointer" }}
                                 onClick={() => this.findUserCard(role.text, idx)} >
-                                <br /><Icon link size="huge" color="teal" name={role.icon} /><br />{role.text + 's'}</Grid.Column>)
+                                <br /><Icon link size="huge" color="teal" name={role.icon} /><br />{
+                                    this.roleFix(role.text)
+                                }</Grid.Column>)
                         })}
                         <Grid.Column />
                     </Grid>
@@ -114,7 +127,7 @@ export default class UserDirectory extends React.Component {
                             </Grid>
                         </div>
                     </div>
-                </div><br/>
+                </div><br/><br/><br/>
             </div>
         );
     }
