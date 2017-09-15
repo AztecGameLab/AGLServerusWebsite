@@ -13,7 +13,7 @@ import UserDirectory from './components/users/UserDirectory';
 import ProfilePageContainer from './components/profile/ProfilePageContainer';
 import Calendar from './components/Calendar/Calendar'
 import TempHome from './components/home/TempHomePage';
-
+import Error from './components/error/ErrorPage';
 
 export default (
     <Route path="/" component={App}>
@@ -27,5 +27,6 @@ export default (
         <Route path="calendar" component={Calendar} />
         <Route path="u" component={UserDirectory}/>
         <Route path='u/:username' component={ProfilePageContainer} />
+        <Route path="*" component={Error}/>
     </Route>
 );
