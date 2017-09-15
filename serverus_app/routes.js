@@ -12,11 +12,12 @@ import MarkdownPage from './components/markdown/BlogPost';
 import UserDirectory from './components/users/UserDirectory';
 import ProfilePageContainer from './components/profile/ProfilePageContainer';
 import Calendar from './components/Calendar/Calendar'
+import TempHome from './components/home/TempHomePage';
 
 
 export default (
     <Route path="/" component={App}>
-        <IndexRoute component={HomePage} />
+        <IndexRoute component={TempHome} />
         <Route path="admin" component={AdminDashboard}/>
         <Route path="about" component={AboutPage} />
         <Route path="games" component={GamesPage} />
