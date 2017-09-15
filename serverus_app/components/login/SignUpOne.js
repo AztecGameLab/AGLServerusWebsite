@@ -39,8 +39,7 @@ class SignUpOne extends React.Component {
       }
     });
     var redIDRef = firebase.database().ref('takenRedIds/');
-    redIDRef.on('value', function (snapshot) {
-      if (that.props.isLeaving) return;
+    redIDRef.once('value', function (snapshot) {
       if (snapshot.val()) {
         that.setState({
           existingRedIDs: Object.values(snapshot.val())
@@ -137,6 +136,7 @@ class SignUpOne extends React.Component {
         }, function () {
           that.formComplete();
         });
+        return;
       }
     }
     let passString = e.target.value;

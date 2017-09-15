@@ -5,6 +5,7 @@ import axios from 'axios';
 import ProfilePage from './ProfilePage';
 import { connect } from 'react-redux';
 
+
 class ProfilePageContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -42,6 +43,8 @@ class ProfilePageContainer extends React.Component {
     }
 
     editModeOff() {
+        debugger;
+        var that = this;
         let editedProfile = this.state.profileObject;
         editedProfile.info.bio = this.state.bio;
         editedProfile.info.facebookLink = editedProfile.info.facebookLink + this.state.facebookLink;
@@ -51,13 +54,26 @@ class ProfilePageContainer extends React.Component {
         this.setState({
             editMode: false,
             profileObject: editedProfile
+        }, function() {
+            var that2 = that;
+            var accountRef = firebase.storage().ref('accounts/' + this.state.profileObject.info.username + '.json');                        
+            var yourFile = new Blob([JSON.stringify(this.state.profileObject)], { type: 'application/json' });
+            accountRef.put(yourFile).then(function () {
+                accountRef.getDownloadURL().then(function (url) {
+                    firebase.database().ref('accounts/' + that.state.profileObject.username).set({
+                        data: url
+                    });
+                    return;
+                });
+            });
         });
+        
     }
     handleProfileInput(e) {
         const yourAccount = this.state.profileObject;
         yourAccount.info.showcaseImage = e.target.name;
         this.setState({
-            profileObject: yourAccount,
+            profileObject: yourAccount
         });
     }
     handleRolesInput(e, { value }) {
@@ -105,6 +121,7 @@ class ProfilePageContainer extends React.Component {
             profileObject: yourAccount
         });
     }
+    
     componentWillMount() {
         var that = this;
         console.log(this.props.routeParams.username);
@@ -139,7 +156,7 @@ class ProfilePageContainer extends React.Component {
                                             }       
                                         }
                                         else {
-                                            that.setSTate({
+                                            that.setState({
                                                 loggedIn: false
                                             })
                                         }    

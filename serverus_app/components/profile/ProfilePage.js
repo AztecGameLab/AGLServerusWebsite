@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import { Image, CloudinaryContext } from 'cloudinary-react';
 import { Grid, Icon, Card, Tab, Button, List, Popup, Feed, Dropdown, TextArea, Input, Label } from 'semantic-ui-react';
 import IconPicker from '../common/IconPicker';
+import { Link } from 'react-router';
 import roles2 from '../common/roleOptions2';
 import badgeDescriptions from '../common/badgeOptions';
+import md5 from 'md5';
+import style from './friend.css';
 
 //DATA IS IN userData!! userData.firstName for example
 const ProfilePage = (props) => {
@@ -39,6 +42,20 @@ const ProfilePage = (props) => {
                 </Feed.Content>
             </div>
         ));
+    };
+    const friendMapper = (friendObject) => {
+        if(Object.keys(friendObject).length > 0) {
+            var keys = Object.keys(friendObject);
+            return (keys.map((key)=> 
+                <Feed.Content key={md5(key)+ 7} >
+                    <Icon name= 'heart outline' size='large' />
+                    <Link to= {'/u/' + key} className = 'friend'> {' @ ' + key} </Link>
+                </Feed.Content>
+            ));
+        }
+        else {
+            return <div></div>;
+        }
     };
     const badgeMapper = (badges) => {
         let objectList = [];
@@ -149,10 +166,10 @@ const ProfilePage = (props) => {
                             </div>
                             :
                             <div>
-                                <Button disabled = {userData.facebookLink.length == 25} circular color='facebook' icon='facebook' href={userData.facebookLink} />
-                                <Button disabled = {userData.twitterLink.length == 20} circular color='twitter' icon='twitter' href={userData.twitterLink} />
-                                <Button disabled = {userData.linkedInLink.length == 28} circular color='linkedin' icon='linkedin' href={userData.linkedInLink} />
-                                <Button disabled = {userData.instagramUser.length == 26} circular color='instagram' icon='instagram' href={userData.instagramUser} />                                
+                                <Button disabled = {userData.facebookLink.length < 30} circular color='facebook' icon='facebook' href={userData.facebookLink} />
+                                <Button disabled = {userData.twitterLink.length < 30} circular color='twitter' icon='twitter' href={userData.twitterLink} />
+                                <Button disabled = {userData.linkedInLink.length < 30} circular color='linkedin' icon='linkedin' href={userData.linkedInLink} />
+                                <Button disabled = {userData.instagramUser.length < 30} circular color='instagram' icon='instagram' href={userData.instagramUser} />                                
                             </div>
                         }
                         </Card.Content>
@@ -163,7 +180,7 @@ const ProfilePage = (props) => {
                         <Card.Content>
                             <Card.Header>
                                 <Icon name = 'street view' size = 'huge' color = 'teal'/> About Me!
-                                {(props.loggedIn && !props.yourAccount) && 
+                                {(props.loggedIn && !props.yourAccount && false) && 
                                     <Popup 
                                         content='Add friend!' 
                                         trigger={<Button 
@@ -238,6 +255,7 @@ const ProfilePage = (props) => {
                         <Card.Content>
                             <Card.Description>
                                 {userData.friends == 0 && <div>Add a friend! </div>}
+                                {friendMapper(userData.friends)}
                             </Card.Description>
                         </Card.Content>
                         <hr />
