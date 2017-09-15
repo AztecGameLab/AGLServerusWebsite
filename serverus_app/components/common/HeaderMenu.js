@@ -66,9 +66,9 @@ class HeaderMenu extends React.Component {
                                     </Dropdown.Menu>
                                 </Dropdown>
                             :
-                            <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' size = 'big'/>View All Articles</Menu.Item>
+                            <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/a/-Ku0ZDLuuQfDd1aRXeEF'><Icon name='newspaper' size = 'big'/>View All Articles</Menu.Item>
                         :
-                        <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' size = 'big'/>View All Articles</Menu.Item>
+                        <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/a/-Ku0ZDLuuQfDd1aRXeEF'><Icon name='newspaper' size = 'big'/>View All Articles</Menu.Item>
                     }
                     { this.state.loggedIn ? 
                         this.state.accounts[0].info.authLevel == 2 ? 

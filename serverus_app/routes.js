@@ -13,11 +13,12 @@ import UserDirectory from './components/users/UserDirectory';
 import ProfilePageContainer from './components/profile/ProfilePageContainer';
 import Calendar from './components/Calendar/Calendar'
 import ArticlePage from './components/markdown/ArticlePage';
-
+import TempHome from './components/home/TempHomePage';
+import Error from './components/error/ErrorPage';
 
 export default (
     <Route path="/" component={App}>
-        <IndexRoute component={HomePage} />
+        <IndexRoute component={TempHome} />
         <Route path="admin" component={AdminDashboard}/>
         <Route path="about" component={AboutPage} />
         <Route path="games" component={GamesPage} />
@@ -28,5 +29,6 @@ export default (
         <Route path="u" component={UserDirectory}/>
         <Route path='u/:username' component={ProfilePageContainer} />
         <Route path='a/:articleId' component={ArticlePage} />
+        <Route path='*' component={Error}/>
     </Route>
 );
