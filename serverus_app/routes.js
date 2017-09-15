@@ -28,8 +28,8 @@ export default (
         <Route path="articles" component={MarkdownPage} />
         <Route path="calendar" component={Calendar} />
         <Route path="u" component={UserDirectory}/>
-        <Route path='*' component={Error}/>
         <Route exact path='u/:username' component={ProfilePageContainer} />
         <Route exact path="inbox/:username" component={Inbox} />
+        <Route path='*' component={Error}/>
     </Route>
 );
