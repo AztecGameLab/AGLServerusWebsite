@@ -38,8 +38,8 @@ class GenericCard extends React.Component {
     toggleUserFavorited() {
         var that = this;
         const previousState = this.state.favorited;
-        
-        var info = this.props.accounts[0].info;
+        var info = Object.assign({}, this.props.accounts[0].info);
+        this.props.actions.signOutAccount();        
         if (!previousState) {
             if(!info.bookmarked.includes(this.props.keyUrl))
                 info.bookmarked.push(this.props.keyUrl);
@@ -48,7 +48,7 @@ class GenericCard extends React.Component {
         }
         var data = {
             uid: this.props.accounts[0].uid,
-            info: this.props.accounts[0].info
+            info: info
         };
         var file = new Blob([JSON.stringify(data)], { type: 'application/json' });        
         var pathRef = firebase.storage().ref('accounts/' + data.info.username + '.json');
@@ -160,6 +160,12 @@ class GenericCard extends React.Component {
     }
 }
 
+function mapDispatchToProps(dispatch){
+    return {
+        actions: bindActionCreators(accountActions,dispatch)
+        //this will go through the courseActions file and wrap with dispatch
+    };
+}
 function mapStateToProps(state, ownProps) {
     return {
         accounts: state.accounts
@@ -169,7 +175,7 @@ function mapStateToProps(state, ownProps) {
     };
 }
 
-export default connect(mapStateToProps, null)(GenericCard);
+export default connect(mapStateToProps, mapDispatchToProps)(GenericCard);
 
 //CSS Styling
 var CardStyle = {
