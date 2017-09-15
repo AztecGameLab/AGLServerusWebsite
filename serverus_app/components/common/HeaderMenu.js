@@ -32,7 +32,6 @@ class HeaderMenu extends React.Component {
         }
     }
     render() {
-        let logo = require('../login/blacklogo.png');
         const { activeItem } = this.state
         return (
             <div className="row" style={HeaderStyle.header}> 
