@@ -13,11 +13,26 @@ import logo from './logo.css';
 class HeaderMenu extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { activeItem: 'home' }
+        this.state = { 
+            activeItem: 'home',
+            loggedIn: false,
+            accounts: null
+        }
 
     }
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.state.loggedIn && nextProps.loggedIn)
+            return false;
+        else {
+            this.setState({
+                loggedIn: true,
+                accounts: nextProps.accounts
+            })
+            return true;
+        }
+    }
     render() {
         let logo = require('../login/blacklogo.png');
         const { activeItem } = this.state
@@ -46,8 +61,8 @@ class HeaderMenu extends React.Component {
                         <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon size = 'big' name='users'/>Users</Menu.Item>
                         <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon size = 'big' name='checked calendar' />Calendar</Menu.Item>
                         <Menu.Item name='about' active={activeItem === 'about'} onClick={this.handleItemClick} as={Link} to='/about'><Icon size = 'big' name='send outline' />About Us</Menu.Item>  
-                        {this.props.loggedIn ?
-                            this.props.accounts[0].info.authLevel == 2 ? 
+                        {this.state.loggedIn ?
+                            this.state.accounts[0].info.authLevel == 2 ? 
                                 <Dropdown item text="Articles">
                                     <Dropdown.Menu>
                                         <Dropdown.Item icon='edit' as={Link} to='/create/announcement' text="Create Article" />
@@ -59,26 +74,26 @@ class HeaderMenu extends React.Component {
                         :
                         <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/articles'><Icon name='newspaper' size = 'big'/>View All Articles</Menu.Item>
                     }
-                    { this.props.loggedIn ? 
-                        this.props.accounts[0].info.authLevel == 2 ? 
+                    { this.state.loggedIn ? 
+                        this.state.accounts[0].info.authLevel == 2 ? 
                             <Menu.Item name="admin" active={activeItem==='admin'} onClick={this.handleItemClick} as={Link} to="/admin"><Icon name="dashboard"/>Dashboard</Menu.Item>
                             : <div/>
                             : <div/>
                     }
-                    {this.props.loggedIn ?
+                    {this.state.loggedIn ?
                         <Menu.Menu position='right'>
                             <Dropdown item trigger=
                             {
                                 <div>
                                 <div style = {HeaderStyle.profilePic}>
-                                    <Image publicId= {this.props.accounts[0].info.showcaseImage}>
+                                    <Image publicId= {this.state.accounts[0].info.showcaseImage}>
                                     </Image>
                                 </div>
-                                Welcome {this.props.accounts[0].info.firstName + ' ' + this.props.accounts[0].info.lastName + '!'}
+                                Welcome {this.state.accounts[0].info.firstName + ' ' + this.state.accounts[0].info.lastName + '!'}
                                 </div>
                             } icon={null} style={HeaderStyle.profile}>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item as={Link} to={'/u/' + this.props.accounts[0].info.username} icon='user circle' text='My Account' />
+                                    <Dropdown.Item as={Link} to={'/u/' + this.state.accounts[0].info.username} icon='user circle' text='My Account' />
                                     <Dropdown.Item icon='sign out' text='Sign out' onClick={this.props.signOut} />
                                 </Dropdown.Menu>
                             </Dropdown>
@@ -114,7 +129,7 @@ var HeaderStyle = {
 function mapStateToProps(state, ownProps) {
     return {
         accounts: state.accounts
-        //this means i would like to access by this.props.accounts
+        //this means i would like to access by this.state.accounts
         // the data within the state of our store named by root reducer
         // ownProps are the props of our component CoursesPage
     };
