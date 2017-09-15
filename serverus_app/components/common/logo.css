@@ -1,0 +1,13 @@
+.ui.menu>.item:first-child {
+    margin-left: 15px;
+}
+.ui.menu .dropdown.item .menu {
+    background-color: black;
+}
+.ui.menu .ui.dropdown .menu>.item {
+    color: white !important;
+}
+.ui.menu .dropdown.item .menu>.item:hover {
+    background-color: #414141 !important;   
+    color: white !important     
+}

@@ -1,0 +1,39 @@
+.ui.form .field>label {
+  font-size: 1em !important;
+}
+.fade-wait-leave {
+    opacity: 1;
+  }
+  .fade-wait-leave.fade-wait-leave-active {
+    opacity: 0;
+    transition: opacity .4s ease-out;
+  }
+  
+  .fade-wait-enter {
+    opacity: 0;
+  }
+  .fade-wait-enter.fade-wait-enter-active {
+    opacity: 1;
+    /* Delay the enter animation until the leave completes */
+    transition: opacity .4s ease-out .6s;
+  }
+  
+  .fade-wait-height {
+    transition: height .3s ease-out;
+  }
+
+
+  .ui.inverted.red.menu {
+    background-color: transparent !important;
+  }
+
+  .ui.tab.active, .ui.tab.open {
+    background-color: transparent !important;
+  }
+  label {
+    color: white !important;
+  }
+
+  .ui.pointing.label {
+    line-height: 20px !important;
+  }

@@ -69,3 +69,37 @@ UNMET PEER DEPENDENCIES?
 2. npm cache clean
 3. npm install
 
+How to access user info from Redux after user is logged in!!!
+---
+1. First add: import {connect} from 'react-redux'; to the top
+2. Second add: import * as "   "Actions from '../actions/"   "Actions';  what actions you need which will be
+3. Most Likely: import * as accountActions from '../actions/accountActions'; (fix the pathing however if problem)
+4. Last Import: import {bindActionCreators} from 'redux';
+5. Wrap the connect function: export default connect(mapStateToProps, null)("yourcomponenthere")
+6. Add the mapping function: 
+function mapStateToProps(state, ownProps) {
+    return {
+        accounts: state.accounts
+        //this means i would like to access by this.props.accounts
+        // the data within the state of our store named by root reducer
+        // ownProps are the props of our component CoursesPage
+    };
+}
+7. Congrats! Access the user object at anytime in your component by using this.props.accounts!
+
+```javascript
+How to make components:
+//Use functional components if you dont need a state! This is highly preferred, dont make classes willy nilly
+//functional component example!
+const ExampleComponent = (props) => {
+    return (
+        <div>
+            A component can only return one element so wrap everything in a div!
+            A functional component has no state, only props! Props are handed in so you can access it with...
+            {props.randomVariableYouGaveExampleComponent} <-- you can use js anytime you want with brackets
+        </div>
+    );
+};
+
+export default ExampleFooter;
+```

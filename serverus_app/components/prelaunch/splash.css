@@ -1,0 +1,79 @@
+@font-face {
+    font-family: horizonFont;
+    src: url('./timeburnerbold.ttf');
+}
+
+.bgimg {
+    /* Background image */
+    background-image: url('./purple.jpg');
+    /* Full-screen */
+    height: 100vh;
+    /* Center the background image */
+    background-position: center;
+    /* Scale and zoom in the image */
+    background-size: cover;
+    /* Add position: relative to enable absolutely positioned elements inside the image (place text) */
+    position: relative;
+    /* Add a white text color to all elements inside the .bgimg container */
+    color: white;
+    /* Add a font */
+    font-size: 40px;
+    font-family: horizonFont;
+    transition-duration: ".5s"
+}
+
+.agl{
+    width: 45vw;
+    max-height: 70%;
+}
+
+/* Position text in the middle */
+.middle {
+    position: absolute;
+    background: black;
+    opacity: .75;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 20px;
+    border-radius: 25px;
+    width: 55vw;
+}
+
+.middle img {
+    width: 40vw;
+}
+.demo {
+    margin: 0;
+    color: lightgreen;
+}
+h1 {
+    font-family: horizonFont;
+}
+
+h2 {
+    font-family: horizonFont;
+}
+.create {
+    color: lightblue;
+    font-family: horizonFont;
+}
+
+.form-group a{
+    font-family: horizonFont;
+    font-size: 40px;  
+    transition-duration: .1s;
+}
+
+.form-group a:hover{
+    border-color: white;
+    border-style: solid;
+    border-width: 3px;
+}
+
+.fb:hover {
+    font-size: 50px;
+    transition-duration: .3s;
+    color: lightgreen;
+}
