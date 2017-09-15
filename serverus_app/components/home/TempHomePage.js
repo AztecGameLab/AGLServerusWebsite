@@ -15,6 +15,15 @@ export default class TempHome extends React.Component {
                     <Image src="http://res.cloudinary.com/aztecgamelab-com/image/upload/v1505454116/bg_qgt59c.jpg" />
                 </Segment>
                 <Segment basic style={ContentStyle.Default}>
+                <Segment basic style={{color:'white'}}>
+                <div style={ContentStyle.Card}>
+                    <h1>Interested in joining our Exective Board</h1>
+                    <p>
+                        <h3>Interested in helping run one of the most unique clubs on campus? We are looking for more people to help run this club. If you are interested, click the button below and APPLY!</h3>
+                    </p>
+                    <Button color="orange" as='a' href='https://drive.google.com/open?id=1cy-1gNI7DelqkA_9QNTOng8usYsg8kREWTymt5Ov9dk'>Apply Here!</Button>
+                </div>
+            </Segment>
                     <Grid columns={2}>
                         <Grid.Column>
                             <div style={ContentStyle.Card}>
@@ -41,15 +50,6 @@ export default class TempHome extends React.Component {
                         </Grid.Column>
                     </Grid>
                 </Segment>
-                <Segment basic style={{color:'white'}}>
-                    <div style={ContentStyle.Card}>
-                        <h1>Interested in joining our Exective Board</h1>
-                        <p>
-                            <h3>Interested in helping run one of the most unique clubs on campus? We are looking for more people to help run this club. If you are interested, click the button below and APPLY!</h3>
-                        </p>
-                        <Button color="orange" as='a' href='https://drive.google.com/open?id=1cy-1gNI7DelqkA_9QNTOng8usYsg8kREWTymt5Ov9dk'>Apply Here!</Button>
-                    </div>
-                </Segment>
             </div>
         );
     }
@@ -64,7 +64,7 @@ let ContentStyle = {
     Card: {
         borderStyle: 'dotted',
         borderRadius: '4px',
-        height: '100%',
+        height: '50%',
         textAlign: 'center',
         padding: '6px'
     }

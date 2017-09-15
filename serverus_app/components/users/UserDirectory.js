@@ -29,7 +29,9 @@ export default class UserDirectory extends React.Component {
         accountRef.on('value', function (snapshot) {
             if (snapshot.val()) {
                 var promises = [];
-                Object.values(snapshot.val()).map(account => {
+                let accountObjects = snapshot.val();
+                delete(accountObjects[undefined]);
+                Object.values(accountObjects).map(account => {
                     promises.push(axios.get(account.data));
                 });
                 Promise.all(promises).then(response => {

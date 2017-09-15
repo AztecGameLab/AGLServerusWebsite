@@ -2,6 +2,7 @@ import { Button, Card, Label, Divider, Grid, Icon, Popup } from 'semantic-ui-rea
 import { Image, CloudinaryContext, Transformation } from 'cloudinary-react';
 import React from 'react';
 import { Link } from 'react-router';
+import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as accountActions from '../actions/accountActions';
@@ -12,7 +13,7 @@ class UserCard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            friend: false,
+            isYourFriend: false,
             loggedIn: false
         };
         this.toggleAddFriend = this.toggleAddFriend.bind(this);
@@ -20,14 +21,14 @@ class UserCard extends React.Component {
 
     toggleAddFriend() {
         var that = this;
-        const previousState = this.state.friend;
-
+        const previousState = this.state.isYourFriend;
+        var friendInfo = this.props.user;
         var info = this.props.accounts[0].info;
         if (!previousState) {
-            if (!info.friends.includes(this.props.keyUrl))
-                info.friends.push(this.props.keyUrl);
+            if (info.inbox.myRequests[friendInfo.info.username] == null)
+                info.inbox.myRequests[friendInfo.info.username] = "sent";
         } else {
-            info.friends.splice(info.friends.indexOf(this.props.info.username));
+            delete info.inbox.myRequests[friendInfo.info.username];
         }
         var data = {
             uid: this.props.accounts[0].uid,
@@ -35,6 +36,7 @@ class UserCard extends React.Component {
         };
         var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
         var pathRef = firebase.storage().ref('accounts/' + data.info.username + '.json');
+        var friendRef = firebase.storage().ref('accounts/' + friendInfo.info.username + '.json');
         pathRef.put(file).then(function () {
             pathRef.getDownloadURL().then(function (url) {
                 var username = firebase.auth().currentUser.displayName;
@@ -43,8 +45,25 @@ class UserCard extends React.Component {
                 });
             });
         });
+        if (friendInfo.info.inbox.friendRequests[this.props.accounts[0].info.username] == null) {
+            friendInfo.info.inbox.friendRequests[this.props.accounts[0].info.username] = "pending";
+        var friendData = {
+            uid: friendInfo.uid,
+            info: friendInfo.info
+        };
+        var friendFile = new Blob([JSON.stringify(friendData)], { type: 'application/json' });
+        friendRef.put(friendFile).then(function () {
+            friendRef.getDownloadURL().then(function (url) {
+                firebase.database().ref('accounts/' + that.props.user.info.username).set({
+                    data: url
+                });
+            });
+        });
+    } else {
+
+    }
         this.setState({
-            friend: !previousState
+            isYourFriend: !previousState
         });
     }
 
@@ -54,20 +73,20 @@ class UserCard extends React.Component {
             objectList.push(rolesOptions.find(role => role.value === userRole));
         });
         return (objectList.map((role, idx) =>
-            <Icon key={idx} color="grey" name={role.icon} style={{ marginRight: 20 }} />
+            <Icon key={idx} color="grey" name={role.icon} style={{ marginRight: 20}} />
         ));
     };
 
 
     render() {
-        let friend = this.state.friend;
+        let isYourFriend = this.state.isYourFriend;
         let loggedIn = this.props.accounts[0] ? true : null;
         return (
             <div id="UserCardContainer">
-                <Card as={Link} to={"/u/" + this.props.user.info.username} style={CardStyle.card}>
+                <Card as={Link} style={CardStyle.card}>
                     <Card.Content>
                         <Grid columns={3} stretched>
-                            <Grid.Column width={6} style={{ paddingRight: 0 }}>
+                            <Grid.Column as={Link} to={"/u/" + this.props.user.info.username} width={6} style={{color: 'black', paddingRight: 0 }}>
                                 <CloudinaryContext cloudName='aztecgamelab-com'>
                                     <Image publicId={this.props.user.info.showcaseImage} />
                                 </CloudinaryContext>
@@ -81,22 +100,28 @@ class UserCard extends React.Component {
                                 </Card.Content>
                             </Grid.Column>
                             <Divider vertical></Divider>
-                            <Grid.Column width={8} style={{ paddingRight: 0 }}>
+                            <Grid.Column width={8} style={{ paddingRight: 0, cursor: 'default' }}>
                                 <div style={CardStyle.Main}>
                                     <Card.Content>
                                         <Card.Description>
                                             <Icon name='quote left' size='small' />
-                                            {this.props.user.info.bio.substring(50)}
+                                            {this.props.user.info.bio.substring(0,50)}
                                             <Icon name='quote right' size='small' />
                                         </Card.Description>
                                     </Card.Content>
                                 </div>
                             </Grid.Column>
                             <Grid.Column width={2} style={{ paddingRight: 0, height: 69 }}>
-                                {loggedIn ? friend ? <Popup content='Remove that bitch' trigger={<Button circular icon="remove user" color="red" onClick={this.toggleAddFriend} />} /> :
-                                    <Popup content='Add friend!' trigger={<Button circular icon="add user" color="blue" onClick={this.toggleAddFriend} />} /> : null}
+                                {loggedIn ? 
+                                    (this.props.accounts[0].info.username == this.props.user.info.username) ? 
+                                                                                                    null : 
+                                                                                                    (!this.props.accounts[0].info.friends.hasOwnProperty(this.props.user.info.username)) ? 
+                                    <Popup content='Add friend!' trigger={<Button circular icon="add user" color="blue" onClick={this.toggleAddFriend} />} /> :
+                                    null : null}
                             </Grid.Column>
+                            <Grid.Row style = {{marginLeft: 15, cursor: 'default'}}>
                             {this.roleMapper(this.props.user.info.roles)}
+                            </Grid.Row>
                         </Grid>
                     </Card.Content>
                 </Card>

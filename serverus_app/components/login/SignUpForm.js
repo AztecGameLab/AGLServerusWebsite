@@ -44,7 +44,7 @@ class SignUpForm extends Component {
         groups: [],
         activities: [],
         verificationHash: '',
-        friends:[],
+        friends:{},
         authLevel: 0,
         showcaseImage: 'ProfileIconsSmall/033-flask.png',
         facebookLink: 'https://www.facebook.com/',
@@ -52,7 +52,12 @@ class SignUpForm extends Component {
         instagramUser: 'https://instagram.com/',
         linkedInLink:'https://www.linkedin.com/in/',
         slackUser:'',
-        inbox:[]
+        inbox:{
+          friendRequests: {},
+          teamRequests: {},
+          myRequests: {}
+
+        }
       }
     };
     //Essential Login Info (SignUpOne)
@@ -160,7 +165,6 @@ class SignUpForm extends Component {
     });
   }
   handleProfileInput(e) {
-    debugger;
     const newAccount = this.state.newAccount;
     newAccount.showcaseImage = e.target.name;
     this.setState({
@@ -181,7 +185,6 @@ class SignUpForm extends Component {
       .then(function () {
         that.sendNewUserToFB();
         //TODO Send to AWS to dispatch email. 
-        debugger;
         let postBody = JSON.stringify({
           email: newUserData.email,
           fName: newUserData.firstName

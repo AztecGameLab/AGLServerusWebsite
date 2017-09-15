@@ -57,7 +57,7 @@ class HeaderMenu extends React.Component {
                         <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon size = 'big' name='users'/>Users</Menu.Item>
                         <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon size = 'big' name='checked calendar' />Calendar</Menu.Item>
                         <Menu.Item name='about' active={activeItem === 'about'} onClick={this.handleItemClick} as={Link} to='/about'><Icon size = 'big' name='send outline' />About Us</Menu.Item>  
-                        {this.state.loggedIn ?
+                        {false && (this.state.loggedIn ?
                             this.state.accounts[0].info.authLevel == 2 ? 
                                 <Dropdown item text="Articles">
                                     <Dropdown.Menu>
@@ -69,7 +69,7 @@ class HeaderMenu extends React.Component {
                             <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/a/-Ku0ZDLuuQfDd1aRXeEF'><Icon name='newspaper' size = 'big'/>View All Articles</Menu.Item>
                         :
                         <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/a/-Ku0ZDLuuQfDd1aRXeEF'><Icon name='newspaper' size = 'big'/>View All Articles</Menu.Item>
-                    }
+                        )}
                     { this.state.loggedIn ? 
                         this.state.accounts[0].info.authLevel == 2 ? 
                             <Menu.Item name="admin" active={activeItem==='admin'} onClick={this.handleItemClick} as={Link} to="/admin"><Icon name="dashboard"/>Dashboard</Menu.Item>
@@ -90,6 +90,7 @@ class HeaderMenu extends React.Component {
                             } icon={null} style={HeaderStyle.profile}>
                                 <Dropdown.Menu>
                                     <Dropdown.Item as={Link} to={'/u/' + this.state.accounts[0].info.username} icon='user circle' text='My Account' />
+                                    <Dropdown.Item as={Link} to={'/inbox/' + this.state.accounts[0].info.username} icon='inbox' text='My Inbox' />
                                     <Dropdown.Item icon='sign out' text='Sign out' onClick={this.props.signOut} />
                                 </Dropdown.Menu>
                             </Dropdown>
