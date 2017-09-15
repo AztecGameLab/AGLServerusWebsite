@@ -190,9 +190,9 @@ class SignUpForm extends Component {
         });
 
         let request = http.request({
-          hostname: 'https://us-central1-serverus-15f25.cloudfunctions.net',
+          hostname: 'us-central1-serverus-15f25.cloudfunctions.net',
           method: 'POST',
-          path: '/testPost',
+          path: '/dispatchConfirmEmail',
           headers: {
             'Content-Type' : 'application/json',
             'Content-Length' : Buffer.byteLength(postBody)
