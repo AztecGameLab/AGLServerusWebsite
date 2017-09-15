@@ -72,13 +72,13 @@ class GenericCard extends React.Component {
         return (
             <div id="GenericCardContainer">
                 {this.props.value.type.text == 'Announcement' || this.props.value.type.text == 'Tutorial' ?
-                    <Card style={CardStyle.card}>
+                    <Card style={CardStyle.card} as={Link} to={"/a/" + this.props.keyUrl} >
                         <Card.Content>
                             <Grid columns={2} stretched>
                                 <Grid.Column>
                                     <Image
                                         fluid
-                                        label={{ as: 'a', color: this.props.value.type.id, content: this.props.value.type.text, ribbon: true }}
+                                        label={{color: this.props.value.type.id, content: this.props.value.type.text, ribbon: true }}
                                         src={profilePic} />
                                 </Grid.Column>
                                 <Divider vertical></Divider>
