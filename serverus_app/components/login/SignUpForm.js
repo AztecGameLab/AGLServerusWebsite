@@ -183,17 +183,15 @@ class SignUpForm extends Component {
         //TODO Send to AWS to dispatch email. 
         debugger;
         let postBody = JSON.stringify({
-          firstName: newUserData.firstName,
-          lastName: newUserData.lastName,
-          username: newUserData.username,
-          email: newUserData.email
+          email: newUserData.email,
+          fName: newUserData.firstName
         });
 
         let request = http.request({
           hostname: 'ec2-13-59-179-171.us-east-2.compute.amazonaws.com',
-          port: "3000",
+          port: "4000",
           method: 'POST',
-          path: "/api/dispatchNewEmail",
+          path: "/api/testHTMLEmail",
           headers: {
             'Content-Type' : 'application/json',
             'Content-Length' : Buffer.byteLength(postBody)
