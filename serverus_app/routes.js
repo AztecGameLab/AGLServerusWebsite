@@ -12,6 +12,7 @@ import MarkdownPage from './components/markdown/BlogPost';
 import UserDirectory from './components/users/UserDirectory';
 import ProfilePageContainer from './components/profile/ProfilePageContainer';
 import Calendar from './components/Calendar/Calendar'
+import ArticlePage from './components/markdown/ArticlePage';
 
 
 export default (
@@ -26,5 +27,6 @@ export default (
         <Route path="calendar" component={Calendar} />
         <Route path="u" component={UserDirectory}/>
         <Route path='u/:username' component={ProfilePageContainer} />
+        <Route path='a/:articleId' component={ArticlePage} />
     </Route>
 );
