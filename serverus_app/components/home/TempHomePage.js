@@ -20,10 +20,11 @@ export default class TempHome extends React.Component {
                             <div style={ContentStyle.Card}>
                                 <h1>Upcoming Workshops</h1>
                                 <Segment basic style={{ padding: "20px" }} />
-                                <ul style={{padding: "14px"}}> 
-                                    <li><h4>Learn Unity: 9/22</h4></li>
-                                    <li><h4>Your First Game... Part1: 9/29</h4></li>
-                                    <li><h4>Your First Game... Part2: 10/6</h4></li>
+                                <ul style={{padding: "14px", fontSize: '1.5em'}}> 
+                                    <li style={{padding: '14px'}}>Learn Unity: 9/22</li>
+                                    <li style={{padding: '14px'}}>Your First Game... Part1: 9/29</li>
+                                    <li style={{padding: '14px'}}>Your First Game... Part2: 10/6</li>
+                                    <li style={{padding: '14px'}}>[TBA...]</li>
                                 </ul>
                                 <Segment basic style={{ padding: "150px" }} />
                             </div>
@@ -32,7 +33,7 @@ export default class TempHome extends React.Component {
                             <a href="/about">
                                 <div style={ContentStyle.Card}>
                                     <h1>About Us</h1>
-                                    <p>
+                                    <p style={{fontSize: "1.5em"}}>
                                         Aztec Game Lab was founded with three goals. Build a Community of Game Developers at San Diego State University. Provide resources for aspiring game developers, and host guest speakers, workshops, and gamejams. 
                                     </p>
                                 </div>
