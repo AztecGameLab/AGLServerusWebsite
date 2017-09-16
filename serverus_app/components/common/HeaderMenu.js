@@ -21,13 +21,15 @@ class HeaderMenu extends React.Component {
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (nextProps.accounts.length > 0) {
+        if (this.state.loggedIn && nextProps.loggedIn)
+            return false;
+        else {
             this.setState({
                 loggedIn: true,
                 accounts: nextProps.accounts
             })
+            return true;
         }
-        return true;
     }
     render() {
         const { activeItem } = this.state
