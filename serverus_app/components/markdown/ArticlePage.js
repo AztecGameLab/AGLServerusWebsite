@@ -18,13 +18,8 @@ class ArticlePage extends React.Component {
             favorited: false,
             edit: false,
         };
-
-        // this.loadMarkdownPosts = this.loadMarkdownPosts.bind(this);
     }
 
-    // componentWillUnmount() {
-    //     this.isPageMounted = false;
-    // }
     componentWillMount() {
         var that = this;
         if (this.props.routeParams.articleId) {
@@ -39,30 +34,16 @@ class ArticlePage extends React.Component {
             })
         }
     }
-    /**
-     * Loads an individual blog posts
-     * @param value
-     * @returns {XML}
-     */
-    // loadMarkdownPosts(value) {
-    //     if(value.data) {
-    //         return (
-    //             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12" key={value.hashKey} >
-    //                 <MarkdownCard value = {value.data}/>
-    //             </div>
-    //         );
-    //     }
-    // }
 
     render() {
         let profilePic = require('../cards/demoProfileImage.jpg');
         let favorited = this.state.edit ? false : this.state.favorited;
-        let loggedIn = this.props.accounts ? this.props.accounts[0] && this.state.postData.title ? true : false : false;
+        let loaded = this.state.postData.title ? true : false;
         return (
             <div style={articleStyle.article}>
-                {loggedIn ?
+                {loaded ?
                     <div className="container-fluid">
-                        <Grid className="row">
+                        <Grid style={{ marginTop: 0 }} className="row">
                             <div className="col-lg-8 col-md-8 col-sm-8 col-xs-8 col-lg-offset-2" >
                                 <Card style={articleStyle.card}>
                                     <Card.Content style={articleStyle.cardContent}>
@@ -71,29 +52,30 @@ class ArticlePage extends React.Component {
                                                 {this.state.edit ? <AvatarEditor
                                                     style={articleStyle.src}
                                                     image={this.state.postData.image.src || profilePic}
-                                                    width={600}
-                                                    height={600}
+                                                    width={450}
+                                                    height={450}
                                                     border={0}
                                                     color={[255, 255, 255, 0.6]}
                                                     scale={1}
                                                     rotate={0} /> :
                                                     <Image
+                                                        style={articleStyle.src}
                                                         fluid
-                                                        label={{color: 'red', content: this.state.postData.type.text, ribbon: true }}
+                                                        label={{ color: 'red', content: this.state.postData.type.text, ribbon: true }}
                                                         src={profilePic} />
                                                 }
 
                                             </Grid.Row>
-                                            <div style={{marginLeft: -15, width: '100%', paddingTop: 15}}>
+                                            <div style={{ marginLeft: -15, width: '100%', paddingTop: 15 }}>
                                                 <Grid.Row >
                                                     {favorited ? <Icon name="star" onClick={this.toggleUserFavorited}></Icon>
                                                         :
-                                                        <div><Icon name="empty star" onClick={this.toggleUserFavorited}></Icon><br/><br/>{this.state.postData.date}</div>}
+                                                        <div><Icon name="empty star" onClick={this.toggleUserFavorited}></Icon><br /><br />{this.state.postData.date}</div>}
                                                 </Grid.Row>
                                                 <hr />
                                                 <Grid.Row style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{this.state.postData.title}</Grid.Row>
-                                                <Grid.Row style={{ fontSize: '1em', color: 'gray', marginTop: 10}}>author: {this.state.postData.author}</Grid.Row>
-                                                <Grid.Row style={{marginTop: 10 }}>
+                                                <Grid.Row style={{ fontSize: '1em', color: 'gray', marginTop: 10 }}>author: {this.state.postData.author}</Grid.Row>
+                                                <Grid.Row style={{ marginTop: 10 }}>
                                                     {this.state.postData.selectedTags.map((value, idx) => {
                                                         return (<button key={idx} type="button" style={articleStyle.tags} className="btn btn-default btn-arrow-left">{'#' + value}</button>)
                                                     })}
@@ -125,13 +107,14 @@ export default connect(mapStateToProps, null)(ArticlePage)
 var articleStyle = {
     article: {
         textAlign: 'center',
-        color: 'black'
+        color: 'black',
+        marginTop: 25,
+        marginBottom: 25
     },
     src: {
         background: '#333',
-        width: '100%',
-        cursor: 'move',
-        borderRadius: 5
+        borderRadius: 5,
+        width: 400
     },
     Main: {
         color: "#000000"
@@ -142,15 +125,18 @@ var articleStyle = {
         paddingTop: 13
     },
     image: {
+        display: 'inline',
         padding: 0,
-        width: '100%'
+        textAlign: '-webkit-center',
+        borderRadius: 5,        
+        background: '#333',
     },
     tempSrc: {
         width: 96,
         height: 96
     },
     card: {
-        width: '100%'
+        width: '100%',
     },
     tags: {
         background: '#263238',
