@@ -65,13 +65,16 @@ class Inbox extends React.Component {
             } else {
                 axios.get(snapshot.val().data).then(
                     function (response) {
+                        debugger;
                         var friendObject = response.data;
                         friendObject.info.friends[that.state.profileObject.info.username] = 'accepted';
                         delete friendObject.info.inbox.myRequests[that.state.profileObject.info.username];
                         var friendRef = firebase.storage().ref('accounts/' + friendObject.info.username + '.json');
                         var newFriendFile = new Blob([JSON.stringify(friendObject)], { type: 'application/json' });
+                        debugger;
                         friendRef.put(newFriendFile).then(function () {
                             friendRef.getDownloadURL().then(function (url) {
+                                debugger;
                                 firebase.database().ref('accounts/' + friendObject.username).set({
                                     data: url
                                 });
@@ -86,6 +89,7 @@ class Inbox extends React.Component {
         var yourFile = new Blob([JSON.stringify(currentData)], { type: 'application/json' });
         accountRef.put(yourFile).then(function () {
             accountRef.getDownloadURL().then(function (url) {
+                debugger;
                 firebase.database().ref('accounts/' + that.state.profileObject.info.username).set({
                     data: url
                 });
@@ -94,10 +98,12 @@ class Inbox extends React.Component {
     }
 
     declineFriend(friendName) {
+        debugger;
         var that = this;
         this.setState({
             friendInteraction:friendName
         }, function () {
+        debugger;
         var currentData = this.state.profileObject.info;
         currentData.friends[friendName] = 'declined';
         delete currentData.inbox.friendRequests[friendName];
@@ -113,6 +119,7 @@ class Inbox extends React.Component {
                     function (response) {
                         var that2 = that;
                         var friendObject = response.data;
+                        debugger;
                         friendObject.info.inbox.myRequests[that2.state.profileObject.info.username] = 'declined';
                         friendObject.info.friends[that2.state.profileObject.info.username] = 'declined';
                         var friendRef = firebase.storage().ref('accounts/' + friendObject.info.username + '.json');                        

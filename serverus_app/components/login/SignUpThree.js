@@ -52,6 +52,7 @@ class SignUpThree extends React.Component {
   usernameCheck(e) {
     var that = this;
     this.props.handleUsernameInput(e);
+    console.log(e.target.value)
     if (e.target.value.length > 0 && e.target.value.length < 20) {
       for (var i in this.state.existingUsernames) {
         if (this.state.existingUsernames[i] == e.target.value) {

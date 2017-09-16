@@ -43,6 +43,7 @@ class ProfilePageContainer extends React.Component {
     }
 
     editModeOff() {
+        debugger;
         var that = this;
         let editedProfile = this.state.profileObject;
         editedProfile.info.bio = this.state.bio;
@@ -112,6 +113,7 @@ class ProfilePageContainer extends React.Component {
         });
     }
     handleSlack(e) {
+        debugger;
         const yourAccount = this.state.profileObject;
         yourAccount.info.slack = e.target.value
         this.setState({
@@ -122,6 +124,7 @@ class ProfilePageContainer extends React.Component {
     
     componentWillMount() {
         var that = this;
+        console.log(this.props.routeParams.username);
         var userRef = firebase.database().ref('accounts/' + this.props.routeParams.username);
         userRef.on('value', function (snapshot) {
             if (!snapshot.val()) {

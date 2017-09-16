@@ -25,7 +25,7 @@ export default (
         <Route path="games" component={GamesPage} />
         <Route path="competitions" component={CompetitionsPage} />
         <Route path="create/:type" component={MarkdownCreate} />
-        <Route path="a/:articleId" component={ArticlePage} />
+        <Route path="articles" component={MarkdownPage} />
         <Route path="calendar" component={Calendar} />
         <Route path="u" component={UserDirectory}/>
         <Route exact path='u/:username' component={ProfilePageContainer} />

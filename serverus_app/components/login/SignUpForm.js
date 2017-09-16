@@ -200,6 +200,8 @@ class SignUpForm extends Component {
         });
         request.end(postBody);
         request.on('response', (response) =>{
+          console.log(response);
+          debugger;
         });
       })
 
@@ -218,6 +220,7 @@ class SignUpForm extends Component {
     this.props.signedUp();
     var that = this;
     var user = firebase.auth().currentUser;
+    console.log('CURRENT USER', user);
     var userUid = user.uid;
     var data = {
       uid: userUid,
