@@ -35,7 +35,6 @@ export default class UserDirectory extends React.Component {
                     promises.push(axios.get(account.data));
                 });
                 Promise.all(promises).then(response => {
-                    console.log(response[0].data.info.roles);
                     const currentState = that.state;
                     response.map(result => {
                         currentState.userData.push(result.data);
