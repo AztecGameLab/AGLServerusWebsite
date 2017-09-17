@@ -21,18 +21,15 @@ class HeaderMenu extends React.Component {
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (this.state.loggedIn && nextProps.loggedIn)
-            return false;
-        else {
+        if (nextProps.accounts.length > 0) {
             this.setState({
                 loggedIn: true,
                 accounts: nextProps.accounts
             })
-            return true;
         }
+        return true;
     }
     render() {
-        let logo = require('../login/blacklogo.png');
         const { activeItem } = this.state
         return (
             <div className="row" style={HeaderStyle.header}> 

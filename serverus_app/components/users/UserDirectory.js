@@ -26,7 +26,7 @@ export default class UserDirectory extends React.Component {
     componentWillMount() {
         var that = this;
         var accountRef = firebase.database().ref('accounts');
-        accountRef.on('value', function (snapshot) {
+        accountRef.once('value', function (snapshot) {
             if (snapshot.val()) {
                 var promises = [];
                 let accountObjects = snapshot.val();
@@ -35,7 +35,6 @@ export default class UserDirectory extends React.Component {
                     promises.push(axios.get(account.data));
                 });
                 Promise.all(promises).then(response => {
-                    console.log(response[0].data.info.roles);
                     const currentState = that.state;
                     response.map(result => {
                         currentState.userData.push(result.data);

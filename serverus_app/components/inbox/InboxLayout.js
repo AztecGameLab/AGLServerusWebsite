@@ -21,7 +21,7 @@ const InboxLayout = (props) => {
                             {key + ' sent you a friend request!'} 
                             <br/>
                             <Button circular color='green' icon='check' onClick = {() => props.acceptFriend(key)}/>
-                            <Button circular color='google plus' icon='cancel' onClick = {() => props.declineFriend(key)}/>
+                            {false && <Button circular color='google plus' icon='cancel' onClick = {() => props.declineFriend(key)}/>}
                     </Feed.Content>
             ));
         }
