@@ -86,7 +86,7 @@ class HeaderMenu extends React.Component {
                                 </div>
                             } icon={null} style={HeaderStyle.profile}>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item as={Link} to={'/u/' + this.state.accounts[0].info.username} icon='user circle' text='My Account' />
+                                    <Dropdown.Item as={Link} to={'/u/' + this.state.accounts[0].info.username} icon='user circle' text='My Profile' />
                                     <Dropdown.Item as={Link} to={'/inbox/' + this.state.accounts[0].info.username} icon='inbox' text='My Inbox' />
                                     <Dropdown.Item icon='sign out' text='Sign out' onClick={this.props.signOut} />
                                 </Dropdown.Menu>

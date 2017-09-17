@@ -46,10 +46,21 @@ class ProfilePageContainer extends React.Component {
         var that = this;
         let editedProfile = this.state.profileObject;
         editedProfile.info.bio = this.state.bio;
-        editedProfile.info.facebookLink = editedProfile.info.facebookLink + this.state.facebookLink;
-        editedProfile.info.twitterLink = editedProfile.info.twitterLink + this.state.twitterLink;
-        editedProfile.info.linkedInLink = editedProfile.info.linkedInLink + this.state.linkedinLink;
-        editedProfile.info.instagramUser = editedProfile.info.instagramUser + this.state.instagramLink;
+        if(this.state.facebookLink.length > 0) {
+            editedProfile.info.facebookLink = 'https://www.facebook.com/' + this.state.facebookLink;
+        }
+        if(this.state.twitterLink.length > 0) {
+            editedProfile.info.twitterLink = 'https://twitter.com/' + this.state.twitterLink;
+        }
+        if(this.state.linkedinLink.length > 0) {
+            editedProfile.info.linkedInLink = 'https://www.linkedin.com/in/' + this.state.linkedinLink;
+        }
+        if(this.state.instagramLink.length > 0) {
+            editedProfile.info.instagramUser = 'https://instagram.com/' + this.state.instagramLink;
+        }
+        if(this.state.slackUser.length > 0) {
+            editedProfile.info.slackUser =  this.state.slackUser;
+        }
         this.setState({
             editMode: false,
             profileObject: editedProfile
@@ -112,11 +123,8 @@ class ProfilePageContainer extends React.Component {
         });
     }
     handleSlack(e) {
-        const yourAccount = this.state.profileObject;
-        yourAccount.info.slack = e.target.value
         this.setState({
             slackUser: e.target.value,
-            profileObject: yourAccount
         });
     }
     

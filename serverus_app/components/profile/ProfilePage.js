@@ -91,7 +91,7 @@ const ProfilePage = (props) => {
                             </Card.Meta>
                             <br/>
                             {props.editMode ? 
-                                <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleSlack} value = {props.slackUser}>
+                                <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleSlack} >
                                     <Icon name='slack' />
                                     <input />
                                 </Input>
@@ -102,7 +102,7 @@ const ProfilePage = (props) => {
                                         <Icon name='slack' size = 'large'/> Slack
                                     </Label>}
                                 header={'Slack Username'}
-                                content={'@ ' + props.slackUser}
+                                content={'@ ' + userData.slackUser}
                             />
                             }
                         </Card.Content>

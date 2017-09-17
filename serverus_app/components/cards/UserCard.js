@@ -104,9 +104,9 @@ class UserCard extends React.Component {
                                 <div style={CardStyle.Main}>
                                     <Card.Content>
                                         <Card.Description>
-                                            <Icon name='quote left' size='small' />
-                                            {this.props.user.info.bio.substring(0,50)}
-                                            <Icon name='quote right' size='small' />
+                                            
+                                            {this.props.user.info.bio.substring(0,150)}
+                                            
                                         </Card.Description>
                                     </Card.Content>
                                 </div>
