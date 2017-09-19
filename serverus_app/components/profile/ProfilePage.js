@@ -273,7 +273,7 @@ const ProfilePage = (props) => {
                         <hr />
                     </Card>
                 </Grid.Column>
-                <Grid.Column width={2} fluid>
+                <Grid.Column width={2}>
                     {
                     props.yourAccount && 
                     <div>
