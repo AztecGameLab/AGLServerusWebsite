@@ -70,6 +70,18 @@ const ProfilePage = (props) => {
         ));
     };
 
+    const evalUsername = (username) => {
+        if(username==='') return 'Username';
+        return username;
+    };
+
+    const evalUserLastDelim = (username) => {
+        username = String(username);
+        let ret = username.substring(username.lastIndexOf('/')+1);
+        if(ret === '' ) return 'Username';
+        return ret;
+    }
+
     return (
         <div>
         <br/><br/>
@@ -91,9 +103,9 @@ const ProfilePage = (props) => {
                             </Card.Meta>
                             <br/>
                             {props.editMode ? 
-                                <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleSlack} >
+                                <Input style = {{fontSize: '15px'}} iconPosition='left' onChange = {props.handleSlack} >
                                     <Icon name='slack' />
-                                    <input />
+                                    <input placeholder={ evalUsername(userData.slackUser) }/>
                                 </Input>
                             :
                             <Popup
@@ -147,21 +159,21 @@ const ProfilePage = (props) => {
                         <Card.Content extra>
                             {props.editMode ? 
                             <div>
-                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleFacebook}>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' onChange = {props.handleFacebook}>
                                 <Icon name='facebook' />
-                                <input />
+                                <input placeholder={evalUserLastDelim(userData.facebookLink)}/>
                             </Input>
-                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleTwitter}>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' onChange = {props.handleTwitter}>
                                 <Icon name='twitter' />
-                                <input />
+                                <input placeholder={evalUserLastDelim(userData.twitterLink)}/>
                             </Input>
-                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleLinkedIn}>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' onChange = {props.handleLinkedIn}>
                                 <Icon name='linkedin' />
-                                <input />
+                                <input placeholder={evalUserLastDelim(userData.linkedInLink)}/>
                             </Input>
-                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleInstagram}>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' onChange = {props.handleInstagram}>
                                 <Icon name='instagram' />
-                                <input />
+                                <input placeholder={evalUserLastDelim(userData.instagramUser)}/>
                             </Input>
                             </div>
                             :
