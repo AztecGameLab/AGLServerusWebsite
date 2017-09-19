@@ -199,34 +199,42 @@ class SignUpOne extends React.Component {
         <div style={modalStyle.spacing}>
           <Form.Field>
                 <Popup
-                  trigger={<label>Email</label>}
+                  trigger={
+                  <div>
+                    <label>Email</label>
+                    <Input inverted placeholder='Email' iconPosition='left'>
+                    <Icon name='mail outline' />
+                    <input id='email' onChange={this.props.handleEmailInput} onBlur={this.emailCheck} />
+                    {this.state.emailWarning ?
+                      this.state.emailFirstClick && !this.state.emailTaken && <Label pointing='left' color='red'>Invalid Email</Label>
+                      : this.state.emailFirstClick ? <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label> : null}
+                    {this.state.emailTaken && <Label pointing='left' color='red'>Email is already used</Label>}
+                  </Input>
+                  </div>
+                  }
                   content='This is where your emails and verification will be sent!'
                   inverted
                 />
-              <Input inverted placeholder='Email' iconPosition='left'>
-              <Icon name='mail outline' />
-              <input id='email' onChange={this.props.handleEmailInput} onBlur={this.emailCheck} />
-              {this.state.emailWarning ?
-                this.state.emailFirstClick && !this.state.emailTaken && <Label pointing='left' color='red'>Invalid Email</Label>
-                : this.state.emailFirstClick ? <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label> : null}
-              {this.state.emailTaken && <Label pointing='left' color='red'>Email is already used</Label>}
-            </Input>
           </Form.Field>
         </div>
         <div style={modalStyle.spacing}>
           <Form.Field>
               <Popup
-                trigger={<label>Password</label>}
+                trigger={
+                  <div>
+                    <label>Password</label>
+                    <Input inverted placeholder='Password' iconPosition='left'>
+                      <Icon name='lock' />
+                      <input id='pass' onChange={this.props.handlePasswordInput} onBlur={this.passwordCheck} type='password' />
+                      {this.state.passwordWarning ?
+                        this.state.passwordFirstClick && <Label color='red' pointing='left'>Password needs 6+ characters, a number and uppercase letter</Label>
+                        : this.state.passwordFirstClick && <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label>}
+                    </Input>
+                  </div>}
                 content='Make sure to have 6+ characters with an uppercase and lowercase letter!'
                 inverted
               />
-              <Input inverted placeholder='Password' iconPosition='left'>
-              <Icon name='lock' />
-              <input id='pass' onChange={this.props.handlePasswordInput} onBlur={this.passwordCheck} type='password' />
-              {this.state.passwordWarning ?
-                this.state.passwordFirstClick && <Label color='red' pointing='left'>Password needs 6+ characters, a number and uppercase letter</Label>
-                : this.state.passwordFirstClick && <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label>}
-            </Input>
+             
           </Form.Field>
         </div>
         <div style={modalStyle.spacing}>

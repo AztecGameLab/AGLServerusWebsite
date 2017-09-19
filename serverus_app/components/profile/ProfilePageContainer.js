@@ -124,14 +124,14 @@ class ProfilePageContainer extends React.Component {
     }
     handleSlack(e) {
         this.setState({
-            slackUser: e.target.value,
+            slackUser: e.target.value
         });
     }
     
     componentWillMount() {
         var that = this;
         var userRef = firebase.database().ref('accounts/' + this.props.routeParams.username);
-        userRef.on('value', function (snapshot) {
+        userRef.once('value', function (snapshot) {
             if (!snapshot.val()) {
                 that.setState({
                     notFound: true

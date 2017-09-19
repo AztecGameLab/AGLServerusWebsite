@@ -3,7 +3,7 @@ import firebase from 'firebase';
 import axios from 'axios';
 import redux from 'react-redux';
 import { Link } from 'react-router';
-import { Divider, Grid, Icon, Menu, Search } from 'semantic-ui-react';
+import { Divider, Grid, Icon, Menu, Search, Loader } from 'semantic-ui-react';
 import UserCard from '../cards/UserCard';
 import RoleOptions from '../common/roleOptions.json';
 import tags from '../cards/tags.css';
@@ -23,7 +23,7 @@ export default class UserDirectory extends React.Component {
         this.roleFix = this.roleFix.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         var that = this;
         var accountRef = firebase.database().ref('accounts');
         accountRef.once('value', function (snapshot) {
@@ -103,6 +103,7 @@ export default class UserDirectory extends React.Component {
         return (
             <div>
                 <br/>
+                {this.state.userData.length <5 && <Loader inverted content='Loading' />}
                 <Menu stackable inverted>
                     <Grid columns={12} style={UserDirStyle.menu}>
                         <Grid.Column />
