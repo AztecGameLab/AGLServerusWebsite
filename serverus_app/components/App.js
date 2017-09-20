@@ -3,11 +3,11 @@ import axios from 'axios';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as accountActions from './actions/accountActions';
-import HeaderMenu from './common/HeaderMenu';
-import Footer from './common/Footer';
+import * as accountActions from './redux/actions/accountActions';
+import HeaderMenu from './navigation/HeaderMenu';
+import Footer from './navigation/Footer';
 import LoginModel from './login/LoginModel';
-import tags from './cards/tags.css'
+import tags from '../styles/tags.css';
 require('../../favicon.ico');
 
 class App extends React.Component {
@@ -28,6 +28,7 @@ class App extends React.Component {
     componentWillMount() {
         var that = this;
         this.isPageMounted = false;
+        //Move to API 
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 var refString = 'accounts/' + user.displayName;
@@ -35,23 +36,19 @@ class App extends React.Component {
                 userUrlRef.on('value', function (snapshot) {
                     var that2 = that;
                     if (that2.state.modelIsOpen) return;
-                    axios.get(snapshot.val().data)
-                        .then(function (response) {
-                            var that3 = that2;
-                            if (!that3.props.accounts[0])
-                                that3.props.actions.loadAccount(response.data);
-                        }).then(function () {
-                            var that3 = that2;
-                            that3.setState({
-                                loggedIn: true
-                            });
+                    axios.get(snapshot.val().data).then(function (response) {
+                        var that3 = that2;
+                        if (!that3.props.accounts[0])
+                            that3.props.actions.loadAccount(response.data);
+                    }).then(function () {
+                        var that3 = that2;
+                        that3.setState({
+                            loggedIn: true
                         });
+                    });
                 });
             }
-            else {
-                console.log('NO USER LOGGED IN');
-            }
-        })
+        });
     }
 
     openLogin(activeIndex) {

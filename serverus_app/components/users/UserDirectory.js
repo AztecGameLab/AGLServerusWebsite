@@ -4,9 +4,8 @@ import axios from 'axios';
 import redux from 'react-redux';
 import { Link } from 'react-router';
 import { Divider, Grid, Icon, Menu, Search, Loader } from 'semantic-ui-react';
-import UserCard from '../cards/UserCard';
-import RoleOptions from '../common/roleOptions.json';
-import tags from '../cards/tags.css';
+import UserCard from '../common/cards/UserCard';
+import roleOptions from '../common/options/roleOptions.json';
 
 export default class UserDirectory extends React.Component {
     constructor(props) {
@@ -107,7 +106,7 @@ export default class UserDirectory extends React.Component {
                 <Menu stackable inverted>
                     <Grid columns={12} style={UserDirStyle.menu}>
                         <Grid.Column />
-                        {RoleOptions.roles.map((role, idx) => {
+                        {roleOptions.roles.map((role, idx) => {
                             return (<Grid.Column className={this.state.selected[idx]}
                                 key={idx} style={{ marginTop: 15, marginBottom: 15, cursor: "pointer" }}
                                 onClick={() => this.findUserCard(role.text, idx)} >

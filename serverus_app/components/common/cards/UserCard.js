@@ -4,9 +4,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as accountActions from '../actions/accountActions';
-import rolesOptions from '../common/roleOptions';
+import roleOptions from '../options/roleOptions.json';
 
 class UserCard extends React.Component {
 
@@ -67,10 +65,11 @@ class UserCard extends React.Component {
         });
     }
 
+    //Move to API
     roleMapper = (roles) => {
         let objectList = [];
         roles.map((userRole) => {
-            objectList.push(rolesOptions.find(role => role.value === userRole));
+            objectList.push(roleOptions.roles.find(role => role.value === userRole));
         });
         return (objectList.map((role, idx) =>
             <Icon key={idx} color="grey" name={role.icon} style={{ marginRight: 20}} />

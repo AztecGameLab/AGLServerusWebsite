@@ -1,6 +1,6 @@
 import React from 'react';
 
-class GamesPage extends React.Component {
+class GameDirectory extends React.Component {
     render() {
         return (
             <div>
@@ -10,4 +10,4 @@ class GamesPage extends React.Component {
     }
 }
 
-export default GamesPage;
+export default GameDirectory;

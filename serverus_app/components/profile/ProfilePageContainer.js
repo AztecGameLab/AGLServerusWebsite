@@ -128,52 +128,54 @@ class ProfilePageContainer extends React.Component {
         });
     }
     componentDidUpdate(nextProps, nextState) {
-        //checks current loadedState to the redirecte
-        if (this.state.profileObject.info.username != this.props.routeParams.username) {
-            window.scrollTo(0, 0);
-            var that = this;
-            var userRef = firebase.database().ref('accounts/' + this.props.routeParams.username);
-            userRef.once('value', function (snapshot) {
-                if (!snapshot.val()) {
-                    that.setState({
-                        notFound: true
-                    });
-                    return;
-                } else {
-                    axios.get(snapshot.val().data).then(
-                        function (response) {
-                            var that2 = that;
-                            that2.setState({
-                                profileObject: response.data
-                            }, () => {
-                                firebase.auth().onAuthStateChanged(function (user) {
-                                    if (user) {
-                                        // User is signed in.
-                                        if (user.email == that.state.profileObject.info.email) {
-                                            that.setState({
-                                                loggedIn: true,
-                                                yourAccount: true,
-                                                rolesSelected: that.state.profileObject.info.roles,
-                                                bio: that.state.profileObject.info.bio
-                                            });
+        //checks current loadedState to the redirected route
+        if (this.state.profileObject.info) {
+            if (this.state.profileObject.info.username != this.props.routeParams.username) {
+                window.scrollTo(0, 0);
+                var that = this;
+                var userRef = firebase.database().ref('accounts/' + this.props.routeParams.username);
+                userRef.once('value', function (snapshot) {
+                    if (!snapshot.val()) {
+                        that.setState({
+                            notFound: true
+                        });
+                        return;
+                    } else {
+                        axios.get(snapshot.val().data).then(
+                            function (response) {
+                                var that2 = that;
+                                that2.setState({
+                                    profileObject: response.data
+                                }, () => {
+                                    firebase.auth().onAuthStateChanged(function (user) {
+                                        if (user) {
+                                            // User is signed in.
+                                            if (user.email == that.state.profileObject.info.email) {
+                                                that.setState({
+                                                    loggedIn: true,
+                                                    yourAccount: true,
+                                                    rolesSelected: that.state.profileObject.info.roles,
+                                                    bio: that.state.profileObject.info.bio
+                                                });
+                                            }
+                                            else {
+                                                that.setState({
+                                                    loggedIn: true
+                                                });
+                                            }
                                         }
                                         else {
                                             that.setState({
-                                                loggedIn: true
-                                            });
+                                                loggedIn: false
+                                            })
                                         }
-                                    }
-                                    else {
-                                        that.setState({
-                                            loggedIn: false
-                                        })
-                                    }
+                                    });
                                 });
-                            });
-                        }
-                    );
-                }
-            });
+                            }
+                        );
+                    }
+                });
+            }
         }
     }
     componentWillMount() {

@@ -3,10 +3,8 @@ import Markmirror from 'react-markmirror';
 import { Dropdown, Icon } from 'semantic-ui-react';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
-import * as accountActions from '../actions/accountActions';
-import { bindActionCreators } from 'redux';
-import stylesheet from './markdown.css';
-import GenericCard from '../cards/GenericCard';
+import stylesheet from '../../styles/markdown.css';
+import GenericCard from '../common/cards/GenericCard';
 
 
 const Editor = (props) => {

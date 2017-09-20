@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as accountActions from '../actions/accountActions';
+import * as accountActions from '../../redux/actions/accountActions';
 import ReactMarkdown from 'react-markdown';
 import AvatarEditor from 'react-avatar-editor';
 
@@ -66,7 +66,7 @@ class GenericCard extends React.Component {
     }
 
     render() {
-        let profilePic = require('./demoProfileImage.jpg');
+        let profilePic = require('../../../styles/demoProfileImage.jpg');
         let favorited = this.props.edit ? false : this.state.favorited;
         let loggedIn = this.props.accounts[0] ? true : null;
         return (

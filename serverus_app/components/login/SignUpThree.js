@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Button, Form, Checkbox, Input, Icon, Grid, Label, Dropdown, Modal, Popup, Message } from 'semantic-ui-react';
-import roleOptions from '../common/roleOptions.json';
-import profileIcons from '../common/profileIconOptions';
+import roleOptions from '../common/options/roleOptions.json';
+import profileIconOptions from '../common/options/profileIconOptions.json';
 import { Image, CloudinaryContext, Transformation } from 'cloudinary-react';
 import axios from 'axios';
-import IconPicker from '../common/IconPicker';
+import IconPicker from '../common//icon/IconPicker';
 
 class SignUpThree extends React.Component {
   constructor(props) {

@@ -4,8 +4,8 @@ import firebase from 'firebase';
 import { Button, Dropdown, Icon, Menu, Popup } from 'semantic-ui-react';
 import {Image, CloudinaryContext} from 'cloudinary-react';
 import { connect } from 'react-redux';
-import styles from './header.css';
-import logo from './logo.css';
+import styles from '../../styles/header.css';
+import logo from '../../styles/logo.css';
 
 
 class HeaderMenu extends React.Component {
