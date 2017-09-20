@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Button, Form, Checkbox, Input, Icon, Grid, Label, Dropdown, Modal, Popup, Message } from 'semantic-ui-react';
-import roles from '../common/roleOptions';
+import roleOptions from '../common/roleOptions.json';
 import profileIcons from '../common/profileIconOptions';
 import { Image, CloudinaryContext, Transformation } from 'cloudinary-react';
 import axios from 'axios';
@@ -20,7 +20,8 @@ class SignUpThree extends React.Component {
       loading: false,
       termsAccepted: false,
       rolesSelected: [],
-      securityCodeFilled: false
+      securityCodeFilled: false,
+      usernameInvalid: false
     };
     this.usernameCheck = this.usernameCheck.bind(this);
     this.adminCheck = this.adminCheck.bind(this);
@@ -52,14 +53,27 @@ class SignUpThree extends React.Component {
   usernameCheck(e) {
     var that = this;
     this.props.handleUsernameInput(e);
-    console.log(e.target.value)
-    if (e.target.value.length > 0 && e.target.value.length < 20) {
+    var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+    debugger;
+    if(format.test(e.target.value)){
+      that.setState({
+        usernameFilled: true,
+        usernameTaken: false,
+        usernameLimit: false,
+        usernameInvalid: true
+      }, function () {
+        that.formComplete();
+      });
+      return;
+    }
+    if (e.target.value.length > 0 && e.target.value.length < 20 ) {
       for (var i in this.state.existingUsernames) {
-        if (this.state.existingUsernames[i] == e.target.value) {
+        if (this.state.existingUsernames[i].toUpperCase() == e.target.value.toUpperCase()) {
           that.setState({
             usernameFilled: true,
             usernameTaken: true,
-            usernameLimit: false
+            usernameLimit: false,
+            usernameInvalid: false
           }, function () {
             that.formComplete();
           });
@@ -69,7 +83,8 @@ class SignUpThree extends React.Component {
       this.setState({
         usernameFilled: true,
         usernameTaken: false,
-        usernameLimit: false
+        usernameLimit: false,
+        usernameInvalid: false
       }, function () {
         that.formComplete();
       });
@@ -79,7 +94,8 @@ class SignUpThree extends React.Component {
       this.setState({
         usernameFilled: false,
         usernameTaken: false,
-        usernameLimit: false
+        usernameLimit: false,
+        usernameInvalid: false
       }, function () {
         that.formComplete();
       });
@@ -88,7 +104,8 @@ class SignUpThree extends React.Component {
       this.setState({
         usernameFilled: true,
         usernameTaken: false,
-        usernameLimit: true
+        usernameLimit: true,
+        usernameInvalid: false
       }, function () {
         that.formComplete();
       });
@@ -159,27 +176,35 @@ class SignUpThree extends React.Component {
                   <Grid.Column width={11} >
                     <Form.Field>
                       <Popup
-                        trigger={<label>AGL Username</label>}
+                        trigger={
+                          <div>
+                          <label>AGL Username</label>
+                          <Input placeholder='Username' iconPosition='left'>
+                            <Icon name='new pied piper' />
+                            <input onChange={this.usernameCheck} />
+                            {this.state.usernameTaken && <Label pointing='left' color='red'>Username is already taken</Label>}
+                            {this.state.usernameLimit && <Label pointing='left' color='red'>Username is too long!</Label>}
+                            {this.state.usernameInvalid && <Label pointing='left' color='red'>Username cannot contain special characters!</Label>}
+                          </Input>
+                          </div>}
                         content='This will be your display username and how others see you!'
                         inverted
                       />
-                      <Input placeholder='Username' iconPosition='left'>
-                        <Icon name='new pied piper' />
-                        <input onChange={this.usernameCheck} />
-                        {this.state.usernameTaken && <Label pointing='left' color='red'>Username is already taken</Label>}
-                        {this.state.usernameLimit && <Label pointing='left' color='red'>Username is too long!</Label>}
-                      </Input>
                     </Form.Field>
                     <Form.Field>
                       <Popup
-                        trigger={<label>Enter a 6 digit Security PIN:</label>}
-                        content='Please make sure to keep this safe and secure!'
+                        trigger={
+                          <div>
+                          <label>Enter a 6 digit Security PIN:</label>
+                          <Input placeholder='Passcode' iconPosition='left'>
+                            <Icon name='numbered list' />
+                            <input onBlur={this.adminCheck} type='password' />
+                          </Input>
+                          </div>}
+                        content='Please make sure to keep this safe and secure! This is for recovering your account information!'
                         inverted
                       />
-                      <Input placeholder='Passcode' iconPosition='left'>
-                        <Icon name='numbered list' />
-                        <input onBlur={this.adminCheck} type='password' />
-                      </Input>
+                      
                     </Form.Field>
                   </Grid.Column>
                 </Grid.Row>
@@ -188,7 +213,7 @@ class SignUpThree extends React.Component {
             <div style={modalStyle.spacing}>
               <Form.Field>
                 <label>Roles Interested In:</label>
-                <Dropdown placeholder='Roles' fluid multiple selection options={roles}
+                <Dropdown placeholder='Roles' fluid multiple selection options={roleOptions.roles}
                   value={this.state.rolesSelected} onChange={this.rolesCheck} />
               </Form.Field>
             </div>

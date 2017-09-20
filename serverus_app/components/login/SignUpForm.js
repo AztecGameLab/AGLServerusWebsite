@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Button, Form, Checkbox, Transition, Grid } from 'semantic-ui-react';
-import Stepper from 'react-stepper-horizontal';
-import ReactTransitions from 'react-transitions';
 import SignUpOne from './SignUpOne';
 import SignUpTwo from './SignUpTwo';
 import SignUpThree from './SignUpThree';
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 
-const http = require('http');
+const http = require('https');
 const md5 = require('md5');
 
 class SignUpForm extends Component {
@@ -45,13 +43,21 @@ class SignUpForm extends Component {
         bookmarked: [],
         groups: [],
         activities: [],
-        friends:[],
+        verificationHash: '',
+        friends:{},
         authLevel: 0,
         showcaseImage: 'ProfileIconsSmall/033-flask.png',
         facebookLink: 'https://www.facebook.com/',
         twitterLink :'https://twitter.com/',
-        instagramUser: '',
-        linkedInLink:'https://www.linkedin.com/in/'
+        instagramUser: 'https://instagram.com/',
+        linkedInLink:'https://www.linkedin.com/in/',
+        slackUser:'',
+        inbox:{
+          friendRequests: {},
+          teamRequests: {},
+          myRequests: {}
+
+        }
       }
     };
     //Essential Login Info (SignUpOne)
@@ -159,7 +165,6 @@ class SignUpForm extends Component {
     });
   }
   handleProfileInput(e) {
-    debugger;
     const newAccount = this.state.newAccount;
     newAccount.showcaseImage = e.target.name;
     this.setState({
@@ -179,27 +184,23 @@ class SignUpForm extends Component {
 
       .then(function () {
         that.sendNewUserToFB();
-        //TODO Send to AWS to dispatch email. 
-        debugger;
         let postBody = JSON.stringify({
-          firstName: newUserData.firstName,
-          lastName: newUserData.lastName,
-          username: newUserData.username,
-          email: newUserData.email
+          email: newUserData.email,
+          fName: newUserData.firstName
         });
 
         let request = http.request({
-          hostname: 'ec2-13-59-179-171.us-east-2.compute.amazonaws.com',
-          port: "3000",
+          hostname: 'us-central1-serverus-15f25.cloudfunctions.net',
           method: 'POST',
-          path: "/api/dispatchNewEmail",
+          path: '/dispatchConfirmEmail',
           headers: {
             'Content-Type' : 'application/json',
             'Content-Length' : Buffer.byteLength(postBody)
           }
         });
         request.end(postBody);
-        request.on('data', console.log);
+        request.on('response', (response) =>{
+        });
       })
 
       .catch(function (error) {
@@ -217,13 +218,13 @@ class SignUpForm extends Component {
     this.props.signedUp();
     var that = this;
     var user = firebase.auth().currentUser;
-    console.log('CURRENT USER', user);
     var userUid = user.uid;
     var data = {
       uid: userUid,
       info: this.state.newAccount
     };
     data.info.password = md5(data.info.password);
+    data.info.verificationHash = md5(data.info.username);
     firebase.database().ref('takenEmails').push(data.info.email); //Taken Emails
     firebase.database().ref('takenRedIds').push(data.info.redId); //Taken RedIDs
     firebase.database().ref('takenUsernames').push(data.info.username); //Taken Emails

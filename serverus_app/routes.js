@@ -12,19 +12,24 @@ import MarkdownPage from './components/markdown/BlogPost';
 import UserDirectory from './components/users/UserDirectory';
 import ProfilePageContainer from './components/profile/ProfilePageContainer';
 import Calendar from './components/Calendar/Calendar'
-
+import Inbox from './components/inbox/Inbox';
+import ArticlePage from './components/markdown/ArticlePage';
+import TempHome from './components/home/TempHomePage';
+import Error from './components/error/ErrorPage';
 
 export default (
     <Route path="/" component={App}>
-        <IndexRoute component={HomePage} />
+        <IndexRoute component={TempHome} />
         <Route path="admin" component={AdminDashboard}/>
         <Route path="about" component={AboutPage} />
         <Route path="games" component={GamesPage} />
         <Route path="competitions" component={CompetitionsPage} />
         <Route path="create/:type" component={MarkdownCreate} />
-        <Route path="articles" component={MarkdownPage} />
+        <Route path="a/:articleId" component={ArticlePage} />
         <Route path="calendar" component={Calendar} />
         <Route path="u" component={UserDirectory}/>
-        <Route path='u/:username' component={ProfilePageContainer} />
+        <Route exact path='u/:username' component={ProfilePageContainer} />
+        <Route exact path="inbox/:username" component={Inbox} />
+        <Route path='*' component={Error}/>
     </Route>
 );

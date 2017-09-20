@@ -5,7 +5,6 @@
 
 .bgimg {
     /* Background image */
-    background-image: url('./purple.jpg');
     /* Full-screen */
     height: 100vh;
     /* Center the background image */

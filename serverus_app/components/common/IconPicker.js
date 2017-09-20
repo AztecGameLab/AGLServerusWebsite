@@ -32,7 +32,7 @@ class IconPicker extends Component {
     }
     componentDidMount() {
         var that = this;
-        axios.get('http://res.cloudinary.com/aztecgamelab-com/image/list/smallIcons.json')
+        axios.get('https://res.cloudinary.com/aztecgamelab-com/image/list/smallIcons.json')
             .then(res => {
                 that.setState({
                     profileIcons: res.data.resources,

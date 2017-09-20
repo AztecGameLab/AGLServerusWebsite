@@ -3,7 +3,7 @@ import firebase from 'firebase';
 import axios from 'axios';
 import Slider from 'react-slick';
 import MarkdownCard from '../markdown/MarkdownCard';
-import GenericCard from '../common/GenericCard';
+import GenericCard from '../cards/GenericCard';
 
 export default class NewsFeed extends React.Component {
     constructor(props) {
@@ -65,7 +65,7 @@ export default class NewsFeed extends React.Component {
         if (value.data) {
             return (
                 <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4" key={value.hashKey} >
-                    <GenericCard value={value.data} />
+                    <GenericCard keyUrl={value.hashKey} value={value.data} />
                 </div>
             );
         }

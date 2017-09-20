@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import * as accountActions from '../actions/accountActions';
 import { bindActionCreators } from 'redux';
 import stylesheet from './markdown.css';
-import GenericCard from '../common/GenericCard';
+import GenericCard from '../cards/GenericCard';
 
 
 const Editor = (props) => {

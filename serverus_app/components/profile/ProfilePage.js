@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { Image, CloudinaryContext } from 'cloudinary-react';
-import { Grid, Icon, Card, Tab, Button, List, Popup, Feed } from 'semantic-ui-react';
+import { Grid, Icon, Card, Tab, Button, List, Popup, Feed, Dropdown, TextArea, Input, Label } from 'semantic-ui-react';
 import IconPicker from '../common/IconPicker';
-import roles from '../common/roleOptions';
+import { Link } from 'react-router';
+import roles2 from '../common/roleOptions2';
 import badgeDescriptions from '../common/badgeOptions';
+import md5 from 'md5';
+import style from './friend.css';
 
 //DATA IS IN userData!! userData.firstName for example
 const ProfilePage = (props) => {
     const userData = props.profileObject.info;
-    const roleOptions = roles;
+    const roleOptions = roles2;
     const badgeDescriptions = badgeDescriptions;
 
     const imageLarge = (originalLink) => {
@@ -40,6 +43,20 @@ const ProfilePage = (props) => {
             </div>
         ));
     };
+    const friendMapper = (friendObject) => {
+        if(Object.keys(friendObject).length > 0) {
+            var keys = Object.keys(friendObject);
+            return (keys.map((key)=> 
+                <Feed.Content key={md5(key)+ 7} >
+                    <Icon name= 'heart outline' size='large' />
+                    <Link to= {'/u/' + key} className = 'friend'> {' @ ' + key} </Link>
+                </Feed.Content>
+            ));
+        }
+        else {
+            return <div></div>;
+        }
+    };
     const badgeMapper = (badges) => {
         let objectList = [];
         //console.log(badgeDescriptions.badge)
@@ -53,8 +70,21 @@ const ProfilePage = (props) => {
         ));
     };
 
+    const evalUsername = (username) => {
+        if(username==='') return 'Username';
+        return username;
+    };
+
+    const evalUserLastDelim = (username) => {
+        username = String(username);
+        let ret = username.substring(username.lastIndexOf('/')+1);
+        if(ret === '' ) return 'Username';
+        return ret;
+    }
+
     return (
         <div>
+        <br/><br/>
             <Grid columns={4} inverted padded>
                 <Grid.Column width={1}>
                 </Grid.Column>
@@ -63,8 +93,7 @@ const ProfilePage = (props) => {
                         <IconPicker
                             startingIcon={imageLarge(userData.showcaseImage)}
                             handleProfileInput={props.handleProfileInput}
-                            editEnabled={false} />
-
+                            editEnabled={props.editMode} />
                         <Card.Content>
                             <Card.Header>
                                 {userData.firstName + ' ' + userData.lastName}
@@ -72,6 +101,22 @@ const ProfilePage = (props) => {
                             <Card.Meta>
                                 <Icon name='at' /> {userData.username}
                             </Card.Meta>
+                            <br/>
+                            {props.editMode ? 
+                                <Input style = {{fontSize: '15px'}} iconPosition='left' onChange = {props.handleSlack} >
+                                    <Icon name='slack' />
+                                    <input placeholder={ evalUsername(userData.slackUser) }/>
+                                </Input>
+                            :
+                            <Popup
+                                trigger={
+                                    <Label basic color = 'black' as='a'>
+                                        <Icon name='slack' size = 'large'/> Slack
+                                    </Label>}
+                                header={'Slack Username'}
+                                content={'@ ' + userData.slackUser}
+                            />
+                            }
                         </Card.Content>
 
                         <Card.Content>
@@ -95,9 +140,13 @@ const ProfilePage = (props) => {
 
                         <Card.Content>
                             <Card.Header>
-
                                 <Feed>
-                                    {roleMapper(userData.roles)}
+                                    {props.editMode ? 
+                                        <Dropdown 
+                                            placeholder='Roles' 
+                                            fluid multiple selection options={roles2}
+                                            value={props.rolesSelected} 
+                                            onChange={props.handleRolesInput} /> : roleMapper(userData.roles)}
                                 </Feed>
                             </Card.Header>
                         </Card.Content>
@@ -108,10 +157,33 @@ const ProfilePage = (props) => {
                             </CloudinaryContext>
                         </Card.Content>
                         <Card.Content extra>
-                            <Button circular color='facebook' icon='facebook' href={''} />
-                            <Button circular color='twitter' icon='twitter' href={''} />
-                            <Button circular color='linkedin' icon='linkedin' href={''} />
-                            <Button circular color='instagram' icon='instagram' href={''} />
+                            {props.editMode ? 
+                            <div>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' onChange = {props.handleFacebook}>
+                                <Icon name='facebook' />
+                                <input placeholder={evalUserLastDelim(userData.facebookLink)}/>
+                            </Input>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' onChange = {props.handleTwitter}>
+                                <Icon name='twitter' />
+                                <input placeholder={evalUserLastDelim(userData.twitterLink)}/>
+                            </Input>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' onChange = {props.handleLinkedIn}>
+                                <Icon name='linkedin' />
+                                <input placeholder={evalUserLastDelim(userData.linkedInLink)}/>
+                            </Input>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' onChange = {props.handleInstagram}>
+                                <Icon name='instagram' />
+                                <input placeholder={evalUserLastDelim(userData.instagramUser)}/>
+                            </Input>
+                            </div>
+                            :
+                            <div>
+                                <Button disabled = {userData.facebookLink.length < 30} circular color='facebook' icon='facebook' href={userData.facebookLink} />
+                                <Button disabled = {userData.twitterLink.length < 30} circular color='twitter' icon='twitter' href={userData.twitterLink} />
+                                <Button disabled = {userData.linkedInLink.length < 30} circular color='linkedin' icon='linkedin' href={userData.linkedInLink} />
+                                <Button disabled = {userData.instagramUser.length < 30} circular color='instagram' icon='instagram' href={userData.instagramUser} />                                
+                            </div>
+                        }
                         </Card.Content>
                     </Card>
                 </Grid.Column>
@@ -120,13 +192,32 @@ const ProfilePage = (props) => {
                         <Card.Content>
                             <Card.Header>
                                 <Icon name = 'street view' size = 'huge' color = 'teal'/> About Me!
+                                {(props.loggedIn && !props.yourAccount && false) && 
+                                    <Popup 
+                                        content='Add friend!' 
+                                        trigger={<Button 
+                                                    floated = 'right' 
+                                                    size = 'massive' 
+                                                    circular icon="add user" 
+                                                    color="blue" />
+                                                }/>}
                             </Card.Header>
                         </Card.Content>
 
                         <Card.Content>
                             <Card.Description>
                                 <Icon name='quote left' size = 'small' />
-                                {userData.bio} hi there georgie 
+                                {props.editMode ? 
+                                    <div>
+                                        <TextArea 
+                                            maxLength = "300"
+                                            style = {profileEdit.bio} 
+                                            placeholder='Hi tell us about yourself! :)' 
+                                            onChange = {props.handleBioInput}
+                                            value = {props.bio}/>
+                                            <div>{"Word Count: " + props.bio.length + " (must be less than 300 characters)"}</div>
+                                    </div>
+                                    : userData.bio}
                                 <Icon name='quote right' size = 'small'/>
                             </Card.Description>
                         </Card.Content>
@@ -139,7 +230,7 @@ const ProfilePage = (props) => {
 
                         <Card.Content>
                             <Card.Description>
-                                add a game here!
+                                Game submission coming soon!
                             </Card.Description>
                         </Card.Content>
 
@@ -151,7 +242,7 @@ const ProfilePage = (props) => {
 
                         <Card.Content>
                             <Card.Description>
-                                add a soundtrack here!
+                                Art submission coming soon!
                             </Card.Description>
                         </Card.Content>
 
@@ -163,7 +254,7 @@ const ProfilePage = (props) => {
 
                         <Card.Content>
                             <Card.Description>
-                                add a game here!
+                                Music submission coming soon!
                             </Card.Description>
                         </Card.Content>
 
@@ -175,20 +266,52 @@ const ProfilePage = (props) => {
 
                         <Card.Content>
                             <Card.Description>
-                                friends here, they'll float too
+                                {userData.friends == 0 && <div>Add a friend! </div>}
+                                {friendMapper(userData.friends)}
                             </Card.Description>
                         </Card.Content>
                         <hr />
                     </Card>
                 </Grid.Column>
-                <Grid.Column width={2} fluid>
-                    <Button fluid icon = 'edit' color = 'blue' content = 'Edit My Profile!' size = 'medium'/>
-                    <hr/>
-                    <Button fluid icon = 'save' color = 'green' content = 'Save My Changes!' size = 'medium'/>
+                <Grid.Column width={2}>
+                    {
+                    props.yourAccount && 
+                    <div>
+                        <Button 
+                            fluid 
+                            onClick = {props.editModeOn} 
+                            icon = 'edit' 
+                            color = 'blue' 
+                            content = 'Edit My Profile!' 
+                            size = 'medium'/>
+                        <hr/>
+                        <Button 
+                            disabled = {!props.editMode} 
+                            onClick = {props.editModeOff} 
+                            fluid 
+                            icon = 'save' 
+                            color = 'green' 
+                            content = 'Save My Changes!' 
+                            size = 'medium'/>
+                    </div>
+                    }
                 </Grid.Column>
             </Grid>
+            <br/><br/><br/>
         </div>
     );
+};
+
+
+var profileEdit = {
+    bio: {
+        width: '100%',
+        padding: '10px',
+        borderRadius: '10px',
+        borderStyle: 'solid',
+        borderWidth: '2px',
+        borderColor: 'green'
+    }
 };
 
 /*
