@@ -23,6 +23,10 @@ class App extends React.Component {
         this.openLogin = this.openLogin.bind(this);
         this.closeLogin = this.closeLogin.bind(this);
         this.changeTabIndex = this.changeTabIndex.bind(this);
+        this.signedUp = this.signedUp.bind(this);
+        this.signOut = this.signOut.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);        
+        this.search = this.search.bind(this);
     }
 
     componentWillMount() {
@@ -88,10 +92,27 @@ class App extends React.Component {
         this.props.actions.signOutAccount();
     }
 
+    handleSearch = (e) => {
+        this.setState({
+            search: e.target.value
+        })
+    }
+
+    search = (e) => {
+        //Prevent Search input to clear
+        e.preventDefault();
+        e.stopPropagation();
+
+        //Redirects to specified path
+        this.context.router.push("/search/" + this.state.search);
+        //AGL API call to retrieve search data, I was thinking we could firebase here to store in redux store for faster async results and 
+        //in the SearchDirectory component we can have a componentDidUpdate to listen for a flag when query results are successfully pushed into store.
+    }
+
     render() {
         return (
             <div>
-                <HeaderMenu loggedIn={this.state.loggedIn} showModel={this.openLogin} signOut={this.signOut}></HeaderMenu>
+                <HeaderMenu loggedIn={this.state.loggedIn} showModel={this.openLogin} signOut={this.signOut} handleSearch={this.handleSearch} search={this.search}></HeaderMenu>
                 <div style={AppStyle.mainContent}>{this.props.children}</div>
                 <Footer />
                 <LoginModel activeIndex={this.state.activeIndex} isOpen={this.state.modelIsOpen} close={this.closeLogin} changeTab={this.changeTabIndex} signedUp={this.signedUp} />
@@ -125,6 +146,9 @@ var AppStyle = {
 
 App.propTypes = {
     children: PropTypes.object
+};
+App.contextTypes = {
+    router: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

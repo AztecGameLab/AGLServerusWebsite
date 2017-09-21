@@ -13,6 +13,7 @@ import GameDirectory from './components/games/GameDirectory';
 import HomePage from './components/home/HomePage';
 import MarkdownCreate from './components/articles/MarkdownCreate';
 import ProfilePageContainer from './components/profile/ProfilePageContainer';
+import SearchDirectory from './components/search/SearchDirectory';
 import TempHome from './components/home/TempHomePage';
 import UserDirectory from './components/users/UserDirectory';
 
@@ -21,14 +22,15 @@ export default (
         <IndexRoute component={TempHome} />
         <Route path="admin" component={AdminDashboard}/>
         <Route path="about" component={AboutPage} />
-        <Route path="games" component={GameDirectory} />
-        <Route path="competitions" component={CompetitionsPage} />
-        <Route path="create/:type" component={MarkdownCreate} />
         <Route path="a/:articleId" component={ArticlePage} />
         <Route path="calendar" component={Calendar} />
+        <Route path="competitions" component={CompetitionsPage} />
+        <Route path="create/:type" component={MarkdownCreate} />
+        <Route path="games" component={GameDirectory} />
+        <Route exact path="inbox/:username" component={Inbox} />
+        <Route path="search/:searchQuery" component={SearchDirectory} />
         <Route path="u" component={UserDirectory}/>
         <Route exact path='u/:username' component={ProfilePageContainer} />
-        <Route exact path="inbox/:username" component={Inbox} />
         <Route path='*' component={Error}/>
     </Route>
 );
