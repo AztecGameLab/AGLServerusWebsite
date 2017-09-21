@@ -7,6 +7,7 @@ import roleOptions from '../common/options/roleOptions.json';
 import badgeOptions from '../common/options/badgeOptions.json';
 import md5 from 'md5';
 import style from '../../styles/friend.css';
+import roleNames from '../common/options/roleNamesOnly.json';
 
 //DATA IS IN userData!! userData.firstName for example
 const ProfilePage = (props) => {
@@ -143,7 +144,7 @@ const ProfilePage = (props) => {
                                     {props.editMode ? 
                                         <Dropdown 
                                             placeholder='Roles' 
-                                            fluid multiple selection options={roles2}
+                                            fluid multiple selection options={roleNames.roles}
                                             value={props.rolesSelected} 
                                             onChange={props.handleRolesInput} /> : roleMapper(userData.roles)}
                                 </Feed>

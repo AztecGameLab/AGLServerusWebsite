@@ -1,7 +1,14 @@
+//Imports
 import React, { Component } from 'react';
 import { Button, Form, Checkbox, Input, Icon, Grid, Segment, Label, Popup } from 'semantic-ui-react';
 import * as EmailValidator from 'email-validator';
 import firebase from 'firebase';
+
+//CSS Objects
+//var modalStyle
+
+//AGL API
+import {GetAllEmails, GetAllRedIds} from '../AGL';
 
 class SignUpOne extends React.Component {
   constructor(props) {
@@ -27,32 +34,19 @@ class SignUpOne extends React.Component {
     this.redIDCheck = this.redIDCheck.bind(this);
     this.formComplete = this.formComplete.bind(this);
   }
-  componentWillMount() {
-    var emailRef = firebase.database().ref('takenEmails/');
-    var that = this;
-    emailRef.on('value', function (snapshot) {
-      if (that.props.isLeaving) return;
-      if (snapshot.val()) {
-        that.setState({
-          existingEmails: Object.values(snapshot.val())
-        });
-      }
-    });
-    var redIDRef = firebase.database().ref('takenRedIds/');
-    redIDRef.once('value', function (snapshot) {
-      if (snapshot.val()) {
-        that.setState({
-          existingRedIDs: Object.values(snapshot.val())
-        });
-      }
+  async componentWillMount() {
+    this.setState({
+      existingEmails: await GetAllEmails(),
+      existingRedIDs: await GetAllRedIds()
     });
   }
+  
   emailCheck(e) {
 
     var profileArray = this.profileIcons;
     var that = this;
     for (var i in this.state.existingEmails) {
-      if (this.state.existingEmails[i] == e.target.value) {
+      if (this.state.existingEmails[i].toUpperCase() == e.target.value.toUpperCase()) {
         that.setState({
           emailFirstClick: true,
           emailWarning: true,
