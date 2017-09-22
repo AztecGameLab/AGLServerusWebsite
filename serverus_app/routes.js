@@ -5,7 +5,7 @@ import App from './components/App';
 import AboutPage from './components/about/AboutPage';
 import AdminDashboard from './components/admin/AdminDashboard';
 import ArticlePage from './components/articles/ArticlePage';
-import Calendar from './components/calendar/Calendar'
+import Calendar from './components/Calendar/Calendar'
 import CompetitionsPage from './components/competitions/CompetitionsPage';
 import Error from './components/common/error/ErrorPage';
 import Inbox from './components/inbox/Inbox';
