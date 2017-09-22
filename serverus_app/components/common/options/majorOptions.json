@@ -1,0 +1,434 @@
+{
+    "majors" : [
+        {
+            "key": "ACC",
+            "value": "ACC",
+            "text": "Accounting"
+        },
+        {
+            "key": "AEN",
+            "value": "AEN",
+            "text": "Aerospace Engineering"
+        },
+        {
+            "key": "AFS",
+            "value": "AFS",
+            "text": "Africana Studies"
+        },
+        {
+            "key": "AIS",
+            "value": "AIS",
+            "text": "American Indian Studies"
+        },
+        {
+            "key": "ANT",
+            "value": "ANT",
+            "text": "Anthoropology"
+        },
+        {
+            "key": "APM",
+            "value": "ARM",
+            "text": "Applied Mathematics"
+        },
+        {
+            "key": "ART",
+            "value": "ART",
+            "text": "Art"
+        },
+        {
+            "key": "ASS",
+            "value": "ASS",
+            "text": "Asian Studies"
+        },
+        {
+            "key": "AST",
+            "value": "AST",
+            "text": "Astronomy"
+        },
+        {
+            "key": "ATT",
+            "value": "ATT",
+            "text": "Athletic Traning"
+        },
+        {
+            "key": "BIO",
+            "value": "BIO",
+            "text": "Biology"
+        },
+        {
+            "key": "BSA",
+            "value": "BSA",
+            "text": "Business Administration"
+        },
+        {
+            "key": "BOP",
+            "value": "BOP",
+            "text": "Business, Online Program"
+        },
+        {
+            "key": "CHM",
+            "value": "CHM",
+            "text": "Chemistry"
+        },
+        {
+            "key": "CCS",
+            "value": "CCS",
+            "text": "Chicana and Chicano Studies"
+        },
+        {
+            "key": "CFD",
+            "value": "CFD",
+            "text": "Child and Family Development"
+        },
+        {
+            "key": "CVE",
+            "value": "CVE",
+            "text": "Civil Engineering"
+        },
+        {
+            "key": "CLS",
+            "value": "CLS",
+            "text": "Classics"
+        },
+        {
+            "key": "COM",
+            "value": "COM",
+            "text": "Communication"
+        },
+        {
+            "key": "CMS",
+            "value": "CIS",
+            "text": "Comparative International Studies"
+        },
+        {
+            "key": "CML",
+            "value": "CML",
+            "text": "Comparative Literature"
+        },
+        {
+            "key": "CPE",
+            "value": "CPE",
+            "text": "Computer Engineering"
+        },
+        {
+            "key": "CPS",
+            "value": "CPS",
+            "text": "Computer Science"
+        },
+        {
+            "key": "CSE",
+            "value": "CSE",
+            "text": "Construction Engineering"
+        },
+        {
+            "key": "CMJ",
+            "value": "CMJ",
+            "text": "Criminal Justice"
+        },
+        {
+            "key": "DNC",
+            "value": "DNC",
+            "text": "Dance"
+        },
+        {
+            "key": "ECO",
+            "value": "ECO",
+            "text": "Economics"
+        },
+        {
+            "key": "EEN",
+            "value": "EEN",
+            "text": "Electrical Engineering"
+        },
+        {
+            "key": "ENG",
+            "value": "ENG",
+            "text": "English"
+        },
+        {
+            "key": "ENE",
+            "value": "ENE",
+            "text": "Environmental Engineering"
+        },
+        {
+            "key": "EUS",
+            "value": "EUS",
+            "text": "European Studies"
+        },
+        {
+            "key": "FIN",
+            "value": "FIN",
+            "text": "Finance"
+        },
+        {
+            "key": "FNS",
+            "value": "FNS",
+            "text": "Financial Services"
+        },
+        {
+            "key": "FNN",
+            "value": "FNN",
+            "text": "Food and Nutrition"
+        },
+        {
+            "key": "FRN",
+            "value": "FRN",
+            "text": "French"
+        },
+        {
+            "key": "GEO",
+            "value": "GEO",
+            "text": "Geography"
+        },
+        {
+            "key": "GES",
+            "value": "GES",
+            "text": "Geological Sciences"
+        },
+        {
+            "key": "GER",
+            "value": "GER",
+            "text": "German"
+        },
+        {
+            "key": "GRT",
+            "value": "GRT",
+            "text": "Gerontology"
+        },
+        {
+            "key": "HLC",
+            "value": "HLC",
+            "text": "Health Communication"
+        },
+        {
+            "key": "HST",
+            "value": "HST",
+            "text": "History"
+        },
+        {
+            "key": "HOS",
+            "value": "HOS",
+            "text": "Hospitality and Tourism Management"
+        },
+        {
+            "key": "HUM",
+            "value": "HUM",
+            "text": "Humanities"
+        },
+        {
+            "key": "INS",
+            "value": "ISN",
+            "text": "Information Systems"
+        },
+        {
+            "key": "IND",
+            "value": "IND",
+            "text": "Interdisiplinary Studies in Three Departments"
+        },
+        {
+            "key": "INT",
+            "value": "INT",
+            "text": "International Business"
+        },
+        {
+            "key": "INC",
+            "value": "INC",
+            "text": "International Security and Conflict Resolution"
+        },
+        {
+            "key": "JPN",
+            "value": "JPN",
+            "text": "Japanese"
+        },
+        {
+            "key": "JRN",
+            "value": "JRN",
+            "text": "Journalism and Media Studies"
+        },
+        {
+            "key": "KIN",
+            "value": "KIN",
+            "text": "Kinesiology"
+        },
+        {
+            "key": "LAS",
+            "value": "AEN",
+            "text": "Latin American Studies"
+        },
+        {
+            "key": "LGB",
+            "value": "LGB",
+            "text": "Lesbian, Gay, Bisexual, and Transgender Studies"
+        },
+        {
+            "key": "LIB",
+            "value": "LIB",
+            "text": "Liberal Studies"
+        },
+        {
+            "key": "LIN",
+            "value": "LIN",
+            "text": "Linguistics"
+        },
+        {
+            "key": "MAN",
+            "value": "MAN",
+            "text": "Management"
+        },
+        {
+            "key": "MKT",
+            "value": "MKT",
+            "text": "Marketing"
+        },
+        {
+            "key": "MAT",
+            "value": "MAT",
+            "text": "Mathematics"
+        },
+        {
+            "key": "MEN",
+            "value": "MEN",
+            "text": "Mechanical Engineering"
+        },
+        {
+            "key": "MBI",
+            "value": "MBI",
+            "text": "Microbiology"
+        },
+        {
+            "key": "MJS",
+            "value": "MJS",
+            "text": "Modern Jewish Studies"
+        },
+        {
+            "key": "MUS",
+            "value": "MUS",
+            "text": "Music"
+        },
+        {
+            "key": "NUR",
+            "value": "NUR",
+            "text": "Nursing"
+        },
+        {
+            "key": "NUT",
+            "value": "NUT",
+            "text": "Nutrition"
+        },
+        {
+            "key": "PHI",
+            "value": "PHI",
+            "text": "Philosophy"
+        },
+        {
+            "key": "PHS",
+            "value": "PHS",
+            "text": "Physical Science"
+        },
+        {
+            "key": "PHY",
+            "value": "PHY",
+            "text": "Physics"
+        },
+        {
+            "key": "POL",
+            "value": "POL",
+            "text": "Political Science"
+        },
+        {
+            "key": "PSY",
+            "value": "PSY",
+            "text": "Psychology"
+        },
+        {
+            "key": "PUB",
+            "value": "PUB",
+            "text": "Public Administration"
+        },
+        {
+            "key": "PUH",
+            "value": "PUH",
+            "text": "Public Health"
+        },
+        {
+            "key": "RLE",
+            "value": "RLE",
+            "text": "Real Estate"
+        },
+        {
+            "key": "RCA",
+            "value": "RCA",
+            "text": "Recreation Administration"
+        },
+        {
+            "key": "REL",
+            "value": "REL",
+            "text": "Religious Studies"
+        },
+        {
+            "key": "RWS",
+            "value": "RWS",
+            "text": "Rhetoric and Writing Studies"
+        },
+        {
+            "key": "RCE",
+            "value": "RCE",
+            "text": "Russian and Central European Studies"
+        },
+        {
+            "key": "SSC",
+            "value": "SSC",
+            "text": "Social Science"
+        },
+        {
+            "key": "SCW",
+            "value": "SCW",
+            "text": "Social Work"
+        },
+        {
+            "key": "SOC",
+            "value": "SOC",
+            "text": "Sociology"
+        },
+        {
+            "key": "SPN",
+            "value": "SPN",
+            "text": "Spanish"
+        },
+        {
+            "key": "SLH",
+            "value": "SLH",
+            "text": "Speech, Language, and Hearing Science"
+        },
+        {
+            "key": "STA",
+            "value": "STA",
+            "text": "Statistics"
+        },
+        {
+            "key": "SUS",
+            "value": "SUS",
+            "text": "Sustainability"
+        },
+        {
+            "key": "TFM",
+            "value": "TFM",
+            "text": "Television, Film, and New Media"
+        },
+        {
+            "key": "THA",
+            "value": "THA",
+            "text": "Theatre Arts"
+        },
+        {
+            "key": "URB",
+            "value": "URB",
+            "text": "Urban Studies"
+        },
+        {
+            "key": "WMS",
+            "value": "WMS",
+            "text": "Womens Studies"
+        }
+    ]
+}

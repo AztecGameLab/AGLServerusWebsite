@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
 import { Button, Form, Checkbox, Input, Icon, Label, Message } from 'semantic-ui-react';
 import firebase from 'firebase';
-// import {connect} from 'react-redux';
-// import * as accountActions from '../actions/accountActions';
-// import {bindActionCreators} from 'redux';
 import axios from 'axios';
 
 const md5 = require('md5');
@@ -129,12 +126,4 @@ var modalStyle = {
   }
 };
 
-// function mapDispatchToProps(dispatch){
-//     return {
-//         actions: bindActionCreators(accountActions,dispatch)
-//         //this will go through the courseActions file and wrap with dispatch
-//     };
-// }
-
-// export default connect(null, mapDispatchToProps)(LoginForm);
 export default LoginForm;

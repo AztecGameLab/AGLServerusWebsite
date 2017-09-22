@@ -1,11 +1,18 @@
+//Imports
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Button, Form, Checkbox, Input, Icon, Grid, Label, Dropdown, Modal, Popup, Message } from 'semantic-ui-react';
-import roleOptions from '../common/roleOptions.json';
-import profileIcons from '../common/profileIconOptions';
+import roleOptions from '../common/options/roleOptions.json';
+import profileIconOptions from '../common/options/profileIconOptions.json';
 import { Image, CloudinaryContext, Transformation } from 'cloudinary-react';
 import axios from 'axios';
-import IconPicker from '../common/IconPicker';
+import IconPicker from '../common//icon/IconPicker';
+
+//CSS Objects
+//var modalStyle
+
+//AGL API
+import {GetAllUsernames} from '../AGL';
 
 class SignUpThree extends React.Component {
   constructor(props) {
@@ -29,15 +36,9 @@ class SignUpThree extends React.Component {
     this.termsAccepted = this.termsAccepted.bind(this);
     this.rolesCheck = this.rolesCheck.bind(this);
   }
-  componentWillMount() {
-    var usernameRef = firebase.database().ref('takenUsernames/');
-    var that = this;
-    usernameRef.once('value', function (snapshot) {
-      if (snapshot.val()) {
-        that.setState({
-          existingUsernames: Object.values(snapshot.val())
-        });
-      }
+  async componentWillMount() {
+    this.setState({
+      existingUsernames: await GetAllUsernames()
     });
   }
   rolesCheck(e, { value }) {

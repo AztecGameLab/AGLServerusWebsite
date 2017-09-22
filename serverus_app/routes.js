@@ -2,34 +2,35 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import firebase from 'firebase';
 import App from './components/App';
-import AdminDashboard from './components/admin/AdminDashboard';
-import HomePage from './components/home/HomePage';
 import AboutPage from './components/about/AboutPage';
-import GamesPage from './components/games/GamesPage';
+import AdminDashboard from './components/admin/AdminDashboard';
+import ArticlePage from './components/articles/ArticlePage';
+import Calendar from './components/calendar/Calendar'
 import CompetitionsPage from './components/competitions/CompetitionsPage';
-import MarkdownCreate from './components/markdown/MarkdownCreate';
-import MarkdownPage from './components/markdown/BlogPost';
-import UserDirectory from './components/users/UserDirectory';
-import ProfilePageContainer from './components/profile/ProfilePageContainer';
-import Calendar from './components/Calendar/Calendar'
+import Error from './components/common/error/ErrorPage';
 import Inbox from './components/inbox/Inbox';
-import ArticlePage from './components/markdown/ArticlePage';
+import GameDirectory from './components/games/GameDirectory';
+import HomePage from './components/home/HomePage';
+import MarkdownCreate from './components/articles/MarkdownCreate';
+import ProfilePageContainer from './components/profile/ProfilePageContainer';
+import SearchDirectory from './components/search/SearchDirectory';
 import TempHome from './components/home/TempHomePage';
-import Error from './components/error/ErrorPage';
+import UserDirectory from './components/users/UserDirectory';
 
 export default (
     <Route path="/" component={App}>
         <IndexRoute component={TempHome} />
         <Route path="admin" component={AdminDashboard}/>
         <Route path="about" component={AboutPage} />
-        <Route path="games" component={GamesPage} />
-        <Route path="competitions" component={CompetitionsPage} />
-        <Route path="create/:type" component={MarkdownCreate} />
         <Route path="a/:articleId" component={ArticlePage} />
         <Route path="calendar" component={Calendar} />
+        <Route path="competitions" component={CompetitionsPage} />
+        <Route path="create/:type" component={MarkdownCreate} />
+        <Route path="games" component={GameDirectory} />
+        <Route exact path="inbox/:username" component={Inbox} />
+        <Route path="search/:searchQuery" component={SearchDirectory} />
         <Route path="u" component={UserDirectory}/>
         <Route exact path='u/:username' component={ProfilePageContainer} />
-        <Route exact path="inbox/:username" component={Inbox} />
         <Route path='*' component={Error}/>
     </Route>
 );

@@ -2,8 +2,7 @@ import React from 'react';
 import firebase from 'firebase';
 import axios from 'axios';
 import Slider from 'react-slick';
-import MarkdownCard from '../markdown/MarkdownCard';
-import GenericCard from '../cards/GenericCard';
+import GenericCard from '../common/cards/GenericCard';
 
 export default class NewsFeed extends React.Component {
     constructor(props) {

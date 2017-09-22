@@ -4,8 +4,6 @@ import axios from 'axios';
 import { Card, Label, Divider, Grid, Image, Icon } from 'semantic-ui-react';
 import AvatarEditor from 'react-avatar-editor';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as accountActions from '../actions/accountActions';
 import ReactMarkdown from 'react-markdown';
 
 class ArticlePage extends React.Component {
@@ -36,7 +34,7 @@ class ArticlePage extends React.Component {
     }
 
     render() {
-        let profilePic = require('../cards/demoProfileImage.jpg');
+        let profilePic = require('../../styles/demoProfileImage.jpg');
         let favorited = this.state.edit ? false : this.state.favorited;
         let loaded = this.state.postData.title ? true : false;
         return (

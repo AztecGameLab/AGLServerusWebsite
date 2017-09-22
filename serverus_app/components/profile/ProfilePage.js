@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import { Image, CloudinaryContext } from 'cloudinary-react';
 import { Grid, Icon, Card, Tab, Button, List, Popup, Feed, Dropdown, TextArea, Input, Label } from 'semantic-ui-react';
-import IconPicker from '../common/IconPicker';
+import IconPicker from '../common/icon/IconPicker';
 import { Link } from 'react-router';
-import roles2 from '../common/roleOptions2';
-import badgeDescriptions from '../common/badgeOptions';
+import roleOptions from '../common/options/roleOptions.json';
+import badgeOptions from '../common/options/badgeOptions.json';
 import md5 from 'md5';
-import style from './friend.css';
+import style from '../../styles/friend.css';
+import roleNames from '../common/options/roleNamesOnly.json';
 
 //DATA IS IN userData!! userData.firstName for example
 const ProfilePage = (props) => {
     const userData = props.profileObject.info;
-    const roleOptions = roles2;
-    const badgeDescriptions = badgeDescriptions;
 
     const imageLarge = (originalLink) => {
         return originalLink.replace("Small", "Large");
@@ -29,10 +28,11 @@ const ProfilePage = (props) => {
         return (month + " " + day + ", " + year);
     };
 
+    //Move to API
     const roleMapper = (roles) => {
         let objectList = [];
         roles.map((userRole) => {
-            objectList.push(roleOptions.find(role => role.value === userRole));
+            objectList.push(roleOptions.roles.find(role => role.value === userRole));
         });
         return (objectList.map((role, idx) =>
             <div key={idx}>
@@ -59,7 +59,7 @@ const ProfilePage = (props) => {
     };
     const badgeMapper = (badges) => {
         let objectList = [];
-        //console.log(badgeDescriptions.badge)
+        //console.log(badgeOptions.badge);
         return (badges.map((badge, idx) =>
             <Popup
                 key={idx}
@@ -144,7 +144,7 @@ const ProfilePage = (props) => {
                                     {props.editMode ? 
                                         <Dropdown 
                                             placeholder='Roles' 
-                                            fluid multiple selection options={roles2}
+                                            fluid multiple selection options={roleNames.roles}
                                             value={props.rolesSelected} 
                                             onChange={props.handleRolesInput} /> : roleMapper(userData.roles)}
                                 </Feed>

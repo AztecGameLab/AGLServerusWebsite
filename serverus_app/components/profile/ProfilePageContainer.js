@@ -1,9 +1,13 @@
+//Imports
 import React from 'react';
 import { Icon, Loader } from 'semantic-ui-react';
 import firebase from 'firebase';
 import axios from 'axios';
 import ProfilePage from './ProfilePage';
 import { connect } from 'react-redux';
+
+//AGL API
+import { LoadUser, IsLoggedIn, IsYourProfile } from '../AGL';
 
 
 class ProfilePageContainer extends React.Component {
@@ -127,102 +131,42 @@ class ProfilePageContainer extends React.Component {
             slackUser: e.target.value
         });
     }
-    componentDidUpdate(nextProps, nextState) {
-        //checks current loadedState to the redirecte
-        if (this.state.profileObject.info.username != this.props.routeParams.username) {
-            window.scrollTo(0, 0);
-            var that = this;
-            var userRef = firebase.database().ref('accounts/' + this.props.routeParams.username);
-            userRef.once('value', function (snapshot) {
-                if (!snapshot.val()) {
-                    that.setState({
-                        notFound: true
-                    });
-                    return;
-                } else {
-                    axios.get(snapshot.val().data).then(
-                        function (response) {
-                            var that2 = that;
-                            that2.setState({
-                                profileObject: response.data
-                            }, () => {
-                                firebase.auth().onAuthStateChanged(function (user) {
-                                    if (user) {
-                                        // User is signed in.
-                                        if (user.email == that.state.profileObject.info.email) {
-                                            that.setState({
-                                                loggedIn: true,
-                                                yourAccount: true,
-                                                rolesSelected: that.state.profileObject.info.roles,
-                                                bio: that.state.profileObject.info.bio
-                                            });
-                                        }
-                                        else {
-                                            that.setState({
-                                                loggedIn: true
-                                            });
-                                        }
-                                    }
-                                    else {
-                                        that.setState({
-                                            loggedIn: false
-                                        })
-                                    }
-                                });
-                            });
-                        }
-                    );
-                }
-            });
+
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     let currentState = this.state;
+    //     if (currentState.profileObject && nextState.profileObject && currentState.profileObject.info)
+    //         if (currentState.profileObject.info.username == nextProps.routeParams.username)
+    //             return false;
+    //         else return true;
+    //     else return true;
+    // }
+    async componentDidUpdate(nextProps, nextState) {
+        debugger;
+        if(this.state.profileObject.info) {
+            if (this.state.profileObject.info.username != this.props.routeParams.username) {
+                window.scrollTo(0, 0);
+                this.setState({
+                    profileObject: await LoadUser(this.props.routeParams.username),
+                    yourAccount: IsYourProfile(this.props.accounts, this.props.routeParams.username)
+                });
+            } 
         }
     }
-    componentWillMount() {
-        var that = this;
-        var userRef = firebase.database().ref('accounts/' + this.props.routeParams.username);
-        userRef.once('value', function (snapshot) {
-            if (!snapshot.val()) {
-                that.setState({
-                    notFound: true
-                });
-                return;
-            } else {
-                axios.get(snapshot.val().data).then(
-                    function (response) {
-                        var that2 = that;
-                        that2.setState({
-                            profileObject: response.data
-                        }, () => {
-                            firebase.auth().onAuthStateChanged(function (user) {
-                                if (user) {
-                                    // User is signed in.
-                                    if (user.email == that.state.profileObject.info.email) {
-                                        that.setState({
-                                            loggedIn: true,
-                                            yourAccount: true,
-                                            rolesSelected: that.state.profileObject.info.roles,
-                                            bio: that.state.profileObject.info.bio
-                                        });
-                                    }
-                                    else {
-                                        that.setState({
-                                            loggedIn: true
-                                        });
-                                    }
-                                }
-                                else {
-                                    that.setState({
-                                        loggedIn: false
-                                    })
-                                }
-                            });
-                        });
-                    }
-                );
-            }
-        });
+    async componentWillMount() {
+        let userData = await LoadUser(this.props.routeParams.username);
+        this.setState({
+            profileObject: userData,
+            loggedIn: IsLoggedIn(this.props.accounts),
+            yourAccount: IsYourProfile(this.props.accounts, this.props.routeParams.username),
+            rolesSelected: userData.info.roles,
+            bio: userData.info.bio
+        });        
+        debugger;
+        
     }
 
     render() {
+        let loggedIn = this.state.loggedIn;
         var currentComponent;
         if (this.state.profileObject.info != null) {
             currentComponent = (
@@ -231,7 +175,7 @@ class ProfilePageContainer extends React.Component {
                     editMode={this.state.editMode}
                     editModeOn={this.editModeOn}
                     editModeOff={this.editModeOff}
-                    loggedIn={this.state.loggedIn}
+                    loggedIn={loggedIn}
                     yourAccount={this.state.yourAccount}
                     handleProfileInput={this.handleProfileInput}
                     handleRolesInput={this.handleRolesInput}

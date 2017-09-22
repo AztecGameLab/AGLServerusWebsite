@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Popup, Header, Modal, Tab, Image, Segment } from 'semantic-ui-react';
 import SignUpForm from './SignUpForm';
 import LoginForm from './LoginForm';
-import transitionStyle from './modal.css';
-let logo = require('./blacklogo.png');
+import transitionStyle from '../../styles/modal.css';
+let logo = require('../../styles/blacklogo.png');
 
 class LoginModel extends Component {
   constructor(props) {

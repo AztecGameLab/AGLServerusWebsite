@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form, Checkbox, Grid, Input, Icon, Dropdown } from 'semantic-ui-react';
-import majorOptions from '../common/majorOptions';
+import majorOptions from '../common/options/majorOptions.json';
 
 class SignUpTwo extends React.Component {
   constructor(props){
@@ -84,7 +84,7 @@ class SignUpTwo extends React.Component {
         <div style={modalStyle.spacing}>
           <Form.Field>
             <label>Major</label>
-            <Dropdown placeholder='Major' search selection options={majorOptions} onChange={this.majorCheck}/>
+            <Dropdown placeholder='Major' search selection options={majorOptions.majors} onChange={this.majorCheck}/>
           </Form.Field>
         </div>
         <div style={modalStyle.spacing}>
