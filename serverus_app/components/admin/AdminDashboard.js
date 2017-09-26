@@ -12,6 +12,7 @@ import {
 import firebase from 'firebase';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import AdminJSONEditor from './AdminJSONEditor';
 import AdminHome from './AdminHome';
 import AdminEmail from './AdminEmail';
 import AdminWriter from './AdminWriter';
@@ -42,6 +43,7 @@ class AdminDashboard extends React.Component {
             { menuItem: { icon: 'home', content: 'Home' }, render: () => <Tab.Pane className='adminPane'><AdminHome /></Tab.Pane> },
             { menuItem: { content: 'Writer', icon: 'book' }, render: () => <Tab.Pane className='adminPane'><AdminWriter /></Tab.Pane> },
             { menuItem: { content: 'Email', icon: 'mail' }, render: () => <Tab.Pane className='adminPane'><AdminEmail /></Tab.Pane> },
+            { menuItem: { content: 'JSON', icon:'tasks' }, render: () => <Tab.Pane className='adminPanel'> <AdminJSONEditor/> </Tab.Pane> }
         ]
         if (loggedIn == 'admin') {
             return (

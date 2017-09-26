@@ -7,7 +7,7 @@ import {
     Radio,
     Form
 } from 'semantic-ui-react';
-
+import {GetAllEmails } from '../AGL';
 const http = require('https');
 
 export default class AdminEmail extends React.Component {
@@ -31,7 +31,8 @@ export default class AdminEmail extends React.Component {
         let recipients = event.target.value;
         console.log(recipients);
         if (recipients === ':All') {
-            //Capture Recipients here. 
+            let recipArray = GetAllEmails();
+            this.setState({ recipients: recipArray });
         }
     }
 
