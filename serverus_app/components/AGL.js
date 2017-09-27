@@ -7,11 +7,11 @@ export const IsLoggedIn = (reduxStateAccounts) => {
 };
 
 export const IsAdmin = (reduxStateAccounts) => {
-    return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].info.authLevel == 2 ? true: false : false : false;
+    return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].info.authLevel == 2 ? true : false : false : false;
 };
 
 export const IsYourProfile = (reduxStateAccounts, username) => {
-    return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].info.username == username ? true: false : false : false;
+    return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].info.username == username ? true : false : false : false;
 };
 
 export const LoadUser = async (username, filters = []) => {
@@ -21,25 +21,58 @@ export const LoadUser = async (username, filters = []) => {
     return response.data;
 }
 
-export const LoadAllUsers = async () => {
-    let usersRef = firebase.database().ref('accounts');
-    const userUrls = await usersRef.once('value');
-
-}
-
 export const EditUser = async (username, newDataObj) => {
     let userRef = firebase.storage().ref('accounts/' + username + '.json');
-    const currentData = await axios.get(firebaseUrl.val().data);
     debugger;
+    const currentData = await axios.get(firebaseUrl.val().data);
     let mergedObj = Object.assign({}, currentData.data, newDataObj);
     var newFile = new blob([JSON.stringify(mergedObj)], {type: 'application/json'});
     await accountRef.put(newFile);
+}
 
+export const LoadAllUsers = async () => {
+    let accounts = firebase.database().ref('accounts');
+    const firebaseUrls = await accounts.once('value');
+    let promises = [];
+    Object.values(firebaseUrls.val()).forEach(url => {
+        promises.push(axios.get(url.data));
+    });
+    let response = await Promise.all(promises);
+    let temp = [];
+    let users = {}
+    response.map(user => {
+        var data = {
+            key: user.data.uid,
+            text: user.data.info.firstName + ' ' + user.data.info.lastName,
+            value: user.data.info.username
+        };
+        temp.push(data);
+        users[user.data.info.username] = user.data;
+    });
+    return { users, temp };
+}
+
+export const UpdateUser = async (username, data) => {
+    var accountRef = firebase.storage().ref('accounts/' + username + '.json');
+    var yourFile = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    accountRef.put(yourFile).then(async () => {
+        let url = await accountRef.getDownloadURL();
+        firebase.database().ref('accounts/' + username).set({
+            data: url
+        });
+    });
+}
+
+export const UpdateAllUsers = async (accounts) => {
+    Object.keys(accounts).map(user => {
+        debugger;
+        UpdateUser(user.info.username, user);
+    });
 }
 
 export const GetAllEmails = async () => {
     let emailPathRef = firebase.database().ref('takenEmails/');
-    let emailList = await emailPathRef.once('value'); 
+    let emailList = await emailPathRef.once('value');
     debugger;
     return Object.values(emailList.val());
 }
