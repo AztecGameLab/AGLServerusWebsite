@@ -21,6 +21,22 @@ export const LoadUser = async (username, filters = []) => {
     return response.data;
 }
 
+export const LoadAllUsers = async () => {
+    let usersRef = firebase.database().ref('accounts');
+    const userUrls = await usersRef.once('value');
+
+}
+
+export const EditUser = async (username, newDataObj) => {
+    let userRef = firebase.storage().ref('accounts/' + username + '.json');
+    const currentData = await axios.get(firebaseUrl.val().data);
+    debugger;
+    let mergedObj = Object.assign({}, currentData.data, newDataObj);
+    var newFile = new blob([JSON.stringify(mergedObj)], {type: 'application/json'});
+    await accountRef.put(newFile);
+
+}
+
 export const GetAllEmails = async () => {
     let emailPathRef = firebase.database().ref('takenEmails/');
     let emailList = await emailPathRef.once('value'); 
@@ -42,3 +58,6 @@ export const GetAllUsernames = async () => {
     return Object.values(usernameList.val());
 }
 
+//update all users value
+//edit user
+//add new field to all users

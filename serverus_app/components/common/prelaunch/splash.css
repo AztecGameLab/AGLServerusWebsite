@@ -1,6 +1,6 @@
 @font-face {
-    font-family: horizonFont;
-    src: url('./timeburnerbold.ttf');
+    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+    
 }
 
 .bgimg {
@@ -17,7 +17,6 @@
     color: white;
     /* Add a font */
     font-size: 40px;
-    font-family: horizonFont;
     transition-duration: ".5s"
 }
 
@@ -47,20 +46,12 @@
     margin: 0;
     color: lightgreen;
 }
-h1 {
-    font-family: horizonFont;
-}
 
-h2 {
-    font-family: horizonFont;
-}
 .create {
     color: lightblue;
-    font-family: horizonFont;
 }
 
 .form-group a{
-    font-family: horizonFont;
     font-size: 40px;  
     transition-duration: .1s;
 }

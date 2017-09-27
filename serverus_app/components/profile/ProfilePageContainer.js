@@ -132,14 +132,7 @@ class ProfilePageContainer extends React.Component {
         });
     }
 
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     let currentState = this.state;
-    //     if (currentState.profileObject && nextState.profileObject && currentState.profileObject.info)
-    //         if (currentState.profileObject.info.username == nextProps.routeParams.username)
-    //             return false;
-    //         else return true;
-    //     else return true;
-    // }
+
     async componentDidUpdate(nextProps, nextState) {
         debugger;
         if(this.state.profileObject.info) {
@@ -152,6 +145,7 @@ class ProfilePageContainer extends React.Component {
             } 
         }
     }
+    
     async componentWillMount() {
         let userData = await LoadUser(this.props.routeParams.username);
         this.setState({
