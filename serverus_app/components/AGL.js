@@ -1,6 +1,7 @@
 //Imports
 import firebase from 'firebase';
 import axios from 'axios';
+const https = require('https');
 
 export const IsLoggedIn = (reduxStateAccounts) => {
     return reduxStateAccounts ? reduxStateAccounts.length > 0 ? true : false : false;
@@ -52,14 +53,13 @@ export const LoadAllUsers = async () => {
     return { users, temp };
 }
 
-export const UpdateUser = async (username, data) => {
-    var accountRef = firebase.storage().ref('accounts/' + username + '.json');
-    var yourFile = new Blob([JSON.stringify(data)], { type: 'application/json' });
-    accountRef.put(yourFile).then(async () => {
-        let url = await accountRef.getDownloadURL();
-        firebase.database().ref('accounts/' + username).set({
-            data: url
-        });
+export const UpdateUser = async (userData) => {
+    let storageAcc = firebase.storage().ref('accounts/' + userData.info.username + '.json');
+    let userFile = new Blob([JSON.stringify(userData)], { type: 'application/json' });
+    await storageAcc.put(userFile);
+    let url = await storageAcc.getDownloadURL();
+    firebase.database().ref('accounts/' + userData.info.username).set({
+        data: url
     });
 }
 

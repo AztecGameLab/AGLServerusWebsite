@@ -23,7 +23,7 @@ export default class AdminJSONEditor extends React.Component {
         this.updateSchema = this.updateSchema.bind(this);
         this.chooseUser = this.chooseUser.bind(this);
         this.changeVal = this.changeVal.bind(this);
-        this.removeEmpty = this.removeEmpty.bind(this);
+        this.removeDefaults = this.removeDefaults.bind(this);
         this.backupData = this.backupData.bind(this);
     }
 
@@ -78,7 +78,7 @@ export default class AdminJSONEditor extends React.Component {
                 let user = accounts[username].info;
                 Object.keys(addedUserFields.info).map(key => {
                     user[key] = addedUserFields.info[key];
-                    
+
                 });
             });
         }
@@ -94,7 +94,7 @@ export default class AdminJSONEditor extends React.Component {
             decideOperations(selectedUser, userTemplate);
         } else {
             //Cloud function to update single user storage/database
-            // UpdateUser(this.state.selectedUser.info.username, this.state.selectedUser);
+            UpdateUser(this.state.selectedUser);
         }
     }
     removeDefaults = (obj) => {
