@@ -3,6 +3,7 @@ import firebase from 'firebase';
 import axios from 'axios';
 const https = require('https');
 
+//Redux Check API
 export const IsLoggedIn = (reduxStateAccounts) => {
     return reduxStateAccounts ? reduxStateAccounts.length > 0 ? true : false : false;
 };
@@ -15,8 +16,20 @@ export const IsYourProfile = (reduxStateAccounts, username) => {
     return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].info.username == username ? true : false : false : false;
 };
 
-export const LoadUser = async (username, filters = []) => {
+//READ ONLY API
+export const LoadUser = async (username) => {
+    let postBody = JSON.stringify({
+        username: username
+    });
     let userRef = firebase.database().ref('accounts/' + username);
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          debugger;
+        } else {
+          // No user is signed in.
+        }
+      });
+    debugger;
     const firebaseUrl = await userRef.once('value');
     const response = await axios.get(firebaseUrl.val().data);
     return response.data;
@@ -74,23 +87,76 @@ export const GetAllEmails = async () => {
     let emailPathRef = firebase.database().ref('takenEmails/');
     let emailList = await emailPathRef.once('value');
     debugger;
-    return Object.values(emailList.val());
-}
-
-export const GetAllRedIds = async () => {
-    let redIdPathRef = firebase.database().ref('takenRedIds/');
-    let redIdList = await redIdPathRef.once('value');
+    let response = await axios.post (
+        'http://localhost:5000/serverus-15f25/us-central1/AGLEncryption', 
+        {password: password});
     debugger;
-    return Object.values(redIdList.val());
+    return response.data;
+    //encrypted resposne
 }
 
+// Read Only - For Admin Panel
 export const GetAllUsernames = async () => {
-    let usernamePathRef = firebase.database().ref('takenUsernames/');
-    let usernameList = await usernamePathRef.once('value');
     debugger;
-    return Object.values(usernameList.val());
+    let response = await axios.get(
+        'http://localhost:5000/serverus-15f25/us-central1/getListOfAllUsernames');
+    debugger;
+    let usernameList = Object.values(response.data);
+    return usernameList;
+}
+
+//Sign Up Checks
+export const UsernameTakenCheck = async (username) => {
+    debugger;
+    let response = await axios.post(
+        'http://localhost:5000/serverus-15f25/us-central1/isUsernameTaken', 
+        {username: username});
+    debugger;
+    return response.data;
+    // '{usernameTaken: true/false, profanity: true/false}' 
+}
+
+export const EmailTakenCheck = async (email) => {
+    debugger;
+    let response = await axios.post(
+        'http://localhost:5000/serverus-15f25/us-central1/isEmailTaken', 
+        {email: email});
+    debugger;
+    return response.data;
+    //'{emailTaken: true/false, validEmail: true/false}'
+}
+
+export const RedIdTakenCheck = async (redId) => {
+    debugger;
+    let response = await axios.post(
+        'http://localhost:5000/serverus-15f25/us-central1/isRedIdTaken', 
+        {redId: redId});
+    debugger;
+    return response.data;
+    //Either '{redIdTaken: true/false}'
+}
+
+export const AGLEncryption = async (password) => {
+    debugger;
+    let response = await axios.post (
+        'http://localhost:5000/serverus-15f25/us-central1/AGLEncryption', 
+        {password: password});
+    debugger;
+    return response.data;
+    //encrypted resposne
 }
 
 //update all users value
 //edit user
 //add new field to all users
+
+// debugger;
+// https.get('http://localhost:5000/serverus-15f25/us-central1/getListOfAllUsernames', (response) => {
+//     debugger;    
+//     response.on('data', (chunk) => {
+//         debugger;
+//         let usernameJSON = new TextDecoder('utf-8').decode(chunk);
+//         let usernameList = Object.values(JSON.parse(usernameList));
+//         return usernameList;
+//     });
+// });

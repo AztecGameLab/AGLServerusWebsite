@@ -5,6 +5,8 @@ import axios from 'axios';
 
 const md5 = require('md5');
 
+import {AGLEncryption} from '../AGL';
+
 class LoginForm extends Component {
     constructor(props){
         super(props);
@@ -18,6 +20,11 @@ class LoginForm extends Component {
         this.handleEmailInput = this.handleEmailInput.bind(this);
         this.handlePasswordInput = this.handlePasswordInput.bind(this);
         this.handleSubmission = this.handleSubmission.bind(this);
+    }
+
+    async componentWillMount() {
+        let response = await AGLEncryption("zebrapassword");
+        debugger;
     }
     handleEmailInput(e) {
         this.setState({
