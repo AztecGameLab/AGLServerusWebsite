@@ -12,7 +12,7 @@ import IconPicker from '../common//icon/IconPicker';
 //var modalStyle
 
 //AGL API
-import {GetAllUsernames} from '../AGL';
+import {UsernameTakenCheck} from '../AGL';
 
 class SignUpThree extends React.Component {
   constructor(props) {
@@ -20,6 +20,7 @@ class SignUpThree extends React.Component {
     this.state = {
       usernameFilled: false,
       usernameLimit: false,
+      vulgarUsername: false,
       rolesFilled: '',
       usernameTaken: false,
       buttonDisable: true,
@@ -36,11 +37,7 @@ class SignUpThree extends React.Component {
     this.termsAccepted = this.termsAccepted.bind(this);
     this.rolesCheck = this.rolesCheck.bind(this);
   }
-  async componentWillMount() {
-    this.setState({
-      existingUsernames: await GetAllUsernames()
-    });
-  }
+
   rolesCheck(e, { value }) {
     this.props.handleRolesInput(e, { value });
     var that = this;
@@ -51,7 +48,11 @@ class SignUpThree extends React.Component {
     });
   }
 
-  usernameCheck(e) {
+  async usernameCheck(e) {
+    e.persist();
+    let usernameCheck = await UsernameTakenCheck(e.target.value);
+    let isTaken = usernameCheck.usernameTaken;
+    let containsProfanity = usernameCheck.profanity;
     var that = this;
     this.props.handleUsernameInput(e);
     var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
@@ -61,31 +62,47 @@ class SignUpThree extends React.Component {
         usernameFilled: true,
         usernameTaken: false,
         usernameLimit: false,
-        usernameInvalid: true
+        usernameInvalid: true,
+        vulgarUsername: false,
       }, function () {
         that.formComplete();
       });
       return;
     }
     if (e.target.value.length > 0 && e.target.value.length < 20 ) {
-      for (var i in this.state.existingUsernames) {
-        if (this.state.existingUsernames[i].toUpperCase() == e.target.value.toUpperCase()) {
+        if (isTaken == true) {
           that.setState({
             usernameFilled: true,
             usernameTaken: true,
             usernameLimit: false,
-            usernameInvalid: false
+            usernameInvalid: false,
+            vulgarUsername: false
           }, function () {
             that.formComplete();
+            setTimeout(function(){
+              document.getElementById("username").value = '';
+          }, 2000);
           });
           return;
-        }
+      }
+      else if (containsProfanity == true) {
+        this.setState({
+          usernameFilled: true,
+          usernameTaken: false,
+          usernameLimit: false,
+          usernameInvalid: false,
+          vulgarUsername: true
+        }, function () {
+          that.formComplete();
+        });
+        return;
       }
       this.setState({
         usernameFilled: true,
         usernameTaken: false,
         usernameLimit: false,
-        usernameInvalid: false
+        usernameInvalid: false,
+        vulgarUsername: false
       }, function () {
         that.formComplete();
       });
@@ -96,30 +113,45 @@ class SignUpThree extends React.Component {
         usernameFilled: false,
         usernameTaken: false,
         usernameLimit: false,
-        usernameInvalid: false
+        usernameInvalid: false,
+        vulgarUsername: false
       }, function () {
         that.formComplete();
       });
+      return;
     }
     else {
       this.setState({
         usernameFilled: true,
         usernameTaken: false,
         usernameLimit: true,
-        usernameInvalid: false
+        usernameInvalid: false,
+        vulgarUsername: false
       }, function () {
         that.formComplete();
       });
+      return;
     }
   }
 
   adminCheck(e) {
     this.props.handleAdminCode(e);
-    this.setState({
-      securityCodeFilled: true
-    }, function () {
-      this.formComplete();
-    });
+    if(e.target.value.toString().length == 6){
+      this.setState({
+        securityCodeFilled: true
+      }, function () {
+        this.formComplete();
+      });
+      return;
+    }
+    else {
+      this.setState({
+        securityCodeFilled: false
+      }, function () {
+        this.formComplete();
+      });
+      return;
+    }
   }
 
   termsAccepted(e) {
@@ -129,32 +161,43 @@ class SignUpThree extends React.Component {
     }, function () {
       this.formComplete();
     });
+    return;
   }
   formComplete() {
+    console.log('input form')
+    var validInputs = !this.state.usernameInvalid && !this.state.vulgarUsername;
     var isTaken = this.state.usernameTaken || this.state.usernameLimit;
     var inputsFilled = this.state.usernameFilled && (this.state.rolesSelected.length > 0) && this.state.securityCodeFilled;
     var termsAccepted = this.state.termsAccepted;
-    if (inputsFilled) {
-      if (!isTaken) {
-        if (termsAccepted) {
-          this.setState({
-            buttonDisable: false
-          });
-          return;
+    if(validInputs){
+      if (inputsFilled) {
+        if (!isTaken) {
+          if (termsAccepted) {
+            this.setState({
+              buttonDisable: false
+            });
+            return;
+          }
+          else {
+            this.setState({
+              buttonDisable: true
+            });
+            return;
+          }
         }
         else {
           this.setState({
             buttonDisable: true
           });
-          return;
         }
+        return;
       }
       else {
         this.setState({
           buttonDisable: true
         });
+        return;
       }
-      return;
     }
     else {
       this.setState({
@@ -182,10 +225,11 @@ class SignUpThree extends React.Component {
                           <label>AGL Username</label>
                           <Input placeholder='Username' iconPosition='left'>
                             <Icon name='new pied piper' />
-                            <input onChange={this.usernameCheck} />
+                            <input id = 'username' onChange={(e) => this.usernameCheck(e)} />
                             {this.state.usernameTaken && <Label pointing='left' color='red'>Username is already taken</Label>}
-                            {this.state.usernameLimit && <Label pointing='left' color='red'>Username is too long!</Label>}
-                            {this.state.usernameInvalid && <Label pointing='left' color='red'>Username cannot contain special characters!</Label>}
+                            {this.state.usernameLimit && <Label pointing='left' color='red'>Username is too long</Label>}
+                            {this.state.usernameInvalid && <Label pointing='left' color='red'>No special characters</Label>}
+                            {this.state.vulgarUsername && <Label pointing='left' color='red'>Inappropriate username</Label>}
                           </Input>
                           </div>}
                         content='This will be your display username and how others see you!'
@@ -199,7 +243,9 @@ class SignUpThree extends React.Component {
                           <label>Enter a 6 digit Security PIN:</label>
                           <Input placeholder='Passcode' iconPosition='left'>
                             <Icon name='numbered list' />
-                            <input onBlur={this.adminCheck} type='password' />
+                            <input onChange={this.adminCheck} type='password' />
+                            {this.state.securityCodeFilled && <Label pointing='left' color='red'>Invalid Code</Label>}
+                            
                           </Input>
                           </div>}
                         content='Please make sure to keep this safe and secure! This is for recovering your account information!'

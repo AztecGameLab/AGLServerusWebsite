@@ -1,14 +1,13 @@
 //Imports
 import React, { Component } from 'react';
 import { Button, Form, Checkbox, Input, Icon, Grid, Segment, Label, Popup } from 'semantic-ui-react';
-import * as EmailValidator from 'email-validator';
 import firebase from 'firebase';
 
 //CSS Objects
 //var modalStyle
 
 //AGL API
-import {GetAllEmails, GetAllRedIds} from '../AGL';
+import {EmailTakenCheck, RedIdTakenCheck} from '../AGL';
 
 class SignUpOne extends React.Component {
   constructor(props) {
@@ -26,37 +25,32 @@ class SignUpOne extends React.Component {
       redIDFilled: false,
       buttonDisable: true,
       redIDTaken: false,
-      existingEmails: [],
-      existingRedIDs: []
     };
     this.emailCheck = this.emailCheck.bind(this);
     this.passwordCheck = this.passwordCheck.bind(this);
     this.redIDCheck = this.redIDCheck.bind(this);
     this.formComplete = this.formComplete.bind(this);
   }
-  async componentWillMount() {
-    this.setState({
-      existingEmails: await GetAllEmails(),
-      existingRedIDs: await GetAllRedIds()
-    });
-  }
   
-  emailCheck(e) {
-
-    var profileArray = this.profileIcons;
+  async emailCheck(e) {
+    e.persist();
     var that = this;
-    for (var i in this.state.existingEmails) {
-      if (this.state.existingEmails[i].toUpperCase() == e.target.value.toUpperCase()) {
-        that.setState({
-          emailFirstClick: true,
-          emailWarning: true,
-          emailFilled: true,
-          emailTaken: true
-        }, function () {
-          that.formComplete();
-        });
-        return;
-      }
+    const emailCheck = await EmailTakenCheck(e.target.value);   
+    const isTaken = emailCheck.emailTaken;
+    const isValid = emailCheck.validEmail;
+    if (isTaken) {
+      that.setState({
+        emailFirstClick: true,
+        emailWarning: true,
+        emailFilled: true,
+        emailTaken: true
+      }, function () {
+        that.formComplete();
+        setTimeout(function(){
+          document.getElementById("email").value = '';
+      }, 2000);
+      });
+      return;
     }
     if (e.target.value == "") {
       this.setState({
@@ -68,7 +62,7 @@ class SignUpOne extends React.Component {
         this.formComplete()
       });
     }
-    else if (EmailValidator.validate(e.target.value) == false) {
+    else if (isValid == false) {
       this.setState({
         emailFirstClick: true,
         emailWarning: true,
@@ -118,20 +112,26 @@ class SignUpOne extends React.Component {
       });
     }
   }
-  redIDCheck(e) {
+  async redIDCheck(e) {
+    e.persist();
+    const redIdCheck = await RedIdTakenCheck(e.target.value);   
+    const isTaken = redIdCheck.redIdTaken;
+    console.log(isTaken);
     this.props.handleRedIDInput(e);
     var that = this;
-    for (var i in this.state.existingRedIDs) {
-      if (this.state.existingRedIDs[i] == e.target.value) {
-        that.setState({
-          redIDFirstClick: true,
-          redIDWarning: true,
-          redIDTaken: true
-        }, function () {
-          that.formComplete();
-        });
-        return;
-      }
+    if (isTaken == true) {
+      debugger;
+      that.setState({
+        redIDFirstClick: true,
+        redIDWarning: true,
+        redIDTaken: true
+      }, function () {
+        that.formComplete();
+        setTimeout(function(){
+          document.getElementById("red").value = '';
+      }, 2000);
+      });
+      return;
     }
     let passString = e.target.value;
     let numMatches = passString.match(/[0-9]/g); 
@@ -198,7 +198,7 @@ class SignUpOne extends React.Component {
                     <label>Email</label>
                     <Input inverted placeholder='Email' iconPosition='left'>
                     <Icon name='mail outline' />
-                    <input id='email' onChange={this.props.handleEmailInput} onBlur={this.emailCheck} />
+                    <input id='email' onChange={this.props.handleEmailInput} onChange={(e) => this.emailCheck(e)} />
                     {this.state.emailWarning ?
                       this.state.emailFirstClick && !this.state.emailTaken && <Label pointing='left' color='red'>Invalid Email</Label>
                       : this.state.emailFirstClick ? <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label> : null}
@@ -219,7 +219,7 @@ class SignUpOne extends React.Component {
                     <label>Password</label>
                     <Input inverted placeholder='Password' iconPosition='left'>
                       <Icon name='lock' />
-                      <input id='pass' onChange={this.props.handlePasswordInput} onBlur={this.passwordCheck} type='password' />
+                      <input id='pass' onChange={this.props.handlePasswordInput} onChange={(e) => this.passwordCheck(e)} type='password' />
                       {this.state.passwordWarning ?
                         this.state.passwordFirstClick && <Label color='red' pointing='left'>Password needs 6+ characters, a number and uppercase letter</Label>
                         : this.state.passwordFirstClick && <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label>}
@@ -236,7 +236,7 @@ class SignUpOne extends React.Component {
             <label>Red ID</label>
             <Input inverted placeholder="Red ID" iconPosition='left'>
               <Icon name='shield' />
-              <input id='red' onChange={this.redIDCheck} />
+              <input id='red' onChange={(e) => this.redIDCheck(e)} />
               {this.state.redIDWarning ?
                 this.state.redIDFirstClick && !this.state.redIDTaken && <Label color='red' pointing='left'>Incorrect Red ID</Label>
                 : this.state.redIDFirstClick ? <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label> : null}
