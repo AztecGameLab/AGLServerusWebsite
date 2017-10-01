@@ -3,9 +3,7 @@ import { Button, Form, Checkbox, Input, Icon, Label, Message } from 'semantic-ui
 import firebase from 'firebase';
 import axios from 'axios';
 
-const md5 = require('md5');
-
-import {AGLEncryption} from '../AGL';
+import {AGLRencryption, isUserRencrypted, AGLEncryption, isPrecryptCorrect} from '../AGL';
 
 class LoginForm extends Component {
     constructor(props){
@@ -22,10 +20,13 @@ class LoginForm extends Component {
         this.handleSubmission = this.handleSubmission.bind(this);
     }
 
-    async componentWillMount() {
-        let response = await AGLEncryption("zebrapassword");
-        debugger;
-    }
+    // async componentWillMount() {
+    //     debugger;
+    // }
+    //"5888c044e58629859636455310dd72570072ae8a8487808f7c8ce45c7b1647bc71c2b6210bfade3c3e582764f541be8b06372da540ff020b7b8386c86e232697"
+    //"5888c044e58629859636455310dd72570072ae8a8487808f7c8ce45c7b1647bc71c2b6210bfade3c3e582764f541be8b06372da540ff020b7b8386c86e232697"
+
+
     handleEmailInput(e) {
         this.setState({
             email: e.target.value
@@ -36,44 +37,57 @@ class LoginForm extends Component {
             password: e.target.value
         });
     }
-    handleSubmission() {
+    async handleSubmission() {
+        debugger;
+        const username= this.state.email;
+        const password = this.state.password;
         var that = this;
         this.setState({
             loading:true
         });
-        firebase.auth().signInWithEmailAndPassword(this.state.email, md5(this.state.password))
-        .then(function(response) {
-            var that2 = that;
-            if (response){
-                var refString = 'accounts/' + response.displayName;
-                var userUrlRef = firebase.database().ref(refString);
-                userUrlRef.on('value', function(snapshot) {
-                    var that3 = that2;
-                    axios.get(snapshot.val().data)
-                    .then(function(response) {
-                        var that4 = that3;
-                        // that4.props.actions.loadAccount(response.data);
-                        that4.setState({
-                            loading: false,
-                            loaded: true
-                        });
-                        window.location.reload();
+        debugger;
+        let reCryptCheck  = await isUserRencrypted(username, password);
+        debugger;
+        if(reCryptCheck == false)
+        {
+            debugger;
+            let passwordCorrect = await isPrecryptCorrect(username, password);
+            debugger;
+            if(passwordCorrect.correctPass == true) {
+                debugger;
+                let response = await AGLRencryption(username, password);
+                debugger;
+                if (response.data.error){
+                    this.setState({
+                        error: true,
+                        loading: false,
+                        errMessage: response.data.error
                     });
-                });
+                    return;//GTFO
+                }
             }
-        })
-        .catch(function(error) {
-        var that2 = that;
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        that2.setState({
-            error: true,
-            loading: false,
-            errMessage: errorMessage
-        });
-        // ...
-        });
+        }
+        // let reCryptCheck = await AGLRencryption(this.state.email, this.state.password);
+        // if (reCryptCheck
+        debugger;
+        let encryptedPass = await AGLEncryption(password);
+        debugger;
+        firebase.auth().signInWithEmailAndPassword(this.state.email, encryptedPass)
+            .then(function(response) {
+                window.location.reload();
+            })
+            .catch(function(error) {
+            var that2 = that;
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+                that2.setState({
+                    error: true,
+                    loading: false,
+                    errMessage: errorMessage
+                });
+            // ...
+            });
     }
     render() {
         var loggedIn = !this.state.loaded || !this.state.email || !this.state.password ? false: true;

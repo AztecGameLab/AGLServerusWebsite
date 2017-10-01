@@ -9,6 +9,8 @@ import ReactCSSTransitionReplace from 'react-css-transition-replace';
 const http = require('https');
 const md5 = require('md5');
 
+import {AGLEncryption} from '../AGL';
+
 class SignUpForm extends Component {
   constructor(props) {
     super(props);
@@ -173,14 +175,14 @@ class SignUpForm extends Component {
     });
   }
 
-  onSubmission() {
+  async onSubmission() {
     this.setState({
       loading: true
     });
     var that = this;
     const newUserData = this.state.newAccount;
-    let hashPass = md5(newUserData.password);
-    firebase.auth().createUserWithEmailAndPassword(newUserData.email, hashPass)
+    let pass = await AGLEncryption(newUserData.password);
+    firebase.auth().createUserWithEmailAndPassword(newUserData.email, pass)
 
       .then(function () {
         that.sendNewUserToFB();
@@ -211,11 +213,9 @@ class SignUpForm extends Component {
         alert(errorMessage);
         // ...
       });
-    //TODO: TURN new user's info (this.state.newAccount) into new userdata.txt containing user's info 
-    // Package the User UID from account creation as key and pair with download url for the userdata.txt
   }
 
-  sendNewUserToFB() {
+  async sendNewUserToFB() {
     this.props.signedUp();
     var that = this;
     var user = firebase.auth().currentUser;
@@ -224,15 +224,16 @@ class SignUpForm extends Component {
       uid: userUid,
       info: this.state.newAccount
     };
-    data.info.password = md5(data.info.password);
-    data.info.verificationHash = md5(data.info.username);
+    let pass = await AGLEncryption(newUserData.password);
+    data.info.password = pass;
     firebase.database().ref('takenEmails').push(data.info.email); //Taken Emails
     firebase.database().ref('takenRedIds').push(data.info.redId); //Taken RedIDs
-    firebase.database().ref('takenUsernames').push(data.info.username); //Taken Emails
+    firebase.database().ref('takenUsernames').push(data.info.username); //Taken Usernames
     var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
     this.pathRef = firebase.storage().ref('accounts/' + data.info.username + '.json');
     user.updateProfile({
-      displayName: this.state.newAccount.username
+      displayName: this.state.newAccount.username,
+      photoURL: 'rencrypted'
     }).then(function () {
       var that2 = that;
       that.pathRef.put(file).then(function () {

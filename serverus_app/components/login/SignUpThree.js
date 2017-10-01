@@ -136,6 +136,7 @@ class SignUpThree extends React.Component {
 
   adminCheck(e) {
     this.props.handleAdminCode(e);
+    debugger;
     if(e.target.value.toString().length == 6){
       this.setState({
         securityCodeFilled: true
@@ -225,7 +226,7 @@ class SignUpThree extends React.Component {
                           <label>AGL Username</label>
                           <Input placeholder='Username' iconPosition='left'>
                             <Icon name='new pied piper' />
-                            <input id = 'username' onChange={(e) => this.usernameCheck(e)} />
+                            <input id = 'username' onBlur={(e) => this.usernameCheck(e)} />
                             {this.state.usernameTaken && <Label pointing='left' color='red'>Username is already taken</Label>}
                             {this.state.usernameLimit && <Label pointing='left' color='red'>Username is too long</Label>}
                             {this.state.usernameInvalid && <Label pointing='left' color='red'>No special characters</Label>}
@@ -243,8 +244,8 @@ class SignUpThree extends React.Component {
                           <label>Enter a 6 digit Security PIN:</label>
                           <Input placeholder='Passcode' iconPosition='left'>
                             <Icon name='numbered list' />
-                            <input onChange={this.adminCheck} type='password' />
-                            {this.state.securityCodeFilled && <Label pointing='left' color='red'>Invalid Code</Label>}
+                            <input onBlur={this.adminCheck} type='password' />
+                            {!this.state.securityCodeFilled && <Label pointing='left' color='red'>Invalid Code</Label>}
                             
                           </Input>
                           </div>}

@@ -99,7 +99,7 @@ export const GetAllEmails = async () => {
 export const GetAllUsernames = async () => {
     debugger;
     let response = await axios.get(
-        'http://localhost:5000/serverus-15f25/us-central1/getListOfAllUsernames');
+        'https://us-central1-serverus-15f25.cloudfunctions.net/getListOfAllUsernames');
     debugger;
     let usernameList = Object.values(response.data);
     return usernameList;
@@ -109,7 +109,7 @@ export const GetAllUsernames = async () => {
 export const UsernameTakenCheck = async (username) => {
     debugger;
     let response = await axios.post(
-        'http://localhost:5000/serverus-15f25/us-central1/isUsernameTaken', 
+        'http://us-central1-serverus-15f25.cloudfunctions.net/isUsernameTaken', 
         {username: username});
     debugger;
     return response.data;
@@ -119,7 +119,7 @@ export const UsernameTakenCheck = async (username) => {
 export const EmailTakenCheck = async (email) => {
     debugger;
     let response = await axios.post(
-        'http://localhost:5000/serverus-15f25/us-central1/isEmailTaken', 
+        'http://us-central1-serverus-15f25.cloudfunctions.net/isEmailTaken', 
         {email: email});
     debugger;
     return response.data;
@@ -129,11 +129,21 @@ export const EmailTakenCheck = async (email) => {
 export const RedIdTakenCheck = async (redId) => {
     debugger;
     let response = await axios.post(
-        'http://localhost:5000/serverus-15f25/us-central1/isRedIdTaken', 
+        'http://us-central1-serverus-15f25.cloudfunctions.net/isRedIdTaken', 
         {redId: redId});
     debugger;
     return response.data;
     //Either '{redIdTaken: true/false}'
+}
+
+export const isPrecryptCorrect = async(username, password) => {
+    debugger;
+    let resposne = await axios.post(
+        'http://localhost:5000/serverus-15f25/us-central1/isPrecryptCorrect',
+        {username: username,
+        password: password});
+    debugger;
+    return response.data;
 }
 
 export const AGLEncryption = async (password) => {
@@ -144,6 +154,26 @@ export const AGLEncryption = async (password) => {
     debugger;
     return response.data;
     //encrypted resposne
+}
+
+export const AGLRencryption = async (username, password) => {
+    debugger;
+    let response = await axios.post (
+        'http://localhost:5000/serverus-15f25/us-central1/AGLRencryption',
+        {username: username,
+         password: password});
+    debugger;
+    return response;
+}
+
+export const isUserRencrypted = async (username, password) => {
+    debugger;
+    let response = await axios.post(
+        'http://localhost:5000/serverus-15f25/us-central1/isUserRencrypted',
+        {username: username,
+         password: password});
+    debugger;
+    return (response.data == 'rencrypted');
 }
 
 //update all users value

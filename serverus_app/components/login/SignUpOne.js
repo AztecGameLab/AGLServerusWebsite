@@ -198,7 +198,7 @@ class SignUpOne extends React.Component {
                     <label>Email</label>
                     <Input inverted placeholder='Email' iconPosition='left'>
                     <Icon name='mail outline' />
-                    <input id='email' onChange={this.props.handleEmailInput} onChange={(e) => this.emailCheck(e)} />
+                    <input id='email' onChange={this.props.handleEmailInput} onBlur={(e) => this.emailCheck(e)} />
                     {this.state.emailWarning ?
                       this.state.emailFirstClick && !this.state.emailTaken && <Label pointing='left' color='red'>Invalid Email</Label>
                       : this.state.emailFirstClick ? <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label> : null}
@@ -213,30 +213,10 @@ class SignUpOne extends React.Component {
         </div>
         <div style={modalStyle.spacing}>
           <Form.Field>
-              <Popup
-                trigger={
-                  <div>
-                    <label>Password</label>
-                    <Input inverted placeholder='Password' iconPosition='left'>
-                      <Icon name='lock' />
-                      <input id='pass' onChange={this.props.handlePasswordInput} onChange={(e) => this.passwordCheck(e)} type='password' />
-                      {this.state.passwordWarning ?
-                        this.state.passwordFirstClick && <Label color='red' pointing='left'>Password needs 6+ characters, a number and uppercase letter</Label>
-                        : this.state.passwordFirstClick && <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label>}
-                    </Input>
-                  </div>}
-                content='Make sure to have 6+ characters with an uppercase and lowercase letter!'
-                inverted
-              />
-             
-          </Form.Field>
-        </div>
-        <div style={modalStyle.spacing}>
-          <Form.Field>
             <label>Red ID</label>
             <Input inverted placeholder="Red ID" iconPosition='left'>
               <Icon name='shield' />
-              <input id='red' onChange={(e) => this.redIDCheck(e)} />
+              <input id='red' onBlur={(e) => this.redIDCheck(e)} />
               {this.state.redIDWarning ?
                 this.state.redIDFirstClick && !this.state.redIDTaken && <Label color='red' pointing='left'>Incorrect Red ID</Label>
                 : this.state.redIDFirstClick ? <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label> : null}
@@ -244,6 +224,26 @@ class SignUpOne extends React.Component {
             </Input>
           </Form.Field>
         </div>
+        <div style={modalStyle.spacing}>
+        <Form.Field>
+            <Popup
+              trigger={
+                <div>
+                  <label>Password</label>
+                  <Input inverted placeholder='Password' iconPosition='left'>
+                    <Icon name='lock' />
+                    <input id='pass' onChange={this.props.handlePasswordInput} onChange={(e) => this.passwordCheck(e)} type='password' />
+                    {this.state.passwordWarning ?
+                      this.state.passwordFirstClick && <Label color='red' pointing='left'>Password needs 6+ characters, a number and uppercase letter</Label>
+                      : this.state.passwordFirstClick && <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label>}
+                  </Input>
+                </div>}
+              content='Make sure to have 6+ characters with an uppercase and lowercase letter!'
+              inverted
+            />
+           
+        </Form.Field>
+      </div>
         <div style={modalStyle.spacing}>
         </div>
         <div style={{ padding: '20px' }}>
