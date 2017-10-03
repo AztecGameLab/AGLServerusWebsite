@@ -9,7 +9,7 @@ import ReactCSSTransitionReplace from 'react-css-transition-replace';
 const http = require('https');
 const md5 = require('md5');
 
-import {AGLEncryption} from '../AGL';
+import { AGLEncryption, createAGLUser } from '../AGL';
 
 class SignUpForm extends Component {
   constructor(props) {
@@ -24,7 +24,7 @@ class SignUpForm extends Component {
         //Login Info
         email: '',
         password: '',
-        securityCode:'',
+        securityCode: '',
         //Basic Info
         firstName: '',
         lastName: '',
@@ -34,7 +34,7 @@ class SignUpForm extends Component {
         school: 'San Diego State University',
         //AGL Info
         username: '',
-        roles : [],
+        roles: [],
         bio: 'hi, im new!',
         flare: '',
         goodBoyPoints: 0,
@@ -46,15 +46,15 @@ class SignUpForm extends Component {
         groups: [],
         activities: [],
         verificationHash: '',
-        friends:{},
+        friends: {},
         authLevel: 0,
         showcaseImage: 'ProfileIconsSmall/033-flask.png',
         facebookLink: 'https://www.facebook.com/',
-        twitterLink :'https://twitter.com/',
+        twitterLink: 'https://twitter.com/',
         instagramUser: 'https://instagram.com/',
-        linkedInLink:'https://www.linkedin.com/in/',
-        slackUser:'',
-        inbox:{
+        linkedInLink: 'https://www.linkedin.com/in/',
+        slackUser: '',
+        inbox: {
           friendRequests: {},
           teamRequests: {},
           myRequests: {}
@@ -75,7 +75,6 @@ class SignUpForm extends Component {
     this.handleUsernameInput = this.handleUsernameInput.bind(this);
     this.handleAdminCode = this.handleAdminCode.bind(this);
     this.onSubmission = this.onSubmission.bind(this);
-    this.sendNewUserToFB = this.sendNewUserToFB.bind(this);
     this.handleProfileInput = this.handleProfileInput.bind(this);
     //Navigation
     this.changePhase = this.changePhase.bind(this);
@@ -94,9 +93,9 @@ class SignUpForm extends Component {
     const newAccount = this.state.newAccount;
     newAccount.email = e.target.value;
     newAccount.dateJoined = now;
-    if(new Date().getFullYear() == 2017){
+    if (new Date().getFullYear() == 2017) {
       newAccount.badges[0] = 'Badges/sprout.png';
-      
+
     }
     this.setState({
       newAccount: newAccount
@@ -181,127 +180,75 @@ class SignUpForm extends Component {
     });
     var that = this;
     const newUserData = this.state.newAccount;
-    let pass = await AGLEncryption(newUserData.password);
-    firebase.auth().createUserWithEmailAndPassword(newUserData.email, pass)
-
-      .then(function () {
-        that.sendNewUserToFB();
-        let postBody = JSON.stringify({
-          email: newUserData.email,
-          fName: newUserData.firstName
-        });
-
-        let request = http.request({
-          hostname: 'us-central1-serverus-15f25.cloudfunctions.net',
-          method: 'POST',
-          path: '/dispatchConfirmEmail',
-          headers: {
-            'Content-Type' : 'application/json',
-            'Content-Length' : Buffer.byteLength(postBody)
-          }
-        });
-        request.end(postBody);
-        request.on('response', (response) =>{
-          
-        });
-      })
-
-      .catch(function (error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        alert(errorMessage);
-        // ...
-      });
-  }
-
-  async sendNewUserToFB() {
+    const pass = await AGLEncryption(newUserData.password);
+    debugger;
+    let response = await createAGLUser(newUserData.username, newUserData.email, pass, newUserData);
+    debugger;
+    this.setState({
+      loading: false,
+      created: true
+    });
     this.props.signedUp();
-    var that = this;
-    var user = firebase.auth().currentUser;
-    var userUid = user.uid;
-    var data = {
-      uid: userUid,
-      info: this.state.newAccount
-    };
-    let pass = await AGLEncryption(newUserData.password);
-    data.info.password = pass;
-    firebase.database().ref('takenEmails').push(data.info.email); //Taken Emails
-    firebase.database().ref('takenRedIds').push(data.info.redId); //Taken RedIDs
-    firebase.database().ref('takenUsernames').push(data.info.username); //Taken Usernames
-    var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
-    this.pathRef = firebase.storage().ref('accounts/' + data.info.username + '.json');
-    user.updateProfile({
-      displayName: this.state.newAccount.username,
-      photoURL: 'rencrypted'
-    }).then(function () {
-      var that2 = that;
-      that.pathRef.put(file).then(function () {
-        that2.pathRef.getDownloadURL().then(function (url) {
-          var username = firebase.auth().currentUser.displayName;
-          firebase.database().ref('accounts/' + username).set({
-            data: url
-          });
-          that2.setState({
-            loading: false,
-            created: true
-          });
-          that2.props.signedUp();
-          var that3 = that2;
-          //firebase.database().ref().child('/testUserURL').push(newUid:url);
-        })
-      }).catch(function (error) {
-        console.log(error);
-        that2.setState({
-          errorMessage: error.errorMessage,
-          error: true
-        });
-        
-      });
+    let postBody = JSON.stringify({
+      email: newUserData.email,
+      fName: newUserData.firstName
+    });
+    let request = http.request({
+      hostname: 'us-central1-serverus-15f25.cloudfunctions.net',
+      method: 'POST',
+      path: '/dispatchConfirmEmail',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(postBody)
+      }
+    });
+    request.end(postBody);
+    request.on('response', (response) => {
     });
   }
+
 
   render() {
     //Semantic UI transitions not working atm
     let phase;
     switch (this.state.currentPhase) {
       case 0:
-        phase = <SignUpOne key = '0'
+        phase = <SignUpOne key='0'
           handleEmailInput={this.handleEmailInput}
           handlePasswordInput={this.handlePasswordInput}
           handleRedIDInput={this.handleRedIDInput}
           changePhase={this.changePhase} />;
         break;
       case 1:
-        phase = <SignUpTwo key = '1'
+        phase = <SignUpTwo key='1'
           handleFirstNameInput={this.handleFirstNameInput}
           handleLastNameInput={this.handleLastNameInput}
           handleMajorInput={this.handleMajorInput}
           changePhase={this.changePhase} />;
         break;
       case 2:
-        phase = <SignUpThree key = '2'
+        phase = <SignUpThree key='2'
           handleUsernameInput={this.handleUsernameInput}
           handleAdminCode={this.handleAdminCode}
           onSubmission={this.onSubmission}
           changePhase={this.changePhase}
           randomUser={this.randomUser}
-          created={this.state.created} 
-          loading = {this.state.loading}
-          handleRolesInput = {this.handleRolesInput}
-          handleProfileInput = {this.handleProfileInput}
-          startingIcon = {this.state.startingIcon}
-          error = {this.state.error}
-          errorMessage = {this.state.errorMessage}/>
+          created={this.state.created}
+          loading={this.state.loading}
+          handleRolesInput={this.handleRolesInput}
+          handleProfileInput={this.handleProfileInput}
+          startingIcon={this.state.startingIcon}
+          error={this.state.error}
+          errorMessage={this.state.errorMessage} />
         break;
     }
     return (
       <Form>
-        <ReactCSSTransitionReplace transitionName="fade-wait" 
+        <ReactCSSTransitionReplace transitionName="fade-wait"
           transitionEnterTimeout={1000} transitionLeaveTimeout={1000}>
           {phase}
         </ReactCSSTransitionReplace>
-        
+
       </Form>
     );
   }

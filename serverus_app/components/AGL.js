@@ -5,7 +5,9 @@ const https = require('https');
 
 //Redux Check API
 export const IsLoggedIn = (reduxStateAccounts) => {
-    return reduxStateAccounts ? reduxStateAccounts.length > 0 ? true : false : false;
+    firebase.auth().onAuthStateChanged(function(user) {
+        return user != null;
+      });
 };
 
 export const IsAdmin = (reduxStateAccounts) => {
@@ -79,6 +81,19 @@ export const UpdateAllUsers = async (accounts) => {
     });
 }
 
+export const createAGLUser = async (username, email, password, newDataObj) => {
+    debugger;
+    let response = await axios.post(
+        'http://localhost:5000/serverus-15f25/us-central1/createAGLUser',
+        {
+        username: username,
+        email: email,
+        password: password,
+        newDataObj: newDataObj
+    });
+    debugger;
+};
+
 export const GetAllEmails = async () => {
     let emailPathRef = firebase.database().ref('takenEmails/');
     let emailList = await emailPathRef.once('value');
@@ -143,11 +158,9 @@ export const isPrecryptCorrect = async(username, password) => {
 }
 
 export const AGLEncryption = async (password) => {
-    debugger;
     let response = await axios.post (
         'http://localhost:5000/serverus-15f25/us-central1/AGLEncryption', 
         {password: password});
-    debugger;
     return response.data;
     //encrypted resposne
 }
