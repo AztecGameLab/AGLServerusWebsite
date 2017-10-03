@@ -7,7 +7,7 @@ import ProfilePage from './ProfilePage';
 import { connect } from 'react-redux';
 
 //AGL API
-import { LoadUser, IsLoggedIn, IsYourProfile } from '../AGL';
+import { LoadProfile, IsLoggedIn, IsYourProfile, EditProfile } from '../AGL';
 
 
 class ProfilePageContainer extends React.Component {
@@ -49,50 +49,48 @@ class ProfilePageContainer extends React.Component {
     editModeOff() {
         var that = this;
         let editedProfile = this.state.profileObject;
-        editedProfile.info.bio = this.state.bio;
+        editedProfile.bio = this.state.bio;
         if (this.state.facebookLink.length > 0) {
-            editedProfile.info.facebookLink = 'https://www.facebook.com/' + this.state.facebookLink;
+            editedProfile.facebookLink = 'https://www.facebook.com/' + this.state.facebookLink;
         }
         if (this.state.twitterLink.length > 0) {
-            editedProfile.info.twitterLink = 'https://twitter.com/' + this.state.twitterLink;
+            editedProfile.twitterLink = 'https://twitter.com/' + this.state.twitterLink;
         }
         if (this.state.linkedinLink.length > 0) {
-            editedProfile.info.linkedInLink = 'https://www.linkedin.com/in/' + this.state.linkedinLink;
+            editedProfile.linkedInLink = 'https://www.linkedin.com/in/' + this.state.linkedinLink;
         }
         if (this.state.instagramLink.length > 0) {
-            editedProfile.info.instagramUser = 'https://instagram.com/' + this.state.instagramLink;
+            editedProfile.instagramUser = 'https://instagram.com/' + this.state.instagramLink;
         }
         if (this.state.slackUser.length > 0) {
-            editedProfile.info.slackUser = this.state.slackUser;
+            editedProfile.slackUser = this.state.slackUser;
         }
         this.setState({
             editMode: false,
             profileObject: editedProfile
-        }, function () {
-            var that2 = that;
-            var accountRef = firebase.storage().ref('accounts/' + this.state.profileObject.info.username + '.json');
-            var yourFile = new Blob([JSON.stringify(this.state.profileObject)], { type: 'application/json' });
-            accountRef.put(yourFile).then(function () {
-                accountRef.getDownloadURL().then(function (url) {
-                    firebase.database().ref('accounts/' + that.state.profileObject.username).set({
-                        data: url
-                    });
-                    return;
-                });
-            });
+        }, function() {
+            firebase.auth().onAuthStateChanged(function async (user) {
+                if (user) {
+                    debugger;
+                    //check that scope
+                    //let response = await EditProfile(user.displayName, user.uid, that.state.profileObject);
+                }
+                else{
+                    return alert('WARNING FALSIFIED EDIT');
+                }
+            }); 
         });
-
     }
     handleProfileInput(e) {
         const yourAccount = this.state.profileObject;
-        yourAccount.info.showcaseImage = e.target.name;
+        yourAccount.showcaseImage = e.target.name;
         this.setState({
             profileObject: yourAccount
         });
     }
     handleRolesInput(e, { value }) {
         const yourAccount = this.state.profileObject;
-        yourAccount.info.roles = value;
+        yourAccount.roles = value;
         this.setState({
             rolesSelected: value,
             profileObject: yourAccount
@@ -100,7 +98,7 @@ class ProfilePageContainer extends React.Component {
     }
     handleBioInput(e) {
         const yourAccount = this.state.profileObject;
-        yourAccount.info.bio = e.target.value
+        yourAccount.bio = e.target.value
         this.setState({
             bio: e.target.value,
             profileObject: yourAccount
@@ -136,10 +134,10 @@ class ProfilePageContainer extends React.Component {
     async componentDidUpdate(nextProps, nextState) {
         debugger;
         if(this.state.profileObject.info) {
-            if (this.state.profileObject.info.username != this.props.routeParams.username) {
+            if (this.state.profileObject.username != this.props.routeParams.username) {
                 window.scrollTo(0, 0);
                 this.setState({
-                    profileObject: await LoadUser(this.props.routeParams.username),
+                    profileObject: await LoadProfile(this.props.routeParams.username),
                     yourAccount: IsYourProfile(this.props.accounts, this.props.routeParams.username)
                 });
             } 
@@ -147,13 +145,13 @@ class ProfilePageContainer extends React.Component {
     }
     
     async componentWillMount() {
-        let userData = await LoadUser(this.props.routeParams.username);
+        let userData = await LoadProfile(this.props.routeParams.username);
         this.setState({
             profileObject: userData,
             loggedIn: IsLoggedIn(this.props.accounts),
             yourAccount: IsYourProfile(this.props.accounts, this.props.routeParams.username),
-            rolesSelected: userData.info.roles,
-            bio: userData.info.bio
+            rolesSelected: userData.roles,
+            bio: userData.bio
         });        
         debugger;
         
@@ -162,7 +160,7 @@ class ProfilePageContainer extends React.Component {
     render() {
         let loggedIn = this.state.loggedIn;
         var currentComponent;
-        if (this.state.profileObject.info != null) {
+        if (this.state.profileObject.firstName != null) {
             currentComponent = (
                 <ProfilePage
                     profileObject={this.state.profileObject}

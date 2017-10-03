@@ -17,31 +17,27 @@ export const IsYourProfile = (reduxStateAccounts, username) => {
 };
 
 //READ ONLY API
-export const LoadUser = async (username) => {
-    let postBody = JSON.stringify({
-        username: username
-    });
-    let userRef = firebase.database().ref('accounts/' + username);
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-          debugger;
-        } else {
-          // No user is signed in.
-        }
-      });
+
+export const LoadProfile = async(username) => {
     debugger;
-    const firebaseUrl = await userRef.once('value');
-    const response = await axios.get(firebaseUrl.val().data);
+    let response = await axios.post(
+        'http://localhost:5000/serverus-15f25/us-central1/LoadProfile',
+        {username: username});
+    debugger;
     return response.data;
 }
 
-export const EditUser = async (username, newDataObj) => {
-    let userRef = firebase.storage().ref('accounts/' + username + '.json');
+export const EditProfile = async (username, uid, newDataObj) => {
     debugger;
-    const currentData = await axios.get(firebaseUrl.val().data);
-    let mergedObj = Object.assign({}, currentData.data, newDataObj);
-    var newFile = new blob([JSON.stringify(mergedObj)], {type: 'application/json'});
-    await accountRef.put(newFile);
+    let response = await axios.post(
+        'http://localhost:5000/serverus-15f25/us-central1/EditProfile',
+        {
+            username: username,
+            uid: uid,
+            newDataObj: newDataObj
+        }
+    );
+    debugger;
 }
 
 export const LoadAllUsers = async () => {

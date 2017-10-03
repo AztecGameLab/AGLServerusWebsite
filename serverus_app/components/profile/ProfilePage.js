@@ -11,7 +11,7 @@ import roleNames from '../common/options/roleNamesOnly.json';
 
 //DATA IS IN userData!! userData.firstName for example
 const ProfilePage = (props) => {
-    const userData = props.profileObject.info;
+    const userData = props.profileObject;
 
     const imageLarge = (originalLink) => {
         return originalLink.replace("Small", "Large");
@@ -44,8 +44,8 @@ const ProfilePage = (props) => {
         ));
     };
     const friendMapper = (friendObject) => {
-        if(Object.keys(friendObject).length > 0) {
-            var keys = Object.keys(friendObject);
+        if(friendObject.length > 0) {
+            var keys = friendObject;
             return (keys.map((key)=> 
                 <Feed.Content key={md5(key)+ 7} >
                     <Icon name= 'heart outline' size='large' />
@@ -267,7 +267,7 @@ const ProfilePage = (props) => {
                         <Card.Content>
                             <Card.Description>
                                 {userData.friends == 0 && <div>Add a friend! </div>}
-                                {friendMapper(userData.friends)}
+                                {userData.friends != null ? friendMapper(userData.friends) : null}
                             </Card.Description>
                         </Card.Content>
                         <hr />
