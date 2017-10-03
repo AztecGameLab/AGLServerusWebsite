@@ -100,7 +100,6 @@ export default class AdminJSONEditor extends React.Component {
     removeDefaults = (obj) => {
         delete obj["uid"];
         Object.keys(obj.info).forEach((key) => (obj.info[key] == 'default') && delete obj.info[key]);
-        debugger;
         return obj;
     };
 

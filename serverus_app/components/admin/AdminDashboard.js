@@ -33,7 +33,7 @@ class AdminDashboard extends React.Component {
         //var loggedIn = this.props.accounts[0].length > 0 ? this.props.accounts[0].info.accountLevel == 2 ? 'admin' : 'notAdmin' : false;
         let loggedIn = '';
         if(this.props.accounts.length > 0){
-            if(this.props.accounts[0].info.authLevel == 2){
+            if(this.props.accounts[0].authLevel == 2){
                 loggedIn = 'admin';
             }else{
                 loggedIn = 'notAdmin'

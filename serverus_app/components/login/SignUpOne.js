@@ -120,7 +120,6 @@ class SignUpOne extends React.Component {
     this.props.handleRedIDInput(e);
     var that = this;
     if (isTaken == true) {
-      debugger;
       that.setState({
         redIDFirstClick: true,
         redIDWarning: true,

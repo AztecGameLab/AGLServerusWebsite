@@ -56,7 +56,6 @@ class SignUpThree extends React.Component {
     var that = this;
     this.props.handleUsernameInput(e);
     var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
-    debugger;
     if(format.test(e.target.value)){
       that.setState({
         usernameFilled: true,
@@ -136,7 +135,6 @@ class SignUpThree extends React.Component {
 
   adminCheck(e) {
     this.props.handleAdminCode(e);
-    debugger;
     if(e.target.value.toString().length == 6){
       this.setState({
         securityCodeFilled: true

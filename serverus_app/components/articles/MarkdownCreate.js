@@ -130,7 +130,7 @@ class MarkdownCreate extends React.Component {
         now = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
         var data = {
             title: this.state.title,
-            author: this.props.accounts[0].info.username,
+            author: this.props.accounts[0].username,
             date: now,
             text: this.state.text,
             selectedTags: this.state.selectedTags,
@@ -157,7 +157,7 @@ class MarkdownCreate extends React.Component {
     }
     render() {
         var { currentValue } = this.state;
-        var loggedIn = this.props.accounts[0] ? this.props.accounts[0].info.authLevel == 2 ? true : false : false
+        var loggedIn = this.props.accounts[0] ? this.props.accounts[0].authLevel == 2 ? true : false : false
         return (
             <div style={{ backgroundColor: 'black' }}>
                 {loggedIn ? <div>
@@ -170,7 +170,7 @@ class MarkdownCreate extends React.Component {
                         </div>
                         <div className="col-lg-6 col-sm-12"><h1 style={markdownStyle.title}>Preview post</h1></div>
                         <div className="col-lg-6 col-sm-12" style={markdownStyle.post}>
-                            <GenericCard value={this.state} user={this.props.accounts[0].info.username} edit={true} />
+                            <GenericCard value={this.state} user={this.props.accounts[0].username} edit={true} />
                         </div>
                     </div>
                     <div className="row col-lg-12">

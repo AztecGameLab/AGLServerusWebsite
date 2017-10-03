@@ -29,7 +29,7 @@ class GenericCard extends React.Component {
         if (nextProps.accounts[0] && !nextState.loggedIn) {
             this.setState({
                 loggedIn: true,
-                favorited: nextProps.accounts[0].info.bookmarked.includes(this.props.keyUrl)
+                favorited: nextProps.accounts[0].bookmarked.includes(this.props.keyUrl)
             })
         }
         return true;
@@ -38,7 +38,7 @@ class GenericCard extends React.Component {
     toggleUserFavorited() {
         var that = this;
         const previousState = this.state.favorited;
-        var info = Object.assign({}, this.props.accounts[0].info);
+        var info = Object.assign({}, this.props.accounts[0]);
         this.props.actions.signOutAccount();        
         if (!previousState) {
             if(!info.bookmarked.includes(this.props.keyUrl))

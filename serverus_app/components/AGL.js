@@ -11,26 +11,23 @@ export const IsLoggedIn = (reduxStateAccounts) => {
 };
 
 export const IsAdmin = (reduxStateAccounts) => {
-    return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].info.authLevel == 2 ? true : false : false : false;
+    return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].authLevel == 2 ? true : false : false : false;
 };
 
 export const IsYourProfile = (reduxStateAccounts, username) => {
-    return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].info.username == username ? true : false : false : false;
+    return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].username == username ? true : false : false : false;
 };
 
 //READ ONLY API
 
-export const LoadProfile = async(username) => {
-    debugger;
-    let response = await axios.post(
-        'http://localhost:5000/serverus-15f25/us-central1/LoadProfile',
-        {username: username});
-    debugger;
+export const LoadProfile = async (username) => {
+    let url = 'http://localhost:5000/serverus-15f25/us-central1/LoadProfile?=' + username;
+    let response = await axios.get(url);
     return response.data;
 }
 
 export const EditProfile = async (username, uid, newDataObj) => {
-    debugger;
+
     let response = await axios.post(
         'http://localhost:5000/serverus-15f25/us-central1/EditProfile',
         {
@@ -39,29 +36,25 @@ export const EditProfile = async (username, uid, newDataObj) => {
             newDataObj: newDataObj
         }
     );
-    debugger;
 }
 
-export const LoadAllUsers = async () => {
-    let accounts = firebase.database().ref('accounts');
-    const firebaseUrls = await accounts.once('value');
-    let promises = [];
-    Object.values(firebaseUrls.val()).forEach(url => {
-        promises.push(axios.get(url.data));
-    });
-    let response = await Promise.all(promises);
-    let temp = [];
-    let users = {}
-    response.map(user => {
-        var data = {
-            key: user.data.uid,
-            text: user.data.info.firstName + ' ' + user.data.info.lastName,
-            value: user.data.info.username
-        };
-        temp.push(data);
-        users[user.data.info.username] = user.data;
-    });
-    return { users, temp };
+export const LoadAllUsers = async (component) => {
+    let response = await axios.get('http://localhost:5000/serverus-15f25/us-central1/LoadAllUserProfiles');
+    if (component == "dashboard") {
+
+        response.data.map(user => {
+            var data = {
+                key: user.data.uid,
+                text: user.data.info.firstName + ' ' + user.data.info.lastName,
+                value: user.data.info.username
+            };
+            temp.push(data);
+            users[user.data.info.username] = user.data;
+        });
+        return { users, temp };
+    } else if (component == "userDirectory") {
+        return response.data;
+    }
 }
 
 export const UpdateUser = async (userData) => {
@@ -76,7 +69,6 @@ export const UpdateUser = async (userData) => {
 
 export const UpdateAllUsers = async (accounts) => {
     Object.keys(accounts).map(user => {
-        debugger;
         UpdateUser(user.info.username, user);
     });
 }
@@ -97,63 +89,59 @@ export const createAGLUser = async (username, email, password, newDataObj) => {
 export const GetAllEmails = async () => {
     let emailPathRef = firebase.database().ref('takenEmails/');
     let emailList = await emailPathRef.once('value');
-    debugger;
-    let response = await axios.post (
-        'http://localhost:5000/serverus-15f25/us-central1/AGLEncryption', 
-        {password: password});
-    debugger;
+    let response = await axios.post(
+        'http://localhost:5000/serverus-15f25/us-central1/AGLEncryption',
+        { password: password });
     return response.data;
     //encrypted resposne
 }
 
 // Read Only - For Admin Panel
 export const GetAllUsernames = async () => {
-    debugger;
     let response = await axios.get(
         'https://us-central1-serverus-15f25.cloudfunctions.net/getListOfAllUsernames');
-    debugger;
     let usernameList = Object.values(response.data);
     return usernameList;
 }
 
 //Sign Up Checks
 export const UsernameTakenCheck = async (username) => {
-    debugger;
     let response = await axios.post(
-        'http://us-central1-serverus-15f25.cloudfunctions.net/isUsernameTaken', 
-        {username: username});
-    debugger;
+        'http://us-central1-serverus-15f25.cloudfunctions.net/isUsernameTaken',
+        { username: username });
     return response.data;
     // '{usernameTaken: true/false, profanity: true/false}' 
 }
 
 export const EmailTakenCheck = async (email) => {
-    debugger;
+
     let response = await axios.post(
-        'http://us-central1-serverus-15f25.cloudfunctions.net/isEmailTaken', 
-        {email: email});
-    debugger;
+        'http://us-central1-serverus-15f25.cloudfunctions.net/isEmailTaken',
+        { email: email });
+
     return response.data;
     //'{emailTaken: true/false, validEmail: true/false}'
 }
 
 export const RedIdTakenCheck = async (redId) => {
-    debugger;
+
     let response = await axios.post(
-        'http://us-central1-serverus-15f25.cloudfunctions.net/isRedIdTaken', 
-        {redId: redId});
-    debugger;
+        'http://us-central1-serverus-15f25.cloudfunctions.net/isRedIdTaken',
+        { redId: redId });
+
     return response.data;
     //Either '{redIdTaken: true/false}'
 }
 
-export const isPrecryptCorrect = async(username, password) => {
-    debugger;
+export const isPrecryptCorrect = async (username, password) => {
+
     let resposne = await axios.post(
         'http://localhost:5000/serverus-15f25/us-central1/isPrecryptCorrect',
-        {username: username,
-        password: password});
-    debugger;
+        {
+            username: username,
+            password: password
+        });
+
     return response.data;
 }
 
@@ -166,34 +154,63 @@ export const AGLEncryption = async (password) => {
 }
 
 export const AGLRencryption = async (username, password) => {
-    debugger;
-    let response = await axios.post (
+
+    let response = await axios.post(
         'http://localhost:5000/serverus-15f25/us-central1/AGLRencryption',
-        {username: username,
-         password: password});
-    debugger;
+        {
+            username: username,
+            password: password
+        });
+
     return response;
 }
 
 export const isUserRencrypted = async (username, password) => {
-    debugger;
+
     let response = await axios.post(
         'http://localhost:5000/serverus-15f25/us-central1/isUserRencrypted',
-        {username: username,
-         password: password});
-    debugger;
+        {
+            username: username,
+            password: password
+        });
+
     return (response.data == 'rencrypted');
+}
+
+export const InboxWatch = async (username) => {
+    let url = 'http://localhost:5000/serverus-15f25/us-central1/GetInboxData?=' + username;
+    let inboxResponse = await axios.get(url);
+    return inboxResponse.data;
+}
+
+export const SendFriendRequest = async (myInfo, friendInfo) => {
+
+    axios.post('http://localhost:5000/serverus-15f25/us-central1/SendFriendRequest',
+        {
+            myInfo: myInfo,
+            friendInfo: friendInfo
+        })
+        .then(response => {
+            console.log("Success! ", response.data);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
+
+export const AcceptFriendRequest = async () => {
+
 }
 
 //update all users value
 //edit user
 //add new field to all users
 
-// debugger;
+// 
 // https.get('http://localhost:5000/serverus-15f25/us-central1/getListOfAllUsernames', (response) => {
-//     debugger;    
+//         
 //     response.on('data', (chunk) => {
-//         debugger;
+//         
 //         let usernameJSON = new TextDecoder('utf-8').decode(chunk);
 //         let usernameList = Object.values(JSON.parse(usernameList));
 //         return usernameList;

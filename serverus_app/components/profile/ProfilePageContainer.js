@@ -71,7 +71,6 @@ class ProfilePageContainer extends React.Component {
         }, function() {
             firebase.auth().onAuthStateChanged(function async (user) {
                 if (user) {
-                    debugger;
                     //check that scope
                     //let response = await EditProfile(user.displayName, user.uid, that.state.profileObject);
                 }
@@ -132,7 +131,6 @@ class ProfilePageContainer extends React.Component {
 
 
     async componentDidUpdate(nextProps, nextState) {
-        debugger;
         if(this.state.profileObject.info) {
             if (this.state.profileObject.username != this.props.routeParams.username) {
                 window.scrollTo(0, 0);
@@ -153,8 +151,6 @@ class ProfilePageContainer extends React.Component {
             rolesSelected: userData.roles,
             bio: userData.bio
         });        
-        debugger;
-        
     }
 
     render() {
