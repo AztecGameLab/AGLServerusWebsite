@@ -96,6 +96,40 @@ export const GetAllEmails = async () => {
     //encrypted resposne
 }
 
+export const GetArticle = async (key) => {
+    const url = 'http://localhost:5000/serverus-15f25/us-central1/GetArticle?=' + key;
+    let article = await axios.get(url);
+    return article.data;
+}
+
+export const GetAllArticles = async () => {
+    let articles = await axios.get('http://localhost:5000/serverus-15f25/us-central1/GetAllArticles');
+    return Object.values(articles.data);
+}
+
+export const CreatePost = (post, type, id) => {
+    let url;
+    if (id) {
+        url = 'http://localhost:5000/serverus-15f25/us-central1/CreatePost?=' + type + '&=' + id;
+    } else {
+        url = 'http://localhost:5000/serverus-15f25/us-central1/CreatePost?=' + type;
+    }
+    return axios.post(url, post).then(response => {
+        return response;
+    }).catch(err => {
+        return err;
+    });
+}
+
+export const SavePost = (post, type, overwrite, key) => {
+    const url = 'http://localhost:5000/serverus-15f25/us-central1/SavePost?=' + type + '&=save';
+    return axios.post(url, {post, overwrite, key}).then(response => {
+        return response.data;
+    }).catch(err => {
+        return err;
+    });
+}
+
 // Read Only - For Admin Panel
 export const GetAllUsernames = async () => {
     let response = await axios.get(

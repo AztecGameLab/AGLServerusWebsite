@@ -46,22 +46,7 @@ class App extends React.Component {
             }
         });
     }
-    // var refString = 'BackupAcc/' + user.displayName;
-    // var userUrlRef = firebase.database().ref(refString);
-    // userUrlRef.on('value', function (snapshot) {
-    //     var that2 = that;
-    //     if (that2.state.modelIsOpen) return;
-    //     axios.get(snapshot.val().data).then(function (response) {
-    //         var that3 = that2;
-    //         if (!that3.props.accounts[0])
-    //             that3.props.actions.loadAccount(response.data);
-    //     }).then(function () {
-    //         var that3 = that2;
-    //         that3.setState({
-    //             loggedIn: true
-    //         });
-    //     });
-    // });
+
 
 
     openLogin(activeIndex) {
