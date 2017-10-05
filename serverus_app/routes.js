@@ -19,7 +19,7 @@ import UserDirectory from './components/users/UserDirectory';
 
 export default (
     <Route path="/" component={App}>
-        <IndexRoute component={TempHome} />
+        <IndexRoute component={HomePage} />
         <Route path="admin" component={AdminDashboard}/>
         <Route path="about" component={AboutPage} />
         <Route path="a/:articleId" component={ArticlePage} />

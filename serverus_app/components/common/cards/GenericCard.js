@@ -215,6 +215,7 @@ var CardStyle = {
         background: '#263238',
         color: 'white',
         paddingRight: 25,
-        paddingLeft: 16
+        paddingLeft: 16,
+        outline: 'none'
     }
 };

@@ -5,9 +5,9 @@ const https = require('https');
 
 //Redux Check API
 export const IsLoggedIn = (reduxStateAccounts) => {
-    firebase.auth().onAuthStateChanged(function(user) {
+    firebase.auth().onAuthStateChanged(function (user) {
         return user != null;
-      });
+    });
 };
 
 export const IsAdmin = (reduxStateAccounts) => {
@@ -78,11 +78,11 @@ export const createAGLUser = async (username, email, password, newDataObj) => {
     let response = await axios.post(
         'http://localhost:5000/serverus-15f25/us-central1/createAGLUser',
         {
-        username: username,
-        email: email,
-        password: password,
-        newDataObj: newDataObj
-    });
+            username: username,
+            email: email,
+            password: password,
+            newDataObj: newDataObj
+        });
     debugger;
 };
 
@@ -96,10 +96,13 @@ export const GetAllEmails = async () => {
     //encrypted resposne
 }
 
-export const GetArticle = async (key) => {
-    const url = 'http://localhost:5000/serverus-15f25/us-central1/GetArticle?=' + key;
-    let article = await axios.get(url);
-    return article.data;
+export const GetArticle = (status, key) => {
+    const url = 'http://localhost:5000/serverus-15f25/us-central1/GetArticle?=' + status + '&=' + key;
+    return axios.get(url).then(article => {
+        return article.data;
+    }).catch(error => {
+        return Promise.reject(error);
+    });
 }
 
 export const GetAllArticles = async () => {
@@ -107,26 +110,30 @@ export const GetAllArticles = async () => {
     return Object.values(articles.data);
 }
 
-export const CreatePost = (post, type, id) => {
+export const CreatePost = (post, type, id, edit) => {
     let url;
     if (id) {
-        url = 'http://localhost:5000/serverus-15f25/us-central1/CreatePost?=' + type + '&=' + id;
+        if (edit) {
+            url = 'http://localhost:5000/serverus-15f25/us-central1/CreatePost?=' + type + '&=' + id + '&=edit';
+        } else {
+            url = 'http://localhost:5000/serverus-15f25/us-central1/CreatePost?=' + type + '&=' + id;
+        }
     } else {
         url = 'http://localhost:5000/serverus-15f25/us-central1/CreatePost?=' + type;
     }
     return axios.post(url, post).then(response => {
         return response;
     }).catch(err => {
-        return err;
+        return Promise.reject(error);
     });
 }
 
 export const SavePost = (post, type, overwrite, key) => {
     const url = 'http://localhost:5000/serverus-15f25/us-central1/SavePost?=' + type + '&=save';
-    return axios.post(url, {post, overwrite, key}).then(response => {
+    return axios.post(url, { post, overwrite, key }).then(response => {
         return response.data;
     }).catch(err => {
-        return err;
+        return Promise.reject(error);
     });
 }
 
@@ -180,9 +187,9 @@ export const isPrecryptCorrect = async (username, password) => {
 }
 
 export const AGLEncryption = async (password) => {
-    let response = await axios.post (
-        'http://localhost:5000/serverus-15f25/us-central1/AGLEncryption', 
-        {password: password});
+    let response = await axios.post(
+        'http://localhost:5000/serverus-15f25/us-central1/AGLEncryption',
+        { password: password });
     return response.data;
     //encrypted resposne
 }

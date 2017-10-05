@@ -64,16 +64,41 @@ class MarkdownCreate extends React.Component {
 
     componentWillMount() {
         if (this.props.location.query['']) {
-            //edit draft post
-            if (!Array.isArray(this.props.location.query[''])) {
-                GetArticle(this.props.location.query['']).then(article => {
-                    this.setState({
-                        postData: article,
-                        savedPost: true
-                    });
-                });
-            } else {
+            if (Array.isArray(this.props.location.query[''])) {
                 //Edit published post
+                var article;
+                if (this.props.location.query[''][1] == "edit") {
+                    GetArticle("all", this.props.location.query[''][0]).then(article => {
+
+                        this.setState({
+                            postData: article,
+                            editPost: true
+                        });
+                        var currentState = this.state.postData;
+                        currentState.selectedTags.map(tag => {
+                            this.handleAddition(null, {}, tag);
+                        });
+                    }).catch(error => {
+                        console.error(error.response.data);
+                        return error;
+                    });
+                }
+                //edit draft post
+                else {
+                    GetArticle("saved", this.props.location.query[''][0]).then(article => {
+                        this.setState({
+                            postData: article,
+                            savedPost: true
+                        });
+                        var currentState = this.state.postData;
+                        currentState.selectedTags.map(tag => {
+                            this.handleAddition(null, {}, tag);
+                        });
+                    }).catch(error => {
+                        console.error(error.response.data);
+                        return error;
+                    });
+                }
             }
         }
         var currentState = this.state.postData;
@@ -81,35 +106,41 @@ class MarkdownCreate extends React.Component {
             case 'announcement':
                 currentState.type = { text: "Announcement", id: 'red' };
                 this.setState({
-                    postData: currentState 
+                    postData: currentState
                 });
                 break;
             case 'game':
-                currentState.type = { text: "Game", id: 'green' };         
+                currentState.type = { text: "Game", id: 'green' };
                 this.setState({
-                    postData: currentState 
+                    postData: currentState
                 });
                 break;
             case 'tutorial':
-                currentState.type = { text: "Tutorial", id: 'blue' };           
+                currentState.type = { text: "Tutorial", id: 'blue' };
                 this.setState({
-                    postData: currentState 
+                    postData: currentState
                 });
                 break;
             default: break;
         }
     }
 
-    handleAddition = (e, { value }) => {
+    handleAddition = (e, { value }, init) => {
         var counter = 0;
         this.state.tags.forEach(item => {
             if (item.value == value)
                 return counter++;
         });
-        if (counter < 1) {
+        if (init) {
             this.setState({
-                tags: [{ text: '#' + value, value }, ...this.state.tags]
+                tags: [{ text: '#' + init, value: init }, ...this.state.tags]
             });
+        } else {
+            if (counter < 1) {
+                this.setState({
+                    tags: [{ text: '#' + value, value }, ...this.state.tags]
+                });
+            }
         }
     }
 
@@ -179,10 +210,13 @@ class MarkdownCreate extends React.Component {
             type: this.state.postData.type
         };
         if (this.props.location.query['']) {
-            if (!Array.isArray(this.props.location.query[''])) {
+            if (Array.isArray(this.props.location.query[''])) {
+                if (this.props.location.query[''][1] == "edit") {
+                    let response = await CreatePost(data, this.props.routeParams.type, this.props.location.query[''][0], true);
+                    console.log(response);
+                } else console.log("Incorrect URL parameters.");
+            } else {
                 let response = await CreatePost(data, this.props.routeParams.type, this.props.location.query['']);
-                console.log(response);
-                debugger;
             }
         } else {
             let response = await CreatePost(data, this.props.routeParams.type);
@@ -247,7 +281,7 @@ class MarkdownCreate extends React.Component {
                                 fluid
                                 multiple
                                 allowAdditions
-                                value={this.state.postData.selectedTags}
+                                defaultValue={this.state.postData.selectedTags}
                                 onAddItem={this.handleAddition}
                                 onChange={this.handleTags}
                             />
@@ -279,7 +313,7 @@ class MarkdownCreate extends React.Component {
                             </div> : null}
 
                         <div style={markdownStyle.button} className="col-lg-6">
-                            <button className="btn btn-info" disabled={this.buttonDisable()} onClick={this.savePost}>Save Draft!</button>
+                            {this.savedPost ? <button className="btn btn-info" disabled={this.buttonDisable()} onClick={this.savePost}>Save Draft!</button> : null}
                             <button className="btn btn-success" disabled={this.buttonDisable()} onClick={this.sendToFB}>Publish Post!</button>
                         </div>
                     </div>
