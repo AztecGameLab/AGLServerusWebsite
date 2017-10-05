@@ -64,7 +64,8 @@ var modalStyle = {
     boxShadow: '3px 3px 5px black',
     color: '#fff',
     borderRadius: '20px',
-    padding: '2%'
+    paddingRight: '2%',
+    paddingTop: '2%'
   },
   logo: {
     display: 'block',

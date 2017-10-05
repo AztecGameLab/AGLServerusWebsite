@@ -174,18 +174,6 @@ export const RedIdTakenCheck = async (redId) => {
     //Either '{redIdTaken: true/false}'
 }
 
-export const isPrecryptCorrect = async (username, password) => {
-
-    let resposne = await axios.post(
-        'http://localhost:5000/serverus-15f25/us-central1/isPrecryptCorrect',
-        {
-            username: username,
-            password: password
-        });
-
-    return response.data;
-}
-
 export const AGLEncryption = async (password) => {
     let response = await axios.post(
         'http://localhost:5000/serverus-15f25/us-central1/AGLEncryption',
@@ -240,6 +228,14 @@ export const SendFriendRequest = async (myInfo, friendInfo) => {
 
 export const AcceptFriendRequest = async () => {
 
+}
+
+export const usernameToEmail = async (username) => {
+    let response = await axios.post(
+        'http://localhost:5000/serverus-15f25/us-central1/usernameToEmail',
+        {username: username});
+        debugger;
+        return response.data;
 }
 
 //update all users value

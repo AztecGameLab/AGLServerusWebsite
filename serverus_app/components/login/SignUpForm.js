@@ -73,7 +73,6 @@ class SignUpForm extends Component {
     this.handleRolesInput = this.handleRolesInput.bind(this);
     //Optional Infos (SignUpThree)
     this.handleUsernameInput = this.handleUsernameInput.bind(this);
-    this.handleAdminCode = this.handleAdminCode.bind(this);
     this.onSubmission = this.onSubmission.bind(this);
     this.handleProfileInput = this.handleProfileInput.bind(this);
     //Navigation
@@ -147,17 +146,6 @@ class SignUpForm extends Component {
     });
   }
 
-  handleAdminCode(e) {
-    const newAccount = this.state.newAccount;
-    newAccount.securityCode = e.target.value;
-    if (e.target.value == "乇乂ㄒ尺卂 ㄒ卄丨匚匚") {
-      newAccount.authLevel = 2;
-    }
-    this.setState({
-      newAccount: newAccount
-    });
-  }
-
   handleRolesInput(e, { value }) {
     const newAccount = this.state.newAccount;
     newAccount.roles = value;
@@ -183,6 +171,12 @@ class SignUpForm extends Component {
     const pass = await AGLEncryption(newUserData.password);
     debugger;
     newUserData.password = pass;
+    newUserData.securityCode = randomstring.generate({
+      length: 6,
+      charset: 'R3ACTAGL69GODNATHANAZTECGAMELABYOUNMONEY$$$AUTISM',
+      readable: true,
+      capitialization: true
+    });
     let response = await createAGLUser(newUserData.username, newUserData.email, pass, newUserData);
     debugger;
     this.setState({
@@ -214,34 +208,32 @@ class SignUpForm extends Component {
     //Semantic UI transitions not working atm
     let phase;
     switch (this.state.currentPhase) {
-      case 0:
-        phase = <SignUpOne key='0'
+      case 2:
+        phase = <SignUpOne key='2'
           handleEmailInput={this.handleEmailInput}
           handlePasswordInput={this.handlePasswordInput}
-          handleRedIDInput={this.handleRedIDInput}
-          changePhase={this.changePhase} />;
+          changePhase={this.changePhase}
+          onSubmission={this.onSubmission} 
+          loading={this.state.loading}
+          error={this.state.error}
+          errorMessage={this.state.errorMessage}/>;
         break;
-      case 1:
-        phase = <SignUpTwo key='1'
+      case 0:
+        phase = <SignUpTwo key='0'
           handleFirstNameInput={this.handleFirstNameInput}
           handleLastNameInput={this.handleLastNameInput}
           handleMajorInput={this.handleMajorInput}
           changePhase={this.changePhase} />;
         break;
-      case 2:
-        phase = <SignUpThree key='2'
+      case 1:
+        phase = <SignUpThree key='1'
           handleUsernameInput={this.handleUsernameInput}
-          handleAdminCode={this.handleAdminCode}
-          onSubmission={this.onSubmission}
           changePhase={this.changePhase}
           randomUser={this.randomUser}
-          created={this.state.created}
-          loading={this.state.loading}
+          handleRedIDInput={this.handleRedIDInput}
           handleRolesInput={this.handleRolesInput}
           handleProfileInput={this.handleProfileInput}
-          startingIcon={this.state.startingIcon}
-          error={this.state.error}
-          errorMessage={this.state.errorMessage} />
+          startingIcon={this.state.startingIcon} />
         break;
     }
     return (
