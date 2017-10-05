@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import { Button, Form, Checkbox, Input, Icon, Label, Message } from 'semantic-ui-react';
 import firebase from 'firebase';
 import axios from 'axios';
+var md5 = require('md5');
 
-import {AGLRencryption, isUserRencrypted, AGLEncryption, isPrecryptCorrect} from '../AGL';
+import {AGLRencryption, isUserRencrypted, AGLEncryption, isPrecryptCorrect, EditProfile} from '../AGL';
 
 class LoginForm extends Component {
     constructor(props){
@@ -20,11 +21,28 @@ class LoginForm extends Component {
         this.handleSubmission = this.handleSubmission.bind(this);
     }
 
-    // async componentWillMount() {
-    //     debugger;
-    // }
-    //"5888c044e58629859636455310dd72570072ae8a8487808f7c8ce45c7b1647bc71c2b6210bfade3c3e582764f541be8b06372da540ff020b7b8386c86e232697"
-    //"5888c044e58629859636455310dd72570072ae8a8487808f7c8ce45c7b1647bc71c2b6210bfade3c3e582764f541be8b06372da540ff020b7b8386c86e232697"
+    componentWillMount() {
+        // var auth = firebase.auth();
+        // debugger;
+        // auth.sendPasswordResetEmail('kevindokhoale@gmail.com').then(function() {
+        //     alert("xD");
+        //   }).catch(function(error) {
+        //     // An error happened.
+        //   });
+        //debugger;
+        //let response = await EditProfile('Kevin Do', 'YBqyzzPuFdbBQpVNjNK9DR3x6HG2', {name: 'Kevin Do2', newVal: 'xD'});
+        // const accsRef = firebase.database().ref("BackupAcc");
+        //     accsRef.once('value', function (snapshot){
+        //         // console.log(snapshot.val());
+        //         Object.values(snapshot.val()).forEach( (user) => {
+        //             debugger;
+        //             const validKey = md5(user.email);
+        //             debugger;
+        //             let newPair = {[validKey]: user.username }
+        //             firebase.database().ref("usernameLookup/").update(newPair);
+        //         });
+        //     });
+    }
 
 
     handleEmailInput(e) {
@@ -37,62 +55,80 @@ class LoginForm extends Component {
             password: e.target.value
         });
     }
-    async handleSubmission() {
+    async handleSubmission(e) {
+        e.stopPropagation();
+        e.preventDefault();
         debugger;
         const username= this.state.email;
         const password = this.state.password;
+        const encryptedPass = await AGLEncryption(password);
         var that = this;
         this.setState({
-            loading:true
+            loading:true,
+            encryptedPass: encryptedPass
         });
         debugger;
-        let reCryptCheck  = await isUserRencrypted(username, password);
+        let reCryptCheck  = await isUserRencrypted(username);
         debugger;
         if(reCryptCheck == false)
         {
             debugger;
-            let passwordCorrect = await isPrecryptCorrect(username, password);
+            let response = await AGLRencryption(username, password);
             debugger;
-            if(passwordCorrect.correctPass == true) {
-                debugger;
-                let response = await AGLRencryption(username, password);
-                debugger;
-                if (response.data.error){
-                    this.setState({
-                        error: true,
-                        loading: false,
-                        errMessage: response.data.error
-                    });
-                    return;//GTFO
-                }
-            }
-        }
-        // let reCryptCheck = await AGLRencryption(this.state.email, this.state.password);
-        // if (reCryptCheck
-        debugger;
-        let encryptedPass = await AGLEncryption(password);
-        debugger;
-        firebase.auth().signInWithEmailAndPassword(this.state.email, encryptedPass)
-            .then(function(response) {
-                window.location.reload();
-            })
-            .catch(function(error) {
-            var that2 = that;
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-                that2.setState({
+            if (response.data == "Wrong Password"){
+                this.setState({
                     error: true,
                     loading: false,
-                    errMessage: errorMessage
+                    errMessage: "Wrong Pass"
                 });
-            // ...
-            });
+                return;//GTFO
+            }
+            else {
+                let encryptedPass = await AGLEncryption(password);
+                debugger;
+                firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.encryptedPass)
+                    .then(function(response) {
+                        window.location.reload();
+                        return;
+                    })
+                    .catch(function(error) {
+                    var that2 = that;
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                        that2.setState({
+                            error: true,
+                            loading: false,
+                            errMessage: errorMessage
+                        });
+                        return;
+                    });
+            }
+        }
+        else {
+            debugger;
+            firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.encryptedPass)
+                .then(function(response) {
+                    window.location.reload();
+                    return;
+                })
+                .catch(function(error) {
+                var that2 = that;
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                    that2.setState({
+                        error: true,
+                        loading: false,
+                        errMessage: errorMessage
+                    });
+                    return;
+                });
+        }
     }
+
     render() {
         var loggedIn = !this.state.loaded || !this.state.email || !this.state.password ? false: true;
         return (
-            <Form onSubmit={this.handleSubmission}>
+            <Form onSubmit={(e) => this.handleSubmission(e)}>
                 <div style={modalStyle.spacing}>
                     <Form.Field>
                         <label>Email</label>

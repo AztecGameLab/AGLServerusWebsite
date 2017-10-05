@@ -182,6 +182,7 @@ class SignUpForm extends Component {
     const newUserData = this.state.newAccount;
     const pass = await AGLEncryption(newUserData.password);
     debugger;
+    newUserData.password = pass;
     let response = await createAGLUser(newUserData.username, newUserData.email, pass, newUserData);
     debugger;
     this.setState({
@@ -205,6 +206,7 @@ class SignUpForm extends Component {
     request.end(postBody);
     request.on('response', (response) => {
     });
+    window.location.reload();
   }
 
 

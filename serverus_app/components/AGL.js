@@ -196,7 +196,7 @@ export const AGLEncryption = async (password) => {
 
 export const AGLRencryption = async (username, password) => {
 
-    let response = await axios.post(
+    return await axios.post(
         'http://localhost:5000/serverus-15f25/us-central1/AGLRencryption',
         {
             username: username,
@@ -206,16 +206,15 @@ export const AGLRencryption = async (username, password) => {
     return response;
 }
 
-export const isUserRencrypted = async (username, password) => {
-
+export const isUserRencrypted = async (username) => {
+    debugger;
     let response = await axios.post(
         'http://localhost:5000/serverus-15f25/us-central1/isUserRencrypted',
         {
-            username: username,
-            password: password
+            username: username
         });
 
-    return (response.data == 'rencrypted');
+    return response.data; //true/false
 }
 
 export const InboxWatch = async (username) => {
