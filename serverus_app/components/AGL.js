@@ -5,9 +5,9 @@ const https = require('https');
 
 //Redux Check API
 export const IsLoggedIn = (reduxStateAccounts) => {
-    firebase.auth().onAuthStateChanged(function(user) {
+    firebase.auth().onAuthStateChanged(function (user) {
         return user != null;
-      });
+    });
 };
 
 export const IsAdmin = (reduxStateAccounts) => {
@@ -78,11 +78,11 @@ export const createAGLUser = async (username, email, password, newDataObj) => {
     let response = await axios.post(
         'http://localhost:5000/serverus-15f25/us-central1/createAGLUser',
         {
-        username: username,
-        email: email,
-        password: password,
-        newDataObj: newDataObj
-    });
+            username: username,
+            email: email,
+            password: password,
+            newDataObj: newDataObj
+        });
     debugger;
 };
 
@@ -180,16 +180,18 @@ export const isPrecryptCorrect = async (username, password) => {
 }
 
 export const AGLEncryption = async (password) => {
-    let response = await axios.post (
-        'http://localhost:5000/serverus-15f25/us-central1/AGLEncryption', 
-        {password: password});
+    debugger;
+    let response = await axios.post(
+        'http://localhost:5000/serverus-15f25/us-central1/AGLEncryption',
+        { password: password });
+        debugger;
     return response.data;
     //encrypted resposne
 }
 
 export const AGLRencryption = async (username, password) => {
 
-    let response = await axios.post(
+    return await axios.post(
         'http://localhost:5000/serverus-15f25/us-central1/AGLRencryption',
         {
             username: username,
@@ -199,16 +201,15 @@ export const AGLRencryption = async (username, password) => {
     return response;
 }
 
-export const isUserRencrypted = async (username, password) => {
-
+export const isUserRencrypted = async (username) => {
+    debugger;
     let response = await axios.post(
         'http://localhost:5000/serverus-15f25/us-central1/isUserRencrypted',
         {
-            username: username,
-            password: password
+            username: username
         });
 
-    return (response.data == 'rencrypted');
+    return response.data; //true/false
 }
 
 export const InboxWatch = async (username) => {
