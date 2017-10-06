@@ -10,7 +10,7 @@ import CompetitionsPage from './components/competitions/CompetitionsPage';
 import Error from './components/common/error/ErrorPage';
 import Inbox from './components/inbox/Inbox';
 import GameDirectory from './components/games/GameDirectory';
-import HomePage from './components/home/HomePage';
+import TempHomePage from './components/home/TempHomePage';
 import MarkdownCreate from './components/articles/MarkdownCreate';
 import ProfilePageContainer from './components/profile/ProfilePageContainer';
 import SearchDirectory from './components/search/SearchDirectory';
@@ -21,7 +21,7 @@ import RequestReset from './components/password/RequestReset';
 
 export default (
     <Route path="/" component={App}>
-        <IndexRoute component={HomePage} />
+        <IndexRoute component={TempHomePage} />
         <Route path="admin" component={AdminDashboard}/>
         <Route path="about" component={AboutPage} />
         <Route path="a/:articleId" component={ArticlePage} />

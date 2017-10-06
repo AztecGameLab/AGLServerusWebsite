@@ -90,7 +90,7 @@ class HeaderMenu extends React.Component {
                                     } icon={null} style={HeaderStyle.profile}>
                                     <Dropdown.Menu>
                                         <Dropdown.Item as={Link} to={'/u/' + this.state.accounts[0].username} icon='user circle' text='My Profile' />
-                                        <Dropdown.Item as={Link} to={'/inbox/' + this.state.accounts[0].username} icon='inbox' text='My Inbox' />
+                                        {false && <Dropdown.Item as={Link} to={'/inbox/' + this.state.accounts[0].username} icon='inbox' text='My Inbox' />}
                                         <Dropdown.Item icon='sign out' text='Sign out' onClick={this.props.signOut} />
                                     </Dropdown.Menu>
                                 </Dropdown>

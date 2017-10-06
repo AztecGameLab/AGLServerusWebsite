@@ -4,27 +4,19 @@ import axios from 'axios';
 const https = require('https');
 
 //Redux Check API
-export const IsLoggedIn = () => {
-    firebase.auth().onAuthStateChanged(function (user) {
-        return user != null;
-    });
+export const IsLoggedIn = (reduxStateAccounts) => {
+    debugger;
+    return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].username != null ? true : false : false : false;
 };
 
 export const IsAdmin = (reduxStateAccounts) => {
     return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].authLevel == 2 ? true : false : false : false;
 };
 
-export const IsYourProfile = ( username) => {
-    firebase.auth().onAuthStateChanged(async function (user) {
-        if (user) {
-            return user.displayName == username.replace(" ", '%20');
-        }
-        else{
-            return false;
-        }
-    });
-};
-
+export const IsYourProfile = (reduxStateAccounts, username) => { 
+    debugger;
+    return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].username == username ? true : false : false : false; 
+}
 //READ ONLY API
 
 export const LoadProfile = async (username) => {

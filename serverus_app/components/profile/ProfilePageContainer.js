@@ -136,7 +136,7 @@ class ProfilePageContainer extends React.Component {
                 window.scrollTo(0, 0);
                 this.setState({
                     profileObject: await LoadProfile(this.props.routeParams.username),
-                    yourAccount: IsYourProfile(this.props.routeParams.username)
+                    yourAccount: IsYourProfile(this.props.accounts, this.props.routeParams.username)
                 });
             } 
         }
@@ -144,11 +144,12 @@ class ProfilePageContainer extends React.Component {
     
     async componentWillMount() {
         let userData = await LoadProfile(this.props.routeParams.username);
+        let isLoggedIn = IsLoggedIn(this.state.accounts);
         debugger;
         this.setState({
             profileObject: userData,
-            loggedIn: IsLoggedIn(),
-            yourAccount: IsYourProfile(this.props.routeParams.username),
+            loggedIn: isLoggedIn,
+            yourAccount: IsYourProfile(this.props.accounts, this.props.routeParams.username),
             rolesSelected: userData.roles,
             bio: userData.bio
         });        
@@ -162,7 +163,7 @@ class ProfilePageContainer extends React.Component {
                 <ProfilePage
                     profileObject={this.state.profileObject}
                     editMode={this.state.editMode}
-                    editModeOn={this.editModeOn}
+                    editModeOn={false}
                     editModeOff={this.editModeOff}
                     loggedIn={loggedIn}
                     yourAccount={this.state.yourAccount}
