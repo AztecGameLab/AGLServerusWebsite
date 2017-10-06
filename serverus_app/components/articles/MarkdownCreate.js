@@ -1,11 +1,13 @@
 import React from 'react';
 import Markmirror from 'react-markmirror';
 import { Dropdown, Icon } from 'semantic-ui-react';
-import firebase from 'firebase';
 import { connect } from 'react-redux';
 import stylesheet from '../../styles/markdown.css';
 import GenericCard from '../common/cards/GenericCard';
 import { CreatePost, GetArticle, SavePost } from '../AGL';
+import ArticleCard from '../common/cards/ArticleCard';
+import { CloudinaryUpload } from '../AGL';
+
 
 const Editor = (props) => {
     const handleType = text => {
@@ -48,18 +50,29 @@ class MarkdownCreate extends React.Component {
                 }
             },
             tags: [{ text: '#extra', value: 'extra' }, { text: '#thicc', value: 'thicc' }],
+            comments: [],
+            selectedTags: [],
+            type: {},
+            image: {
+                src: [{}],
+                allowZoomOut: true,
+                width: 600,
+                height: 350,
+                scale: 1
+            },
+            uploaded: false
         };
-        this.storage = firebase.storage();
         this.onTitleChange = this.onTitleChange.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
         this.savePost = this.savePost.bind(this);
         this.sendToFB = this.sendToFB.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.handleTags = this.handleTags.bind(this);
-        this.handleNewImage = this.handleNewImage.bind(this);
+        // this.handleNewImage = this.handleNewImage.bind(this);
         this.handleScale = this.handleScale.bind(this);
         this.handleAllowZoomOut = this.handleAllowZoomOut.bind(this);
         this.buttonDisable = this.buttonDisable.bind(this);
+        this.sendToCloudinary = this.sendToCloudinary.bind(this);
     }
 
     componentWillMount() {
@@ -158,6 +171,7 @@ class MarkdownCreate extends React.Component {
             postData: currentState
         });
     }
+
     handleScale = e => {
         const scale = parseFloat(e.target.value)
         const currentState = Object.assign({}, this.state.postData);
@@ -188,26 +202,26 @@ class MarkdownCreate extends React.Component {
             date: now,
             text: this.state.postData.text,
             selectedTags: this.state.postData.selectedTags,
-            type: this.state.postData.type
+            type: this.state.postData.type,
         };
         let response = await SavePost(data, this.props.routeParams.type, this.state.savedPost, this.props.location.query['']);
         console.log(response);
     }
 
-    /**
-     * Send JSON to firebase storage and store url in database
-     */
     async sendToFB() {
         var that = this;
         var now = new Date();
         now = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+        //public_id of image
+        let cloudinaryImage = await this.sendToCloudinary();
         var data = {
             title: this.state.postData.title,
             author: this.props.accounts[0].username,
             date: now,
             text: this.state.postData.text,
             selectedTags: this.state.postData.selectedTags,
-            type: this.state.postData.type
+            type: this.state.postData.type,
+            image: cloudinaryImage
         };
         if (this.props.location.query['']) {
             if (Array.isArray(this.props.location.query[''])) {
@@ -221,21 +235,7 @@ class MarkdownCreate extends React.Component {
         } else {
             let response = await CreatePost(data, this.props.routeParams.type);
             console.log(response);
-            debugger;
         }
-
-        // var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
-        // this.pathRef = this.storage.ref('userData/' + this.props.accounts[0].uid + '/articles/' + data.title + '.json');
-        // this.pathRef.put(file).then(function () {
-        //     alert('Uploaded File');
-        //     var that2 = that;
-        //     that.pathRef.getDownloadURL().then(function (url) {
-        //         firebase.database().ref('/allArticles').push(url);
-        //         firebase.database().ref('/articles/' + that2.props.accounts[0].uid).push(url);
-        //     }).catch(function (error) {
-        //         console.log(error);
-        //     });
-        // });
     }
 
     onTitleChange(event) {
@@ -253,10 +253,24 @@ class MarkdownCreate extends React.Component {
             postData: currentState
         });
     }
+
+    sendToCloudinary() {
+        var that = this;
+        if (this.state.postData.image.src) {
+            return CloudinaryUpload(this.state.postData.image.src).then(response => {
+                return response.public_id;
+            }).catch(error => {
+                console.error(error);
+            });
+        } else {
+            return null;
+        }
+    }
+
     render() {
         var loggedIn = this.props.accounts[0] ? this.props.accounts[0] ? true : false : false;
         return (
-            <div style={{ backgroundColor: 'black' }}>
+            <div style={{ backgroundColor: 'black', height: '-webkit-fill-available' }}>
                 {loggedIn ? <div>
                     <div className="row col-lg-12">
                         <div className="col-lg-6 col-sm-12"><h1 style={markdownStyle.title}>Create a new {this.props.routeParams.type}</h1>
@@ -267,7 +281,8 @@ class MarkdownCreate extends React.Component {
                         </div>
                         <div className="col-lg-6 col-sm-12"><h1 style={markdownStyle.title}>Preview post</h1></div>
                         <div className="col-lg-6 col-sm-12" style={markdownStyle.post}>
-                            <GenericCard value={this.state.postData} user={this.props.accounts[0].username} edit={true} />
+                            {this.props.routeParams.type == 'announcement' || this.props.routeParams.type == 'tutorial' ? <ArticleCard edit={true} postData={this.state.postData} uploaded={this.state.uploaded} /> :
+                                <GenericCard value={this.state.postData} user={this.props.accounts[0].username} edit={true} />}
                         </div>
                     </div>
                     <div className="row col-lg-12">
@@ -285,10 +300,8 @@ class MarkdownCreate extends React.Component {
                                 onAddItem={this.handleAddition}
                                 onChange={this.handleTags}
                             />
-                        </div>
-                        {this.state.postData.type.text == 'Game' ?
                             <div style={{ color: 'white', marginTop: 5 }} className="col-lg-6" >
-                                <input name='newImage' type='file' onChange={this.handleNewImage} />
+                                <input type='file' onChange={this.handleNewImage} />
                                 <br />
                                 {'Scaling Mode: '}
                                 <input
@@ -296,7 +309,7 @@ class MarkdownCreate extends React.Component {
                                     name='allowZoomOut'
                                     type='checkbox'
                                     onChange={this.handleAllowZoomOut}
-                                    checked={this.state.postData.image.allowZoomOut}
+                                    checked={this.state.image.allowZoomOut}
                                 />
                                 <br />
                                 <br />
@@ -305,16 +318,42 @@ class MarkdownCreate extends React.Component {
                                     name='scale'
                                     type='range'
                                     onChange={this.handleScale}
-                                    min={this.state.postData.image.allowZoomOut ? '0.1' : '1'}
+                                    min={this.state.image.allowZoomOut ? '0.1' : '1'}
                                     max='2'
                                     step='0.01'
                                     defaultValue='1'
                                 />
-                            </div> : null}
+                            </div>
+                            {this.state.postData.type.text == 'Game' ?
+                                <div style={{ color: 'white', marginTop: 5 }} className="col-lg-6" >
+                                    <input name='newImage' type='file' onChange={this.handleNewImage} />
+                                    <br />
+                                    {'Scaling Mode: '}
+                                    <input
+                                        style={{ color: 'black' }}
+                                        name='allowZoomOut'
+                                        type='checkbox'
+                                        onChange={this.handleAllowZoomOut}
+                                        checked={this.state.postData.image.allowZoomOut}
+                                    />
+                                    <br />
+                                    <br />
+                                    Zoom:
+                                    <input
+                                        name='scale'
+                                        type='range'
+                                        onChange={this.handleScale}
+                                        min={this.state.postData.image.allowZoomOut ? '0.1' : '1'}
+                                        max='2'
+                                        step='0.01'
+                                        defaultValue='1'
+                                    />
+                                </div> : null}
 
-                        <div style={markdownStyle.button} className="col-lg-6">
-                            {this.savedPost ? <button className="btn btn-info" disabled={this.buttonDisable()} onClick={this.savePost}>Save Draft!</button> : null}
-                            <button className="btn btn-success" disabled={this.buttonDisable()} onClick={this.sendToFB}>Publish Post!</button>
+                            <div style={markdownStyle.button} className="col-lg-6">
+                                {this.savedPost ? <button className="btn btn-info" disabled={this.buttonDisable()} onClick={this.savePost}>Save Draft!</button> : null}
+                                <button className="btn btn-success" disabled={this.buttonDisable()} onClick={this.sendToFB}>Publish Post!</button>
+                            </div>
                         </div>
                     </div>
                 </div> : <div>You need admin privileges in order to create posts</div>}

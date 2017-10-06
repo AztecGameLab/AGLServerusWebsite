@@ -123,6 +123,21 @@ export const CreatePost = (post, type, id, edit) => {
     });
 }
 
+export const CloudinaryUpload = async (image) => {
+    var reader = new FileReader();
+    reader.readAsDataURL(image);
+    let imgUrl = await new Promise((resolve, reject) => {
+        reader.onload = () => {
+            resolve(reader.result);
+        }
+    });
+    return axios.post('http://localhost:5000/serverus-15f25/us-central1/UploadToCloudinary', { imgUrl }).then(response => {
+        return response.data;
+    }).catch(error => {
+        return Promise.reject(error);
+    });
+}
+
 export const SavePost = (post, type, overwrite, key) => {
     const url = 'http://localhost:5000/serverus-15f25/us-central1/SavePost?=' + type + '&=save';
     return axios.post(url, { post, overwrite, key }).then(response => {
