@@ -72,8 +72,8 @@ UNMET PEER DEPENDENCIES?
 How to access user info from Redux after user is logged in!!!
 ---
 1. First add: import {connect} from 'react-redux'; to the top
-2. Second add: import * as "   "Actions from '../actions/"   "Actions';  what actions you need which will be
-3. Most Likely: import * as accountActions from '../actions/accountActions'; (fix the pathing however if problem)
+2. Second add: import * as "   "Actions from '..redux/actions/"   "Actions';  what actions you need which will be
+3. Most Likely: import * as accountActions from '..redux/actions/accountActions'; (fix the pathing however if problem)
 4. Last Import: import {bindActionCreators} from 'redux';
 5. Wrap the connect function: export default connect(mapStateToProps, null)("yourcomponenthere")
 6. Add the mapping function: 

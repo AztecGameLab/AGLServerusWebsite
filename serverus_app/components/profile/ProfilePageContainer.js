@@ -1,9 +1,13 @@
+//Imports
 import React from 'react';
 import { Icon, Loader } from 'semantic-ui-react';
 import firebase from 'firebase';
 import axios from 'axios';
 import ProfilePage from './ProfilePage';
 import { connect } from 'react-redux';
+
+//AGL API
+import { LoadProfile, IsLoggedIn, IsYourProfile, EditProfile } from '../AGL';
 
 
 class ProfilePageContainer extends React.Component {
@@ -16,12 +20,12 @@ class ProfilePageContainer extends React.Component {
             loggedIn: false,
             yourAccount: false,
             rolesSelected: [],
-            bio:'',
-            facebookLink:'',
-            twitterLink:'',
-            linkedinLink:'',
-            instagramLink:'',
-            slackUser:''
+            bio: '',
+            facebookLink: '',
+            twitterLink: '',
+            linkedinLink: '',
+            instagramLink: '',
+            slackUser: ''
 
         };
         //bind edits to data here!
@@ -29,12 +33,12 @@ class ProfilePageContainer extends React.Component {
         this.editModeOff = this.editModeOff.bind(this);
         this.handleProfileInput = this.handleProfileInput.bind(this);
         this.handleRolesInput = this.handleRolesInput.bind(this);
-        this.handleBioInput = this.handleBioInput.bind(this);    
-        this.handleFacebook = this.handleFacebook.bind(this);    
-        this.handleTwitter = this.handleTwitter.bind(this); 
-        this.handleLinkedIn= this.handleLinkedIn.bind(this); 
-        this.handleInstagram = this.handleInstagram.bind(this); 
-        this.handleSlack = this.handleSlack.bind(this); 
+        this.handleBioInput = this.handleBioInput.bind(this);
+        this.handleFacebook = this.handleFacebook.bind(this);
+        this.handleTwitter = this.handleTwitter.bind(this);
+        this.handleLinkedIn = this.handleLinkedIn.bind(this);
+        this.handleInstagram = this.handleInstagram.bind(this);
+        this.handleSlack = this.handleSlack.bind(this);
     }
     editModeOn() {
         this.setState({
@@ -45,39 +49,47 @@ class ProfilePageContainer extends React.Component {
     editModeOff() {
         var that = this;
         let editedProfile = this.state.profileObject;
-        editedProfile.info.bio = this.state.bio;
-        editedProfile.info.facebookLink = editedProfile.info.facebookLink + this.state.facebookLink;
-        editedProfile.info.twitterLink = editedProfile.info.twitterLink + this.state.twitterLink;
-        editedProfile.info.linkedInLink = editedProfile.info.linkedInLink + this.state.linkedinLink;
-        editedProfile.info.instagramUser = editedProfile.info.instagramUser + this.state.instagramLink;
+        editedProfile.bio = this.state.bio;
+        if (this.state.facebookLink.length > 0) {
+            editedProfile.facebookLink = 'https://www.facebook.com/' + this.state.facebookLink;
+        }
+        if (this.state.twitterLink.length > 0) {
+            editedProfile.twitterLink = 'https://twitter.com/' + this.state.twitterLink;
+        }
+        if (this.state.linkedinLink.length > 0) {
+            editedProfile.linkedInLink = 'https://www.linkedin.com/in/' + this.state.linkedinLink;
+        }
+        if (this.state.instagramLink.length > 0) {
+            editedProfile.instagramUser = 'https://instagram.com/' + this.state.instagramLink;
+        }
+        if (this.state.slackUser.length > 0) {
+            editedProfile.slackUser = this.state.slackUser;
+        }
         this.setState({
             editMode: false,
             profileObject: editedProfile
         }, function() {
-            var that2 = that;
-            var accountRef = firebase.storage().ref('accounts/' + this.state.profileObject.info.username + '.json');                        
-            var yourFile = new Blob([JSON.stringify(this.state.profileObject)], { type: 'application/json' });
-            accountRef.put(yourFile).then(function () {
-                accountRef.getDownloadURL().then(function (url) {
-                    firebase.database().ref('accounts/' + that.state.profileObject.username).set({
-                        data: url
-                    });
-                    return;
-                });
-            });
+            firebase.auth().onAuthStateChanged(async function (user) {
+                if (user) {
+                    debugger;
+                    let response = await EditProfile(user.displayName, user.uid, that.state.profileObject);
+                }
+                else{
+                    return alert('WARNING FALSIFIED EDIT');
+                }
+            }); 
         });
-        
     }
     handleProfileInput(e) {
         const yourAccount = this.state.profileObject;
-        yourAccount.info.showcaseImage = e.target.name;
+        yourAccount.showcaseImage = e.target.name;
         this.setState({
             profileObject: yourAccount
         });
     }
     handleRolesInput(e, { value }) {
         const yourAccount = this.state.profileObject;
-        yourAccount.info.roles = value;
+        yourAccount.roles = value;
         this.setState({
             rolesSelected: value,
             profileObject: yourAccount
@@ -85,7 +97,7 @@ class ProfilePageContainer extends React.Component {
     }
     handleBioInput(e) {
         const yourAccount = this.state.profileObject;
-        yourAccount.info.bio = e.target.value
+        yourAccount.bio = e.target.value
         this.setState({
             bio: e.target.value,
             profileObject: yourAccount
@@ -112,81 +124,60 @@ class ProfilePageContainer extends React.Component {
         });
     }
     handleSlack(e) {
-        const yourAccount = this.state.profileObject;
-        yourAccount.info.slack = e.target.value
         this.setState({
-            slackUser: e.target.value,
-            profileObject: yourAccount
-        });
-    }
-    
-    componentWillMount() {
-        var that = this;
-        var userRef = firebase.database().ref('accounts/' + this.props.routeParams.username);
-        userRef.on('value', function (snapshot) {
-            if (!snapshot.val()) {
-                that.setState({
-                    notFound: true
-                });
-                return;
-            } else {
-                axios.get(snapshot.val().data).then(
-                    function (response) {
-                        var that2 = that;
-                        that2.setState({
-                            profileObject: response.data
-                        }, () => {  firebase.auth().onAuthStateChanged(function (user) {
-                                        if (user) {
-                                            // User is signed in.
-                                            if (user.email == that.state.profileObject.info.email) {
-                                                that.setState({
-                                                    loggedIn: true,
-                                                    yourAccount: true,
-                                                    rolesSelected: that.state.profileObject.info.roles,
-                                                    bio: that.state.profileObject.info.bio
-                                                });
-                                            }
-                                            else {
-                                                that.setState({
-                                                    loggedIn: true
-                                                });
-                                            }       
-                                        }
-                                        else {
-                                            that.setState({
-                                                loggedIn: false
-                                            })
-                                        }    
-                                    });
-                                });
-                    }
-                );
-            }
+            slackUser: e.target.value
         });
     }
 
+
+    async componentDidUpdate(nextProps, nextState) {
+        if(this.state.profileObject.info) {
+            if (this.state.profileObject.username != this.props.routeParams.username) {
+                window.scrollTo(0, 0);
+                this.setState({
+                    profileObject: await LoadProfile(this.props.routeParams.username),
+                    yourAccount: IsYourProfile(this.props.accounts, this.props.routeParams.username)
+                });
+            } 
+        }
+    }
+    
+    async componentWillMount() {
+        let userData = await LoadProfile(this.props.routeParams.username);
+        let isLoggedIn = IsLoggedIn(this.state.accounts);
+        debugger;
+        this.setState({
+            profileObject: userData,
+            loggedIn: isLoggedIn,
+            yourAccount: IsYourProfile(this.props.accounts, this.props.routeParams.username),
+            rolesSelected: userData.roles,
+            bio: userData.bio
+        });        
+    }
+
     render() {
+        let loggedIn = this.state.loggedIn;
         var currentComponent;
-        if (this.state.profileObject.info != null) {
+        if (this.state.profileObject.firstName != null) {
             currentComponent = (
                 <ProfilePage
                     profileObject={this.state.profileObject}
                     editMode={this.state.editMode}
-                    editModeOn={this.editModeOn}
+                    editModeOn={false}
                     editModeOff={this.editModeOff}
-                    loggedIn={this.state.loggedIn}
+                    loggedIn={loggedIn}
                     yourAccount={this.state.yourAccount}
-                    handleProfileInput = {this.handleProfileInput} 
-                    handleRolesInput = {this.handleRolesInput}
-                    rolesSelected = {this.state.rolesSelected}
-                    handleBioInput = {this.handleBioInput}
-                    bio = {this.state.bio}
-                    handleFacebook = {this.handleFacebook}
-                    handleTwitter = {this.handleTwitter}
-                    handleLinkedIn = {this.handleLinkedIn}
-                    handleInstagram = {this.handleInstagram}
-                    handleSlack = {this.handleSlack}
-                    slackUser = {this.state.slackUser}/>
+                    handleProfileInput={this.handleProfileInput}
+                    handleRolesInput={this.handleRolesInput}
+                    rolesSelected={this.state.rolesSelected}
+                    handleBioInput={this.handleBioInput}
+                    bio={this.state.bio}
+                    handleFacebook={this.handleFacebook}
+                    handleTwitter={this.handleTwitter}
+                    handleLinkedIn={this.handleLinkedIn}
+                    handleInstagram={this.handleInstagram}
+                    handleSlack={this.handleSlack}
+                    slackUser={this.state.slackUser} />
             );
         }
         else if (this.state.notFound) {
