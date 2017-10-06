@@ -3,11 +3,12 @@ import axios from 'axios';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as accountActions from './actions/accountActions';
-import HeaderMenu from './common/HeaderMenu';
-import Footer from './common/Footer';
+import * as accountActions from './redux/actions/accountActions';
+import HeaderMenu from './navigation/HeaderMenu';
+import Footer from './navigation/Footer';
 import LoginModel from './login/LoginModel';
-import tags from './cards/tags.css'
+import tags from '../styles/tags.css';
+import { LoadProfile } from './AGL';
 require('../../favicon.ico');
 
 class App extends React.Component {
@@ -23,36 +24,30 @@ class App extends React.Component {
         this.openLogin = this.openLogin.bind(this);
         this.closeLogin = this.closeLogin.bind(this);
         this.changeTabIndex = this.changeTabIndex.bind(this);
+        this.signedUp = this.signedUp.bind(this);
+        this.signOut = this.signOut.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
+        this.search = this.search.bind(this);
     }
 
     componentWillMount() {
         var that = this;
         this.isPageMounted = false;
-        firebase.auth().onAuthStateChanged(function (user) {
+        //Move to API 
+        firebase.auth().onAuthStateChanged(async function (user) {
             if (user) {
-                var refString = 'accounts/' + user.displayName;
-                var userUrlRef = firebase.database().ref(refString);
-                userUrlRef.on('value', function (snapshot) {
-                    var that2 = that;
-                    if (that2.state.modelIsOpen) return;
-                    axios.get(snapshot.val().data)
-                        .then(function (response) {
-                            var that3 = that2;
-                            if (!that3.props.accounts[0])
-                                that3.props.actions.loadAccount(response.data);
-                        }).then(function () {
-                            var that3 = that2;
-                            that3.setState({
-                                loggedIn: true
-                            });
-                        });
-                });
+                let userObj = await LoadProfile(user.displayName);
+                if (!that.props.accounts[0]) {
+                    that.props.actions.loadAccount(userObj);
+                    that.setState({
+                        loggedIn: true
+                    });
+                }
             }
-            else {
-                console.log('NO USER LOGGED IN');
-            }
-        })
+        });
     }
+
+
 
     openLogin(activeIndex) {
         this.changeTabIndex(activeIndex);
@@ -91,10 +86,27 @@ class App extends React.Component {
         this.props.actions.signOutAccount();
     }
 
+    handleSearch = (e) => {
+        this.setState({
+            search: e.target.value
+        })
+    }
+
+    search = (e) => {
+        //Prevent Search input to clear
+        e.preventDefault();
+        e.stopPropagation();
+
+        //Redirects to specified path
+        this.context.router.push("/search/" + this.state.search);
+        //AGL API call to retrieve search data, I was thinking we could firebase here to store in redux store for faster async results and 
+        //in the SearchDirectory component we can have a componentDidUpdate to listen for a flag when query results are successfully pushed into store.
+    }
+
     render() {
         return (
             <div>
-                <HeaderMenu loggedIn={this.state.loggedIn} showModel={this.openLogin} signOut={this.signOut}></HeaderMenu>
+                <HeaderMenu loggedIn={this.state.loggedIn} showModel={this.openLogin} signOut={this.signOut} handleSearch={this.handleSearch} search={this.search}></HeaderMenu>
                 <div style={AppStyle.mainContent}>{this.props.children}</div>
                 <Footer />
                 <LoginModel activeIndex={this.state.activeIndex} isOpen={this.state.modelIsOpen} close={this.closeLogin} changeTab={this.changeTabIndex} signedUp={this.signedUp} />
@@ -128,6 +140,9 @@ var AppStyle = {
 
 App.propTypes = {
     children: PropTypes.object
+};
+App.contextTypes = {
+    router: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

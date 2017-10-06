@@ -5,9 +5,9 @@ import { Router, browserHistory } from 'react-router';
 import routes from './routes';
 import firebase from 'firebase';
 import { StyleRoot } from 'radium';
-import configureStore from './components/store/configureStore';
+import configureStore from './components/redux/store/configureStore';
 import {Provider} from 'react-redux';
-import CountdownPage from './components/prelaunch/CountdownPage';
+import CountdownPage from './components/common/prelaunch/CountdownPage';
 
 
 const config = {

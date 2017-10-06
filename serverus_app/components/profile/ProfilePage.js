@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import { Image, CloudinaryContext } from 'cloudinary-react';
 import { Grid, Icon, Card, Tab, Button, List, Popup, Feed, Dropdown, TextArea, Input, Label } from 'semantic-ui-react';
-import IconPicker from '../common/IconPicker';
+import IconPicker from '../common/icon/IconPicker';
 import { Link } from 'react-router';
-import roles2 from '../common/roleOptions2';
-import badgeDescriptions from '../common/badgeOptions';
+import roleOptions from '../common/options/roleOptions.json';
+import badgeOptions from '../common/options/badgeOptions.json';
 import md5 from 'md5';
-import style from './friend.css';
+import style from '../../styles/friend.css';
+import roleNames from '../common/options/roleNamesOnly.json';
 
 //DATA IS IN userData!! userData.firstName for example
 const ProfilePage = (props) => {
-    const userData = props.profileObject.info;
-    const roleOptions = roles2;
-    const badgeDescriptions = badgeDescriptions;
+    const userData = props.profileObject;
 
     const imageLarge = (originalLink) => {
         return originalLink.replace("Small", "Large");
@@ -29,10 +28,11 @@ const ProfilePage = (props) => {
         return (month + " " + day + ", " + year);
     };
 
+    //Move to API
     const roleMapper = (roles) => {
         let objectList = [];
         roles.map((userRole) => {
-            objectList.push(roleOptions.find(role => role.value === userRole));
+            objectList.push(roleOptions.roles.find(role => role.value === userRole));
         });
         return (objectList.map((role, idx) =>
             <div key={idx}>
@@ -44,8 +44,8 @@ const ProfilePage = (props) => {
         ));
     };
     const friendMapper = (friendObject) => {
-        if(Object.keys(friendObject).length > 0) {
-            var keys = Object.keys(friendObject);
+        if(friendObject.length > 0) {
+            var keys = friendObject;
             return (keys.map((key)=> 
                 <Feed.Content key={md5(key)+ 7} >
                     <Icon name= 'heart outline' size='large' />
@@ -59,7 +59,7 @@ const ProfilePage = (props) => {
     };
     const badgeMapper = (badges) => {
         let objectList = [];
-        //console.log(badgeDescriptions.badge)
+        //console.log(badgeOptions.badge);
         return (badges.map((badge, idx) =>
             <Popup
                 key={idx}
@@ -69,6 +69,18 @@ const ProfilePage = (props) => {
             />
         ));
     };
+
+    const evalUsername = (username) => {
+        if(username==='') return 'Username';
+        return username;
+    };
+
+    const evalUserLastDelim = (username) => {
+        username = String(username);
+        let ret = username.substring(username.lastIndexOf('/')+1);
+        if(ret === '' ) return 'Username';
+        return ret;
+    }
 
     return (
         <div>
@@ -91,9 +103,9 @@ const ProfilePage = (props) => {
                             </Card.Meta>
                             <br/>
                             {props.editMode ? 
-                                <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleSlack} value = {props.slackUser}>
+                                <Input style = {{fontSize: '15px'}} iconPosition='left' onChange = {props.handleSlack} >
                                     <Icon name='slack' />
-                                    <input />
+                                    <input placeholder={ evalUsername(userData.slackUser) }/>
                                 </Input>
                             :
                             <Popup
@@ -102,7 +114,7 @@ const ProfilePage = (props) => {
                                         <Icon name='slack' size = 'large'/> Slack
                                     </Label>}
                                 header={'Slack Username'}
-                                content={'@ ' + props.slackUser}
+                                content={'@ ' + userData.slackUser}
                             />
                             }
                         </Card.Content>
@@ -132,7 +144,7 @@ const ProfilePage = (props) => {
                                     {props.editMode ? 
                                         <Dropdown 
                                             placeholder='Roles' 
-                                            fluid multiple selection options={roles2}
+                                            fluid multiple selection options={roleNames.roles}
                                             value={props.rolesSelected} 
                                             onChange={props.handleRolesInput} /> : roleMapper(userData.roles)}
                                 </Feed>
@@ -147,21 +159,21 @@ const ProfilePage = (props) => {
                         <Card.Content extra>
                             {props.editMode ? 
                             <div>
-                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleFacebook}>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' onChange = {props.handleFacebook}>
                                 <Icon name='facebook' />
-                                <input />
+                                <input placeholder={evalUserLastDelim(userData.facebookLink)}/>
                             </Input>
-                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleTwitter}>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' onChange = {props.handleTwitter}>
                                 <Icon name='twitter' />
-                                <input />
+                                <input placeholder={evalUserLastDelim(userData.twitterLink)}/>
                             </Input>
-                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleLinkedIn}>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' onChange = {props.handleLinkedIn}>
                                 <Icon name='linkedin' />
-                                <input />
+                                <input placeholder={evalUserLastDelim(userData.linkedInLink)}/>
                             </Input>
-                            <Input style = {{fontSize: '15px'}} iconPosition='left' placeholder='Username' onChange = {props.handleInstagram}>
+                            <Input style = {{fontSize: '15px'}} iconPosition='left' onChange = {props.handleInstagram}>
                                 <Icon name='instagram' />
-                                <input />
+                                <input placeholder={evalUserLastDelim(userData.instagramUser)}/>
                             </Input>
                             </div>
                             :
@@ -255,13 +267,13 @@ const ProfilePage = (props) => {
                         <Card.Content>
                             <Card.Description>
                                 {userData.friends == 0 && <div>Add a friend! </div>}
-                                {friendMapper(userData.friends)}
+                                {userData.friends != null ? friendMapper(userData.friends) : null}
                             </Card.Description>
                         </Card.Content>
                         <hr />
                     </Card>
                 </Grid.Column>
-                <Grid.Column width={2} fluid>
+                <Grid.Column width={2}>
                     {
                     props.yourAccount && 
                     <div>

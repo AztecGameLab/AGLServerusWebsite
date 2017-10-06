@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as accountActions from '../actions/accountActions';
+import * as accountActions from '../../redux/actions/accountActions';
 import ReactMarkdown from 'react-markdown';
 import AvatarEditor from 'react-avatar-editor';
 
@@ -27,21 +27,27 @@ class GenericCard extends React.Component {
 
     componentWillUpdate(nextProps, nextState) {
         if (nextProps.accounts[0] && !nextState.loggedIn) {
-            this.setState({
-                loggedIn: true,
-                favorited: nextProps.accounts[0].info.bookmarked.includes(this.props.keyUrl)
-            })
+            if (nextProps.accounts[0].bookmarked) {
+                this.setState({
+                    loggedIn: true,
+                    favorited: nextProps.accounts[0].bookmarked.includes(this.props.keyUrl)
+                });
+            } else {
+                this.setState({
+                    loggedIn: true,
+                });
+            }
+            return true;
         }
-        return true;
     }
     //Toggles if the user has favorited a card or not... Should call back to the json. 
     toggleUserFavorited() {
         var that = this;
         const previousState = this.state.favorited;
-        var info = Object.assign({}, this.props.accounts[0].info);
-        this.props.actions.signOutAccount();        
+        var info = Object.assign({}, this.props.accounts[0]);
+        this.props.actions.signOutAccount();
         if (!previousState) {
-            if(!info.bookmarked.includes(this.props.keyUrl))
+            if (!info.bookmarked.includes(this.props.keyUrl))
                 info.bookmarked.push(this.props.keyUrl);
         } else {
             info.bookmarked.splice(info.bookmarked.indexOf(this.props.keyUrl));
@@ -50,7 +56,7 @@ class GenericCard extends React.Component {
             uid: this.props.accounts[0].uid,
             info: info
         };
-        var file = new Blob([JSON.stringify(data)], { type: 'application/json' });        
+        var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
         var pathRef = firebase.storage().ref('accounts/' + data.info.username + '.json');
         pathRef.put(file).then(function () {
             pathRef.getDownloadURL().then(function (url) {
@@ -66,7 +72,7 @@ class GenericCard extends React.Component {
     }
 
     render() {
-        let profilePic = require('./demoProfileImage.jpg');
+        let profilePic = require('../../../styles/demoProfileImage.jpg');
         let favorited = this.props.edit ? false : this.state.favorited;
         let loggedIn = this.props.accounts[0] ? true : null;
         return (
@@ -78,7 +84,7 @@ class GenericCard extends React.Component {
                                 <Grid.Column as={Link} to={"/a/" + this.props.keyUrl} >
                                     <Image
                                         fluid
-                                        label={{color: this.props.value.type.id, content: this.props.value.type.text, ribbon: true }}
+                                        label={{ color: this.props.value.type.id, content: this.props.value.type.text, ribbon: true }}
                                         src={profilePic} />
                                 </Grid.Column>
                                 <Divider vertical></Divider>
@@ -160,9 +166,9 @@ class GenericCard extends React.Component {
     }
 }
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators(accountActions,dispatch)
+        actions: bindActionCreators(accountActions, dispatch)
         //this will go through the courseActions file and wrap with dispatch
     };
 }
@@ -209,6 +215,7 @@ var CardStyle = {
         background: '#263238',
         color: 'white',
         paddingRight: 25,
-        paddingLeft: 16
+        paddingLeft: 16,
+        outline: 'none'
     }
 };

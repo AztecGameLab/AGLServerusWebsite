@@ -11,7 +11,7 @@ class AboutPage extends React.Component {
                 <br/><br/><br/>
                     <h1>About Us</h1>
                     <p>
-                    Aztec Game Lab was conceived and envisioned since 2016. We came together at the begining of this summer to officially organize our efforts.
+                    Aztec Game Lab was conceived and envisioned since 2016. We came together at the beginning of this summer to officially organize our efforts.
                     </p>
                     <br/>
                     <p>
