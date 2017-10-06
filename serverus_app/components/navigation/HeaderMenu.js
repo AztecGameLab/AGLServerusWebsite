@@ -90,14 +90,14 @@ class HeaderMenu extends React.Component {
                                     } icon={null} style={HeaderStyle.profile}>
                                     <Dropdown.Menu>
                                         <Dropdown.Item as={Link} to={'/u/' + this.state.accounts[0].username} icon='user circle' text='My Profile' />
-                                        <Dropdown.Item as={Link} to={'/inbox/' + this.state.accounts[0].username} icon='inbox' text='My Inbox' />
+                                        {false && <Dropdown.Item as={Link} to={'/inbox/' + this.state.accounts[0].username} icon='inbox' text='My Inbox' />}
                                         <Dropdown.Item icon='sign out' text='Sign out' onClick={this.props.signOut} />
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </Menu.Menu>
                             :
                             <Menu.Menu position='right'>
-                                <Menu.Item><form onSubmit={this.props.search}><input className="form-control" style={{color:'black'}}type="text" placeholder="Search..." onChange={this.props.handleSearch} /></form></Menu.Item>
+                                {false && <Menu.Item><form onSubmit={this.props.search}><input className="form-control" style={{color:'black'}}type="text" placeholder="Search..." onChange={this.props.handleSearch} /></form></Menu.Item>}
                                 <Menu.Item onClick={() => this.props.showModel(0)}><Icon name='sign in' size='big' /> Login!</Menu.Item>
                                 <Menu.Item onClick={() => this.props.showModel(1)} style={HeaderStyle.profile}><Icon name='signup' size='big' /> Sign Up!</Menu.Item>
                             </Menu.Menu>}

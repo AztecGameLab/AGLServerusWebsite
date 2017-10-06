@@ -69,10 +69,10 @@ class ProfilePageContainer extends React.Component {
             editMode: false,
             profileObject: editedProfile
         }, function() {
-            firebase.auth().onAuthStateChanged(function async (user) {
+            firebase.auth().onAuthStateChanged(async function (user) {
                 if (user) {
-                    //check that scope
-                    //let response = await EditProfile(user.displayName, user.uid, that.state.profileObject);
+                    debugger;
+                    let response = await EditProfile(user.displayName, user.uid, that.state.profileObject);
                 }
                 else{
                     return alert('WARNING FALSIFIED EDIT');
@@ -144,9 +144,11 @@ class ProfilePageContainer extends React.Component {
     
     async componentWillMount() {
         let userData = await LoadProfile(this.props.routeParams.username);
+        let isLoggedIn = IsLoggedIn(this.state.accounts);
+        debugger;
         this.setState({
             profileObject: userData,
-            loggedIn: IsLoggedIn(this.props.accounts),
+            loggedIn: isLoggedIn,
             yourAccount: IsYourProfile(this.props.accounts, this.props.routeParams.username),
             rolesSelected: userData.roles,
             bio: userData.bio
@@ -161,7 +163,7 @@ class ProfilePageContainer extends React.Component {
                 <ProfilePage
                     profileObject={this.state.profileObject}
                     editMode={this.state.editMode}
-                    editModeOn={this.editModeOn}
+                    editModeOn={false}
                     editModeOff={this.editModeOff}
                     loggedIn={loggedIn}
                     yourAccount={this.state.yourAccount}

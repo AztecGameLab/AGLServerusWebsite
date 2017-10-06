@@ -63,11 +63,19 @@ class SignUpTwo extends React.Component {
   render() {
     return (
       <div>
+      <Grid>
+        <Grid.Column width = {1}>
+          <Icon name = 'rocket' size = 'big' />
+        </Grid.Column>
+        <Grid.Column width = {11}>
+        <h3>Come join us! Let's make awesome games! </h3>
+        </Grid.Column>
+      </Grid>
+      <hr/>
         <div style={modalStyle.spacing}>
           <Form.Field>
             <label>First Name</label>
-            <Input placeholder='First Name' iconPosition='left'>
-              <Icon name='user outline' />
+            <Input placeholder='First Name' >
               <input onChange={this.props.handleFirstNameInput} onBlur = {this.firstNameCheck}/>
             </Input>
           </Form.Field>
@@ -75,8 +83,7 @@ class SignUpTwo extends React.Component {
         <div style={modalStyle.spacing}>
           <Form.Field>
             <label>Last Name</label>
-            <Input placeholder='Last Name' iconPosition='left'>
-              <Icon name='user outline' />
+            <Input placeholder='Last Name' >
               <input onChange={this.props.handleLastNameInput} onBlur = {this.lastNameCheck} />
             </Input>
           </Form.Field>
@@ -91,11 +98,6 @@ class SignUpTwo extends React.Component {
         </div>
         <div style={{ padding: '20px' }}>
           <Grid>
-            <Grid.Column floated='left' width={1}>
-              <Button circular icon size='big' onClick={() => this.props.changePhase(-1)}>
-                <Icon name='angle double left' />
-              </Button>
-            </Grid.Column>
             <Grid.Column floated='right' width={1}>
               <Button circular icon color='green' size='big' onClick={() => this.props.changePhase(1)}
                 disabled={this.state.buttonDisable}>

@@ -7,7 +7,7 @@ import firebase from 'firebase';
 //var modalStyle
 
 //AGL API
-import {EmailTakenCheck, RedIdTakenCheck} from '../AGL';
+import {EmailTakenCheck} from '../AGL';
 
 class SignUpOne extends React.Component {
   constructor(props) {
@@ -18,17 +18,15 @@ class SignUpOne extends React.Component {
       emailWarning: false,
       emailTaken: false,
       passwordWarning: false,
-      redIDFirstClick: false,
-      redIDWarning: false,
       emailFilled: false,
       passFilled: false,
-      redIDFilled: false,
       buttonDisable: true,
-      redIDTaken: false,
+      termsAccepted: false,
+      
     };
+    this.termsAccepted = this.termsAccepted.bind(this);    
     this.emailCheck = this.emailCheck.bind(this);
     this.passwordCheck = this.passwordCheck.bind(this);
-    this.redIDCheck = this.redIDCheck.bind(this);
     this.formComplete = this.formComplete.bind(this);
   }
   
@@ -83,6 +81,17 @@ class SignUpOne extends React.Component {
       });
     }
   }
+
+  termsAccepted(e) {
+    let prevChecked = this.state.termsAccepted;
+    this.setState({
+      termsAccepted: !prevChecked
+    }, function () {
+      this.formComplete();
+    });
+    return;
+  }
+
   passwordCheck(e) {
     let passString = e.target.value;
     let upperMatches = passString.match(/[A-Z]/g);
@@ -112,71 +121,10 @@ class SignUpOne extends React.Component {
       });
     }
   }
-  async redIDCheck(e) {
-    e.persist();
-    const redIdCheck = await RedIdTakenCheck(e.target.value);   
-    const isTaken = redIdCheck.redIdTaken;
-    console.log(isTaken);
-    this.props.handleRedIDInput(e);
-    var that = this;
-    if (isTaken == true) {
-      that.setState({
-        redIDFirstClick: true,
-        redIDWarning: true,
-        redIDTaken: true
-      }, function () {
-        that.formComplete();
-        setTimeout(function(){
-          document.getElementById("red").value = '';
-      }, 2000);
-      });
-      return;
-    }
-    let passString = e.target.value;
-    let numMatches = passString.match(/[0-9]/g); 
-    let specialMatches = passString.match(/\D/g); 
-    let numCount = numMatches ? numMatches.length : 0;
-    if (numCount == 9 && specialMatches == null) {
-      this.setState({
-        redIDFirstClick: true,
-        redIDWarning: false,
-        redIDFilled: true,
-        redIDTaken: false
-      }, function () {
-        this.formComplete();
-      });
-    }
-    else if (e.target.value.length > 9) {
-      this.setState({
-        redIDFirstClick: true,
-        redIDWarning: true,
-        redIDTaken: false
-      }, function () {
-        this.formComplete();
-      });
-    }
-    else if ((e.target.value == "" || e.target.value.length < 9) && !specialMatches) {
-      this.setState({
-        redIDFirstClick: false,
-        redIDWarning: false,
-        redIDTaken: false
-      }, function () {
-        this.formComplete();
-      });
-    }
-    else {
-      this.setState({
-        redIDFirstClick: true,
-        redIDWarning: true,
-        redIDTaken: false
-      }, function () {
-        this.formComplete();
-      });
-    }
-  }
+  
   formComplete() {
-    var warningsOn = (this.state.emailWarning || this.state.passwordWarning || this.state.redIDWarning || this.state.emailTaken || this.state.redIDTaken);
-    var inputsFilled = (this.state.emailFilled && this.state.passFilled && this.state.redIDFilled);
+    var warningsOn = (this.state.emailWarning || this.state.passwordWarning || this.state.emailTaken);
+    var inputsFilled = (this.state.emailFilled && this.state.passFilled && this.state.termsAccepted);
     if (inputsFilled) {
       this.setState({
         buttonDisable: warningsOn
@@ -186,7 +134,6 @@ class SignUpOne extends React.Component {
   render() {
     var emailInput = document.getElementById('email');
     var passInput = document.getElementById('pass');
-    var redInput = document.getElementById('red');
     return (
       <div>
         <div style={modalStyle.spacing}>
@@ -206,21 +153,7 @@ class SignUpOne extends React.Component {
                   </div>
                   }
                   content='This is where your emails and verification will be sent!'
-                  inverted
                 />
-          </Form.Field>
-        </div>
-        <div style={modalStyle.spacing}>
-          <Form.Field>
-            <label>Red ID</label>
-            <Input inverted placeholder="Red ID" iconPosition='left'>
-              <Icon name='shield' />
-              <input id='red' onBlur={(e) => this.redIDCheck(e)} />
-              {this.state.redIDWarning ?
-                this.state.redIDFirstClick && !this.state.redIDTaken && <Label color='red' pointing='left'>Incorrect Red ID</Label>
-                : this.state.redIDFirstClick ? <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label> : null}
-              {this.state.redIDTaken && <Label pointing='left' color='red'>Red ID is already used</Label>}
-            </Input>
           </Form.Field>
         </div>
         <div style={modalStyle.spacing}>
@@ -238,22 +171,42 @@ class SignUpOne extends React.Component {
                   </Input>
                 </div>}
               content='Make sure to have 6+ characters with an uppercase and lowercase letter!'
-              inverted
             />
            
         </Form.Field>
       </div>
-        <div style={modalStyle.spacing}>
-        </div>
-        <div style={{ padding: '20px' }}>
-          <Grid>
-            <Grid.Column floated='right' width={1}>
-              <Button circular icon color='green' size='big' onClick={() => this.props.changePhase(1)}
-                disabled={this.state.buttonDisable}>
-                <Icon name='angle double right' />
-              </Button>
-            </Grid.Column>
-          </Grid>
+        <div style={{ padding: '5px' }}>
+          <Form.Field>
+            <Checkbox label='By signing up you agree to AGL terms and conditions:  ' onClick={this.termsAccepted} />
+            <Button icon color = "teal" floated = "right" onClick= {() => {window.open('https://docs.google.com/document/d/1R6tGpquyGkJQlrIz-iO-xCoMH5pjsymbRFWiCd6qYQ4/edit?usp=sharing','_blank')}} >
+            <Icon name='file text' />
+          </Button>
+            <hr />
+            
+          </Form.Field>
+          <br/>
+          <div style={modalStyle.spacing}>
+            <Grid>
+              <Grid.Column floated='left' width={1}>
+                <Button circular icon size='big' onClick={() => this.props.changePhase(-1)}>
+                  <Icon name='angle double left' />
+                </Button>
+              </Grid.Column>
+              <Grid.Column floated='right' width={10}>
+                {<Button fluid color='green' size='massive' 
+                  onClick={this.props.onSubmission}
+                  loading={this.props.loading}
+                  disabled = {this.state.buttonDisable}>
+                  <Icon  size = 'large' name = 'shutdown'/>
+                  Join our lab!
+                </Button>}
+                {this.props.error && <Message negative>
+                  <Message.Header>Sorry, authentification failed</Message.Header>
+                      <p>{this.props.errorMessage}</p>
+              </Message>}
+              </Grid.Column>
+            </Grid>
+          </div>
         </div>
       </div>
     );

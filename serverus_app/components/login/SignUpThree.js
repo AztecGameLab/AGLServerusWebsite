@@ -12,7 +12,7 @@ import IconPicker from '../common//icon/IconPicker';
 //var modalStyle
 
 //AGL API
-import {UsernameTakenCheck} from '../AGL';
+import {UsernameTakenCheck, RedIdTakenCheck} from '../AGL';
 
 class SignUpThree extends React.Component {
   constructor(props) {
@@ -24,18 +24,20 @@ class SignUpThree extends React.Component {
       rolesFilled: '',
       usernameTaken: false,
       buttonDisable: true,
+      redIDFirstClick: false,
+      redIDWarning: false,
+      redIDFilled: false,      
       existingUsernames: [],
       loading: false,
-      termsAccepted: false,
       rolesSelected: [],
-      securityCodeFilled: false,
+      redIDTaken: false,      
       usernameInvalid: false
     };
     this.usernameCheck = this.usernameCheck.bind(this);
-    this.adminCheck = this.adminCheck.bind(this);
     this.formComplete = this.formComplete.bind(this);
-    this.termsAccepted = this.termsAccepted.bind(this);
     this.rolesCheck = this.rolesCheck.bind(this);
+    this.redIDCheck = this.redIDCheck.bind(this);
+    
   }
 
   rolesCheck(e, { value }) {
@@ -133,56 +135,82 @@ class SignUpThree extends React.Component {
     }
   }
 
-  adminCheck(e) {
-    this.props.handleAdminCode(e);
-    if(e.target.value.toString().length == 6){
+
+  async redIDCheck(e) {
+    e.persist();
+    const redIdCheck = await RedIdTakenCheck(e.target.value);   
+    const isTaken = redIdCheck.redIdTaken;
+    console.log(isTaken);
+    this.props.handleRedIDInput(e);
+    var that = this;
+    if (isTaken == true) {
+      that.setState({
+        redIDFirstClick: true,
+        redIDWarning: true,
+        redIDTaken: true
+      }, function () {
+        that.formComplete();
+        setTimeout(function(){
+          document.getElementById("red").value = '';
+      }, 2000);
+      });
+      return;
+    }
+    let passString = e.target.value;
+    let numMatches = passString.match(/[0-9]/g); 
+    let specialMatches = passString.match(/\D/g); 
+    let numCount = numMatches ? numMatches.length : 0;
+    if (numCount == 9 && specialMatches == null) {
       this.setState({
-        securityCodeFilled: true
+        redIDFirstClick: true,
+        redIDWarning: false,
+        redIDFilled: true,
+        redIDTaken: false
       }, function () {
         this.formComplete();
       });
-      return;
+    }
+    else if (e.target.value.length > 9) {
+      this.setState({
+        redIDFirstClick: true,
+        redIDWarning: true,
+        redIDTaken: false
+      }, function () {
+        this.formComplete();
+      });
+    }
+    else if ((e.target.value == "" || e.target.value.length < 9) && !specialMatches) {
+      this.setState({
+        redIDFirstClick: false,
+        redIDWarning: false,
+        redIDTaken: false
+      }, function () {
+        this.formComplete();
+      });
     }
     else {
       this.setState({
-        securityCodeFilled: false
+        redIDFirstClick: true,
+        redIDWarning: true,
+        redIDTaken: false
       }, function () {
         this.formComplete();
       });
-      return;
     }
   }
 
-  termsAccepted(e) {
-    let prevChecked = this.state.termsAccepted;
-    this.setState({
-      termsAccepted: !prevChecked
-    }, function () {
-      this.formComplete();
-    });
-    return;
-  }
   formComplete() {
     console.log('input form')
-    var validInputs = !this.state.usernameInvalid && !this.state.vulgarUsername;
-    var isTaken = this.state.usernameTaken || this.state.usernameLimit;
-    var inputsFilled = this.state.usernameFilled && (this.state.rolesSelected.length > 0) && this.state.securityCodeFilled;
-    var termsAccepted = this.state.termsAccepted;
+    var validInputs = !this.state.usernameInvalid && !this.state.vulgarUsername && !this.state.redIDWarning;
+    var isTaken = this.state.usernameTaken || this.state.usernameLimit || this.state.redIDTaken;
+    var inputsFilled = this.state.redIDFilled && this.state.usernameFilled && (this.state.rolesSelected.length > 0);
     if(validInputs){
       if (inputsFilled) {
         if (!isTaken) {
-          if (termsAccepted) {
             this.setState({
               buttonDisable: false
             });
             return;
-          }
-          else {
-            this.setState({
-              buttonDisable: true
-            });
-            return;
-          }
         }
         else {
           this.setState({
@@ -206,18 +234,25 @@ class SignUpThree extends React.Component {
     }
   }
   render() {
+    var redInput = document.getElementById('red');    
       return (
           <div>
             <div style={modalStyle.spacing}>
               <Grid divided='vertically'>
                 <Grid.Row columns={2}>
                   <Grid.Column width={5} >
+                  <br/>
                     <IconPicker startingIcon= {this.props.startingIcon} 
                                 handleProfileInput = {this.props.handleProfileInput}
                                 editEnabled = {true}/>
                   </Grid.Column>
                   <Grid.Column width={11} >
                     <Form.Field>
+                    <Popup
+                    trigger = { <label> San Diego State University </label>}
+                    content = 'More schools coming later!'
+                    />
+                    <hr/>
                       <Popup
                         trigger={
                           <div>
@@ -229,28 +264,22 @@ class SignUpThree extends React.Component {
                             {this.state.usernameLimit && <Label pointing='left' color='red'>Username is too long</Label>}
                             {this.state.usernameInvalid && <Label pointing='left' color='red'>No special characters</Label>}
                             {this.state.vulgarUsername && <Label pointing='left' color='red'>Inappropriate username</Label>}
+                            {this.state.usernameFilled && !this.state.usernameTaken && !this.state.usernameLimit && !this.state.vulgarUsername && 
+                              <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label>}
                           </Input>
                           </div>}
                         content='This will be your display username and how others see you!'
-                        inverted
                       />
-                    </Form.Field>
-                    <Form.Field>
-                      <Popup
-                        trigger={
-                          <div>
-                          <label>Enter a 6 digit Security PIN:</label>
-                          <Input placeholder='Passcode' iconPosition='left'>
-                            <Icon name='numbered list' />
-                            <input onBlur={this.adminCheck} type='password' />
-                            {!this.state.securityCodeFilled && <Label pointing='left' color='red'>Invalid Code</Label>}
-                            
-                          </Input>
-                          </div>}
-                        content='Please make sure to keep this safe and secure! This is for recovering your account information!'
-                        inverted
-                      />
-                      
+                      <br/>
+                      <label>Red ID</label>
+                      <Input inverted placeholder="Red ID" iconPosition='left'>
+                        <Icon name='shield' />
+                        <input id='red' onBlur={(e) => this.redIDCheck(e)} />
+                        {this.state.redIDWarning ?
+                          this.state.redIDFirstClick && !this.state.redIDTaken && <Label color='red' pointing='left'>Incorrect Red ID</Label>
+                          : this.state.redIDFirstClick ? <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label> : null}
+                        {this.state.redIDTaken && <Label pointing='left' color='red'>Red ID is already used</Label>}
+                      </Input>
                     </Form.Field>
                   </Grid.Column>
                 </Grid.Row>
@@ -263,36 +292,22 @@ class SignUpThree extends React.Component {
                   value={this.state.rolesSelected} onChange={this.rolesCheck} />
               </Form.Field>
             </div>
-            <div style={{ padding: '5px' }}>
-              <Form.Field>
-                <Checkbox label='I agree to the Terms and Conditions' onClick={this.termsAccepted} />
-                <hr />
-                AGL terms and conditions can be found:   <a href='https://docs.google.com/document/d/1R6tGpquyGkJQlrIz-iO-xCoMH5pjsymbRFWiCd6qYQ4/edit?usp=sharing'> here</a>
-              </Form.Field>
-              <div style={modalStyle.spacing}>
-                <Grid>
-                  <Grid.Column floated='left' width={1}>
-                    <Button circular icon size='big' onClick={() => this.props.changePhase(-1)}>
-                      <Icon name='angle double left' />
-                    </Button>
-                  </Grid.Column>
-                  <Grid.Column floated='right' width={10}>
-                    {<Button fluid color='green' size='massive' 
-                      onClick={this.props.onSubmission}
-                      loading={this.props.loading}
-                      disabled = {this.state.buttonDisable}>
-                      <Icon  size = 'large' name = 'flask'/>
-                      Welcome!
+            <div style={{ padding: '20px' }}>
+            <Grid>
+              <Grid.Column floated='left' width={1}>
+                <Button circular icon size='big' onClick={() => this.props.changePhase(-1)}>
+                  <Icon name='angle double left' />
+                </Button>
+              </Grid.Column>
+              <Grid.Column floated='right' width={1}>
+                <Button circular icon color='green' size='big' onClick={() => this.props.changePhase(1)}
+                  disabled={this.state.buttonDisable}>
+                  <Icon name='angle double right' />
+                </Button>
+              </Grid.Column>
+            </Grid>
+          </div>
 
-                    </Button>}
-                    {this.state.error && <Message negative>
-                      <Message.Header>Sorry, authentification failed</Message.Header>
-                          <p>{this.prop.errorMessage}</p>
-                  </Message>}
-                  </Grid.Column>
-                </Grid>
-              </div>
-            </div>
           </div>
       );
   }
