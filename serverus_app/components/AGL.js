@@ -4,7 +4,7 @@ import axios from 'axios';
 const https = require('https');
 
 //Redux Check API
-export const IsLoggedIn = (reduxStateAccounts) => {
+export const IsLoggedIn = () => {
     firebase.auth().onAuthStateChanged(function (user) {
         return user != null;
     });
@@ -14,8 +14,15 @@ export const IsAdmin = (reduxStateAccounts) => {
     return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].authLevel == 2 ? true : false : false : false;
 };
 
-export const IsYourProfile = (reduxStateAccounts, username) => {
-    return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].username == username ? true : false : false : false;
+export const IsYourProfile = ( username) => {
+    firebase.auth().onAuthStateChanged(async function (user) {
+        if (user) {
+            return user.displayName == username.replace(" ", '%20');
+        }
+        else{
+            return false;
+        }
+    });
 };
 
 //READ ONLY API
@@ -23,6 +30,7 @@ export const IsYourProfile = (reduxStateAccounts, username) => {
 export const LoadProfile = async (username) => {
     let url = 'http://localhost:5000/serverus-15f25/us-central1/LoadProfile?=' + username;
     let response = await axios.get(url);
+    debugger;
     return response.data;
 }
 
@@ -87,13 +95,8 @@ export const createAGLUser = async (username, email, password, newDataObj) => {
 };
 
 export const GetAllEmails = async () => {
-    let emailPathRef = firebase.database().ref('takenEmails/');
-    let emailList = await emailPathRef.once('value');
-    let response = await axios.post(
-        'http://localhost:5000/serverus-15f25/us-central1/AGLEncryption',
-        { password: password });
-    return response.data;
-    //encrypted resposne
+    let response = await axios.get('http://localhost:5000/serverus-15f25/us-central1/getAllEmails');
+    return Object.values(response.data);
 }
 
 export const GetArticle = (status, key) => {
@@ -155,9 +158,9 @@ export const UsernameTakenCheck = async (username) => {
 }
 
 export const EmailTakenCheck = async (email) => {
-
+    debugger;
     let response = await axios.post(
-        'http://us-central1-serverus-15f25.cloudfunctions.net/isEmailTaken',
+        'http://localhost:5000/serverus-15f25/us-central1/isEmailTaken',
         { email: email });
 
     return response.data;
@@ -236,6 +239,35 @@ export const usernameToEmail = async (username) => {
         {username: username});
         debugger;
         return response.data;
+}
+
+export const sendPasswordReset = async(email) => {
+    let response = await axios.post(
+        'http://localhost:5000/serverus-15f25/us-central1/sendPasswordReset',
+        {email: email});
+        debugger;
+        return response.data;
+}
+
+export const resetRequestExists = async(hash) => {
+    debugger;
+    let response = await axios.post(
+        'http://localhost:5000/serverus-15f25/us-central1/resetRequestExists',
+        {hash: hash});
+    return response.data;
+}
+
+export const resetPassword = async(securityCode, hash, newPassword) => {
+    debugger;
+    let response = await axios.post(
+        'http://localhost:5000/serverus-15f25/us-central1/resetPassword',
+    {
+        securityCode: securityCode,
+        hash:hash,
+        newPassword:newPassword
+    });
+    debugger;
+    return response.data;
 }
 
 //update all users value

@@ -186,7 +186,8 @@ class SignUpForm extends Component {
     this.props.signedUp();
     let postBody = JSON.stringify({
       email: newUserData.email,
-      fName: newUserData.firstName
+      fName: newUserData.firstName,
+      securityCode: newUserData.securityCode
     });
     let request = http.request({
       hostname: 'us-central1-serverus-15f25.cloudfunctions.net',

@@ -69,10 +69,10 @@ class ProfilePageContainer extends React.Component {
             editMode: false,
             profileObject: editedProfile
         }, function() {
-            firebase.auth().onAuthStateChanged(function async (user) {
+            firebase.auth().onAuthStateChanged(async function (user) {
                 if (user) {
-                    //check that scope
-                    //let response = await EditProfile(user.displayName, user.uid, that.state.profileObject);
+                    debugger;
+                    let response = await EditProfile(user.displayName, user.uid, that.state.profileObject);
                 }
                 else{
                     return alert('WARNING FALSIFIED EDIT');
@@ -136,7 +136,7 @@ class ProfilePageContainer extends React.Component {
                 window.scrollTo(0, 0);
                 this.setState({
                     profileObject: await LoadProfile(this.props.routeParams.username),
-                    yourAccount: IsYourProfile(this.props.accounts, this.props.routeParams.username)
+                    yourAccount: IsYourProfile(this.props.routeParams.username)
                 });
             } 
         }
@@ -144,10 +144,11 @@ class ProfilePageContainer extends React.Component {
     
     async componentWillMount() {
         let userData = await LoadProfile(this.props.routeParams.username);
+        debugger;
         this.setState({
             profileObject: userData,
-            loggedIn: IsLoggedIn(this.props.accounts),
-            yourAccount: IsYourProfile(this.props.accounts, this.props.routeParams.username),
+            loggedIn: IsLoggedIn(),
+            yourAccount: IsYourProfile(this.props.routeParams.username),
             rolesSelected: userData.roles,
             bio: userData.bio
         });        

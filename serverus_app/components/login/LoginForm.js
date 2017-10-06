@@ -5,8 +5,9 @@ import axios from 'axios';
 var md5 = require('md5');
 var randomstring = require('randomstring');
 var Isemail = require('isemail');
+import {Link} from 'react-router';
 
-import {AGLRencryption, isUserRencrypted, AGLEncryption, EditProfile, usernameToEmail} from '../AGL';
+import {AGLRencryption, isUserRencrypted, AGLEncryption, EditProfile, usernameToEmail, GetAllEmails} from '../AGL';
 
 class LoginForm extends Component {
     constructor(props){
@@ -23,8 +24,13 @@ class LoginForm extends Component {
         this.handleSubmission = this.handleSubmission.bind(this);
     }
 
-    componentWillMount() {
+    async componentWillMount() {
 
+
+            // let emailList = await GetAllEmails();
+            // debugger;
+            //encrypted resposne
+        
         // let pass = randomstring.generate({
         //     length: 6,
         //     charset: 'R3ACTAGL69GODNATHANAZTECGAMELABYOUNMONEY$$$AUTISM',
@@ -182,7 +188,7 @@ class LoginForm extends Component {
                     </Form.Field>
                 </div>
                 <div style={modalStyle.forgot}>  
-                    <Label as='a' color = 'blue' href = 'https://goo.gl/forms/Lfxp7iaOZ49nk9Xm1'>
+                    <Label as={Link} to='forgotpassword' target="_blank" color = 'teal'>
                     <Icon name='question circle' size = "large" />  
                     Forgot your password?
                     </Label>

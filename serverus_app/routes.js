@@ -16,6 +16,8 @@ import ProfilePageContainer from './components/profile/ProfilePageContainer';
 import SearchDirectory from './components/search/SearchDirectory';
 import TempHome from './components/home/TempHomePage';
 import UserDirectory from './components/users/UserDirectory';
+import PasswordReset from './components/password/PasswordReset';
+import RequestReset from './components/password/RequestReset';
 
 export default (
     <Route path="/" component={App}>
@@ -31,6 +33,8 @@ export default (
         <Route path="search/:searchQuery" component={SearchDirectory} />
         <Route path="u" component={UserDirectory}/>
         <Route exact path='u/:username' component={ProfilePageContainer} />
+        <Route path = "forgotpassword" component = {RequestReset}/>
+        <Route exact path = "passwordreset/:hash" component = {PasswordReset}/>
         <Route path='*' component={Error}/>
     </Route>
 );

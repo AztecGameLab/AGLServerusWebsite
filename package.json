@@ -27,6 +27,7 @@
     "react-avatar-editor": "^10.2.1",
     "react-css-transition-replace": "^2.2.1",
     "react-dom": "^15.6.0",
+    "react-giphy": "0.0.1",
     "react-json-edit": "^0.3.1",
     "react-markdown": "^2.5.0",
     "react-markmirror": "^0.4.16",
