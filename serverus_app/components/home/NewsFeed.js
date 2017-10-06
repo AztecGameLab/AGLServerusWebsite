@@ -1,6 +1,5 @@
 import React from 'react';
 import firebase from 'firebase';
-import axios from 'axios';
 import Slider from 'react-slick';
 import GenericCard from '../common/cards/GenericCard';
 import { GetAllArticles } from '../AGL';
@@ -25,40 +24,6 @@ export default class NewsFeed extends React.Component {
         this.setState({
             postData: articles[0]
         });
-        // var that = this;
-        // var markdownUrlRef = firebase.database().ref('allArticles/');
-
-        // markdownUrlRef.once('value', function (snapshot) {
-        //     if (!snapshot.val()) return;
-        //     that.setState({
-        //         postData: []
-        //     });
-        //     Object.keys(snapshot.val()).reverse().map(function (key, index) {
-        //         that.setState(prevState => ({
-        //             postData: prevState.postData.concat({
-        //                 hashKey: key
-        //             })
-        //         }));
-        //     });
-        //     var values = [];
-        //     Object.values(snapshot.val()).reverse().map(function (value, idx) {
-        //         values.push(axios.get(value));
-        //     });
-        //     Promise.all(values).then(function (response) {
-        //         that.noPostLoaded++;
-        //         // Only store 10 most recent posts
-        //         for (var i = 0; response.length < 10 ? i < response.length : i <= 10; i++) {
-        //             var tempState = that.state.postData.slice();
-        //             tempState[i] = {
-        //                 hashKey: tempState[i]["hashKey"],
-        //                 data: response[i].data
-        //             };
-        //             that.setState({
-        //                 postData: tempState
-        //             });
-        //         }
-        //     });
-        // });
     }
 
     /**
