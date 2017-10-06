@@ -41,9 +41,9 @@ class RequestReset extends React.Component{
               loading: true
           });
           let response = await EmailTakenCheck(this.state.email);
-          debugger;
+          
           if(response.emailTaken){
-              debugger;
+              
             let status= await sendPasswordReset(this.state.email);
                 this.setState({
                     loading: false,

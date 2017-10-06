@@ -59,9 +59,9 @@ class PasswordReset extends React.Component {
     
     async componentWillMount() {
         //Check for validity
-        debugger;
+        
         let exists = await resetRequestExists (this.props.routeParams.hash);
-        debugger;
+        
         if (exists){
             this.setState({
                 requestExists: true
@@ -78,16 +78,16 @@ class PasswordReset extends React.Component {
         this.setState({
             loading: true
         });
-        debugger;
+        
           let status= await resetPassword(this.state.securityCode, this.props.routeParams.hash, this.state.newPassword);
-          debugger;
+          
           if (status == 'Your password has been reset! :)'){
               this.setState({
                   loading: false,
                   success: status
               });
               setTimeout(()=> {
-                window.location.replace("http://localhost:8080");
+                window.location.replace("http://aztecgamelab.com/");
               }, 5000);
               return;
             }

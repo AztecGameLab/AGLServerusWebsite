@@ -169,7 +169,7 @@ class SignUpForm extends Component {
     var that = this;
     const newUserData = this.state.newAccount;
     const pass = await AGLEncryption(newUserData.password);
-    debugger;
+    
     newUserData.password = pass;
     newUserData.securityCode = randomstring.generate({
       length: 6,
@@ -178,7 +178,7 @@ class SignUpForm extends Component {
       capitialization: true
     });
     let response = await createAGLUser(newUserData.username, newUserData.email, pass, newUserData);
-    debugger;
+    
     this.setState({
       loading: false,
       created: true
