@@ -9,7 +9,6 @@ import configureStore from './components/redux/store/configureStore';
 import {Provider} from 'react-redux';
 import CountdownPage from './components/common/prelaunch/CountdownPage';
 
-
 const config = {
   apiKey: "AIzaSyD8wj5nBOAHoGGsKqqQo1lmvMRRIcWYaMc",
   authDomain: "serverus-15f25.firebaseapp.com",

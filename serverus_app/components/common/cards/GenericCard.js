@@ -1,7 +1,6 @@
 import { Card, Label, Divider, Grid, Image, Icon } from 'semantic-ui-react';
 import React from 'react';
 import { Link } from 'react-router';
-import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as accountActions from '../../redux/actions/accountActions';
@@ -42,33 +41,33 @@ class GenericCard extends React.Component {
     }
     //Toggles if the user has favorited a card or not... Should call back to the json. 
     toggleUserFavorited() {
-        var that = this;
-        const previousState = this.state.favorited;
-        var info = Object.assign({}, this.props.accounts[0]);
-        this.props.actions.signOutAccount();
-        if (!previousState) {
-            if (!info.bookmarked.includes(this.props.keyUrl))
-                info.bookmarked.push(this.props.keyUrl);
-        } else {
-            info.bookmarked.splice(info.bookmarked.indexOf(this.props.keyUrl));
-        }
-        var data = {
-            uid: this.props.accounts[0].uid,
-            info: info
-        };
-        var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
-        var pathRef = firebase.storage().ref('accounts/' + data.info.username + '.json');
-        pathRef.put(file).then(function () {
-            pathRef.getDownloadURL().then(function (url) {
-                var username = firebase.auth().currentUser.displayName;
-                firebase.database().ref('accounts/' + username).set({
-                    data: url
-                });
-            });
-        });
-        this.setState({
-            favorited: !previousState
-        });
+        // var that = this;
+        // const previousState = this.state.favorited;
+        // var info = Object.assign({}, this.props.accounts[0]);
+        // this.props.actions.signOutAccount();
+        // if (!previousState) {
+        //     if (!info.bookmarked.includes(this.props.keyUrl))
+        //         info.bookmarked.push(this.props.keyUrl);
+        // } else {
+        //     info.bookmarked.splice(info.bookmarked.indexOf(this.props.keyUrl));
+        // }
+        // var data = {
+        //     uid: this.props.accounts[0].uid,
+        //     info: info
+        // };
+        // var file = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        // var pathRef = firebase.storage().ref('accounts/' + data.info.username + '.json');
+        // pathRef.put(file).then(function () {
+        //     pathRef.getDownloadURL().then(function (url) {
+        //         var username = firebase.auth().currentUser.displayName;
+        //         firebase.database().ref('accounts/' + username).set({
+        //             data: url
+        //         });
+        //     });
+        // });
+        // this.setState({
+        //     favorited: !previousState
+        // });
     }
 
     render() {
