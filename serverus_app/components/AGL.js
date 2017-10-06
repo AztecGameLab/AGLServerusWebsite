@@ -158,7 +158,7 @@ export const GetAllUsernames = async () => {
 //Sign Up Checks
 export const UsernameTakenCheck = async (username) => {
     let response = await axios.post(
-        'http://us-central1-serverus-15f25.cloudfunctions.net/isUsernameTaken',
+        'https://us-central1-serverus-15f25.cloudfunctions.net/isUsernameTaken',
         { username: username });
     return response.data;
     // '{usernameTaken: true/false, profanity: true/false}' 
@@ -177,7 +177,7 @@ export const EmailTakenCheck = async (email) => {
 export const RedIdTakenCheck = async (redId) => {
 
     let response = await axios.post(
-        'http://us-central1-serverus-15f25.cloudfunctions.net/isRedIdTaken',
+        'https://us-central1-serverus-15f25.cloudfunctions.net/isRedIdTaken',
         { redId: redId });
 
     return response.data;

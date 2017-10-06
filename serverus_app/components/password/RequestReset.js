@@ -3,7 +3,7 @@ import React from 'react';
 import {Grid, Label, Button, Input, Header, Icon, Card, Message, Popup} from 'semantic-ui-react';
 //AGL API
 import { resetRequestExists, EmailTakenCheck, sendPasswordReset } from '../AGL';
-var Isemail = require('isemail');
+var validator = require("email-validator");
 
 
 class RequestReset extends React.Component{
@@ -24,7 +24,7 @@ class RequestReset extends React.Component{
         this.setState({
             email: e.target.value
           });
-        if(Isemail.validate(this.state.email, { errorLevel: false })) {
+        if(validator.validate(this.state.email)) {
             this.setState({
                 buttonDisable: false
             });

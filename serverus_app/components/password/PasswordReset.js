@@ -87,7 +87,7 @@ class PasswordReset extends React.Component {
                   success: status
               });
               setTimeout(()=> {
-                window.location.replace("http://aztecgamelab.com/");
+                window.location.replace("https://aztecgamelab.com/");
               }, 5000);
               return;
             }

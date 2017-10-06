@@ -6,7 +6,7 @@ import SignUpTwo from './SignUpTwo';
 import SignUpThree from './SignUpThree';
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 
-const http = require('https');
+const https = require('https');
 const md5 = require('md5');
 
 import { AGLEncryption, createAGLUser } from '../AGL';
