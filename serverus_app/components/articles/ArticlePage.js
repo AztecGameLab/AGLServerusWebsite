@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Card, Label, Divider, Grid, Image, Icon } from 'semantic-ui-react';
 import AvatarEditor from 'react-avatar-editor';
 import { connect } from 'react-redux';
+import { GetArticle } from '../AGL';
 import ReactMarkdown from 'react-markdown';
 
 class ArticlePage extends React.Component {
@@ -18,19 +19,25 @@ class ArticlePage extends React.Component {
         };
     }
 
-    componentWillMount() {
-        var that = this;
+    async componentWillMount() {
         if (this.props.routeParams.articleId) {
-            var articleRef = firebase.database().ref('allArticles/' + this.props.routeParams.articleId);
-            articleRef.once('value', snapshot => {
-                var that2 = this;
-                axios.get(snapshot.val()).then(response => {
-                    that2.setState({
-                        postData: response.data
-                    });
-                });
-            })
+        let article = await GetArticle("all", this.props.routeParams.articleId);
+        this.setState({
+            postData: article
+        });
         }
+        // var that = this;
+        // if (this.props.routeParams.articleId) {
+        //     var articleRef = firebase.database().ref('allArticles/' + this.props.routeParams.articleId);
+        //     articleRef.once('value', snapshot => {
+        //         var that2 = this;
+        //         axios.get(snapshot.val()).then(response => {
+        //             that2.setState({
+        //                 postData: response.data
+        //             });
+        //         });
+        //     })
+        // }
     }
 
     render() {

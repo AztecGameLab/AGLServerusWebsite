@@ -8,6 +8,7 @@ import HeaderMenu from './navigation/HeaderMenu';
 import Footer from './navigation/Footer';
 import LoginModel from './login/LoginModel';
 import tags from '../styles/tags.css';
+import { LoadProfile } from './AGL';
 require('../../favicon.ico');
 
 class App extends React.Component {
@@ -25,7 +26,7 @@ class App extends React.Component {
         this.changeTabIndex = this.changeTabIndex.bind(this);
         this.signedUp = this.signedUp.bind(this);
         this.signOut = this.signOut.bind(this);
-        this.handleSearch = this.handleSearch.bind(this);        
+        this.handleSearch = this.handleSearch.bind(this);
         this.search = this.search.bind(this);
     }
 
@@ -33,27 +34,20 @@ class App extends React.Component {
         var that = this;
         this.isPageMounted = false;
         //Move to API 
-        firebase.auth().onAuthStateChanged(function (user) {
+        firebase.auth().onAuthStateChanged(async function (user) {
             if (user) {
-                var refString = 'accounts/' + user.displayName;
-                var userUrlRef = firebase.database().ref(refString);
-                userUrlRef.on('value', function (snapshot) {
-                    var that2 = that;
-                    if (that2.state.modelIsOpen) return;
-                    axios.get(snapshot.val().data).then(function (response) {
-                        var that3 = that2;
-                        if (!that3.props.accounts[0])
-                            that3.props.actions.loadAccount(response.data);
-                    }).then(function () {
-                        var that3 = that2;
-                        that3.setState({
-                            loggedIn: true
-                        });
+                let userObj = await LoadProfile(user.displayName);
+                if (!that.props.accounts[0]) {
+                    that.props.actions.loadAccount(userObj);
+                    that.setState({
+                        loggedIn: true
                     });
-                });
+                }
             }
         });
     }
+
+
 
     openLogin(activeIndex) {
         this.changeTabIndex(activeIndex);

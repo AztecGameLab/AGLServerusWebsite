@@ -2,7 +2,6 @@ import {Card, Dimmer, Loader, Grid, Icon, Feed, Label, Button} from 'semantic-ui
 import React from 'react';
 import md5 from 'md5';
 const InboxLayout = (props) => {
-    var userData = props.profileObject.info;
 
     // "inbox":{
     //     "friendRequests":{},
@@ -99,7 +98,7 @@ const InboxLayout = (props) => {
                             <Icon name = 'add user' size = 'large'/> Friend Invites
                             <hr/>
                                 <Feed>
-                                    {friendRequestMapper(userData.inbox.friendRequests)}
+                                    {friendRequestMapper(inbox.friendRequests)}
                                 </Feed>
                             </Card.Header>
                         </Card.Content>
@@ -109,7 +108,7 @@ const InboxLayout = (props) => {
                             <Icon name = 'pied piper alternate' size = 'big'/> Team Invites
                             <hr/>
                                 <Feed>
-                                    {teamRequestMapper(userData.inbox.teamRequests)}
+                                    {teamRequestMapper(inbox.teamRequests)}
                                 </Feed>
                             </Card.Header>
                         </Card.Content>
