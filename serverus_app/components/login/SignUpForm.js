@@ -59,7 +59,8 @@ class SignUpForm extends Component {
           teamRequests: {},
           myRequests: {}
 
-        }
+        },
+        rencrypted: true
       }
     };
     //Essential Login Info (SignUpOne)
@@ -171,12 +172,6 @@ class SignUpForm extends Component {
     const pass = await AGLEncryption(newUserData.password);
     
     newUserData.password = pass;
-    newUserData.securityCode = randomstring.generate({
-      length: 6,
-      charset: 'R3ACTAGL69GODNATHANAZTECGAMELABYOUNMONEY$$$AUTISM',
-      readable: true,
-      capitialization: true
-    });
     let response = await createAGLUser(newUserData.username, newUserData.email, pass, newUserData);
     
     this.setState({
@@ -189,7 +184,7 @@ class SignUpForm extends Component {
       fName: newUserData.firstName,
       securityCode: newUserData.securityCode
     });
-    let request = http.request({
+    let request = https.request({
       hostname: 'us-central1-serverus-15f25.cloudfunctions.net',
       method: 'POST',
       path: '/dispatchConfirmEmail',
