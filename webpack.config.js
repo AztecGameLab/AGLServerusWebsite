@@ -16,7 +16,7 @@ module.exports = {
  devtool : "#source-map",
     module: {
         loaders: [
-            { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/, include: [path.join(__dirname, '')]},
+            { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/},
             { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ },
             { test: /\.css$/, loader: 'style-loader!css-loader'},
             { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=25000'},
