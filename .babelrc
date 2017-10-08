@@ -1,8 +1,7 @@
 {
-    "presets": [["env", {"targets": { "uglify": false}}], "react"],
+    "presets": ["env", "react"], 
     "plugins": [
         "transform-class-properties",
         "syntax-decorators"
     ]
-
 }

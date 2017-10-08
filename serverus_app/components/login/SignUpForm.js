@@ -6,7 +6,7 @@ import SignUpTwo from './SignUpTwo';
 import SignUpThree from './SignUpThree';
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 
-const http = require('https');
+const https = require('https');
 const md5 = require('md5');
 
 import { AGLEncryption, createAGLUser } from '../AGL';
@@ -59,7 +59,8 @@ class SignUpForm extends Component {
           teamRequests: {},
           myRequests: {}
 
-        }
+        },
+        rencrypted: true
       }
     };
     //Essential Login Info (SignUpOne)
@@ -169,16 +170,10 @@ class SignUpForm extends Component {
     var that = this;
     const newUserData = this.state.newAccount;
     const pass = await AGLEncryption(newUserData.password);
-    debugger;
+    
     newUserData.password = pass;
-    newUserData.securityCode = randomstring.generate({
-      length: 6,
-      charset: 'R3ACTAGL69GODNATHANAZTECGAMELABYOUNMONEY$$$AUTISM',
-      readable: true,
-      capitialization: true
-    });
     let response = await createAGLUser(newUserData.username, newUserData.email, pass, newUserData);
-    debugger;
+    
     this.setState({
       loading: false,
       created: true
@@ -189,7 +184,7 @@ class SignUpForm extends Component {
       fName: newUserData.firstName,
       securityCode: newUserData.securityCode
     });
-    let request = http.request({
+    let request = https.request({
       hostname: 'us-central1-serverus-15f25.cloudfunctions.net',
       method: 'POST',
       path: '/dispatchConfirmEmail',

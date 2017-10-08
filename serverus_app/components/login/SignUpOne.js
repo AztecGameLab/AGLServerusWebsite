@@ -93,6 +93,7 @@ class SignUpOne extends React.Component {
   }
 
   passwordCheck(e) {
+    this.props.handlePasswordInput(e);
     let passString = e.target.value;
     let upperMatches = passString.match(/[A-Z]/g);
     let upperCount = upperMatches ? upperMatches.length : 0;

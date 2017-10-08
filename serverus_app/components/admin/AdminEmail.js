@@ -8,7 +8,7 @@ import {
     Form
 } from 'semantic-ui-react';
 import {GetAllEmails } from '../AGL';
-const http = require('https');
+const https = require('https');
 
 export default class AdminEmail extends React.Component {
     constructor(props) {

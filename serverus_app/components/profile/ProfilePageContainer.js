@@ -71,7 +71,7 @@ class ProfilePageContainer extends React.Component {
         }, function() {
             firebase.auth().onAuthStateChanged(async function (user) {
                 if (user) {
-                    debugger;
+                    
                     let response = await EditProfile(user.displayName, user.uid, that.state.profileObject);
                 }
                 else{
@@ -145,7 +145,7 @@ class ProfilePageContainer extends React.Component {
     async componentWillMount() {
         let userData = await LoadProfile(this.props.routeParams.username);
         let isLoggedIn = IsLoggedIn(this.state.accounts);
-        debugger;
+        
         this.setState({
             profileObject: userData,
             loggedIn: isLoggedIn,

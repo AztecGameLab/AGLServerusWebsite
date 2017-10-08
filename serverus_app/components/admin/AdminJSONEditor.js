@@ -8,7 +8,7 @@ import { LoadAllUsers, UpdateUser, UpdateAllUsers } from '../AGL';
 import userTemplate from '../common/userTemplate.json';
 
 
-const http = require('https');
+const https = require('https');
 
 export default class AdminJSONEditor extends React.Component {
     constructor(props) {
