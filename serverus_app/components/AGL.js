@@ -57,6 +57,18 @@ export const LoadAllUsers = async (component) => {
     }
 }
 
+export const NumberOfUsers = async () => {
+    let length = await axios.get('http://localhost:5000/serverus-15f25/us-central1/NumberOfUsers');
+    return length.data;
+}
+
+export const UserPagination = async (pageNumber, numOfResults) => {
+    let url = 'http://localhost:5000/serverus-15f25/us-central1/QueryUserPage?page=' + pageNumber + '&results=' + numOfResults;
+    let response = await axios.get(url);
+    return response.data;
+}
+
+
 export const UpdateUser = async (userData) => {
     let storageAcc = firebase.storage().ref('accounts/' + userData.info.username + '.json');
     let userFile = new Blob([JSON.stringify(userData)], { type: 'application/json' });
