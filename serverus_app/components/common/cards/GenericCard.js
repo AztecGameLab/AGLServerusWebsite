@@ -101,9 +101,9 @@ class GenericCard extends React.Component {
                                     </div>
                                 </Grid.Column>
                                 <div style={{ marginLeft: 15 }}>
-                                    {this.props.value.selectedTags.map((value, idx) => {
+                                    {this.props.value.selectedTags ? this.props.value.selectedTags.map((value, idx) => {
                                         return (<button key={idx} type="button" style={CardStyle.tags} className="btn btn-default btn-arrow-left">{'#' + value}</button>)
-                                    })
+                                    }) : null
                                     }
                                 </div>
                             </Grid>
@@ -151,9 +151,9 @@ class GenericCard extends React.Component {
                                             </div>
                                         </div>
                                         <div style={{ marginLeft: 15, marginTop: 5 }}>
-                                            {this.props.value.selectedTags.map((value, idx) => {
+                                            {this.props.value.selectedTags ? this.props.value.selectedTags.map((value, idx) => {
                                                 return (<button key={idx} type="button" style={CardStyle.tags} className="btn btn-default btn-arrow-left">{'#' + value}</button>)
-                                            })
+                                            }) : null
                                             }
                                         </div>
                                     </Grid>

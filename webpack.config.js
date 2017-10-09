@@ -13,7 +13,7 @@ module.exports = {
         publicPath: '/',
         filename: 'index_bundle.js'
 },
- //devtool : "#source-map",
+ devtool : "#source-map",
     module: {
         loaders: [
             { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/},

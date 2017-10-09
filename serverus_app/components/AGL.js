@@ -5,24 +5,24 @@ const https = require('https');
 
 //Redux Check API
 export const IsLoggedIn = (reduxStateAccounts) => {
-    
+
     return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].username != null ? true : false : false : false;
 };
 
-export const IsAdmin = (reduxStateAccounts) => {
-    return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].authLevel == 2 ? true : false : false : false;
-};
+// export const IsAdmin = (reduxStateAccounts) => {
+//     return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].authLevel == 2 ? true : false : false : false;
+// };
 
-export const IsYourProfile = (reduxStateAccounts, username) => { 
-    
-    return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].username == username ? true : false : false : false; 
+export const IsYourProfile = (reduxStateAccounts, username) => {
+
+    return reduxStateAccounts ? reduxStateAccounts.length > 0 ? reduxStateAccounts[0].username == username ? true : false : false : false;
 }
 //READ ONLY API
 
 export const LoadProfile = async (username) => {
     let url = 'https://us-central1-serverus-15f25.cloudfunctions.net/LoadProfile?=' + username;
     let response = await axios.get(url);
-    
+
     return response.data;
 }
 
@@ -74,7 +74,7 @@ export const UpdateAllUsers = async (accounts) => {
 }
 
 export const createAGLUser = async (username, email, password, newDataObj) => {
-    
+
     let response = await axios.post(
         'https://us-central1-serverus-15f25.cloudfunctions.net/createAGLUser',
         {
@@ -83,12 +83,22 @@ export const createAGLUser = async (username, email, password, newDataObj) => {
             password: password,
             newDataObj: newDataObj
         });
-    
+
 };
 
 export const GetAllEmails = async () => {
     let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/getAllEmails');
     return Object.values(response.data);
+}
+
+export const IsAdmin = (id) => {
+    let url = 'http://localhost:5000/serverus-15f25/us-central1/IsAdmin?id=' + id;
+    return axios.get(url).then(response => {
+        return response.data;
+        debugger;
+    }).catch(error => {
+        return Promise.reject(error);
+    });
 }
 
 export const GetArticle = (status, key) => {
@@ -109,15 +119,25 @@ export const CreatePost = (post, type, id, edit) => {
     let url;
     if (id) {
         if (edit) {
-            url = 'https://us-central1-serverus-15f25.cloudfunctions.net/CreatePost?=' + type + '&=' + id + '&=edit';
+            url = 'http://localhost:5000/serverus-15f25/us-central1/CreatePost?=' + type + '&=' + id + '&=edit';
         } else {
-            url = 'https://us-central1-serverus-15f25.cloudfunctions.net/CreatePost?=' + type + '&=' + id;
+            url = 'http://localhost:5000/serverus-15f25/us-central1/CreatePost?=' + type + '&=' + id;
         }
     } else {
-        url = 'https://us-central1-serverus-15f25.cloudfunctions.net/CreatePost?=' + type;
+        url = 'http://localhost:5000/serverus-15f25/us-central1/CreatePost?=' + type;
     }
     return axios.post(url, post).then(response => {
         return response;
+    }).catch(err => {
+        return Promise.reject(error);
+    });
+}
+
+
+export const SavePost = (post, type, overwrite, key) => {
+    const url = 'http://localhost:5000/serverus-15f25/us-central1/SavePost?=' + type + '&=save';
+    return axios.post(url, { post, overwrite, key }).then(response => {
+        return response.data;
     }).catch(err => {
         return Promise.reject(error);
     });
@@ -131,21 +151,21 @@ export const CloudinaryUpload = async (image) => {
             resolve(reader.result);
         }
     });
-    return axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/UploadToCloudinary', { imgUrl }).then(response => {
+    return axios.post('http://localhost:5000/serverus-15f25/us-central1/UploadToCloudinary', { imgUrl }).then(response => {
         return response.data;
     }).catch(error => {
         return Promise.reject(error);
     });
 }
 
-export const SavePost = (post, type, overwrite, key) => {
-    const url = 'https://us-central1-serverus-15f25.cloudfunctions.net/SavePost?=' + type + '&=save';
-    return axios.post(url, { post, overwrite, key }).then(response => {
+export const CloudinaryDelete = (public_id) => {
+    return axios.post('http://localhost:5000/serverus-15f25/us-central1/DeleteFromCloudinary', { public_id }).then(response => {
         return response.data;
-    }).catch(err => {
+    }).catch(error => {
         return Promise.reject(error);
     });
 }
+
 
 // Read Only - For Admin Panel
 export const GetAllUsernames = async () => {
@@ -165,7 +185,7 @@ export const UsernameTakenCheck = async (username) => {
 }
 
 export const EmailTakenCheck = async (email) => {
-    
+
     let response = await axios.post(
         'https://us-central1-serverus-15f25.cloudfunctions.net/isEmailTaken',
         { email: email });
@@ -205,7 +225,7 @@ export const AGLRencryption = async (username, password) => {
 }
 
 export const isUserRencrypted = async (username) => {
-    
+
     let response = await axios.post(
         'https://us-central1-serverus-15f25.cloudfunctions.net/isUserRencrypted',
         {
@@ -243,37 +263,37 @@ export const AcceptFriendRequest = async () => {
 export const usernameToEmail = async (username) => {
     let response = await axios.post(
         'https://us-central1-serverus-15f25.cloudfunctions.net/usernameToEmail',
-        {username: username});
-        
-        return response.data;
-}
+        { username: username });
 
-export const sendPasswordReset = async(email) => {
-    let response = await axios.post(
-        'https://us-central1-serverus-15f25.cloudfunctions.net/sendPasswordReset',
-        {email: email});
-        
-        return response.data;
-}
-
-export const resetRequestExists = async(hash) => {
-    
-    let response = await axios.post(
-        'https://us-central1-serverus-15f25.cloudfunctions.net/resetRequestExists',
-        {hash: hash});
     return response.data;
 }
 
-export const resetPassword = async(securityCode, hash, newPassword) => {
-    
+export const sendPasswordReset = async (email) => {
+    let response = await axios.post(
+        'https://us-central1-serverus-15f25.cloudfunctions.net/sendPasswordReset',
+        { email: email });
+
+    return response.data;
+}
+
+export const resetRequestExists = async (hash) => {
+
+    let response = await axios.post(
+        'https://us-central1-serverus-15f25.cloudfunctions.net/resetRequestExists',
+        { hash: hash });
+    return response.data;
+}
+
+export const resetPassword = async (securityCode, hash, newPassword) => {
+
     let response = await axios.post(
         'https://us-central1-serverus-15f25.cloudfunctions.net/resetPassword',
-    {
-        securityCode: securityCode,
-        hash:hash,
-        newPassword:newPassword
-    });
-    
+        {
+            securityCode: securityCode,
+            hash: hash,
+            newPassword: newPassword
+        });
+
     return response.data;
 }
 
