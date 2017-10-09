@@ -31,12 +31,14 @@ class SignUpThree extends React.Component {
       loading: false,
       rolesSelected: [],
       redIDTaken: false,      
-      usernameInvalid: false
+      usernameInvalid: false,
+      checked: false
     };
     this.usernameCheck = this.usernameCheck.bind(this);
     this.formComplete = this.formComplete.bind(this);
     this.rolesCheck = this.rolesCheck.bind(this);
     this.redIDCheck = this.redIDCheck.bind(this);
+    this.handleCheckbox = this.handleCheckbox.bind(this);
     
   }
 
@@ -140,7 +142,6 @@ class SignUpThree extends React.Component {
     e.persist();
     const redIdCheck = await RedIdTakenCheck(e.target.value);   
     const isTaken = redIdCheck.redIdTaken;
-    console.log(isTaken);
     this.props.handleRedIDInput(e);
     var that = this;
     if (isTaken == true) {
@@ -199,11 +200,24 @@ class SignUpThree extends React.Component {
     }
   }
 
+  handleCheckbox() {
+    var currentState = this.state;
+    var checked = !currentState.checked;
+    if (checked) {
+      currentState.redIDFilled = true;
+    } else {
+      currentState.redIDFilled = false;
+    }
+    this.setState({
+      checked: !currentState.checked,
+      redIDFilled: currentState.redIDFilled
+    }, this.formComplete());
+  }
+
   formComplete() {
-    console.log('input form')
     var validInputs = !this.state.usernameInvalid && !this.state.vulgarUsername && !this.state.redIDWarning;
-    var isTaken = this.state.usernameTaken || this.state.usernameLimit || this.state.redIDTaken;
     var inputsFilled = this.state.redIDFilled && this.state.usernameFilled && (this.state.rolesSelected.length > 0);
+    var isTaken = this.state.usernameTaken || this.state.usernameLimit || this.state.redIDTaken;
     if(validInputs){
       if (inputsFilled) {
         if (!isTaken) {
@@ -270,8 +284,8 @@ class SignUpThree extends React.Component {
                           </div>}
                         content='This will be your display username and how others see you!'
                       />
-                      <br/>
-                      <label>Red ID</label>
+                      <Checkbox label="I don't have a Red ID" onClick={this.handleCheckbox} />
+                      {!this.state.checked ? <div><label>Red ID</label>
                       <Input inverted placeholder="Red ID" iconPosition='left'>
                         <Icon name='shield' />
                         <input id='red' onBlur={(e) => this.redIDCheck(e)} />
@@ -279,7 +293,7 @@ class SignUpThree extends React.Component {
                           this.state.redIDFirstClick && !this.state.redIDTaken && <Label color='red' pointing='left'>Incorrect Red ID</Label>
                           : this.state.redIDFirstClick ? <Label circular color='green' pointing='left'><Icon name='checkmark' /></Label> : null}
                         {this.state.redIDTaken && <Label pointing='left' color='red'>Red ID is already used</Label>}
-                      </Input>
+                      </Input></div>: null}
                     </Form.Field>
                   </Grid.Column>
                 </Grid.Row>
