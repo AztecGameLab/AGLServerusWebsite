@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import firebase from 'firebase';
 import {Message, Loader, Dimmer, Button } from 'semantic-ui-react';
 import InboxLayout from './InboxLayout';
 import { connect } from 'react-redux';

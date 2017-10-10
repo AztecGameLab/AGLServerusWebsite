@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, Redirect, Router, Route } from 'react-router';
-import firebase from 'firebase';
 import { Button, Dropdown, Icon, Menu, Popup, Search } from 'semantic-ui-react';
 import { Image, CloudinaryContext } from 'cloudinary-react';
 import { connect } from 'react-redux';

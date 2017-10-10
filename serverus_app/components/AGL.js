@@ -190,8 +190,8 @@ export const GetAllUsernames = async () => {
 //Sign Up Checks
 export const UsernameTakenCheck = async (username) => {
     let response = await axios.post(
-        'https://us-central1-serverus-15f25.cloudfunctions.net/isUsernameTaken',
-        { username: username });
+        'http://localhost:5000/serverus-15f25/us-central1/isUsernameTaken',
+        { username: username.toUpperCase() });
     return response.data;
     // '{usernameTaken: true/false, profanity: true/false}' 
 }
@@ -199,8 +199,8 @@ export const UsernameTakenCheck = async (username) => {
 export const EmailTakenCheck = async (email) => {
 
     let response = await axios.post(
-        'https://us-central1-serverus-15f25.cloudfunctions.net/isEmailTaken',
-        { email: email });
+        'http://localhost:5000/serverus-15f25/us-central1/isEmailTaken',
+        { email: email.toUpperCase() });
 
     return response.data;
     //'{emailTaken: true/false, validEmail: true/false}'
@@ -209,7 +209,7 @@ export const EmailTakenCheck = async (email) => {
 export const RedIdTakenCheck = async (redId) => {
 
     let response = await axios.post(
-        'https://us-central1-serverus-15f25.cloudfunctions.net/isRedIdTaken',
+        'http://localhost:5000/serverus-15f25/us-central1/isRedIdTaken',
         { redId: redId });
 
     return response.data;
@@ -323,3 +323,11 @@ export const resetPassword = async (securityCode, hash, newPassword) => {
 //         return usernameList;
 //     });
 // });
+
+export const WildCard = () => {
+    axios.post('http://localhost:5000/serverus-15f25/us-central1/WildCard').then(response => {
+        return response.data;
+    }).catch(error => {
+        return Promise.reject(error);
+    });
+}

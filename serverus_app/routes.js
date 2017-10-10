@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
-import firebase from 'firebase';
 import App from './components/App';
 import AboutPage from './components/about/AboutPage';
 import AdminDashboard from './components/admin/AdminDashboard';
