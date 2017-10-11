@@ -75,10 +75,10 @@ class LoginForm extends Component {
         e.stopPropagation();
         e.preventDefault();
         
-        let username= this.state.email;
+        let email = this.state.email;
         
         if (validator.validate(this.state.email) == false){
-            username = await usernameToEmail(this.state.email);
+            email = await usernameToEmail(this.state.email);
         }
         const password = this.state.password;
         const encryptedPass = await AGLEncryption(password);
@@ -86,15 +86,15 @@ class LoginForm extends Component {
         this.setState({
             loading:true,
             encryptedPass: encryptedPass,
-            email: username
+            email: email
         });
         
-        let reCryptCheck  = await isUserRencrypted(username);
+        let reCryptCheck  = await isUserRencrypted(email);
         
         if(reCryptCheck == false)
         {
             
-            let response = await AGLRencryption(username, password);
+            let response = await AGLRencryption(email, password);
             
             if (response.data == "Wrong Password"){
                 this.setState({

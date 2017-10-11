@@ -9,7 +9,7 @@ import HeaderMenu from './navigation/HeaderMenu';
 import Footer from './navigation/Footer';
 import LoginModel from './login/LoginModel';
 import tags from '../styles/tags.css';
-import { IsAdmin, LoadProfile } from './AGL';
+import { IsAdmin, LoadProfile, WildCard } from './AGL';
 require('../../favicon.ico');
 
 class App extends React.Component {
