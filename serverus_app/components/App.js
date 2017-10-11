@@ -110,8 +110,10 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <HeaderMenu loggedIn={this.state.loggedIn} showModel={this.openLogin} signOut={this.signOut} handleSearch={this.handleSearch} search={this.search}></HeaderMenu>
-                <div style={AppStyle.mainContent}>{this.props.children}</div>
+                <div style={AppStyle.mainContent}>
+                    {this.props.children}
+                    <HeaderMenu style = {AppStyle.transparentOverlay} loggedIn={this.state.loggedIn} showModel={this.openLogin} signOut={this.signOut} handleSearch={this.handleSearch} search={this.search}></HeaderMenu>                                    
+                </div>
                 <Footer />
                 <LoginModel activeIndex={this.state.activeIndex} isOpen={this.state.modelIsOpen} close={this.closeLogin} changeTab={this.changeTabIndex} signedUp={this.signedUp} />
             </div>
@@ -141,6 +143,10 @@ var AppStyle = {
         marginLeft: 0,
         fontSize: '1.5em',
         zIndex: -1
+    },
+    transparentOverlay: {
+        position: 'absolute',
+        top: 0
     }
 };
 
