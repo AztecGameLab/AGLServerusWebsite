@@ -1,31 +1,37 @@
 import React from 'react';
-import firebase from 'firebase';
 import axios from 'axios';
 import redux from 'react-redux';
 import { Link } from 'react-router';
-import { Divider, Grid, Icon, Menu, Search, Loader } from 'semantic-ui-react';
+import { Button, Divider, Grid, Icon, Menu, Search, Loader } from 'semantic-ui-react';
 import UserCard from '../common/cards/UserCard';
 import roleOptions from '../common/options/roleOptions.json';
-import { LoadAllUsers} from '../AGL';
+import { NumberOfUsers, UserPagination } from '../AGL';
 
 
 export default class UserDirectory extends React.Component {
     constructor(props) {
         super(props);
-        this.storage = firebase.storage();
 
         this.state = {
             userData: [],
             showUsers: [],
             selectedRoles: [],
-            selected: []
+            selected: [],
+            resultsToShow: 24,
+            numberOfUsers: 0,
+            numberOfPages: 0
         }
         this.findUserCard = this.findUserCard.bind(this);
         this.roleFix = this.roleFix.bind(this);
+        this.findUserCard = this.findUserCard.bind(this);
+        this.listPageNumbers = this.listPageNumbers.bind(this);
+        this.selectPage = this.selectPage.bind(this);
     }
 
-    async componentDidMount() {
-        let accountsObj = await LoadAllUsers("userDirectory");
+    async componentWillMount() {
+        let length = await NumberOfUsers();
+        let numberOfPages = Math.ceil(length / this.state.resultsToShow);
+        let accountsObj = await UserPagination(0, this.state.resultsToShow);
         const currentState = this.state;
         Object.values(accountsObj).map(user => {
             currentState.userData.push(user);
@@ -34,38 +40,15 @@ export default class UserDirectory extends React.Component {
         this.setState({
             roles: roleOptions.roles,
             userData: currentState.userData,
-            showUsers: currentState.userData
-        
+            showUsers: currentState.userData,
+            numberOfUsers: length,
+            numberOfPages: numberOfPages
         });
-        // var that = this;
-        // var accountRef = firebase.database().ref('accounts');
-        // accountRef.once('value', function (snapshot) {
-        //     if (snapshot.val()) {
-        //         var promises = [];
-        //         let accountObjects = snapshot.val();
-        //         delete(accountObjects[undefined]);
-        //         Object.values(accountObjects).map(account => {
-        //             promises.push(axios.get(account.data));
-        //         });
-        //         Promise.all(promises).then(response => {
-        //             const currentState = that.state;
-        //             response.map(result => {
-        //                 currentState.userData.push(result.data);
-        //                 currentState.showUsers.push(result.data);
-        //                 currentState.selected.push('unselectedIcon');
-        //             });
-        //             that.setState({
-        //                 roles: currentState.roles,
-        //                 userData: currentState.userData
-        //             });
-        //         });
-        //     }
-        // });
     }
 
     //Loads User Cards into Directory. URL should be gotten from firebase.
     findUserCard(role, idx) {
-        var { selected, selectedRoles, userData} = this.state;
+        var { selected, selectedRoles, userData } = this.state;
         let tempUsers = [];
         if (selected[idx] == 'unselectedIcon') {
             selected[idx] = 'selectedIcon';
@@ -73,18 +56,18 @@ export default class UserDirectory extends React.Component {
             userData.map(user => {
                 selectedRoles.forEach(sRole => {
                     if (user.roles.includes(sRole)) {
-                        if(!tempUsers.includes(user))
+                        if (!tempUsers.includes(user))
                             tempUsers.push(user);
                     }
                 });
             });
         } else {
             selected[idx] = 'unselectedIcon';
-            selectedRoles.splice(selectedRoles.indexOf(role),1);
+            selectedRoles.splice(selectedRoles.indexOf(role), 1);
             userData.map(user => {
                 selectedRoles.forEach(sRole => {
                     if (user.roles.includes(sRole)) {
-                        if(!tempUsers.includes(user))
+                        if (!tempUsers.includes(user))
                             tempUsers.push(user);
                     }
                 });
@@ -99,24 +82,51 @@ export default class UserDirectory extends React.Component {
             selectedRoles: selectedRoles
         });
     }
-    roleFix(roleText){
-        if(roleText.slice(-3) == 'ing'){
+    roleFix(roleText) {
+        if (roleText.slice(-3) == 'ing') {
             return roleText = roleText.slice(0, -3) + 'ors';
         }
-        else if (roleText.slice(-2) == 'nt'){
+        else if (roleText.slice(-2) == 'nt') {
             return roleText;
         }
         else {
             return roleText + 's';
         }
     }
+
+    listPageNumbers() {
+        let pages = [];
+        for (var i = 0; i < this.state.numberOfPages; i++) {
+            pages.push(<Button key={i} value={i} onClick={(e) => { this.selectPage(e) }}>{i + 1}</Button>)
+        }
+        return pages;
+    }
+
+    async selectPage(e) {
+        window.scrollTo(0, 0);        
+        //tell kdo to restore accounts username keys lowercase or uppercase or consistency when querying
+        let accountsObj = await UserPagination(e.target.value, this.state.resultsToShow);
+        const currentState = this.state;
+        currentState.userData = [];
+        currentState.selected = [];
+        Object.values(accountsObj).map(user => {
+            currentState.userData.push(user);
+            currentState.selected.push('unselectedIcon');
+        });
+        this.setState({
+            userData: currentState.userData,
+            showUsers: currentState.userData,
+        });
+    }
+
     render() {
         var { roles } = this.state;
         var { userData } = this.state;
+        var pages = this.listPageNumbers();
         return (
             <div>
-                <br/>
-                {this.state.userData.length <5 && <Loader inverted content='Loading' />}
+                <br />
+                {this.state.userData.length < 5 && <Loader inverted content='Loading' />}
                 <Menu stackable inverted>
                     <Grid columns={12} style={UserDirStyle.menu}>
                         <Grid.Column />
@@ -131,7 +141,7 @@ export default class UserDirectory extends React.Component {
                         <Grid.Column />
                     </Grid>
                 </Menu>
-                <br/>
+                <br />
                 <div className="container-fluid">
                     <div className="row col-lg-12 col-lg-offset-1" style={UserDirStyle.grid}>
                         <div className="col-lg-10" style={UserDirStyle.grid}>
@@ -142,7 +152,9 @@ export default class UserDirectory extends React.Component {
                             </Grid>
                         </div>
                     </div>
-                </div><br/><br/><br/>
+                </div>
+                <div style={{ textAlign: 'center', marginTop: 15 }}>{pages}</div>
+                <br /><br /><br />
             </div>
         );
     }

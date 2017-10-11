@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import firebase from 'firebase';
 import { Button, Form, Checkbox, Transition, Grid } from 'semantic-ui-react';
 import SignUpOne from './SignUpOne';
 import SignUpTwo from './SignUpTwo';
@@ -79,6 +78,7 @@ class SignUpForm extends Component {
     //Navigation
     this.changePhase = this.changePhase.bind(this);
   }
+  
   //Sign Up Nav
   changePhase(value) {
     const current = this.state.currentPhase;
@@ -131,9 +131,9 @@ class SignUpForm extends Component {
       newAccount: newAccount
     });
   }
-  handleMajorInput(e) {
+  handleMajorInput(text) {
     const newAccount = this.state.newAccount;
-    newAccount.major = e.target.textContent;
+    newAccount.major = text;
     this.setState({
       newAccount: newAccount
     });

@@ -13,7 +13,7 @@ export default class TempHome extends React.Component {
         return (
             <div style={{ color: 'black' }}>
                     <Segment basic style={{ color: 'white' }}>
-                        {false && <div className="row col-lg-12"><NewsFeed style={homeStyle.sideStyle} /></div>}
+                        <div className="row col-lg-12"><NewsFeed style={homeStyle.sideStyle} /></div>
                         <div style={ContentStyle.Card}>
                             <br />
                             <h1>Aztec Game Lab</h1>

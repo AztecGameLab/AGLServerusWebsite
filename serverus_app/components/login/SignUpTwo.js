@@ -6,10 +6,6 @@ class SignUpTwo extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      firstNameFirstClick: false,
-      lastFirstClick: false,
-      majorFirstClick: false,
-      redIDWarning: false,
       firstNameFilled: false,
       lastNameFilled: false,
       majorFilled: false,
@@ -24,7 +20,6 @@ class SignUpTwo extends React.Component {
   firstNameCheck(e) {
     if(e.target.value.length > 0 && e.target.value.length < 50) {
       this.setState({
-        firstNameFirstClick: true,
         firstNameFilled: true
       }, function() {
         this.formComplete();
@@ -34,23 +29,19 @@ class SignUpTwo extends React.Component {
   lastNameCheck(e) {
     if(e.target.value.length > 0 && e.target.value.length < 50) {
       this.setState({
-        lasttNameFirstClick: true,
         lastNameFilled: true
       }, function() {
         this.formComplete();
       });
     }
   }
-  majorCheck(e) {
-    this.props.handleMajorInput(e);
-    if(e.target.textContent.length > 0) {
+  majorCheck(e, { value }) {
+    this.props.handleMajorInput(value);
       this.setState({
-        majorFirstClick: true,
         majorFilled: true
       }, function () {
         this.formComplete();
       });
-    }
   }
   formComplete() {
     var inputsFilled = (this.state.firstNameFilled && this.state.lastNameFilled && this.state.majorFilled);

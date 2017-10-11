@@ -77,9 +77,8 @@ class LoginForm extends Component {
         
         let username= this.state.email;
         
-        if(validator.validate(this.state.email) == false){
+        if (validator.validate(this.state.email) == false){
             username = await usernameToEmail(this.state.email);
-            
         }
         const password = this.state.password;
         const encryptedPass = await AGLEncryption(password);

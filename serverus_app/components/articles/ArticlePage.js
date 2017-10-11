@@ -1,7 +1,5 @@
 import React from 'react';
-import firebase from 'firebase';
 import { Grid } from 'semantic-ui-react';
-import { connect } from 'react-redux';
 import { GetArticle } from '../AGL';
 import ArticleCard from '../common/cards/ArticleCard';
 
@@ -43,15 +41,7 @@ class ArticlePage extends React.Component {
     }
 }
 
-function mapStateToProps(state, ownProps) {
-    return {
-        accounts: state.accounts
-        //this means i would like to access by this.state.accounts
-        // the data within the state of our store named by root reducer
-        // ownProps are the props of our component CoursesPage
-    };
-}
-export default connect(mapStateToProps, null)(ArticlePage)
+export default ArticlePage;
 
 var articleStyle = {
     article: {

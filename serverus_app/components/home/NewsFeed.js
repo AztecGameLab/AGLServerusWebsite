@@ -1,5 +1,4 @@
 import React from 'react';
-import firebase from 'firebase';
 import Slider from 'react-slick';
 import GenericCard from '../common/cards/GenericCard';
 import { GetAllArticles } from '../AGL';
@@ -9,7 +8,6 @@ export default class NewsFeed extends React.Component {
     constructor(props) {
         super(props);
 
-        this.storage = firebase.storage();
         this.isPageMounted = true;
         this.noPostLoaded = 0;
         this.state = {

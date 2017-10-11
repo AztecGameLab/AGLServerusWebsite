@@ -19,7 +19,7 @@ const ArticleCard = (props) => {
                         <Grid.Row style={articleStyle.img}>
                             <AvatarEditor
                                 style={articleStyle.src}
-                                image={props.postData.image.src || profilePic}
+                                image={props.postData.image.url || profilePic}
                                 width={props.postData.image.width}
                                 height={props.postData.image.height}
                                 border={0}
@@ -42,7 +42,7 @@ const ArticleCard = (props) => {
                             </Grid.Row> :
                             <Grid.Row style={articleStyle.image}>
                                 {props.postData.image ? <CloudinaryContext cloudName='aztecgamelab-com'>
-                                    <CloudImage publicId={props.postData.image} />
+                                    <CloudImage publicId={props.postData.image.public_id} />
                                 </CloudinaryContext> :
                                     <Image fluid label={{ color: props.postData.type.id, content: props.postData.type.text, ribbon: true }} style={{width: 600}}  src={profilePic} />}
                             </Grid.Row>}
@@ -54,9 +54,9 @@ const ArticleCard = (props) => {
                         <Grid.Row style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{props.postData.title}</Grid.Row>
                         <Grid.Row style={{ fontSize: '1em', color: 'gray', marginTop: 10 }}>author: {author}</Grid.Row>
                         <Grid.Row style={{ marginTop: 10, marginLeft: 15, textAlign: 'left' }}>
-                            {props.postData.selectedTags.map((value, idx) => {
+                            {props.postData.selectedTags ? props.postData.selectedTags.map((value, idx) => {
                                 return (<button key={idx} type="button" style={articleStyle.tags} className="btn btn-default btn-arrow-left">{'#' + value}</button>)
-                            })}
+                            }): null}
                         </Grid.Row>
                         <hr />
                         <Grid.Row><ReactMarkdown source={props.postData.text} /></Grid.Row>

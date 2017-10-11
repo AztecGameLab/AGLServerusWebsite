@@ -4,11 +4,12 @@ import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as accountActions from './redux/actions/accountActions';
+import * as adminActions from './redux/actions/adminActions';
 import HeaderMenu from './navigation/HeaderMenu';
 import Footer from './navigation/Footer';
 import LoginModel from './login/LoginModel';
 import tags from '../styles/tags.css';
-import { LoadProfile } from './AGL';
+import { IsAdmin, LoadProfile } from './AGL';
 require('../../favicon.ico');
 
 class App extends React.Component {
@@ -37,10 +38,13 @@ class App extends React.Component {
         firebase.auth().onAuthStateChanged(async function (user) {
             if (user) {
                 let userObj = await LoadProfile(user.displayName);
+                let isAdmin = await IsAdmin(user.uid);
                 if (!that.props.accounts[0]) {
-                    that.props.actions.loadAccount(userObj);
+                    that.props.accountActions.loadAccount(userObj);
+                    that.props.adminActions.giveAccess(isAdmin);
                     that.setState({
-                        loggedIn: true
+                        loggedIn: true,
+                        isAdmin: isAdmin    //not used anywhere
                     });
                 }
             }
@@ -116,13 +120,15 @@ class App extends React.Component {
 }
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators(accountActions, dispatch)
+        accountActions: bindActionCreators(accountActions, dispatch),
+        adminActions: bindActionCreators(adminActions, dispatch)
         //this will go through the courseActions file and wrap with dispatch
     };
 }
 function mapStateToProps(state, ownProps) {
     return {
-        accounts: state.accounts
+        accounts: state.accounts,
+        access: state.access,
         //this means i would like to access by this.props.accounts
         // the data within the state of our store named by root reducer
         // ownProps are the props of our component CoursesPage

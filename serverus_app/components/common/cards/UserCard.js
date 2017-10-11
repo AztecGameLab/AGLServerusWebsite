@@ -2,7 +2,6 @@ import { Button, Card, Label, Divider, Grid, Icon, Popup } from 'semantic-ui-rea
 import { Image, CloudinaryContext, Transformation } from 'cloudinary-react';
 import React from 'react';
 import { Link } from 'react-router';
-import firebase from 'firebase';
 import { connect } from 'react-redux';
 import roleOptions from '../options/roleOptions.json';
 import { SendFriendRequest } from '../../AGL';
