@@ -68,8 +68,8 @@ class MarkdownCreate extends React.Component {
         this.sendToCloudinary = this.sendToCloudinary.bind(this);
     }
 
-    componentWillMount() {
-        this.initArticle();
+    async componentWillMount() {
+        await this.initArticle();
         var currentState = this.state.postData;
         switch (this.props.routeParams.type) {
             case 'announcement':
@@ -100,9 +100,10 @@ class MarkdownCreate extends React.Component {
                 //Edit published post
                 var article;
                 if (this.props.location.query[''][1] == "edit") {
-                    GetArticle("all", this.props.location.query[''][0]).then(article => {
+                    return GetArticle("all", this.props.location.query[''][0]).then(article => {
                         let currentState = this.state.postData;
                         let cloudUpload = false;
+                        if (!article.image) article.image = {};
                         article.image.allowZoomOut = currentState.image.allowZoomOut;
                         article.image.width = currentState.image.width;
                         article.image.height = currentState.image.height;
@@ -127,7 +128,7 @@ class MarkdownCreate extends React.Component {
             }
             // edit draft post
             else {
-                GetArticle("saved", this.props.location.query['']).then(article => {
+                return GetArticle("saved", this.props.location.query['']).then(article => {
                     let currentState = this.state.postData;
                     let cloudUpload = false;
                     article.image.allowZoomOut = currentState.image.allowZoomOut;
@@ -153,7 +154,7 @@ class MarkdownCreate extends React.Component {
             }
         }
     }
-    
+
     handleAddition = (e, { value }, init) => {
         var counter = 0;
         this.state.tags.forEach(item => {
@@ -256,7 +257,7 @@ class MarkdownCreate extends React.Component {
 
         let response = await SavePost(data, this.props.routeParams.type, this.state.savedPost, id);
         console.log(response);
-        window.location.reload('/create/announcement');
+        // window.location.reload('/create/announcement');
     }
 
     async sendToFB() {
@@ -294,7 +295,7 @@ class MarkdownCreate extends React.Component {
             let response = await CreatePost(data, this.props.routeParams.type);
             console.log(response);
         }
-        window.location.reload();
+        // window.location.reload();
     }
 
 
@@ -302,6 +303,7 @@ class MarkdownCreate extends React.Component {
         if (this.state.postData.image.url) {
             if (typeof this.state.postData.image.url == "object") {
                 return CloudinaryUpload(this.state.postData.image.url).then(response => {
+                    debugger;
                     if (this.state.changeImage) {
                         CloudinaryDelete(this.state.postData.image.public_id).then(resp => {
                             console.log(resp);
