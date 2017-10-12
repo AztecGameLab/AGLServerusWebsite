@@ -33,7 +33,6 @@ export const IsAdmin = (id) => {
     let url = 'https://us-central1-serverus-15f25.cloudfunctions.net/admin-IsAdmin?id=' + id;
     return axios.get(url).then(response => {
         return response.data;
-        debugger;
     }).catch(error => {
         return Promise.reject(error);
     });
@@ -169,7 +168,7 @@ export const createAGLUser = async (username, email, password, newDataObj) => {
 export const UsernameTakenCheck = async (username) => {
     let response = await axios.post(
         'https://us-central1-serverus-15f25.cloudfunctions.net/login-isUsernameTaken',
-        { username: username.toUpperCase() });
+        { username: username });
     return response.data;
     // '{usernameTaken: true/false, profanity: true/false}' 
 }
@@ -178,7 +177,7 @@ export const EmailTakenCheck = async (email) => {
 
     let response = await axios.post(
         'https://us-central1-serverus-15f25.cloudfunctions.net/login-isEmailTaken',
-        { email: email.toUpperCase() });
+        { email: email });
 
     return response.data;
     //'{emailTaken: true/false, validEmail: true/false}'
@@ -223,7 +222,7 @@ export const AGLEncryption = async (password) => {
 
 export const AGLRencryption = async (username, password) => {
 
-    return await axios.post(
+    let response  = await axios.post(
         'https://us-central1-serverus-15f25.cloudfunctions.net/security-AGLRencryption',
         {
             username: username,
@@ -233,12 +232,11 @@ export const AGLRencryption = async (username, password) => {
     return response;
 }
 
-export const isUserRencrypted = async (username) => {
-
+export const isUserRencrypted = async (email) => {
     let response = await axios.post(
         'https://us-central1-serverus-15f25.cloudfunctions.net/security-isUserRencrypted',
         {
-            username: username
+            email: email
         });
 
     return response.data; //true/false
@@ -389,7 +387,7 @@ export const AcceptFriendRequest = async () => {
 // });
 
 // export const WildCard = () => {
-//     axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/WildCard').then(response => {
+//     return axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/admin-WildCard').then(response => {
 //         return response.data;
 //     }).catch(error => {
 //         return Promise.reject(error);

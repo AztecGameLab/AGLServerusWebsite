@@ -9,7 +9,7 @@ import HeaderMenu from './navigation/HeaderMenu';
 import Footer from './navigation/Footer';
 import LoginModel from './login/LoginModel';
 import tags from '../styles/tags.css';
-import { IsAdmin, LoadProfile } from './AGL';
+import { IsAdmin, LoadProfile, WildCard } from './AGL';
 require('../../favicon.ico');
 
 class App extends React.Component {
@@ -106,12 +106,15 @@ class App extends React.Component {
         //AGL API call to retrieve search data, I was thinking we could firebase here to store in redux store for faster async results and 
         //in the SearchDirectory component we can have a componentDidUpdate to listen for a flag when query results are successfully pushed into store.
     }
-
+//{this.props.children }
     render() {
         return (
             <div>
-                <HeaderMenu loggedIn={this.state.loggedIn} showModel={this.openLogin} signOut={this.signOut} handleSearch={this.handleSearch} search={this.search}></HeaderMenu>
-                <div style={AppStyle.mainContent}>{this.props.children}</div>
+                <div style={AppStyle.mainContent}>
+                    
+                    {React.cloneElement(this.props.children, { showModel: this.openLogin})}
+                    <HeaderMenu style = {AppStyle.transparentOverlay} loggedIn={this.state.loggedIn} showModel={this.openLogin} signOut={this.signOut} handleSearch={this.handleSearch} search={this.search}></HeaderMenu>                                    
+                </div>
                 <Footer />
                 <LoginModel activeIndex={this.state.activeIndex} isOpen={this.state.modelIsOpen} close={this.closeLogin} changeTab={this.changeTabIndex} signedUp={this.signedUp} />
             </div>
@@ -141,6 +144,10 @@ var AppStyle = {
         marginLeft: 0,
         fontSize: '1.5em',
         zIndex: -1
+    },
+    transparentOverlay: {
+        position: 'absolute',
+        top: 0
     }
 };
 

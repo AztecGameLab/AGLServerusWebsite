@@ -14,6 +14,7 @@ class HeaderMenu extends React.Component {
             activeItem: 'home',
             loggedIn: false,
             accounts: null,
+            headerIcon: null
         }
         this.handleItemClick = this.handleItemClick.bind(this);
     }
@@ -23,9 +24,12 @@ class HeaderMenu extends React.Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         if (nextProps.accounts.length > 0) {
+            let headerImage = nextProps.accounts[0].showcaseImage;
+            headerImage = headerImage.slice(0, headerImage.indexOf("Small")) + "Extra" + headerImage.slice(headerImage.indexOf("Small"));
             this.setState({
                 loggedIn: true,
-                accounts: nextProps.accounts
+                accounts: nextProps.accounts,
+                headerIcon: headerImage
             })
         }
         return true;
@@ -34,9 +38,9 @@ class HeaderMenu extends React.Component {
     render() {
         const { activeItem } = this.state;
         return (
-            <div className="row" style={HeaderStyle.header}>
+            <div className="row" id = 'header'>
                 <CloudinaryContext cloudName='aztecgamelab-com'>
-                    <Menu stackable inverted  >
+                    <Menu stackable inverted borderless >
                         <Menu.Item className="logo" active={activeItem === 'home'} onClick={this.handleItemClick} as={Link} to='/'>
                             <div >
                                 <Image publicId="WebsiteAssets/blacklogo.png" >
@@ -49,13 +53,16 @@ class HeaderMenu extends React.Component {
                             size='large'
                         />
                         <Popup
-                            trigger={<Menu.Item disabled name='games' active={activeItem === 'games'} ><Icon size='big' name='gamepad' />Games</Menu.Item>}
+                            trigger={<Menu.Item disabled name='games' active={activeItem === 'games'} ><Icon size='big' name='gamepad' />Game Directory</Menu.Item>}
                             content='Game Submissions Coming Soon!'
                             size='large'
                         />
-                        <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon size='big' name='users' />Users</Menu.Item>
-                        <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick} as={Link} to='/calendar'><Icon size='big' name='checked calendar' />Calendar</Menu.Item>
-                        <Menu.Item name='about' active={activeItem === 'about'} onClick={this.handleItemClick} as={Link} to='/about'><Icon size='big' name='send outline' />About Us</Menu.Item>
+                        <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='newspaper' />Article Posts</Menu.Item>                        
+                        <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon size='big' name='users' />User Directory</Menu.Item>
+                        <Menu.Item name='sponsors' active={activeItem === 'sponsors'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='heart' />Sponsors</Menu.Item>                        
+                        <Menu.Item name='patchNotes' active={activeItem === 'patchNodes'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='bug' />Patch Notes</Menu.Item>                        
+                        
+                        
                         {false && (this.state.loggedIn ?
                             this.state.accounts[0].authLevel == 2 ?
                                 <Dropdown item text="Articles">
@@ -69,22 +76,25 @@ class HeaderMenu extends React.Component {
                             :
                             <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/a/-Ku0ZDLuuQfDd1aRXeEF'><Icon name='newspaper' size='big' />View All Articles</Menu.Item>
                         )}
+
+
                         {this.state.loggedIn ?
                             this.state.accounts[0].authLevel == 2 ?
                                 <Menu.Item name="admin" active={activeItem === 'admin'} onClick={this.handleItemClick} as={Link} to="/admin"><Icon name="dashboard" />Dashboard</Menu.Item>
                                 : <div />
                             : <div />
                         }
+
                         {this.state.loggedIn ?
                             <Menu.Menu position='right'>
                                 <Dropdown floating item trigger=
                                     {
                                         <div>
-                                            <div style={HeaderStyle.profilePic}>
-                                                <Image publicId={this.state.accounts[0].showcaseImage}>
+                                            <div>
+                                                <Image publicId={this.state.headerIcon} style={HeaderStyle.profilePic}>
                                                 </Image>
+                                                Welcome {this.state.accounts[0].firstName + ' ' + this.state.accounts[0].lastName + '!'}
                                             </div>
-                                            Welcome {this.state.accounts[0].firstName + ' ' + this.state.accounts[0].lastName + '!'}
                                         </div>
                                     } icon={null} style={HeaderStyle.profile}>
                                     <Dropdown.Menu>
@@ -96,9 +106,12 @@ class HeaderMenu extends React.Component {
                             </Menu.Menu>
                             :
                             <Menu.Menu position='right'>
+                            <Menu.Item>
+                            {false && <Search loading={false} fluid />}
+                            </Menu.Item>
                                 {false && <Menu.Item><form onSubmit={this.props.search}><input className="form-control" style={{color:'black'}}type="text" placeholder="Search..." onChange={this.props.handleSearch} /></form></Menu.Item>}
-                                <Menu.Item onClick={() => this.props.showModel(0)}><Icon name='sign in' size='big' /> Login!</Menu.Item>
-                                <Menu.Item onClick={() => this.props.showModel(1)} style={HeaderStyle.profile}><Icon name='signup' size='big' /> Sign Up!</Menu.Item>
+                                {false && <Menu.Item onClick={() => this.props.showModel(0)}><Icon name='sign in' size='big' /> Login!</Menu.Item>}
+                                {false && <Menu.Item onClick={() => this.props.showModel(1)} style={HeaderStyle.profile}><Icon name='signup' size='big' /> Sign Up!</Menu.Item>}
                             </Menu.Menu>}
                     </Menu>
                 </CloudinaryContext>
@@ -107,9 +120,10 @@ class HeaderMenu extends React.Component {
 };
 var HeaderStyle = {
     header: {
-        position: 'sticky',
-        top: 0,
-        zIndex: 1
+        //position: 'sticky',
+        //top: 0,
+        //zIndex: 1
+        background: 'transparent'
     },
     logo: {
         maxWidth: 150,
@@ -119,8 +133,7 @@ var HeaderStyle = {
         paddingRight: 30
     },
     profilePic: {
-        padding: '20px',
-        width: '42px'
+        paddingRight: 10
     }
 }
 function mapStateToProps(state, ownProps) {

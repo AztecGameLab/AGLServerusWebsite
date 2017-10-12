@@ -1,3 +1,5 @@
+/*UI MENU CSS OVERRIDES*/
+
 .ui.menu>.item:first-child {
     margin-left: 15px;
 }
@@ -10,4 +12,17 @@
 .ui.menu .dropdown.item .menu>.item:hover {
     background-color: #414141 !important;   
     color: white !important     
+}
+
+.ui.inverted.menu {
+    background: transparent;
+    color: lightblue;
+    position: absolute !important;
+    top: 0 !important;
+    width: 100%
+}
+
+.ui.inverted.menu .active.item {
+    background: transparent !important;
+    color: blue;
 }
