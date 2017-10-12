@@ -275,7 +275,7 @@ const ProfilePage = (props) => {
                 </Grid.Column>
                 <Grid.Column width={2}>
                     {
-                    props.yourAccount && 
+                    props.yourAccount && false &&
                     <div>
                         <Button 
                             fluid 

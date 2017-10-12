@@ -14,6 +14,7 @@ class HeaderMenu extends React.Component {
             activeItem: 'home',
             loggedIn: false,
             accounts: null,
+            headerIcon: null
         }
         this.handleItemClick = this.handleItemClick.bind(this);
     }
@@ -23,9 +24,12 @@ class HeaderMenu extends React.Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         if (nextProps.accounts.length > 0) {
+            let headerImage = nextProps.accounts[0].showcaseImage;
+            headerImage = headerImage.slice(0, headerImage.indexOf("Small")) + "Extra" + headerImage.slice(headerImage.indexOf("Small"));
             this.setState({
                 loggedIn: true,
-                accounts: nextProps.accounts
+                accounts: nextProps.accounts,
+                headerIcon: headerImage
             })
         }
         return true;
@@ -86,11 +90,11 @@ class HeaderMenu extends React.Component {
                                 <Dropdown floating item trigger=
                                     {
                                         <div>
-                                            <div style={HeaderStyle.profilePic}>
-                                                <Image publicId={this.state.accounts[0].showcaseImage}>
+                                            <div>
+                                                <Image publicId={this.state.headerIcon} style={HeaderStyle.profilePic}>
                                                 </Image>
+                                                Welcome {this.state.accounts[0].firstName + ' ' + this.state.accounts[0].lastName + '!'}
                                             </div>
-                                            Welcome {this.state.accounts[0].firstName + ' ' + this.state.accounts[0].lastName + '!'}
                                         </div>
                                     } icon={null} style={HeaderStyle.profile}>
                                     <Dropdown.Menu>
@@ -129,8 +133,7 @@ var HeaderStyle = {
         paddingRight: 30
     },
     profilePic: {
-        padding: '20px',
-        width: '42px'
+        paddingRight: 10
     }
 }
 function mapStateToProps(state, ownProps) {

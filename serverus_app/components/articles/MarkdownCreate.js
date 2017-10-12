@@ -303,7 +303,6 @@ class MarkdownCreate extends React.Component {
         if (this.state.postData.image.url) {
             if (typeof this.state.postData.image.url == "object") {
                 return CloudinaryUpload(this.state.postData.image.url).then(response => {
-                    debugger;
                     if (this.state.changeImage) {
                         CloudinaryDelete(this.state.postData.image.public_id).then(resp => {
                             console.log(resp);
