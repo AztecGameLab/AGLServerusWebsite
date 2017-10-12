@@ -6,6 +6,7 @@ import { Button, Divider, Grid, Icon, Menu, Search, Loader } from 'semantic-ui-r
 import UserCard from '../common/cards/UserCard';
 import roleOptions from '../common/options/roleOptions.json';
 import { NumberOfUsers, UserPagination } from '../AGL';
+import {CloudinaryContext, Image as CloudImage} from 'cloudinary-react';
 
 
 export default class UserDirectory extends React.Component {
@@ -124,38 +125,41 @@ export default class UserDirectory extends React.Component {
         var { userData } = this.state;
         var pages = this.listPageNumbers();
         return (
-            <div>
-                <br />
-                {this.state.userData.length < 5 && <Loader inverted content='Loading' />}
-                <Menu stackable inverted>
-                    <Grid columns={12} style={UserDirStyle.menu}>
-                        <Grid.Column />
-                        {roleOptions.roles.map((role, idx) => {
-                            return (<Grid.Column className={this.state.selected[idx]}
-                                key={idx} style={{ marginTop: 15, marginBottom: 15, cursor: "pointer" }}
-                                onClick={() => this.findUserCard(role.text, idx)} >
-                                <br /><Icon link size="huge" color="teal" name={role.icon} /><br />{
-                                    this.roleFix(role.text)
-                                }</Grid.Column>)
-                        })}
-                        <Grid.Column />
-                    </Grid>
-                </Menu>
-                <br />
-                <div className="container-fluid">
-                    <div className="row col-lg-12 col-lg-offset-1" style={UserDirStyle.grid}>
-                        <div className="col-lg-10" style={UserDirStyle.grid}>
-                            <Grid columns={3} >
-                                {this.state.showUsers.map((user, idx) => {
-                                    return <Grid.Column key={idx}><UserCard user={user}></UserCard></Grid.Column>
-                                })}
-                            </Grid>
+            <CloudinaryContext cloudName='aztecgamelab-com' >
+                <div>
+                <CloudImage publicId="WebsiteAssets/header.png" style = {{width: "100%"}}/>
+                    <br />
+                    {this.state.userData.length < 5 && <Loader inverted content='Loading' />}
+                    <Menu stackable >
+                        <Grid columns={12} style={UserDirStyle.menu}>
+                            <Grid.Column />
+                            {roleOptions.roles.map((role, idx) => {
+                                return (<Grid.Column className={this.state.selected[idx]}
+                                    key={idx} style={{ marginTop: 15, marginBottom: 15, cursor: "pointer" }}
+                                    onClick={() => this.findUserCard(role.text, idx)} >
+                                    <br /><Icon link size="huge" color="teal" name={role.icon} /><br />{
+                                        this.roleFix(role.text)
+                                    }</Grid.Column>)
+                            })}
+                            <Grid.Column />
+                        </Grid>
+                    </Menu>
+                    <br />
+                    <div className="container-fluid">
+                        <div className="row col-lg-12 col-lg-offset-1" style={UserDirStyle.grid}>
+                            <div className="col-lg-10" style={UserDirStyle.grid}>
+                                <Grid columns={3} >
+                                    {this.state.showUsers.map((user, idx) => {
+                                        return <Grid.Column key={idx}><UserCard user={user}></UserCard></Grid.Column>
+                                    })}
+                                </Grid>
+                            </div>
                         </div>
                     </div>
+                    <div style={{ textAlign: 'center', marginTop: 15 }}>{pages}</div>
+                    <br /><br /><br />
                 </div>
-                <div style={{ textAlign: 'center', marginTop: 15 }}>{pages}</div>
-                <br /><br /><br />
-            </div>
+            </CloudinaryContext>
         );
     }
 }

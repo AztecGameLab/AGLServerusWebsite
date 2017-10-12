@@ -10,17 +10,31 @@
     to { background-color: rgb(86, 88, 211); -webkit-box-shadow: 0 0 15px #3B3CEF; }
   }
 
+  @-webkit-keyframes greenPulse {
+    from { background-color: #09bd4e; -webkit-box-shadow: 0 0 9px #5fb982; }
+    50% { background-color: #1cbd95; -webkit-box-shadow: 0 0 18px #1cbd95; }
+    to { background-color: #09bd4e; -webkit-box-shadow: 0 0 9px #5fb982; }
+  }
+
   .loadSave {
     -webkit-animation-name: redPulse;
     -webkit-animation-duration: 1.6s;
     -webkit-animation-iteration-count: infinite;
   }
 
+  /* .loadSave:focus{
+    -webkit-animation-name: greenPulse;
+  } */
+
   .newSave {
     -webkit-animation-name: purpPulse;
     -webkit-animation-duration: 1.6s;
     -webkit-animation-iteration-count: infinite;
   }
+
+  /* .newSave:focus{
+    -webkit-animation-name: greenPulse;
+  } */
 
 /* 
 

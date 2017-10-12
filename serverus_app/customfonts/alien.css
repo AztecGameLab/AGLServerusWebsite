@@ -1,0 +1,14 @@
+@font-face {
+    font-family: "AlienEncounters";
+    src: url("./sfalienencounters-webfont.eot");
+    src: 
+    url("./sfalienencounters-webfont.woff") format("woff"),
+    url("./sfalienencounters-webfont.svg") format("svg");
+}
+
+h1 {
+    font-family: 'AlienEncounters', Arial, sans-serif;
+    font-weight: normal;
+    font-style:normal;
+    font-size: 170%
+    }

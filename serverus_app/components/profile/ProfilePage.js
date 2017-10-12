@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, CloudinaryContext } from 'cloudinary-react';
+import { Image as CloudImage, CloudinaryContext } from 'cloudinary-react';
 import { Grid, Icon, Card, Tab, Button, List, Popup, Feed, Dropdown, TextArea, Input, Label } from 'semantic-ui-react';
 import IconPicker from '../common/icon/IconPicker';
 import { Link } from 'react-router-dom';
@@ -13,7 +13,7 @@ import roleNames from '../common/options/roleNamesOnly.json';
 const ProfilePage = (props) => {
     const userData = props.profileObject;
 
-    const imageLarge = (originalLink) => {
+    const ImageLarge = (originalLink) => {
         return originalLink.replace("Small", "Large");
     };
 
@@ -63,7 +63,7 @@ const ProfilePage = (props) => {
         return (badges.map((badge, idx) =>
             <Popup
                 key={idx}
-                trigger={<Image publicId={badge}></Image>}
+                trigger={<CloudImage publicId={badge}></CloudImage>}
                 header={'Early Adopter'}
                 content={'Joined AGL in its first semester!'}
             />
@@ -84,6 +84,8 @@ const ProfilePage = (props) => {
 
     return (
         <div>
+        <CloudinaryContext cloudName='aztecgamelab-com' >
+        <CloudImage publicId="WebsiteAssets/header.png" style = {{width: "100%"}}/>
         <br/><br/>
             <Grid columns={4} inverted padded>
                 <Grid.Column width={1}>
@@ -91,7 +93,7 @@ const ProfilePage = (props) => {
                 <Grid.Column width={3} >
                     <Card fluid>
                         <IconPicker
-                            startingIcon={imageLarge(userData.showcaseImage)}
+                            startingIcon={ImageLarge(userData.showcaseImage)}
                             handleProfileInput={props.handleProfileInput}
                             editEnabled={props.editMode} />
                         <Card.Content>
@@ -298,6 +300,7 @@ const ProfilePage = (props) => {
                 </Grid.Column>
             </Grid>
             <br/><br/><br/>
+            </CloudinaryContext>
         </div>
     );
 };

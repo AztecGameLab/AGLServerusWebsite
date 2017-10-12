@@ -14,6 +14,7 @@ import { CloudinaryContext, Image as CloudImage } from 'cloudinary-react';
 import { Fade, Flip, Rotate, Zoom } from 'react-reveal';
 var Mousetrap = require('mousetrap');
 import styles from './glowingAnimation.css';
+import stylings from '../../customfonts/alien.css';
 
 export default class TempHome extends React.Component {
     constructor(props) {
@@ -27,24 +28,29 @@ export default class TempHome extends React.Component {
         this.selectButton = this.selectButton.bind(this);
     }
 
+    handleLeftRef = c => (this.refL = c)
+    handleRightRef = c => (this.refR = c)
+
     selectLeft() {
+        this.refL.focus();
         this.setState({
-            selectorPosition: '23',
+            selectorPosition: '24',
             blinking: true
         });
     }
 
     selectRight() {
         debugger;
+        this.refR.focus();
         this.setState({
-            selectorPosition: '73',
+            selectorPosition: '74',
             blinking: true
         });
     }
 
     selectButton() {
-        if (this.state.selectorPosition == '23'){
-            this.props.showModal(0);
+        if (this.state.selectorPosition == '24'){
+            this.props.showModel(0);
         }
         else {
             this.props.showModal(1);
@@ -53,7 +59,7 @@ export default class TempHome extends React.Component {
 
     componentDidMount() {
         this.parallax = new Parallax(this.scene);
-        this.interval = setInterval(this.mrBlinkyxD, 800);
+        this.interval = setInterval(this.mrBlinkyxD, 200);
         Mousetrap.bind('up up down down left right left right b a',
             () => {
                 alert('konami code');
@@ -63,6 +69,7 @@ export default class TempHome extends React.Component {
         Mousetrap.bind('left', this.selectLeft);
         Mousetrap.bind('right', this.selectRight);
         Mousetrap.bind('enter', this.selectButton);
+        this.refL.focus();
     }
 
     componentWillUnmount() {
@@ -103,89 +110,92 @@ export default class TempHome extends React.Component {
                         <CloudImage className="layer" data-hover-only = {true} data-depth="0.07" publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer1.png" style = {{width: "100%"}}/>
                         <CloudImage className="layer" data-hover-only = {true} data-depth="0.60" publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer2.png" style = {{width: "100%"}}/>                    
                     </div>
-                    <Button inverted size = 'massive' className = 'loadSave' style = {homeStyle.buttonLeft} onClick={() => this.props.showModal(0)}>LOAD SAVE</Button>    
-                    <Button inverted size = 'massive' className = 'newSave' style = {homeStyle.buttonRight} onClick={() => this.props.showModal(1)}>NEW GAME</Button> 
-                    {this.state.blinking && <Icon name = 'hand outline up' size = 'huge' 
+                    <Button inverted size = 'massive' className = 'loadSave' style = {homeStyle.buttonLeft} onClick={() => this.props.showModel(0)} ref={this.handleLeftRef} >LOAD SAVE</Button>    
+                    <Button inverted size = 'massive' className = 'newSave' style = {homeStyle.buttonRight} onClick={() => this.props.showModel(1)} ref={this.handleRightRef} >NEW GAME</Button> 
+                    {this.state.blinking && <Icon name = 'caret up' size = 'huge' 
                     style = 
                     {{
+                        //caret up
+                        //hand outline up
                         position: 'absolute',
                         left: `${this.state.selectorPosition}%`,
-                        top: '78%',
+                        top: '75%',
                     }}
                     />}
 
                 </div>
-                    <Grid columns={2}>
+                    <Grid columns={2} padded>
+                        <Grid.Row>
+                            <Grid.Column width={9} >
+                                <Fade left>
+                                    <iframe src="https://calendar.google.com/calendar/embed?showNav=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=0&amp;height=600&amp;wkst=1&amp;%23ffffff&amp;src=aztecgamelab%40gmail.com&amp;color=%231B887A&amp;ctz=America%2FLos_Angeles" style={{ border: "solid 6px #4D36E9", width: "100%", minHeight: "600px", frameborder: "0", scrolling: "no" }}></iframe>
+                                </Fade>
+                            </Grid.Column>
 
-                        <Grid.Column width={9} >
-                            <Fade left>
-                                <iframe src="https://calendar.google.com/calendar/embed?showNav=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=0&amp;height=600&amp;wkst=1&amp;%23ffffff&amp;src=aztecgamelab%40gmail.com&amp;color=%231B887A&amp;ctz=America%2FLos_Angeles" style={{ border: "solid 6px #4D36E9", width: "100%", minHeight: "600px", frameborder: "0", scrolling: "no" }}></iframe>
-                            </Fade>
-                        </Grid.Column>
+                            <Grid.Column width={6} textAlign='center'>
+                                <Fade right>
+                                    <div>
+                                        <br />
+                                        <h1>Check out our upcoming events!</h1>
+                                        <hr />
+                                        <p>
+                                            We meet every week on Fridays at 2:00 pm in AH1120!
+                                </p>
+                                        <Slider {...settings} >
+                                            <CloudImage publicId="WebsiteAssets/Step1.jpg" />
+                                            <CloudImage publicId="WebsiteAssets/Step2.jpg" />
+                                            <CloudImage publicId="WebsiteAssets/Step3.jpg" />
+                                            <CloudImage publicId="WebsiteAssets/Step4.jpg" />
+                                            <CloudImage publicId="WebsiteAssets/Step5.jpg" />
+                                            <CloudImage publicId="WebsiteAssets/Step6.png" />
+                                        </Slider>
 
-                        <Grid.Column width={6} textAlign='center'>
-                            <Fade right>
-                                <div>
-                                    <br />
-                                    <h1>Check out our upcoming events!</h1>
+                                        <br />
+                                    </div>
+                                </Fade>
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Grid.Column textAlign='center' width={6}>
+                                <Fade left delay={300}>
+                                    <h3>What is Aztec Game Lab?</h3>
+                                </Fade>
+                                <Fade right delay={350}>
+                                    <h1>We are glad you asked!</h1>
+                                </Fade>
                                     <hr />
+                                <Fade up delay={360}>
                                     <p>
-                                        We meet every week on Fridays at 2:00 pm in AH1120!
-                            </p>
-                                    <Slider {...settings} >
-                                        <CloudImage publicId="WebsiteAssets/Step1.jpg" />
-                                        <CloudImage publicId="WebsiteAssets/Step2.jpg" />
-                                        <CloudImage publicId="WebsiteAssets/Step3.jpg" />
-                                        <CloudImage publicId="WebsiteAssets/Step4.jpg" />
-                                        <CloudImage publicId="WebsiteAssets/Step5.jpg" />
-                                        <CloudImage publicId="WebsiteAssets/Step6.png" />
-                                    </Slider>
-
+                                        Aztec Game Lab was conceived and envisioned since 2016. We came together at the beginning of this summer to officially organize our efforts.
+                                    </p>
+                                </Fade>
                                     <br />
-                                </div>
-                            </Fade>
-                        </Grid.Column>
-
-                        <Grid.Column textAlign='center' width={6}>
-                            <Fade left delay={300}>
-                                <h3>What is Aztec Game Lab?</h3>
-                            </Fade>
-                            <Fade right delay={400}>
-                                <h1>We are glad you asked!</h1>
-                            </Fade>
-                                <hr />
-                            <Fade up delay={400}>
-                                <p>
-                                    Aztec Game Lab was conceived and envisioned since 2016. We came together at the beginning of this summer to officially organize our efforts.
-                                </p>
-                            </Fade>
-                                <br />
-                            <Fade up delay={400}>
-                                <p>
-                                    We have been planning our events and activities along with a lasting hope for what we wish to see this club grow into. In fact, we did not want to be a cookie cutter club.
-                                    We are setting out to create game development community and we want everyone to get involved. That means all disciplines and soon, sponsors and game studios!
-                                </p>
-                            </Fade>
-                                <br />
-                            <Fade up delay={600}>
-                                <p>
-                                    We also took a risk and we wanted our own platform to showcase our members and games! That's why we have been coding this website for the last 3 months non-stop! This site is hand coded!
-                                    There are so many talented people at SDSU and we can see that there are creative people all around us just waiting to get started!
-                                </p>
-                            </Fade>
-                                <br />
-                            <Fade up delay={700}>
-                                <h1>Come and join us!</h1>
-                                <br />
-                            </Fade>
-                            
-                        </Grid.Column>
+                                <Fade up delay={400}>
+                                    <p>
+                                        We have been planning our events and activities along with a lasting hope for what we wish to see this club grow into. In fact, we did not want to be a cookie cutter club.
+                                        We are setting out to create game development community and we want everyone to get involved. That means all disciplines and soon, sponsors and game studios!
+                                    </p>
+                                </Fade>
+                                    <br />
+                                <Fade up delay={600}>
+                                    <p>
+                                        We also took a risk and we wanted our own platform to showcase our members and games! That's why we have been coding this website for the last 3 months non-stop! This site is hand coded!
+                                        There are so many talented people at SDSU and we can see that there are creative people all around us just waiting to get started!
+                                    </p>
+                                </Fade>
+                                    <br />
+                                <Fade up delay={650}>
+                                    <h1>Come and join us!</h1>
+                                    <br />
+                                </Fade>
+                                
+                            </Grid.Column>
 
 
-                        <Grid.Column width={9} floated='right'>
-                                <CloudImage style={homeStyle.groupPhoto} publicId="WebsiteAssets/groupPhoto.jpg" />
-                        </Grid.Column>
-
+                            <Grid.Column width={9} floated='right'>
+                                    <CloudImage style={homeStyle.groupPhoto} publicId="WebsiteAssets/groupPhoto.jpg" />
+                            </Grid.Column>
+                        </Grid.Row>
 
                     </Grid>
                 </CloudinaryContext>
@@ -221,12 +231,21 @@ let homeStyle = {
         transform: 'translate(-50%, -50%)'
     },
     buttonLeft: {
+        fontFamily: 'AlienEncounters, Arial, sans-serif',
+        fontWeight: 'normal',
+        fontStyle: 'normal',
         position: 'absolute',
+        fontSize: '130%',
         left: '20%',
         top: '70%',
-        zIndex: 90
+        zIndex: 90,
     },
     buttonRight: {
+        fontFamily: 'AlienEncounters, Arial, sans-serif',
+        fontWeight: 'normal',
+        fontStyle: 'normal',
+        position: 'absolute',
+        fontSize: '130%',
         position: 'absolute',
         left: '70%',
         top: '70%',
