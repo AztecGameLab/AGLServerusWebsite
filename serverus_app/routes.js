@@ -18,10 +18,10 @@ import UserDirectory from './components/users/UserDirectory';
 import PasswordReset from './components/password/PasswordReset';
 import RequestReset from './components/password/RequestReset';
 
-const Routes = (props) => {
+const Routes = (appProps) => {
     return (
         <Switch>
-            <Route exact path="/" render={(props) => <TempHomePage showModal={props.showModal} {...props} />} />
+            <Route exact path="/" render={(props) => <TempHomePage showModal={appProps.showModal} {...props} />} />
             <Route exact path="/admin" component={AdminDashboard} />
             <Route exact path="/about" component={AboutPage} />
             <Route exact path="/a/:articleId" component={ArticlePage} />
