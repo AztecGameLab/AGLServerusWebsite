@@ -132,24 +132,24 @@ class ProfilePageContainer extends React.Component {
 
     async componentDidUpdate(nextProps, nextState) {
         if(this.state.profileObject.info) {
-            if (this.state.profileObject.username != this.props.routeParams.username) {
+            if (this.state.profileObject.username != this.props.match.params.username) {
                 window.scrollTo(0, 0);
                 this.setState({
-                    profileObject: await LoadProfile(this.props.routeParams.username),
-                    yourAccount: IsYourProfile(this.props.accounts, this.props.routeParams.username)
+                    profileObject: await LoadProfile(this.props.match.params.username),
+                    yourAccount: IsYourProfile(this.props.accounts, this.props.match.params.username)
                 });
             } 
         }
     }
     
     async componentWillMount() {
-        let userData = await LoadProfile(this.props.routeParams.username);
+        let userData = await LoadProfile(this.props.match.params.username);
         let isLoggedIn = IsLoggedIn(this.state.accounts);
         
         this.setState({
             profileObject: userData,
             loggedIn: isLoggedIn,
-            yourAccount: IsYourProfile(this.props.accounts, this.props.routeParams.username),
+            yourAccount: IsYourProfile(this.props.accounts, this.props.match.params.username),
             rolesSelected: userData.roles,
             bio: userData.bio
         });        

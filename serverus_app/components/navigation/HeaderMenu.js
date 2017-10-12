@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Redirect, Router, Route } from 'react-router';
+import { Link } from 'react-router-dom';
 import { Button, Dropdown, Icon, Menu, Popup, Search } from 'semantic-ui-react';
 import { Image, CloudinaryContext } from 'cloudinary-react';
 import { connect } from 'react-redux';
@@ -22,17 +22,16 @@ class HeaderMenu extends React.Component {
 
 
 
-    shouldComponentUpdate(nextProps, nextState) {
+    componentWillReceiveProps(nextProps) {
         if (nextProps.accounts.length > 0) {
             let headerImage = nextProps.accounts[0].showcaseImage;
             headerImage = headerImage.slice(0, headerImage.indexOf("Small")) + "Extra" + headerImage.slice(headerImage.indexOf("Small"));
             this.setState({
                 loggedIn: true,
-                accounts: nextProps.accounts,
+                accounts: nextProps.accounts[0],
                 headerIcon: headerImage
-            })
+            });
         }
-        return true;
     }
 
     render() {
@@ -62,24 +61,22 @@ class HeaderMenu extends React.Component {
                         <Menu.Item name='sponsors' active={activeItem === 'sponsors'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='heart' />Sponsors</Menu.Item>                        
                         <Menu.Item name='patchNotes' active={activeItem === 'patchNodes'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='bug' />Patch Notes</Menu.Item>                        
                         
-                        
-                        {false && (this.state.loggedIn ?
-                            this.state.accounts[0].authLevel == 2 ?
+                          {this.state.loggedIn ?
+                            this.props.access ?
                                 <Dropdown item text="Articles">
                                     <Dropdown.Menu>
                                         <Dropdown.Item icon='edit' as={Link} to='/create/announcement' text="Create Article" />
-                                        <Dropdown.Item icon="newspaper" as={Link} to='/articles' text="View all Articles" />
+                                        <Dropdown.Item icon='edit' as={Link} to='/create/game' text="Create Game" />
+                                        <Dropdown.Item icon='edit' as={Link} to='/create/tutorial' text="Create Tutorial" />
                                     </Dropdown.Menu>
                                 </Dropdown>
                                 :
-                                <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/a/-Ku0ZDLuuQfDd1aRXeEF'><Icon name='newspaper' size='big' />View All Articles</Menu.Item>
+                                <Menu.Item name='articles' active={activeItem === 'articles'}><Icon name='newspaper' size='big' />View All Articles</Menu.Item>
                             :
-                            <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/a/-Ku0ZDLuuQfDd1aRXeEF'><Icon name='newspaper' size='big' />View All Articles</Menu.Item>
-                        )}
-
-
+                            <Menu.Item name='articles' active={activeItem === 'articles'}><Icon name='newspaper' size='big' />View All Articles</Menu.Item>
+                        }
                         {this.state.loggedIn ?
-                            this.state.accounts[0].authLevel == 2 ?
+                            this.props.access ?
                                 <Menu.Item name="admin" active={activeItem === 'admin'} onClick={this.handleItemClick} as={Link} to="/admin"><Icon name="dashboard" />Dashboard</Menu.Item>
                                 : <div />
                             : <div />
@@ -93,23 +90,20 @@ class HeaderMenu extends React.Component {
                                             <div>
                                                 <Image publicId={this.state.headerIcon} style={HeaderStyle.profilePic}>
                                                 </Image>
-                                                Welcome {this.state.accounts[0].firstName + ' ' + this.state.accounts[0].lastName + '!'}
+                                                Welcome {this.state.accounts.firstName + ' ' + this.state.accounts.lastName + '!'}
                                             </div>
                                         </div>
                                     } icon={null} style={HeaderStyle.profile}>
                                     <Dropdown.Menu>
-                                        <Dropdown.Item as={Link} to={'/u/' + this.state.accounts[0].username} icon='user circle' text='My Profile' />
-                                        {false && <Dropdown.Item as={Link} to={'/inbox/' + this.state.accounts[0].username} icon='inbox' text='My Inbox' />}
+                                        <Dropdown.Item as={Link} to={'/u/' + this.state.accounts.username} icon='user circle' text='My Profile' />
+                                        {false && <Dropdown.Item as={Link} to={'/inbox/' + this.state.accounts.username} icon='inbox' text='My Inbox' />}
                                         <Dropdown.Item icon='sign out' text='Sign out' onClick={this.props.signOut} />
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </Menu.Menu>
                             :
                             <Menu.Menu position='right'>
-                            <Menu.Item>
-                            {false && <Search loading={false} fluid />}
-                            </Menu.Item>
-                                {false && <Menu.Item><form onSubmit={this.props.search}><input className="form-control" style={{color:'black'}}type="text" placeholder="Search..." onChange={this.props.handleSearch} /></form></Menu.Item>}
+                                {/* <Menu.Item><form onSubmit={this.props.search}><input className="form-control" style={{ color: 'black' }} type="text" placeholder="Search..." onChange={this.props.handleSearch} /></form></Menu.Item> */}
                                 {false && <Menu.Item onClick={() => this.props.showModel(0)}><Icon name='sign in' size='big' /> Login!</Menu.Item>}
                                 {false && <Menu.Item onClick={() => this.props.showModel(1)} style={HeaderStyle.profile}><Icon name='signup' size='big' /> Sign Up!</Menu.Item>}
                             </Menu.Menu>}
@@ -138,7 +132,8 @@ var HeaderStyle = {
 }
 function mapStateToProps(state, ownProps) {
     return {
-        accounts: state.accounts
+        accounts: state.accounts,
+        access: state.access
         //this means i would like to access by this.state.accounts
         // the data within the state of our store named by root reducer
         // ownProps are the props of our component CoursesPage

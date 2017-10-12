@@ -22,7 +22,7 @@ class Inbox extends React.Component {
 
     async componentWillMount(nextProps, nextState) {
         var that = this;
-        var yourUsername = this.props.routeParams.username;
+        var yourUsername = this.props.match.params.username;
         let inbox = await InboxWatch();
         this.setState({
             inbox: inbox

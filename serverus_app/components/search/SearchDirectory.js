@@ -21,7 +21,7 @@ class SearchDirectory extends React.Component {
         return (
             <div>
                 <h2>Search Directory</h2>
-                <h5>Query for {this.props.routeParams.searchQuery}</h5>
+                <h5>Query for {this.props.match.params.searchQuery}</h5>
                 <Loader inverted size="big" active={this.state.loading}/>
             </div>
         );

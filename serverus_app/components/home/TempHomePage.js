@@ -44,10 +44,10 @@ export default class TempHome extends React.Component {
 
     selectButton() {
         if (this.state.selectorPosition == '23'){
-            this.props.showModel(0);
+            this.props.showModal(0);
         }
         else {
-            this.props.showModel(1);
+            this.props.showModal(1);
         }
     }
 
@@ -103,8 +103,8 @@ export default class TempHome extends React.Component {
                         <CloudImage className="layer" data-hover-only = {true} data-depth="0.07" publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer1.png" style = {{width: "100%"}}/>
                         <CloudImage className="layer" data-hover-only = {true} data-depth="0.60" publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer2.png" style = {{width: "100%"}}/>                    
                     </div>
-                    <Button inverted size = 'massive' className = 'loadSave' style = {homeStyle.buttonLeft} onClick={() => this.props.showModel(0)}>LOAD SAVE</Button>    
-                    <Button inverted size = 'massive' className = 'newSave' style = {homeStyle.buttonRight} onClick={() => this.props.showModel(1)}>NEW GAME</Button> 
+                    <Button inverted size = 'massive' className = 'loadSave' style = {homeStyle.buttonLeft} onClick={() => this.props.showModal(0)}>LOAD SAVE</Button>    
+                    <Button inverted size = 'massive' className = 'newSave' style = {homeStyle.buttonRight} onClick={() => this.props.showModal(1)}>NEW GAME</Button> 
                     {this.state.blinking && <Icon name = 'hand outline up' size = 'huge' 
                     style = 
                     {{

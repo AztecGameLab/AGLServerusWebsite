@@ -71,7 +71,7 @@ class MarkdownCreate extends React.Component {
     async componentWillMount() {
         await this.initArticle();
         var currentState = this.state.postData;
-        switch (this.props.routeParams.type) {
+        switch (this.props.match.params.type) {
             case 'announcement':
                 currentState.type = { text: "Announcement", id: 'red' };
                 this.setState({
@@ -95,40 +95,42 @@ class MarkdownCreate extends React.Component {
     }
 
     initArticle() {
-        if (this.props.location.query['']) {
-            if (Array.isArray(this.props.location.query[''])) {
-                //Edit published post
-                var article;
-                if (this.props.location.query[''][1] == "edit") {
-                    return GetArticle("all", this.props.location.query[''][0]).then(article => {
-                        let currentState = this.state.postData;
-                        let cloudUpload = false;
-                        if (!article.image) article.image = {};
-                        article.image.allowZoomOut = currentState.image.allowZoomOut;
-                        article.image.width = currentState.image.width;
-                        article.image.height = currentState.image.height;
-                        if (article.image.public_id && article.image.url) {
-                            cloudUpload = true;
-                        }
-                        this.setState({
-                            postData: article,
-                            editPost: true,
-                            cloudUpload: cloudUpload
-                        });
-                        if (article.selectedTags) {
-                            article.selectedTags.map(tag => {
-                                this.handleAddition(null, {}, tag);
-                            });
-                        }
-                    }).catch(error => {
-                        console.error(error.response.data);
-                        return error;
+        if (this.props.location.search.length > 0) {
+            var search = [];
+            let query = this.props.location.search.replace("?=", "/").replace("&=", "/").split("/");
+            search.push(query[1]);
+            search.push(query[2]);
+            var article;
+            if (search[1] == "edit") {
+                return GetArticle("all", search[0]).then(article => {
+                    let currentState = this.state.postData;
+                    let cloudUpload = false;
+                    if (!article.image) article.image = {};
+                    article.image.allowZoomOut = currentState.image.allowZoomOut;
+                    article.image.width = currentState.image.width;
+                    article.image.height = currentState.image.height;
+                    if (article.image.public_id && article.image.url) {
+                        cloudUpload = true;
+                    }
+                    this.setState({
+                        postData: article,
+                        editPost: true,
+                        cloudUpload: cloudUpload,
+                        query: search
                     });
-                }
+                    if (article.selectedTags) {
+                        article.selectedTags.map(tag => {
+                            this.handleAddition(null, {}, tag);
+                        });
+                    }
+                }).catch(error => {
+                    console.error(error.response.data);
+                    return error;
+                });
             }
             // edit draft post
-            else {
-                return GetArticle("saved", this.props.location.query['']).then(article => {
+            else if (search[1] == "draft") {
+                return GetArticle("saved", search[0]).then(article => {
                     let currentState = this.state.postData;
                     let cloudUpload = false;
                     article.image.allowZoomOut = currentState.image.allowZoomOut;
@@ -140,7 +142,8 @@ class MarkdownCreate extends React.Component {
                     this.setState({
                         postData: article,
                         savedPost: true,
-                        cloudUpload: cloudUpload
+                        cloudUpload: cloudUpload,
+                        query: search
                     });
                     if (article.selectedTags) {
                         article.selectedTags.map(tag => {
@@ -251,11 +254,11 @@ class MarkdownCreate extends React.Component {
             };
         }
         let id;
-        if (this.props.location.query['']) {
-            id = this.props.location.query[''];
+        if (this.state.query) {
+            id = this.state.query[0];
         }
 
-        let response = await SavePost(data, this.props.routeParams.type, this.state.savedPost, id);
+        let response = await SavePost(data, this.props.match.params.type, this.state.savedPost, id);
         console.log(response);
         // window.location.reload('/create/announcement');
     }
@@ -281,18 +284,16 @@ class MarkdownCreate extends React.Component {
                 scale: this.state.postData.image.scale
             };
         }
-        if (this.props.location.query['']) {
-            if (Array.isArray(this.props.location.query[''])) {
-                if (this.props.location.query[''][1] == "edit") {
-                    let response = await CreatePost(data, this.props.routeParams.type, this.props.location.query[''][0], true);
-                    console.log(response);
-                } else console.error("Incorrect URL parameters.");
-            } else {
-                let response = await CreatePost(data, this.props.routeParams.type, this.props.location.query['']);
+        if (this.state.query) {
+            if (this.state.editPost) {
+                let response = await CreatePost(data, this.props.match.params.type, this.state.query[0], true);
                 console.log(response);
-            }
+            } else if (this.state.savedPost) {
+                let response = await CreatePost(data, this.props.match.params.type, this.state.query[0]);
+                console.log(response);
+            } else console.error("Incorrect URL parameters.");
         } else {
-            let response = await CreatePost(data, this.props.routeParams.type);
+            let response = await CreatePost(data, this.props.match.params.type);
             console.log(response);
         }
         // window.location.reload();
@@ -329,7 +330,7 @@ class MarkdownCreate extends React.Component {
             <div style={{ backgroundColor: 'black', height: '-webkit-fill-available' }}>
                 {loggedIn && isAdmin ? <div>
                     <div className="row col-lg-12">
-                        <div className="col-lg-6 col-sm-12"><h1 style={markdownStyle.title}>Create a new {this.props.routeParams.type}</h1>
+                        <div className="col-lg-6 col-sm-12"><h1 style={markdownStyle.title}>Create a new {this.props.match.params.type}</h1>
                             <input style={markdownStyle.inputTitle} className="form-control" type="text" placeholder="Title..." value={this.state.postData.title} onChange={this.onTitleChange} />
                             <div style={markdownStyle.md}>
                                 <Editor onChange={this.onInputChange} value={this.state.postData.text} />
@@ -373,7 +374,7 @@ class MarkdownCreate extends React.Component {
                         </div>
                         <div className="col-lg-6 col-sm-12"><h1 style={markdownStyle.title}>Preview post</h1></div>
                         <div className="col-lg-6 col-sm-12" style={markdownStyle.post}>
-                            {this.props.routeParams.type == 'announcement' || this.props.routeParams.type == 'tutorial' ? <ArticleCard edit={true} postData={this.state.postData} uploaded={this.state.uploaded} /> :
+                            {this.props.match.params.type == 'announcement' || this.props.match.params.type == 'tutorial' ? <ArticleCard edit={true} postData={this.state.postData} uploaded={this.state.uploaded} /> :
                                 <GenericCard value={this.state.postData} user={this.props.accounts[0].username} edit={true} />}
                         </div>
                     </div>

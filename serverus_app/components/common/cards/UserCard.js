@@ -1,7 +1,7 @@
 import { Button, Card, Label, Divider, Grid, Icon, Popup } from 'semantic-ui-react';
 import { Image, CloudinaryContext, Transformation } from 'cloudinary-react';
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import roleOptions from '../options/roleOptions.json';
 import { SendFriendRequest } from '../../AGL';
@@ -59,7 +59,7 @@ class UserCard extends React.Component {
         let loggedIn = this.props.accounts[0] ? true : null;
         return (
             <div id="UserCardContainer">
-                <Card as={Link} style={CardStyle.card}>
+                <Card style={CardStyle.card}>
                     <Card.Content>
                         <Grid columns={3} stretched>
                             <Grid.Column as={Link} to={"/u/" + this.props.user.username} width={6} style={{ color: 'black', paddingRight: 0 }}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import redux from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { Button, Divider, Grid, Icon, Menu, Search, Loader } from 'semantic-ui-react';
 import UserCard from '../common/cards/UserCard';
 import roleOptions from '../common/options/roleOptions.json';

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Image, CloudinaryContext } from 'cloudinary-react';
 import { Grid, Icon, Card, Tab, Button, List, Popup, Feed, Dropdown, TextArea, Input, Label } from 'semantic-ui-react';
 import IconPicker from '../common/icon/IconPicker';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import roleOptions from '../common/options/roleOptions.json';
 import badgeOptions from '../common/options/badgeOptions.json';
 import md5 from 'md5';

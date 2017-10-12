@@ -5,7 +5,7 @@ import axios from 'axios';
 var md5 = require('md5');
 var randomstring = require('randomstring');
 var validator = require("email-validator");
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 
 import {AGLRencryption, isUserRencrypted, AGLEncryption, EditProfile, usernameToEmail, GetAllEmails} from '../AGL';
 
@@ -188,7 +188,7 @@ class LoginForm extends Component {
                     </Form.Field>
                 </div>
                 <div style={modalStyle.forgot}>  
-                    <Label as={Link} to='forgotpassword' target="_blank" color = 'teal'>
+                    <Label as={Link} to='/forgotpassword' target="_blank" color = 'teal'>
                     <Icon name='question circle' size = "large" />  
                     Forgot your password?
                     </Label>
