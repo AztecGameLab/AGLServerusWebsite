@@ -150,12 +150,13 @@ class LoginForm extends Component {
         var loggedIn = !this.state.loaded || !this.state.email || !this.state.password ? false: true;
         return (
             <Form onSubmit={(e) => this.handleSubmission(e)}>
+            <br/>            
             <Grid>
                 <Grid.Column width = {1}>
                     <Icon name = 'flag checkered' size = 'big' />
                 </Grid.Column>
                 <Grid.Column width = {11}>
-                    <h3>Welcome back! Let's rock!</h3>
+                    <h3>Load your save file!</h3>
                 </Grid.Column>
             </Grid>
             <hr/>

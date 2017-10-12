@@ -103,10 +103,7 @@ class HeaderMenu extends React.Component {
                             :
                             <Menu.Menu position='right'>
                             <Menu.Item>
-                                <Search
-                                    loading={false}
-                                    fluid
-                                />
+                            {false && <Search loading={false} fluid />}
                             </Menu.Item>
                                 {false && <Menu.Item><form onSubmit={this.props.search}><input className="form-control" style={{color:'black'}}type="text" placeholder="Search..." onChange={this.props.handleSearch} /></form></Menu.Item>}
                                 {false && <Menu.Item onClick={() => this.props.showModel(0)}><Icon name='sign in' size='big' /> Login!</Menu.Item>}

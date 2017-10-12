@@ -54,12 +54,13 @@ class SignUpTwo extends React.Component {
   render() {
     return (
       <div>
+      <br/>      
       <Grid>
         <Grid.Column width = {1}>
           <Icon name = 'rocket' size = 'big' />
         </Grid.Column>
         <Grid.Column width = {11}>
-        <h3>Come join us! Let's make awesome games! </h3>
+        <h3>New player? Whats your name?  </h3>
         </Grid.Column>
       </Grid>
       <hr/>

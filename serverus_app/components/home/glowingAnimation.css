@@ -1,0 +1,30 @@
+@-webkit-keyframes redPulse {
+    from { background-color: #B02041; -webkit-box-shadow: 0 0 15px #902043; }
+    50% { background-color: #F01E1F; -webkit-box-shadow: 0 0 25px #F01E1F; }
+    to { background-color: #B02041; -webkit-box-shadow: 0 0 15px #902043; }
+  }
+
+  @-webkit-keyframes purpPulse {
+    from { background-color:  rgb(86, 88, 211); -webkit-box-shadow: 0 0 15px #3B3CEF; }
+    50% { background-color: #7360F0; -webkit-box-shadow: 0 0 25px #7360F0; }
+    to { background-color: rgb(86, 88, 211); -webkit-box-shadow: 0 0 15px #3B3CEF; }
+  }
+
+  .loadSave {
+    -webkit-animation-name: redPulse;
+    -webkit-animation-duration: 1.6s;
+    -webkit-animation-iteration-count: infinite;
+  }
+
+  .newSave {
+    -webkit-animation-name: purpPulse;
+    -webkit-animation-duration: 1.6s;
+    -webkit-animation-iteration-count: infinite;
+  }
+
+/* 
+
+  @-webkit-keyframes redPulse {
+    from { background-color: #B02041; -webkit-box-shadow: 0 0 15px #902043; }
+    50% { background-color: #F01E1F; -webkit-box-shadow: 0 0 25px #F01E1F; }
+    to { background-color: #B02041; -webkit-box-shadow: 0 0 15px #902043; } */
