@@ -17,6 +17,7 @@ import TempHome from './components/home/TempHomePage';
 import UserDirectory from './components/users/UserDirectory';
 import PasswordReset from './components/password/PasswordReset';
 import RequestReset from './components/password/RequestReset';
+import MessageTest from './components/message/MessageTest';
 
 const Routes = (appProps) => {
     return (
@@ -35,6 +36,7 @@ const Routes = (appProps) => {
             <Route exact path='/u/:username' component={ProfilePageContainer} />
             <Route exact path="/forgotpassword" component={RequestReset} />
             <Route exact path="/passwordreset/:hash" component={PasswordReset} />
+            <Route exact path="/messageTest" component={MessageTest} />
             <Route path='*' component={Error} />
         </Switch>
     )

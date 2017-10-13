@@ -50,7 +50,7 @@ export default class TempHome extends React.Component {
 
     selectButton() {
         if (this.state.selectorPosition == '24'){
-            this.props.showModel(0);
+            this.props.showModal(0);
         }
         else {
             this.props.showModal(1);
@@ -110,8 +110,8 @@ export default class TempHome extends React.Component {
                         <CloudImage className="layer" data-hover-only = {true} data-depth="0.07" publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer1.png" style = {{width: "100%"}}/>
                         <CloudImage className="layer" data-hover-only = {true} data-depth="0.60" publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer2.png" style = {{width: "100%"}}/>                    
                     </div>
-                    <Button inverted size = 'massive' className = 'loadSave' style = {homeStyle.buttonLeft} onClick={() => this.props.showModel(0)} ref={this.handleLeftRef} >LOAD SAVE</Button>    
-                    <Button inverted size = 'massive' className = 'newSave' style = {homeStyle.buttonRight} onClick={() => this.props.showModel(1)} ref={this.handleRightRef} >NEW GAME</Button> 
+                    <Button inverted size = 'massive' className = 'loadSave' style = {homeStyle.buttonLeft} onClick={() => this.props.showModal(0)} ref={this.handleLeftRef} >LOAD SAVE</Button>    
+                    <Button inverted size = 'massive' className = 'newSave' style = {homeStyle.buttonRight} onClick={() => this.props.showModal(1)} ref={this.handleRightRef} >NEW GAME</Button> 
                     {this.state.blinking && <Icon name = 'caret up' size = 'huge' 
                     style = 
                     {{

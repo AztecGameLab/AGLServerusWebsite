@@ -122,7 +122,7 @@ export const CloudinaryUpload = async (image) => {
     return axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/cloudinary-UploadToCloudinary', { imgUrl }, {
         headers: {
             "hostname": "api.cloudinary.com",
-            "host" : "api.cloudinary.com",
+            "host": "api.cloudinary.com",
             family: 4,
             port: 443,
         }
@@ -222,7 +222,7 @@ export const AGLEncryption = async (password) => {
 
 export const AGLRencryption = async (username, password) => {
 
-    let response  = await axios.post(
+    let response = await axios.post(
         'https://us-central1-serverus-15f25.cloudfunctions.net/security-AGLRencryption',
         {
             username: username,
@@ -354,6 +354,16 @@ export const SendFriendRequest = async (myInfo, friendInfo) => {
 
 export const AcceptFriendRequest = async () => {
 
+}
+
+
+export const SendMessageTest = (message) => {
+    axios.post('http://localhost:5000/serverus-15f25/us-central1/SendMessageTest',
+        {data: message}).then(response => {
+            console.log("Success! ", response.data);
+        }).catch(err => {
+            console.error(err);
+        });
 }
 
 // export const UpdateUser = async (userData) => {

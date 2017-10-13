@@ -56,7 +56,7 @@ class HeaderMenu extends React.Component {
                             content='Game Submissions Coming Soon!'
                             size='large'
                         />
-                        <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='newspaper' />Article Posts</Menu.Item>                        
+                        <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/messageTest'><Icon size='big' name='edit' />Message Tester</Menu.Item>                        
                         <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon size='big' name='users' />User Directory</Menu.Item>
                         <Menu.Item name='sponsors' active={activeItem === 'sponsors'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='heart' />Sponsors</Menu.Item>                        
                         <Menu.Item name='patchNotes' active={activeItem === 'patchNodes'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='bug' />Patch Notes</Menu.Item>                        
