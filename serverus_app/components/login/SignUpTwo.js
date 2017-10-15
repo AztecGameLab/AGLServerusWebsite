@@ -65,7 +65,7 @@ class SignUpTwo extends React.Component {
       </Grid>
       <hr/>
         <div style={modalStyle.spacing}>
-          <Form.Field>
+          <Form.Field className="login">
             <label>First Name</label>
             <Input placeholder='First Name' >
               <input onChange={this.props.handleFirstNameInput} onBlur = {this.firstNameCheck}/>
@@ -73,7 +73,7 @@ class SignUpTwo extends React.Component {
           </Form.Field>
         </div>
         <div style={modalStyle.spacing}>
-          <Form.Field>
+          <Form.Field className="login">
             <label>Last Name</label>
             <Input placeholder='Last Name' >
               <input onChange={this.props.handleLastNameInput} onBlur = {this.lastNameCheck} />
@@ -81,7 +81,7 @@ class SignUpTwo extends React.Component {
           </Form.Field>
         </div>
         <div style={modalStyle.spacing}>
-          <Form.Field>
+          <Form.Field className="login">
             <label>Major</label>
             <Dropdown placeholder='Major' search selection options={majorOptions.majors} onChange={this.majorCheck}/>
           </Form.Field>

@@ -1,5 +1,8 @@
-.ui.form .field>label {
+.ui.form .field.login>label {
   font-size: 1em !important;
+}
+.ui.fullscreen.modal>.close {
+  color: white;
 }
 .fade-wait-leave {
     opacity: 1;

@@ -2,12 +2,9 @@ import React from 'react';
 import Markmirror from 'react-markmirror';
 import { Dropdown, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import stylesheet from '../../styles/markdown.css';
-import GenericCard from '../common/cards/GenericCard';
-import { CreatePost, GetArticle, SavePost } from '../AGL';
+import { CloudinaryUpload, CloudinaryDelete, IsLoggedIn, SubmitPost, GetArticle, SavePost } from '../AGL';
 import ArticleCard from '../common/cards/ArticleCard';
-import { CloudinaryUpload, CloudinaryDelete } from '../AGL';
-
+import stylesheet from '../../styles/markdown.css';
 
 const Editor = (props) => {
     const handleType = text => {
@@ -28,11 +25,12 @@ const Editor = (props) => {
     );
 };
 
-class MarkdownCreate extends React.Component {
+class ArticlePost extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            path :this.props.match.path.split('/')[2],           
             postData: {
                 text: '# hello\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n',
                 title: "",
@@ -47,7 +45,7 @@ class MarkdownCreate extends React.Component {
                     width: 600,
                     height: 350,
                     scale: 1
-                }
+                },
             },
             tags: [{ text: '#extra', value: 'extra' }, { text: '#thicc', value: 'thicc' }],
             uploaded: false,
@@ -71,15 +69,9 @@ class MarkdownCreate extends React.Component {
     async componentWillMount() {
         await this.initArticle();
         var currentState = this.state.postData;
-        switch (this.props.match.params.type) {
+        switch (this.state.path) {
             case 'announcement':
                 currentState.type = { text: "Announcement", id: 'red' };
-                this.setState({
-                    postData: currentState
-                });
-                break;
-            case 'game':
-                currentState.type = { text: "Game", id: 'green' };
                 this.setState({
                     postData: currentState
                 });
@@ -183,7 +175,6 @@ class MarkdownCreate extends React.Component {
         this.setState({ postData: currentState });
     }
 
-
     handleNewImage = e => {
         const currentState = Object.assign({}, this.state.postData);
         let { changeImage } = this.state;
@@ -286,14 +277,14 @@ class MarkdownCreate extends React.Component {
         }
         if (this.state.query) {
             if (this.state.editPost) {
-                let response = await CreatePost(data, this.props.match.params.type, this.state.query[0], true);
+                let response = await SubmitPost(data, this.props.match.params.type, this.state.query[0], true);
                 console.log(response);
             } else if (this.state.savedPost) {
-                let response = await CreatePost(data, this.props.match.params.type, this.state.query[0]);
+                let response = await SubmitPost(data, this.props.match.params.type, this.state.query[0]);
                 console.log(response);
             } else console.error("Incorrect URL parameters.");
         } else {
-            let response = await CreatePost(data, this.props.match.params.type);
+            let response = await SubmitPost(data, this.props.match.params.type);
             console.log(response);
         }
         // window.location.reload();
@@ -324,59 +315,63 @@ class MarkdownCreate extends React.Component {
     }
 
     render() {
-        var loggedIn = this.props.accounts[0] ? this.props.accounts[0] ? true : false : false;
+        var loggedIn = IsLoggedIn(this.props.accounts);
         var isAdmin = this.props.access;
-        return (
-            <div style={{ backgroundColor: 'black', height: '-webkit-fill-available' }}>
-                {loggedIn && isAdmin ? <div>
-                    <div className="row col-lg-12">
-                        <div className="col-lg-6 col-sm-12"><h1 style={markdownStyle.title}>Create a new {this.props.match.params.type}</h1>
-                            <input style={markdownStyle.inputTitle} className="form-control" type="text" placeholder="Title..." value={this.state.postData.title} onChange={this.onTitleChange} />
-                            <div style={markdownStyle.md}>
-                                <Editor onChange={this.onInputChange} value={this.state.postData.text} />
-                                <div style={markdownStyle.tags} className="col-lg-12">
-                                    <Dropdown
-                                        options={this.state.tags}
-                                        placeholder='Add a tag...'
-                                        additionLabel={<Icon name="hashtag" />}
-                                        search
-                                        selection
-                                        fluid
-                                        multiple
-                                        allowAdditions
-                                        defaultValue={this.state.postData.selectedTags}
-                                        onAddItem={this.handleAddition}
-                                        onChange={this.handleTags}
-                                    />
-                                    <div style={{ color: 'white', marginTop: 5 }}>
-                                        <input type='file' accept=".jpg, .jpeg, .png" onChange={this.handleNewImage} />
-                                        <br />
-                                        {'Scaling Mode: '}
-                                        <input
-                                            style={{ color: 'black' }}
-                                            name='allowZoomOut'
-                                            type='checkbox'
-                                            onChange={this.handleAllowZoomOut}
-                                            checked={this.state.postData.image.allowZoomOut} />
-                                        <br /><br />
-                                        Zoom:
+        if (loggedIn && isAdmin) {
+            return (
+                <div className="row col-lg-12">
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <div className="col-lg-6 col-sm-12"><h1 style={markdownStyle.title}>Create a new {this.state.path}</h1>
+                        <input style={markdownStyle.inputTitle} className="form-control" type="text" placeholder="Title..." value={this.state.postData.title} onChange={this.onTitleChange} />
+                        <div style={markdownStyle.md}>
+                            <Editor onChange={this.onInputChange} value={this.state.postData.text} />
+                            <div style={markdownStyle.tags} className="col-lg-12">
+                                <Dropdown
+                                    options={this.state.tags}
+                                    placeholder='Add a tag...'
+                                    search
+                                    selection
+                                    fluid
+                                    multiple
+                                    allowAdditions
+                                    defaultValue={this.state.postData.selectedTags}
+                                    onAddItem={this.handleAddition}
+                                    onChange={this.handleTags}
+                                />
+                                <div style={{ color: 'white', marginTop: 5 }}>
+                                    <input type='file' accept=".jpg, .jpeg, .png" onChange={this.handleNewImage} />
+                                    <br />
+                                    {'Scaling Mode: '}
                                     <input
-                                            name='scale'
-                                            type='range'
-                                            onChange={this.handleScale}
-                                            min={this.state.postData.image.allowZoomOut ? '0.1' : '1'}
-                                            max='2'
-                                            step='0.01'
-                                            defaultValue={this.state.postData.image.scale} />
-                                    </div>
+                                        style={{ color: 'black' }}
+                                        name='allowZoomOut'
+                                        type='checkbox'
+                                        onChange={this.handleAllowZoomOut}
+                                        checked={this.state.postData.image.allowZoomOut} />
+                                    <br /><br />
+                                    Zoom:
+                                    <input
+                                        name='scale'
+                                        type='range'
+                                        onChange={this.handleScale}
+                                        min={this.state.postData.image.allowZoomOut ? '0.1' : '1'}
+                                        max='2'
+                                        step='0.01'
+                                        defaultValue={this.state.postData.image.scale} />
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-6 col-sm-12"><h1 style={markdownStyle.title}>Preview post</h1></div>
-                        <div className="col-lg-6 col-sm-12" style={markdownStyle.post}>
-                            {this.props.match.params.type == 'announcement' || this.props.match.params.type == 'tutorial' ? <ArticleCard edit={true} postData={this.state.postData} uploaded={this.state.uploaded} /> :
-                                <GenericCard value={this.state.postData} user={this.props.accounts[0].username} edit={true} />}
-                        </div>
+                    </div>
+                    <div className="col-lg-6 col-sm-12"><h1 style={markdownStyle.title}>Preview post</h1></div>
+                    <div className="col-lg-6 col-sm-12" style={markdownStyle.post}>
+                        <ArticleCard edit={true} postData={this.state.postData} uploaded={this.state.uploaded} />
                     </div>
                     <div className="row col-lg-12">
                         <div style={markdownStyle.button} className="col-lg-6">
@@ -384,9 +379,9 @@ class MarkdownCreate extends React.Component {
                             <button className="btn btn-success" disabled={this.buttonDisable()} onClick={this.sendToFB}>Publish Post!</button>
                         </div>
                     </div>
-                </div> : <div>You need admin privileges in order to create posts</div>}
-            </div>
-        );
+                </div>
+            );
+        } else return null;
     }
 }
 
@@ -400,7 +395,7 @@ function mapStateToProps(state, ownProps) {
     };
 }
 
-export default connect(mapStateToProps, null)(MarkdownCreate)
+export default connect(mapStateToProps, null)(ArticlePost)
 
 var markdownStyle = {
     title: {

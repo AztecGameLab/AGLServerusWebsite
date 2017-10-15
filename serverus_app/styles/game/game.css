@@ -1,0 +1,54 @@
+.ui.form .field.game>label {
+    font-size: 1.5em !important;
+}
+.field.game {
+    margin-bottom: 25px !important;
+}
+/* Genre Icons */
+i.icon.custom-icon-action {
+    content: url('./mailed-fist.png');
+}
+i.icon.custom-icon-adventure {
+    content: url('./pikeman.png');
+}
+i.icon.custom-icon-horror {
+    content: url('./imp-laugh.png');
+}
+i.icon.custom-icon-mystery {
+    content: url('./magnifying-glass.png');
+}
+i.icon.custom-icon-race {
+    content: url('./steering-wheel.png');
+}
+i.icon.custom-icon-rpg {
+    content: url('./battle-gear.png');
+}
+i.icon.custom-icon-shooter {
+    content: url('./desert-eagle.png');
+}
+i.icon.custom-icon-sports {
+    content: url('./volleyball-ball.png');
+}
+i.icon.custom-icon-two-d {
+    content: url('./001-game.png');
+}
+i.icon.custom-icon-three-d {
+    content: url('./003-squares.png');
+}
+i.icon.custom-icon-vr {
+    content: url('./002-technology.png');
+}
+
+/* Platform icons */
+i.icon.custom-icon-android {
+    content: url('./002-android-logo.png');
+}
+i.icon.custom-icon-ios{
+    content: url('./003-mac-os-logo.png');
+}
+i.icon.custom-icon-mac {
+    content: url('./001-happy-mac-logo.png');
+}
+i.icon.custom-icon-windows {
+    content: url('./004-windows.png');
+}

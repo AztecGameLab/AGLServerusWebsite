@@ -255,7 +255,7 @@ class SignUpThree extends React.Component {
                   editEnabled={true} />
               </Grid.Column>
               <Grid.Column width={11} >
-                <Form.Field>
+                <Form.Field className="login">
                   <Popup
                     trigger={<label> San Diego State University </label>}
                     content='More schools coming later!'
@@ -293,7 +293,7 @@ class SignUpThree extends React.Component {
           </Grid>
         </div>
         <div style={modalStyle.spacing}>
-          <Form.Field>
+          <Form.Field className="login">
             <label>Roles Interested In:</label>
             <Dropdown placeholder='Roles' fluid multiple selection options={roleOptions.roles}
               value={this.state.rolesSelected} onChange={this.rolesCheck} />

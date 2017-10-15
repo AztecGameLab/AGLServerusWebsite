@@ -72,7 +72,7 @@ export const GetAllArticles = async () => {
     return Object.values(articles.data);
 }
 
-export const CreatePost = (post, type, id, edit) => {
+export const SubmitPost = (post, type, id, edit) => {
     let url;
     if (id) {
         if (edit) {

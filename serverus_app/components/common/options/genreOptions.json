@@ -1,0 +1,81 @@
+{
+    "genre": [
+        {
+            "key": "ACT",
+            "text": "Action",
+            "value": "Action",
+            "description": "Exciting games to challenge your limits on your skills!",
+            "icon": {"className": "custom-icon-action"}
+        },
+        {
+            "key": "ADV",
+            "text": "Adventure",
+            "value": "Adventure",
+            "description": "Explore and discover regions by solving puzzles and quests!",
+            "icon": {"className": "custom-icon-adventure"}
+        },
+        {
+            "key": "HOR",
+            "text": "Horror",
+            "value": "Horror",
+            "description": "Heart-racing activities that will make you jump off your seat!",
+            "icon": {"className": "custom-icon-horror"}
+        },
+        {
+            "key": "MYS",
+            "text": "Mystery/Suspense",
+            "value": "Mystery/Suspense",
+            "description": "Use deduction and reasoning to find clues and solve mysteries!",
+            "icon": {"className": "custom-icon-mystery"}
+        },
+        {
+            "key": "RAC",
+            "text": "Racing",
+            "value": "Racing",
+            "description": "Buckle up, rev your engines, and go for spin!",
+            "icon": {"className": "custom-icon-race"}
+        },
+        {
+            "key": "RPG",
+            "text": "RPG",
+            "value": "RPG",
+            "description": "Play an unique character as you immerse yourself into the game!",
+            "icon": {"className": "custom-icon-rpg"}
+        },
+        {
+            "key": "SHT",
+            "text": "Shooter",
+            "value": "Shooter",
+            "description": "Whip out your weapons and test your reflexes!",
+            "icon": {"className": "custom-icon-shooter"}
+        },
+        {
+            "key": "SPT",
+            "text": "Sports",
+            "value": "Sports",
+            "description": "Play outside you lazy fuck",
+            "icon": {"className": "custom-icon-sports"}
+        },
+        {
+            "key": "TWO",
+            "text": "2D",
+            "value": "2D",
+            "description": "Two dimensional games with an unique ambience!",
+            "icon": {"className": "custom-icon-two-d"}
+        },
+        {
+            "key": "THR",
+            "text": "3D",
+            "value": "3D",
+            "description": "Three dimensional games giving you a lifelike experience!",
+            "icon": {"className": "custom-icon-three-d"}
+        },
+        {
+            "key": "VR",
+            "text": "Virtual Reality",
+            "value": "Virtual Reality",
+            "description": "Immerse yourself into an alternate reality out of this world!",
+            "icon": {"className": "custom-icon-vr"}
+        }
+    ]
+}
