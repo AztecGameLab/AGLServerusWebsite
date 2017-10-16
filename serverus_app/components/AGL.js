@@ -301,10 +301,15 @@ export const EditProfile = async (username, uid, newDataObj) => {
     );
 }
 
+export const LoadUsernames = async () => {
+    let response = await axios.get('http://localhost:5000/serverus-15f25/us-central1/LoadUsernames');
+    return response.data;
+}
+    
+
 export const LoadAllUsers = async (component) => {
     let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/users-LoadAllUserProfiles');
     if (component == "dashboard") {
-
         response.data.map(user => {
             var data = {
                 key: user.data.uid,

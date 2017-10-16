@@ -1,14 +1,15 @@
 import React from 'react';
 import stylesheet from '../../styles/markdown.css';
-import { Button, Checkbox, Dropdown, Form, Grid, Icon, Input, Modal } from 'semantic-ui-react';
+import { Button, Checkbox, Dropdown, Form, Grid, Icon, Input, Label, Modal, TextArea } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { CloudinaryUpload, CloudinaryDelete, IsLoggedIn, SubmitGame, GetGamePost, SaveGame } from '../AGL';
-import PreviewGame from './PreviewGame';
+import { CloudinaryUpload, CloudinaryDelete, GetGamePost, IsLoggedIn, LoadUsernames, SubmitGame, SaveGame } from '../AGL';
+import GamePage from './GamePage';
 import genreOptions from '../common/options/genreOptions.json';
 import styles from '../../styles/game/game.css';
 
 const platforms = [{ key: "WIN", text: "Windows", value: "Windows", icon: { className: "custom-icon-windows" } }, { key: "MAC", text: "Mac", value: "Mac", icon: { className: "custom-icon-mac" } },
 { key: "AND", text: "Android", value: "Android", icon: { className: "custom-icon-android" } }, { key: "IOS", text: "iOS", value: "iOS", icon: { className: "custom-icon-ios" } }];
+
 class GamePost extends React.Component {
     constructor(props) {
         super(props);
@@ -16,8 +17,11 @@ class GamePost extends React.Component {
         this.state = {
             gamePostData: {
                 title: "",
+                authors: [],
                 teamName: "",
                 date: new Date().toDateString(),
+                description: "",
+                downloadLinks: [],
                 sourceCode: "",
                 selectedTags: [],
                 selectedGenres: [],
@@ -28,14 +32,16 @@ class GamePost extends React.Component {
                     url: null,
                     allowZoomOut: true,
                     width: 600,
-                    height: 350,
-                    scale: 1
+                    height: 400,
+                    scale: 0.5
                 },
                 screenshots: {
                     public_id: [],
                     url: []
                 },
+                rating: 0
             },
+            contributors: [],
             tags: [{ text: '#extra', value: 'extra' }, { text: '#thicc', value: 'thicc' }],
             genres: genreOptions.genre,
             uploaded: false,
@@ -47,7 +53,13 @@ class GamePost extends React.Component {
         };
         this.onTitleChange = this.onTitleChange.bind(this);
         this.onTeamChange = this.onTeamChange.bind(this);
+        this.onDescriptionChange = this.onDescriptionChange.bind(this);
+        this.handleTagAddition = this.handleTagAddition.bind(this);
+        this.handleDownloadLinks = this.handleDownloadLinks.bind(this);
+        this.createDownloadLinks = this.createDownloadLinks.bind(this);
+        this.handleAuthors = this.handleAuthors.bind(this);
         this.handleTags = this.handleTags.bind(this);
+        this.handlePlatforms = this.handlePlatforms.bind(this);
         this.handleGenre = this.handleGenre.bind(this);
         this.handleScale = this.handleScale.bind(this);
         this.handleAllowZoomOut = this.handleAllowZoomOut.bind(this);
@@ -63,10 +75,12 @@ class GamePost extends React.Component {
 
     async componentWillMount() {
         await this.initGame();
+        let contributors = await LoadUsernames();
         var currentState = this.state.gamePostData;
         currentState.type = { text: "Game", id: 'green' };
         this.setState({
-            gamePostData: currentState
+            gamePostData: currentState,
+            contributors: contributors
         });
     }
 
@@ -96,7 +110,7 @@ class GamePost extends React.Component {
                     });
                     if (game.selectedTags) {
                         game.selectedTags.map(tag => {
-                            this.handleAddition(null, {}, tag);
+                            this.handleTagAddition(null, {}, tag);
                         });
                     }
                 }).catch(error => {
@@ -134,12 +148,58 @@ class GamePost extends React.Component {
         }
     }
 
+    handleTagAddition = (e, { value }, init) => {
+        var counter = 0;
+        this.state.tags.forEach(item => {
+            if (item.value == value)
+                return counter++;
+        });
+        if (init) {
+            this.setState({
+                tags: [{ text: '#' + init, value: init }, ...this.state.tags]
+            });
+        } else {
+            if (counter < 1) {
+                this.setState({
+                    tags: [{ text: '#' + value, value }, ...this.state.tags]
+                });
+            }
+        }
+    }
 
     handleTags = (e, { value }) => {
         let currentState = Object.assign({}, this.state.gamePostData);
         currentState.selectedTags = value;
         this.setState({ gamePostData: currentState });
     }
+
+    handleAuthors = (e, { value }) => {
+        let currentState = Object.assign({}, this.state.gamePostData);
+        currentState.authors = value;
+        this.setState({ gamePostData: currentState });
+    }
+
+    handlePlatforms = (e, { value }) => {
+        let currentState = Object.assign({}, this.state.gamePostData);
+        currentState.selectedPlatforms = value;
+        this.setState({ gamePostData: currentState });
+    }
+
+    createDownloadLinks(value, key) {
+        return (
+            <div key={key} style={{ marginBottom: 15 }} >
+                <label style={{ fontSize: '1.5em' }}> Download link for {value} platform</label>
+                <Input onChange={() => { this.handleDownloadLinks(value, key) }} placeholder={"Add a download link!"} />
+            </div>
+        );
+    }
+
+    handleDownloadLinks = (value, i) => {
+        let currentState = Object.assign({}, this.state.gamePostData);
+        currentState.downloadLinks[i] = value;
+        this.setState({ gamePostData: currentState });
+    }
+
 
     handleGenre = (e, { value }) => {
         let currentState = Object.assign({}, this.state.gamePostData);
@@ -164,7 +224,7 @@ class GamePost extends React.Component {
         const currentState = Object.assign({}, this.state.gamePostData);
         let { changeScreenshot } = this.state;
         if (currentState.screenshots.public_id) {
-            changeScreenshot= true;
+            changeScreenshot = true;
         }
         currentState.screenshots.url = e.target.files;
         this.setState({
@@ -220,7 +280,15 @@ class GamePost extends React.Component {
         });
     }
 
-    onSourceCodeChange (e) {
+    onDescriptionChange(e) {
+        let currentState = Object.assign({}, this.state.gamePostData);
+        currentState.description = e.target.value;
+        this.setState({
+            gamePostData: currentState
+        });
+    }
+
+    onSourceCodeChange(e) {
         let currentState = Object.assign({}, this.state.gamePostData);
         currentState.sourceCode = e.target.value;
         this.setState({
@@ -235,7 +303,7 @@ class GamePost extends React.Component {
         let cloudinaryImage = await this.sendToCloudinary();
         var data = {
             title: this.state.gamePostData.title,
-            author: this.props.accounts[0].username,
+            authors: this.state.gamePostData.authors,
             date: now,
             text: this.state.gamePostData.text,
             selectedTags: this.state.gamePostData.selectedTags,
@@ -266,7 +334,7 @@ class GamePost extends React.Component {
         let cloudinaryImage = await this.sendToCloudinary("publish");
         var data = {
             title: this.state.gamePostData.title,
-            author: this.props.accounts[0].username,
+            authors: this.state.gamePostData.authors,
             date: now,
             text: this.state.gamePostData.text,
             selectedTags: this.state.gamePostData.selectedTags,
@@ -294,7 +362,7 @@ class GamePost extends React.Component {
         // window.location.reload();
     }
 
-//Fix changeShowcase screenshot logic for upload/delete multiple
+    //Fix changeShowcase screenshot logic for upload/delete multiple
     sendToCloudinary(type) {
         if (this.state.gamePostData.showcase.url) {
             if (typeof this.state.gamePostData.showcase.url == "object") {
@@ -335,14 +403,32 @@ class GamePost extends React.Component {
                     <br />
                     <div className="row col-lg-4 col-lg-offset-4">
                         <Form>
-                            <h2>Create a Game!</h2>
+                            <h1 style={{ fontSize: '3em', textAlign: 'center', marginBottom: 15 }}>Create a Game!</h1>
                             <Form.Field className="game">
                                 <label>Title</label>
-                                <Input onChange={this.onTitleChange} placeholder="Add a game title!"/>
+                                <Input onChange={this.onTitleChange} placeholder="Add a game title!" />
                             </Form.Field>
                             <Form.Field className="game">
-                                <Checkbox label="One man squad" />
-                                {!this.state.lmao ? <div><label style={gameForm.label}>Team Name</label> <Input onChange={this.onTeamChange} placeholder="Add a team!" /></div> : null}
+                                <label style={gameForm.label}>Team Name</label> <Input onChange={this.onTeamChange} placeholder="Add a team!" />
+                            </Form.Field>
+                            <Form.Field className="game">
+                                <label>Contributors</label>
+                                {this.state.gamePostData.authors.length > 5 && <Label basic color='red' pointing='below'>Teams cannot consist more than 5 members!</Label>}
+                                <Dropdown
+                                    options={this.state.contributors}
+                                    placeholder='Add a your team members '
+                                    scrolling
+                                    search
+                                    selection
+                                    fluid
+                                    multiple
+                                    error={this.state.gamePostData.authors.length > 5}
+                                    defaultValue={this.state.gamePostData.authors}
+                                    onChange={this.handleAuthors} />
+                            </Form.Field>
+                            <Form.Field className="game">
+                                <label>Game Description</label>
+                                <TextArea onChange={this.onDescriptionChange} placeholder="Tell us about your game!" />
                             </Form.Field>
                             <Form.Field className="game">
                                 <label>Tags</label>
@@ -355,22 +441,25 @@ class GamePost extends React.Component {
                                     multiple
                                     allowAdditions
                                     defaultValue={this.state.gamePostData.selectedTags}
-                                    onAddItem={this.state.handleAddition}
-                                    onChange={this.state.handleTags} />
+                                    onAddItem={this.handleTagAddition}
+                                    onChange={this.handleTags} />
                             </Form.Field>
                             <Form.Field className="game">
                                 <label>Genre</label>
                                 <Dropdown placeholder='Add a genre!' fluid multiple selection
                                     defaultValue={this.state.gamePostData.selectedGenres}
-                                    onChange={this.state.handleGenre}
+                                    onChange={this.handleGenre}
                                     options={genreOptions.genre} />
                             </Form.Field>
                             <Form.Field className="game">
                                 <label>Platforms</label>
                                 <Dropdown placeholder='Add compatible platforms!' fluid multiple selection
                                     defaultValue={this.state.gamePostData.selectedPlatforms}
-                                    onChange={this.state.handlePlatforms}
+                                    onChange={this.handlePlatforms}
                                     options={platforms} />
+                            </Form.Field>
+                            <Form.Field>
+                                {this.state.gamePostData.selectedPlatforms.map(this.createDownloadLinks)}
                             </Form.Field>
                             <Form.Field className="game">
                                 <label>Showcase Image</label>
@@ -382,7 +471,7 @@ class GamePost extends React.Component {
                             </Form.Field>
                             <Form.Field className="game">
                                 <label>Source Code</label>
-                                <Input onChange={this.onSourceCodeChange} placeholder="Add source code!"/>
+                                <Input onChange={this.onSourceCodeChange} placeholder="Add source code!" />
                             </Form.Field>
                             <Form.Field className="game">
                                 <Checkbox label="I agree to AGL game submission terms and conditions" />
@@ -393,8 +482,32 @@ class GamePost extends React.Component {
                             </Form.Field>
                         </Form>
                     </div>
-                    <Modal size="fullscreen" basic closeIcon open={this.state.open} onClose={this.closeModal} >
-                        <PreviewGame postData={this.state.gamePostData} />
+                    <Modal className="gameModal" size="fullscreen" basic closeIcon open={this.state.open} onClose={this.closeModal}>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <GamePage gamePostData={this.state.gamePostData} {...this.props} edit={true} />
+                        <div className="col-lg-4" style={gameForm.editShowcase}>
+                            {'Scaling Mode: '}
+                            <input
+                                style={{ color: 'black' }}
+                                name='allowZoomOut'
+                                type='checkbox'
+                                onChange={this.handleAllowZoomOut}
+                                checked={this.state.gamePostData.showcase.allowZoomOut} />
+                            <br /><br />
+                            Zoom:
+                            <input
+                                name='scale'
+                                type='range'
+                                onChange={this.handleScale}
+                                min={this.state.gamePostData.showcase.allowZoomOut ? '0.1' : '1'}
+                                max='2'
+                                step='0.01'
+                                defaultValue={this.state.gamePostData.showcase.scale} />
+                        </div>
                     </Modal>
                 </div>
             );
@@ -413,6 +526,11 @@ export default connect(mapStateToProps, null)(GamePost);
 
 const gameForm = {
     label: {
+        fontSize: '1.5em'
+    },
+    editShowcase: {
+        marginTop: 50,
+        color: 'white',
         fontSize: '1.5em'
     }
 }

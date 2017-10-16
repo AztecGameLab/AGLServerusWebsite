@@ -4,6 +4,10 @@
 .field.game {
     margin-bottom: 25px !important;
 }
+.ui.fullscreen.modal.gameModal {
+    width: 100% !important;
+    left: 0 !important;
+}
 /* Genre Icons */
 i.icon.custom-icon-action {
     content: url('./mailed-fist.png');

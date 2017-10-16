@@ -8,6 +8,7 @@ import ArticlePost from './components/articles/ArticlePost';
 import Calendar from './components/Calendar/Calendar'
 import CompetitionsPage from './components/competitions/CompetitionsPage';
 import Error from './components/common/error/ErrorPage';
+import GamePage from './components/games/GamePage';
 import GamePost from './components/games/GamePost';
 import Inbox from './components/inbox/Inbox';
 import GameDirectory from './components/games/GameDirectory';
@@ -32,6 +33,7 @@ const Routes = (appProps) => {
             <Route exact path="/create/announcement" component={ArticlePost} />
             <Route exact path="/create/tutorial" component={ArticlePost} />
             <Route exact path="/create/game" component={GamePost} />
+            <Route exact path="/g/:gameId" component={GamePage} />
             {/* <Route exact path="/create/game" component={MessageTest} /> */}
             <Route exact path="/games" component={GameDirectory} />
             <Route exact path="/inbox/:username" component={Inbox} />
