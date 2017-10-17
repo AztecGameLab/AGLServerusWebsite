@@ -16,6 +16,7 @@ class SignUpForm extends Component {
     this.state = {
       currentPhase: 0,
       error: false,
+      errorMessage: '',
       startingIcon: 'ProfileIconsSmall/033-flask.png',
       created: false,
       loading: false,
@@ -174,6 +175,15 @@ class SignUpForm extends Component {
     newUserData.password = pass;
     let response = await createAGLUser(newUserData.username, newUserData.email, pass, newUserData);
     
+    if(response.data != "Successful account creation!"){
+      this.setState({
+        loading: false,
+        created: false,
+        error: true,
+        errorMessage: response.data
+      });
+      return;
+    }
     this.setState({
       loading: false,
       created: true

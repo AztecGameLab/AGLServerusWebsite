@@ -47,14 +47,16 @@ class RequestReset extends React.Component{
             let status= await sendPasswordReset(this.state.email);
                 this.setState({
                     loading: false,
-                    success: status
+                    success: status,
+                    error: ''
                 });
                 return;
           }
           else {
               this.setState({
                   loading: false,
-                  error: "User not found."
+                  error: "User not found.",
+                  success: ''
               });
               return;
           }
