@@ -5,7 +5,10 @@ import {
     Grid,
     Card,
     Button,
-    Icon
+    Icon,
+    List,
+    Input,
+    Message
 } from 'semantic-ui-react';
 import NewsFeed from './NewsFeed';
 import Parallax from 'parallax-js';
@@ -16,12 +19,19 @@ var Mousetrap = require('mousetrap');
 import styles from './glowingAnimation.css';
 import stylings from '../../customfonts/alien.css';
 
+import {EmailTakenCheck, addToNewsletter} from '../AGL';
+
 export default class TempHome extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             selectorPosition: '23', //for left //false for right
-            blinking: true
+            blinking: true,
+            emailTaken: false,
+            errorMessage: '',
+            successMessage: '',
+            email:'',
+            loading: false
         };
         this.selectLeft = this.selectLeft.bind(this);
         this.selectRight = this.selectRight.bind(this);
@@ -30,6 +40,51 @@ export default class TempHome extends React.Component {
 
     handleLeftRef = c => (this.refL = c)
     handleRightRef = c => (this.refR = c)
+
+    newsletterAdd = async () => {
+        this.setState({
+            loading: true
+        });
+        debugger;
+        console.log(this.state.email);
+        let emailCheck = await EmailTakenCheck(this.state.email);
+        const isTaken = emailCheck.emailTaken;
+        const isValid = emailCheck.validEmail;
+        if(isValid == false) {
+            this.setState({
+                emailTaken: false,
+                errorMessage: 'Invalid email format, try again!',
+                successMessage: '',
+                loading: false
+            });
+            return;
+        }
+        else if(isTaken ){
+            this.setState({
+                emailTaken: true,
+                errorMessage: 'No worries, you are already signed up! :)',
+                successMessage: '',
+                loading: false
+            });
+            return;
+        }
+        else {
+            let response = await addToNewsletter(this.state.email);
+            debugger;
+            this.setState({
+                emailTaken: false,
+                successMessage: response,
+                errorMessage: '',
+                loading: false
+            });
+        }
+    }
+    handleEmailInput = (e) => {
+        this.setState({
+            email: e.target.value
+        });
+        console.log(this.state.email);
+    }
 
     selectLeft() {
         this.refL.focus();
@@ -49,8 +104,9 @@ export default class TempHome extends React.Component {
     }
 
     selectButton() {
-        if (this.state.selectorPosition == '24'){
-            this.props.showModel(0);
+        debugger;
+        if (this.state.selectorPosition == '24') {
+            this.props.showModal(0);
         }
         else {
             this.props.showModal(1);
@@ -59,12 +115,11 @@ export default class TempHome extends React.Component {
 
     componentDidMount() {
         this.parallax = new Parallax(this.scene);
-        this.interval = setInterval(this.mrBlinkyxD, 200);
         Mousetrap.bind('up up down down left right left right b a',
             () => {
                 alert('konami code');
             }
-        );    
+        );
 
         Mousetrap.bind('left', this.selectLeft);
         Mousetrap.bind('right', this.selectRight);
@@ -75,15 +130,15 @@ export default class TempHome extends React.Component {
     componentWillUnmount() {
         this.parallax.disable();
         Mousetrap.unbind('up up down down left right left right b a',
-        () => {
-            alert('konami code');
-        }
-    );    
+            () => {
+                alert('konami code');
+            }
+        );
 
-    Mousetrap.unbind('left', this.selectLeft);
-    Mousetrap.unbind('right', this.selectRight);
-    Mousetrap.unbind('enter', this.selectButton);
-    
+        Mousetrap.unbind('left', this.selectLeft);
+        Mousetrap.unbind('right', this.selectRight);
+        Mousetrap.unbind('enter', this.selectButton);
+
     }
 
     mrBlinkyxD = () => {
@@ -92,7 +147,7 @@ export default class TempHome extends React.Component {
             blinking: !prevState
         });
     }
-    
+
     render() {
         var settings = {
             dots: true,
@@ -104,26 +159,26 @@ export default class TempHome extends React.Component {
         return (
             <div >
                 <CloudinaryContext cloudName='aztecgamelab-com'>
-                <div>
-                    <div ref={el => this.scene = el}>
-                        <CloudImage className="layer" data-hover-only = {true} data-depth="0.00" publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer0.png" style = {{width: "100%"}}/>
-                        <CloudImage className="layer" data-hover-only = {true} data-depth="0.07" publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer1.png" style = {{width: "100%"}}/>
-                        <CloudImage className="layer" data-hover-only = {true} data-depth="0.60" publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer2.png" style = {{width: "100%"}}/>                    
-                    </div>
-                    <Button inverted size = 'massive' className = 'loadSave' style = {homeStyle.buttonLeft} onClick={() => this.props.showModel(0)} ref={this.handleLeftRef} >LOAD SAVE</Button>    
-                    <Button inverted size = 'massive' className = 'newSave' style = {homeStyle.buttonRight} onClick={() => this.props.showModel(1)} ref={this.handleRightRef} >NEW GAME</Button> 
-                    {this.state.blinking && <Icon name = 'caret up' size = 'huge' 
-                    style = 
-                    {{
-                        //caret up
-                        //hand outline up
-                        position: 'absolute',
-                        left: `${this.state.selectorPosition}%`,
-                        top: '75%',
-                    }}
-                    />}
+                    <div>
+                        <div ref={el => this.scene = el}>
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.00" publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer0.png" style={{ width: "100%" }} />
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.07" publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer1.png" style={{ width: "100%" }} />
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.60" publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer2.png" style={{ width: "100%" }} />
+                        </div>
+                        <Button inverted size='massive' className='loadSave' style={homeStyle.buttonLeft} onClick={() => this.props.showModal(0)} ref={this.handleLeftRef} >LOAD SAVE</Button>
+                        <Button inverted size='massive' className='newSave' style={homeStyle.buttonRight} onClick={() => this.props.showModal(1)} ref={this.handleRightRef} >NEW GAME</Button>
+                        <Icon className='selectorBlink' name='caret up' size='huge'
+                            style=
+                            {{
+                                //caret up
+                                //hand outline up
+                                position: 'absolute',
+                                left: `${this.state.selectorPosition}%`,
+                                top: '75%',
+                            }}
+                        />
 
-                </div>
+                    </div>
                     <Grid columns={2} padded>
                         <Grid.Row>
                             <Grid.Column width={9} >
@@ -132,15 +187,14 @@ export default class TempHome extends React.Component {
                                 </Fade>
                             </Grid.Column>
 
-                            <Grid.Column width={6} textAlign='center'>
-                                <Fade right>
+                            <Grid.Column width={7} textAlign='center'>
+                                <Fade right delay = {200}>
                                     <div>
-                                        <br />
                                         <h1>Check out our upcoming events!</h1>
                                         <hr />
                                         <p>
-                                            We meet every week on Fridays at 2:00 pm in AH1120!
-                                </p>
+                                            <Icon name = 'marker' size = 'big'/> We meet every Friday at 2:00 pm in Adams Humanities 1120!
+                                        </p>
                                         <Slider {...settings} >
                                             <CloudImage publicId="WebsiteAssets/Step1.jpg" />
                                             <CloudImage publicId="WebsiteAssets/Step2.jpg" />
@@ -155,6 +209,8 @@ export default class TempHome extends React.Component {
                                 </Fade>
                             </Grid.Column>
                         </Grid.Row>
+                        <br/>
+                        <br/>
                         <Grid.Row>
                             <Grid.Column textAlign='center' width={6}>
                                 <Fade left delay={300}>
@@ -163,41 +219,85 @@ export default class TempHome extends React.Component {
                                 <Fade right delay={350}>
                                     <h1>We are glad you asked!</h1>
                                 </Fade>
-                                    <hr />
+                                <hr />
                                 <Fade up delay={360}>
                                     <p>
                                         Aztec Game Lab was conceived and envisioned since 2016. We came together at the beginning of this summer to officially organize our efforts.
                                     </p>
                                 </Fade>
-                                    <br />
+                                <br />
                                 <Fade up delay={400}>
                                     <p>
                                         We have been planning our events and activities along with a lasting hope for what we wish to see this club grow into. In fact, we did not want to be a cookie cutter club.
                                         We are setting out to create game development community and we want everyone to get involved. That means all disciplines and soon, sponsors and game studios!
                                     </p>
                                 </Fade>
-                                    <br />
-                                <Fade up delay={600}>
-                                    <p>
-                                        We also took a risk and we wanted our own platform to showcase our members and games! That's why we have been coding this website for the last 3 months non-stop! This site is hand coded!
-                                        There are so many talented people at SDSU and we can see that there are creative people all around us just waiting to get started!
-                                    </p>
-                                </Fade>
-                                    <br />
+                                <br />
                                 <Fade up delay={650}>
                                     <h1>Come and join us!</h1>
                                     <br />
                                 </Fade>
-                                
+
                             </Grid.Column>
-
-
+                            <br/>
+                            <br/>
                             <Grid.Column width={9} floated='right'>
-                                    <CloudImage style={homeStyle.groupPhoto} publicId="WebsiteAssets/groupPhoto.jpg" />
+                                <CloudImage style={homeStyle.groupPhoto} publicId="WebsiteAssets/groupPhoto.jpg" />
                             </Grid.Column>
                         </Grid.Row>
 
+                        <Grid.Row>    
+                            <Grid.Column width = {7}>
+                                <Fade left delay={850}>
+                                <CloudImage style = {{width: '100%'}} publicId="WebsiteAssets/testenv.png"  />
+                                </Fade>
+                            </Grid.Column>
+                            <Grid.Column width = {8} textAlign= 'center'>
+                                <Zoom delay = {1000}>
+                                    <div>
+                                        <h1> Let's get in touch!</h1>
+                                        <hr/>
+                                        <p>We would love to hear from you! Feel free to shoot us an email and drop by!</p>
+                                        <List divided relaxed horizontal inverted>
+                                            <List.Item icon='users' content='Aztec Game Lab' />
+                                            <List.Item icon='map' content='San Diego, CA' />
+                                            <List.Item icon='mail' content={<a href='mailto:aztecgamelab@gmail.com'>aztecgamelab@gmail.com</a>} />
+                                            <List.Item icon='linkify' content={<a href='https://aztecgamelab.com/'>aztecgamelab.com</a>} />
+                                        </List>
+                                        <br/><br/>
+                                        <p> Join our social media groups and slack channel!</p>
+                                        <List divided relaxed horizontal inverted>
+                                            <List.Item icon='facebook' content={<a href='https://www.facebook.com/groups/aztecgamelab/'>Facebook</a>} />
+                                            <List.Item icon='instagram' content={<a href='https://www.instagram.com/aztecgamelab/'>Instagram</a>} />
+                                            <List.Item icon='twitter' content={<a href='https://twitter.com/AztecGameLab'>Twitter</a>} />
+                                            <List.Item icon='slack' content={<a href='http://ec2-13-59-179-171.us-east-2.compute.amazonaws.com:3000/'>Slack Invite</a>} />
+                                        </List>
+                                        <br/><br/><br/><br/><br/>
+                                        <p>Prefer email? Awesome! Sign up for our weekly newsletter!</p>
+                                            <Input type = 'text' placeholder = "Email Address" action>
+                                                <input onChange = {this.handleEmailInput}/>
+                                                <Button
+                                                    color='red'
+                                                    content='Submit'
+                                                    icon='mail'
+                                                    onClick = {this.newsletterAdd}
+                                                    loading = {this.state.loading}
+                                                />
+                                            </Input>
+                                            {this.state.errorMessage.length > 0 && <Message info>
+                                                <Message.Header>Heads up!</Message.Header>
+                                                    <p>{this.state.errorMessage}</p>
+                                            </Message>}
+                                            {this.state.successMessage.length > 0 && <Message positive>
+                                                <Message.Header>Success!</Message.Header>
+                                                <p>{this.state.successMessage}</p>
+                                              </Message>}
+                                        </div>
+                                </Zoom>
+                            </Grid.Column>
+                        </Grid.Row>
                     </Grid>
+                    <br/>
                 </CloudinaryContext>
             </div>
         );
@@ -239,6 +339,9 @@ let homeStyle = {
         left: '20%',
         top: '70%',
         zIndex: 90,
+        color: 'black',
+        transitionDuration: '0.4s',
+        borderRadius: '20px'
     },
     buttonRight: {
         fontFamily: 'AlienEncounters, Arial, sans-serif',
@@ -249,6 +352,9 @@ let homeStyle = {
         position: 'absolute',
         left: '70%',
         top: '70%',
-        zIndex: 90
+        zIndex: 90,
+        color: 'black',
+        transitionDuration: '0.4s',
+        borderRadius: '20px'
     }
 };

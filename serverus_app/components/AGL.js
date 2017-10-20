@@ -201,6 +201,13 @@ export const usernameToEmail = async (username) => {
     return response.data;
 }
 
+export const addToNewsletter = async (email) => {
+    let response = await axios.post(
+        'https://us-central1-serverus-15f25.cloudfunctions.net/email-addToNewsletter',
+        {email:email});
+    return response.data;
+}
+
 
 /*
 ______                                   _    _                 ______                    _    _                    

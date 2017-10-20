@@ -84,9 +84,7 @@ const ProfilePage = (props) => {
 
     return (
         <div>
-        <CloudinaryContext cloudName='aztecgamelab-com' >
-        <CloudImage publicId="WebsiteAssets/header.png" style = {{width: "100%"}}/>
-        <br/><br/>
+        <br/><br/><br/><br/><br/><br/><br/><br/>
             <Grid columns={4} inverted padded>
                 <Grid.Column width={1}>
                 </Grid.Column>
@@ -300,7 +298,6 @@ const ProfilePage = (props) => {
                 </Grid.Column>
             </Grid>
             <br/><br/><br/>
-            </CloudinaryContext>
         </div>
     );
 };

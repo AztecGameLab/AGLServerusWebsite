@@ -17,6 +17,7 @@ import TempHome from './components/home/TempHomePage';
 import UserDirectory from './components/users/UserDirectory';
 import PasswordReset from './components/password/PasswordReset';
 import RequestReset from './components/password/RequestReset';
+import PatchNodes from './components/patchnotes/PatchNotes';
 
 const Routes = (appProps) => {
     return (
@@ -29,6 +30,7 @@ const Routes = (appProps) => {
             <Route exact path="/competitions" component={CompetitionsPage} />
             <Route exact path="/create/:type" component={MarkdownCreate} />
             <Route exact path="/games" component={GameDirectory} />
+            <Route exact path="/patchnotes" component={PatchNodes} />
             <Route exact path="/inbox/:username" component={Inbox} />
             <Route exact path="/search/:searchQuery" component={SearchDirectory} />
             <Route exact path="/u" component={UserDirectory} />

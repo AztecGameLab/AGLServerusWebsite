@@ -16,15 +16,31 @@
     to { background-color: #09bd4e; -webkit-box-shadow: 0 0 9px #5fb982; }
   }
 
+  @-webkit-keyframes mrBlinky {
+    from { opacity: 0; }
+    to { opacity: 100; }
+  }
+
+  .selectorBlink {
+    -webkit-animation-name: mrBlinky;
+    -webkit-animation-duration: .85s;
+    -webkit-animation-iteration-count: infinite;
+  }
+
   .loadSave {
     -webkit-animation-name: redPulse;
     -webkit-animation-duration: 1.6s;
     -webkit-animation-iteration-count: infinite;
   }
 
-  /* .loadSave:focus{
-    -webkit-animation-name: greenPulse;
-  } */
+  .loadSave:focus{
+    /* -webkit-animation-name: greenPulse; */
+    font-size: 132% !important;
+    border-radius: 20px !important;
+    color: white !important;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19) !important;
+    
+  }
 
   .newSave {
     -webkit-animation-name: purpPulse;
@@ -32,9 +48,13 @@
     -webkit-animation-iteration-count: infinite;
   }
 
-  /* .newSave:focus{
-    -webkit-animation-name: greenPulse;
-  } */
+  .newSave:focus{
+    /* -webkit-animation-name: greenPulse; */
+    font-size: 132% !important;
+    border-radius: 20px !important;    
+    color: white !important;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19) !important;
+  }
 
 /* 
 

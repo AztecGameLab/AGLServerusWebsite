@@ -59,7 +59,7 @@ class HeaderMenu extends React.Component {
                         <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='newspaper' />Article Posts</Menu.Item>                        
                         <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon size='big' name='users' />User Directory</Menu.Item>
                         <Menu.Item name='sponsors' active={activeItem === 'sponsors'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='heart' />Sponsors</Menu.Item>                        
-                        <Menu.Item name='patchNotes' active={activeItem === 'patchNodes'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='bug' />Patch Notes</Menu.Item>                        
+                        <Menu.Item name='patchNotes' active={activeItem === 'patchNodes'} onClick={this.handleItemClick} as={Link} to='/patchnotes'><Icon size='big' name='bug' />Patch Notes</Menu.Item>                        
                         
                           {this.state.loggedIn ?
                             this.props.access ?
@@ -71,7 +71,7 @@ class HeaderMenu extends React.Component {
                                     </Dropdown.Menu>
                                 </Dropdown>
                                 :
-                                <Menu.Item name='articles' active={activeItem === 'articles'}><Icon name='newspaper' size='big' />View All Articles</Menu.Item>
+                                /*<Menu.Item name='articles' active={activeItem === 'articles'}><Icon name='newspaper' size='big' />View All Articles</Menu.Item>*/ null
                             :
                             <Menu.Item name='articles' active={activeItem === 'articles'}><Icon name='newspaper' size='big' />View All Articles</Menu.Item>
                         }

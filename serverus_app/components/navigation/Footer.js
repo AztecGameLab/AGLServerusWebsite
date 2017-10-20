@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Icon, Grid } from 'semantic-ui-react';
+import { Button, Icon, Grid, List } from 'semantic-ui-react';
 
 const Footer = (props) => {
     return (
         <div style={FooterStyle.footer}>
-            <Grid centered divided inverted >
+            <Grid centered inverted >
                 <Grid.Row>
                     <h1>Aztec Game Lab</h1>
                 </Grid.Row>
@@ -20,18 +20,25 @@ const Footer = (props) => {
                     <Button icon color='twitter' circular  as='a' href="https://twitter.com/AztecGameLab"><Icon name='twitter' /></Button>
                 </div>
                 </Grid.Row>
-                <Grid.Row textAlign='center'>
-                    <Grid.Column width = {2}>
-                        <a href='https://docs.google.com/document/d/1R6tGpquyGkJQlrIz-iO-xCoMH5pjsymbRFWiCd6qYQ4/edit?usp=sharing'> Terms & Conditions </a>
-                    </Grid.Column>
-                    <Grid.Column width = {2}> 
-                        <a href='http://www.cs.sdsu.edu/'> San Diego State University</a>
-                    </Grid.Column>
-                    <Grid.Column width = {2}> 
-                        <Icon name = 'copyright'> </Icon>AztecGameLab 2017 
-                    </Grid.Column>
+                
+                <br/><br/>
+                <Grid.Row>
+                <List divided relaxed horizontal inverted>
+                    <List.Item icon='building' content='SDSU SLL Office Hours:' />                                            
+                    <List.Item icon='map signs' content={<a href='http://sll.sdsu.edu/student_affairs/sll/'>Aztec Student Union - Suite 210</a>} />  
+                    <List.Item icon='time' content='Tuesdays & Thursdays at 9:00pm - 12:00pm' />                                            
+                </List>
                 </Grid.Row>
-            </Grid>
+                <Grid.Row>
+                <br/>
+                <List divided relaxed horizontal inverted>
+                    <List.Item icon='law' content={<a href='https://docs.google.com/document/d/1R6tGpquyGkJQlrIz-iO-xCoMH5pjsymbRFWiCd6qYQ4/edit?usp=sharing'>Terms & Conditions</a>} />  
+                    <List.Item icon='university' content={<a href='http://www.cs.sdsu.edu/'>San Diego State University</a>} />  
+                    <List.Item icon='copyright' content= 'Aztec Game Lab 2017' />  
+                </List>
+                </Grid.Row>
+                </Grid>
+            
         </div>
 
     );

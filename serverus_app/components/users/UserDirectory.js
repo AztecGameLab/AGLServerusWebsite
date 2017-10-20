@@ -125,10 +125,8 @@ export default class UserDirectory extends React.Component {
         var { userData } = this.state;
         var pages = this.listPageNumbers();
         return (
-            <CloudinaryContext cloudName='aztecgamelab-com' >
                 <div>
-                <CloudImage publicId="WebsiteAssets/header.png" style = {{width: "100%"}}/>
-                    <br />
+                <br/><br/><br/><br/><br/><br/><br/><br/>
                     {this.state.userData.length < 5 && <Loader inverted content='Loading' />}
                     <Menu stackable >
                         <Grid columns={12} style={UserDirStyle.menu}>
@@ -159,7 +157,6 @@ export default class UserDirectory extends React.Component {
                     <div style={{ textAlign: 'center', marginTop: 15 }}>{pages}</div>
                     <br /><br /><br />
                 </div>
-            </CloudinaryContext>
         );
     }
 }
