@@ -220,12 +220,12 @@ export const AGLEncryption = async (password) => {
     //encrypted resposne
 }
 
-export const AGLRencryption = async (username, password) => {
+export const AGLRencryption = async (email, password) => {
 
     let response = await axios.post(
         'https://us-central1-serverus-15f25.cloudfunctions.net/security-AGLRencryption',
         {
-            username: username,
+            email: email,
             password: password
         });
 

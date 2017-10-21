@@ -1,77 +1,211 @@
 import React from 'react';
-import { Button, Card, Divider, Grid, Icon, Image, Label } from 'semantic-ui-react';
+import { Button, Card, Divider, Dropdown, Grid, Icon, Image, Label } from 'semantic-ui-react';
+import Slider from 'react-slick';
+import Lightbox from 'react-images';
 import AvatarEditor from 'react-avatar-editor';
 import { CloudinaryContext, Image as CloudImage } from 'cloudinary-react';
+import SlickNextArrow from '../arrows/SlickNextArrow';
+import SlickPrevArrow from '../arrows/SlickPrevArrow';
+import CustomIcon from './CustomIcon';
 
 const profilePic = require('../../../styles/demoProfileImage.jpg');
-const GameCard = (props) => {
-    return (
-        <Card style={gameStyle.card}>
-            <Card.Content style={gameStyle.cardContent}>
-                <Grid style={{ padding: 0, marginRight: 0 }} stretched>
-                    {props.edit && !props.uploaded ?
-                        <Grid.Row style={gameStyle.img}>
-                            <AvatarEditor
-                                style={gameStyle.src}
-                                image={props.gamePostData.showcase.url || profilePic}
-                                width={props.gamePostData.showcase.width}
-                                height={props.gamePostData.showcase.height}
-                                border={0}
-                                color={[255, 255, 255, 0.6]}
-                                scale={props.gamePostData.showcase.scale}
-                                rotate={0} />
-                            <span style={gameStyle.header}>
-                                <div className="col-lg-9" style={gameStyle.subHeader} >
-                                    {props.gamePostData.title || "Title"}
-                                </div>
-                                <div className="col-lg-2" style={{ fontSize: '0.5em', marginLeft: 90 }} >
-                                    <Icon size="big" name="empty star" style={{ float: 'right' }}></Icon>
-                                </div>
-                                <div className="col-lg-12" style={{ fontSize: '0.5em', marginLeft: 50 }}>
-                                    by: {props.gamePostData.teamName || "Team name"}
-                                </div>
-                            </span>
-                        </Grid.Row>
-                        :
-                        props.uploaded ?
+class GameCard extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            lightBoxIsOpen: false,
+            lightBoxCurrentImage: 0,
+        }
+    }
+
+    async componentWillMount() {
+        if (this.props.gamePostData.downloadLinks) {
+            this.setState({
+                downloadLinks: this.props.gamePostData.downloadLinks
+            });
+        }
+        if (this.props.gamePostData.screenshots.url[0]) {
+            var imageUrls = [];
+            for (var i = 0; i < this.props.gamePostData.screenshots.url.length; i++) {
+                var reader = new FileReader();
+                reader.readAsDataURL(this.props.gamePostData.screenshots.url[i]);
+                var imageUrl = await new Promise((resolve, reject) => {
+                    reader.onload = () => {
+                        resolve(reader.result);
+                    }
+                });
+                if (imageUrl) {
+                    imageUrls.push({ src: imageUrl });
+                }
+            }
+            this.setState({
+                screenshots: imageUrls
+            });
+        }
+    }
+
+    redirectDownloadLink = (e, { value }) => {
+        window.open(value, '_blank');
+    }
+    createScreenshots = (value, key) => {
+        return (
+            <div style={{ textAlign: 'center' }} key={key}>
+                <Image style={{ maxHeight: 250, borderRadius: 5, cursor: 'zoom-in' }} onDoubleClick={this.showScreenshot} src={value.src} />
+            </div>
+        );
+    }
+
+    showGenresIcons = (genre, key) => {
+        return (
+            <CustomIcon key={key} value={genre.value} />
+        );
+    }
+    showScreenshot = (e) => {
+        var index = this.state.screenshots.findIndex((image) => {
+            return e.target.src == image.src;
+        });
+        this.setState({
+            lightBoxIsOpen: true,
+            lightBoxCurrentImage: index
+        });
+    }
+
+    closeLightbox = () => {
+        this.setState({
+            lightBoxIsOpen: false
+        });
+    }
+    gotoPrevious = () => {
+        this.setState({
+            lightBoxCurrentImage: this.state.lightBoxCurrentImage - 1,
+        });
+    }
+    gotoNext = () => {
+        this.setState({
+            lightBoxCurrentImage: this.state.lightBoxCurrentImage + 1,
+        });
+    }
+
+    render() {
+        var that = this;
+        var slidesToShow = this.state.screenshots ? this.state.screenshots.length < 3 ? 1 : 3 : null;
+        var settings;
+        if (that.state.screenshots) {
+            settings = {
+                accessibility: false,
+                // autoplay: true,
+                // autoplaySpeed: 2000,
+                centerMode: true,
+                centerPadding: 0,
+                customPaging: function (i) {
+                    return <a><img style={{ maxHeight: 24, height: '-webkit-fill-available' }} src={that.state.screenshots[i].src} /></a>
+                },
+                dots: true,
+                dotsClass: 'slick-dots slick-thumb',
+                focusOnSelect: true,
+                infinite: true,
+                pauseOnHover: true,
+                speed: 400,
+                slidesToShow: slidesToShow,
+                nextArrow: <SlickNextArrow noArrow={true} />,
+                prevArrow: <SlickPrevArrow noArrow={true} />
+            }
+        }
+        var genreIcons = this.props.gamePostData.selectedGenres.length > 0 ? this.props.gamePostData.selectedGenres.map(this.showGenresIcons) : null;
+
+        var screenshots = this.state.screenshots ? this.state.screenshots.map(this.createScreenshots) : null;
+        if (screenshots) {
+            var lightBox = <Lightbox images={this.state.screenshots} currentImage={this.state.lightBoxCurrentImage} isOpen={this.state.lightBoxIsOpen} onClose={this.closeLightbox}
+                onClickNext={this.gotoNext}
+                onClickPrev={this.gotoPrevious}
+                enableKeyboardInput />
+        }
+        return (
+            <Card style={gameStyle.card}>
+                <Card.Content style={gameStyle.cardContent}>
+                    <Grid style={{ padding: 0, marginRight: 0 }} stretched>
+                        {this.props.edit && !this.props.uploaded ?
                             <Grid.Row style={gameStyle.img}>
                                 <AvatarEditor
                                     style={gameStyle.src}
-                                    image={props.gamePostData.showcase.src}
-                                    width={props.gamePostData.showcase.width}
-                                    height={props.gamePostData.showcase.height}
+                                    image={this.props.gamePostData.showcase.url || profilePic}
+                                    width={this.props.gamePostData.showcase.width}
+                                    height={this.props.gamePostData.showcase.height}
                                     border={0}
                                     color={[255, 255, 255, 0.6]}
-                                    scale={props.gamePostData.image.scale}
+                                    scale={this.props.gamePostData.showcase.scale}
                                     rotate={0} />
-                            </Grid.Row> :
-                            <Grid.Row style={gameStyle.image}>
-                                {props.gamePostData.showcase ? <CloudinaryContext cloudName='aztecgamelab-com'>
-                                    <CloudImage publicId={props.gamePostData.showcase.public_id} />
-                                </CloudinaryContext> :
-                                    <Image fluid label={{ color: props.gamePostData.type.id, content: props.gamePostData.type.text, ribbon: true }} style={{ width: 600 }} src={profilePic} />}
-                            </Grid.Row>}
-                    <div style={{ marginLeft: 50, width: '100%', paddingTop: 15, fontSize: '1.5em' }}>
-                        <Grid.Row >
-                            Release Date: {props.gamePostData.date}
-                            <br /> <br />
-                            <a href='https://drive.google.com/' target="_blank">
-                                <Button size="big" color="teal">Download!</Button>
-                            </a>
-                        </Grid.Row>
-                        <hr />
-                        <Grid.Row>Description: {props.gamePostData.description || "Describe your game!"}</Grid.Row>
-                        <hr />
-                        <Grid.Row style={{ marginTop: 10, marginLeft: 15, textAlign: 'left' }}>
-                            {props.gamePostData.selectedTags ? props.gamePostData.selectedTags.map((value, idx) => {
-                                return (<button key={idx} type="button" style={gameStyle.tags} className="btn btn-default btn-arrow-left">{'#' + value}</button>)
-                            }) : null}
-                        </Grid.Row>
-                    </div>
-                </Grid>
-            </Card.Content>
-        </Card>
-    )
+                                <span style={gameStyle.header}>
+                                    <div className="col-lg-9 col-md-9" style={gameStyle.subHeader} >
+                                        {this.props.gamePostData.title || "Title"}
+                                    </div>
+                                    <div className="col-lg-3 col-md-3" style={{ fontSize: '0.5em', right: 15 }} >
+                                        <Icon size="big" name="empty star" style={{ float: 'right' }}></Icon>
+                                    </div>
+                                    <div className="col-lg-12 col-md-12" style={{ fontSize: '0.5em', paddingLeft: 50 }}>
+                                        <span>
+                                            by: {this.props.gamePostData.teamName || "Team name"}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </span>
+                                        <span>
+                                            {genreIcons}
+                                        </span>
+                                    </div>
+                                </span>
+                            </Grid.Row>
+                            :
+                            this.props.uploaded ?
+                                <Grid.Row style={gameStyle.img}>
+                                    <AvatarEditor
+                                        style={gameStyle.src}
+                                        image={this.props.gamePostData.showcase.src}
+                                        width={this.props.gamePostData.showcase.width}
+                                        height={this.props.gamePostData.showcase.height}
+                                        border={0}
+                                        color={[255, 255, 255, 0.6]}
+                                        scale={this.props.gamePostData.image.scale}
+                                        rotate={0} />
+                                </Grid.Row> :
+                                <Grid.Row style={gameStyle.image}>
+                                    {this.props.gamePostData.showcase ? <CloudinaryContext cloudName='aztecgamelab-com'>
+                                        <CloudImage publicId={this.props.gamePostData.showcase.public_id} />
+                                    </CloudinaryContext> :
+                                        <Image fluid label={{ color: this.props.gamePostData.type.id, content: this.props.gamePostData.type.text, ribbon: true }} style={{ width: 600 }} src={profilePic} />}
+                                </Grid.Row>}
+                        <div style={{ width: '100%', fontSize: '1.5em' }}>
+                            <Grid.Row style={gameStyle.screenshotsRow}>
+                                <Slider {...settings}>
+                                    {screenshots ? screenshots : <div><div>Image 1</div><div>Image 2</div><div>Image 3</div></div>}
+                                </Slider>
+                                {lightBox}
+                            </Grid.Row>
+                            <hr />
+                            <Grid.Row style={{ marginLeft: 25, marginTop: 10 }} >
+                                <h2>Release Date:</h2>{this.props.gamePostData.date}
+                                <br /> <br />
+                                <Dropdown options={Object.values(this.state.downloadLinks)}
+                                    onChange={this.redirectDownloadLink}
+                                    trigger={
+                                        <span>
+                                            <Button size="big" color="teal">Download!</Button>
+                                        </span>
+                                    }
+                                />
+                            </Grid.Row>
+                            <hr />
+                            <Grid.Row style={{ marginLeft: 25, wordWrap: 'break-word', maxWidth: "95%" }} ><h2>
+                                Description:</h2>{this.props.gamePostData.description || "Describe your game!"}</Grid.Row>
+                            <hr />
+                            <Grid.Row style={{ marginTop: 10, marginLeft: 15, marginBottom: 15, textAlign: 'left' }}>
+                                {this.props.gamePostData.selectedTags ? this.props.gamePostData.selectedTags.map((value, idx) => {
+                                    return (<button key={idx} type="button" style={gameStyle.tags} className="btn btn-default btn-arrow-left">{'#' + value}</button>)
+                                }) : null}
+                            </Grid.Row>
+                        </div>
+                    </Grid>
+                </Card.Content>
+            </Card>
+        )
+    }
 }
 
 const gameStyle = {
@@ -86,10 +220,10 @@ const gameStyle = {
         fontWeight: 'bold',
         color: 'white',
         width: '100%',
-        top: 325,
+        top: 315,
     },
     subHeader: {
-        marginLeft: 50
+        paddingLeft: 50
     },
     cardContent: {
         paddingLeft: 28,
@@ -98,13 +232,11 @@ const gameStyle = {
     },
     src: {
         background: '#333',
-        width: '100%',
+        marginLeft: 15,
         cursor: 'move',
-        borderRadius: 5
     },
     img: {
         padding: 0,
-        width: '100%'
     },
     image: {
         display: 'inline',
@@ -126,6 +258,13 @@ const gameStyle = {
         color: 'white',
         paddingRight: 25,
         paddingLeft: 16
+    },
+    screenshotsRow: {
+        position: 'relative',
+        width: '99.6%',
+        maxHeight: 250,
+        backgroundColor: 'black',
+        marginBottom: 50
     }
 }
 
