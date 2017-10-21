@@ -31,7 +31,8 @@ export default class TempHome extends React.Component {
             errorMessage: '',
             successMessage: '',
             email:'',
-            loading: false
+            loading: false,
+            konami: false
         };
         this.selectLeft = this.selectLeft.bind(this);
         this.selectRight = this.selectRight.bind(this);
@@ -113,13 +114,16 @@ export default class TempHome extends React.Component {
         }
     }
 
+    konami = () => {
+        debugger;
+        this.setState({
+            konami: true
+        });
+    }
+
     componentDidMount() {
         this.parallax = new Parallax(this.scene);
-        Mousetrap.bind('up up down down left right left right b a',
-            () => {
-                alert('konami code');
-            }
-        );
+        Mousetrap.bind('up up down down left right left right b a', this.konami);
 
         Mousetrap.bind('left', this.selectLeft);
         Mousetrap.bind('right', this.selectRight);
@@ -129,12 +133,7 @@ export default class TempHome extends React.Component {
 
     componentWillUnmount() {
         this.parallax.disable();
-        Mousetrap.unbind('up up down down left right left right b a',
-            () => {
-                alert('konami code');
-            }
-        );
-
+        Mousetrap.unbind('up up down down left right left right b a', this.konami);
         Mousetrap.unbind('left', this.selectLeft);
         Mousetrap.unbind('right', this.selectRight);
         Mousetrap.unbind('enter', this.selectButton);
@@ -155,16 +154,39 @@ export default class TempHome extends React.Component {
             speed: 350,
             slidesToShow: 1,
         };
+/*
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.01" publicId="WebsiteAssets/ParallaxV2/1.png" style={{ width: "100%" }} />
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.05" publicId="WebsiteAssets/ParallaxV2/2.png" style={{ width: "100%" }} />
 
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.1" publicId="WebsiteAssets/ParallaxV2/3.png" style={{ width: "100%" }} />
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.2" publicId="WebsiteAssets/ParallaxV2/4.png" style={{ width: "100%" }} />
+*/
         return (
             <div >
                 <CloudinaryContext cloudName='aztecgamelab-com'>
                     <div>
                         <div ref={el => this.scene = el}>
-                            <CloudImage className="layer" data-hover-only={true} data-depth="0.00" publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer0.png" style={{ width: "100%" }} />
-                            <CloudImage className="layer" data-hover-only={true} data-depth="0.07" publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer1.png" style={{ width: "100%" }} />
-                            <CloudImage className="layer" data-hover-only={true} data-depth="0.60" publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer2.png" style={{ width: "100%" }} />
+                            {this.state.konami && <CloudImage className="layer" data-hover-only={true} data-depth="0.1"  publicId="WebsiteAssets/ParallaxV2/konami.png" style={{ width: "100%" }}/> }                  
+                            {!this.state.konami && <CloudImage className="layer" data-hover-only={true} data-depth="0.15" publicId="WebsiteAssets/ParallaxV2/0.png" style={{ width: "100%" }} />}
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.3" publicId="WebsiteAssets/ParallaxV2/2.png" style={{ width: "100%" }} />
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.45" publicId="WebsiteAssets/ParallaxV2/3.png" style={{ width: "100%" }} /> 
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.55" publicId="WebsiteAssets/ParallaxV2/dva.png" style={{ width: "100%" }} />
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.55" publicId="WebsiteAssets/ParallaxV2/sombra.png" style={{ width: "100%" }} />                           
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.55" publicId="WebsiteAssets/ParallaxV2/6.png" style={{ width: "100%" }} />
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.9" publicId="WebsiteAssets/ParallaxV2/7.png" style={{ width: "100%" }} />                            
                         </div>
+                        {this.state.konami &&
+                        <div>
+                            <br/><br/>
+                            <br/><br/>
+                            <br/><br/>
+                            <br/><br/>
+                            <br/><br/>
+                            <br/><br/>
+                            <br/><br/>
+                            <br/><br/>
+                            <br/><br/>                            
+                        </div>}
                         <Button inverted size='massive' className='loadSave' style={homeStyle.buttonLeft} onClick={() => this.props.showModal(0)} ref={this.handleLeftRef} >LOAD SAVE</Button>
                         <Button inverted size='massive' className='newSave' style={homeStyle.buttonRight} onClick={() => this.props.showModal(1)} ref={this.handleRightRef} >NEW GAME</Button>
                         <Icon className='selectorBlink' name='caret up' size='huge'

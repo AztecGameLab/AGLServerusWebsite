@@ -24,9 +24,9 @@ const Footer = (props) => {
                 <br/><br/>
                 <Grid.Row>
                 <List divided relaxed horizontal inverted>
-                    <List.Item icon='building' content='SDSU SLL Office Hours:' />                                            
-                    <List.Item icon='map signs' content={<a href='http://sll.sdsu.edu/student_affairs/sll/'>Aztec Student Union - Suite 210</a>} />  
-                    <List.Item icon='time' content='Tuesdays & Thursdays at 9:00pm - 12:00pm' />                                            
+                    <List.Item icon='rebel' content='General Body Meetings:' />                                            
+                    <List.Item icon='map signs' content={<a href='http://www.myatlascms.com/map/index.php?id=801#!s/key=adams?m/146395?ce/12160'>Adams Humanities 1120</a>} />  
+                    <List.Item icon='time' content='Fridays at 2:00pm - 4:00pm' />                                            
                 </List>
                 </Grid.Row>
                 <Grid.Row>
