@@ -68,16 +68,16 @@ class ProfilePageContainer extends React.Component {
         this.setState({
             editMode: false,
             profileObject: editedProfile
-        }, function() {
+        }, function () {
             firebase.auth().onAuthStateChanged(async function (user) {
                 if (user) {
-                    
+
                     let response = await EditProfile(user.displayName, user.uid, that.state.profileObject);
                 }
-                else{
+                else {
                     return alert('WARNING FALSIFIED EDIT');
                 }
-            }); 
+            });
         });
     }
     handleProfileInput(e) {
@@ -131,33 +131,33 @@ class ProfilePageContainer extends React.Component {
 
 
     async componentDidUpdate(nextProps, nextState) {
-        if(this.state.profileObject.info) {
+        if (this.state.profileObject) {
             if (this.state.profileObject.username != this.props.match.params.username) {
                 window.scrollTo(0, 0);
                 this.setState({
                     profileObject: await LoadProfile(this.props.match.params.username),
-                    yourAccount: IsYourProfile(this.props.accounts, this.props.match.params.username)
+                    yourAccount: IsYourProfile(nextProps.accounts, this.props.match.params.username)
                 });
-            } 
+            }
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.accounts.length > 0) {
+        if (nextProps.accounts.length > 0) {
             this.setState({
                 loggedIn: true,
-                yourAccount: IsYourProfile(this.props.accounts, this.props.match.params.username),
-            });  
+                yourAccount: IsYourProfile(nextProps.accounts, this.props.match.params.username),
+            });
         }
     }
     async componentWillMount() {
         let userData = await LoadProfile(this.props.match.params.username);
-        
         this.setState({
             profileObject: userData,
             rolesSelected: userData.roles,
-            bio: userData.bio
-        });        
+            bio: userData.bio,
+            yourAccount: IsYourProfile(this.props.accounts, this.props.match.params.username)
+        });
     }
 
     render() {
