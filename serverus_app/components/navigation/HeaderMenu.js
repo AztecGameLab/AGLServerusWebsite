@@ -47,13 +47,13 @@ class HeaderMenu extends React.Component {
                             </div>
                         </Menu.Item>
                         <Popup
-                            trigger={<Menu.Item disabled name='competitions' active={activeItem === 'competitions'} ><Icon size='big' name='trophy' />Competitions</Menu.Item>}
-                            content='First Competition Coming Soon!'
+                            trigger={<Menu.Item name='competitions' active={activeItem === 'competitions'} onClick={this.handleItemClick} as={Link} to='/competitions'><Icon size='big' name='trophy' />Competitions</Menu.Item>}
+                            content='Woot! Come enter in AGLs first ever game jam!'
                             size='large'
                         />
                         <Popup
                             trigger={<Menu.Item disabled name='games' active={activeItem === 'games'} ><Icon size='big' name='gamepad' />Game Directory</Menu.Item>}
-                            content='Game Submissions Coming Soon!'
+                            content='Game directory coming soon!'
                             size='large'
                         />
                         <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='newspaper' />Article Posts</Menu.Item>                        
