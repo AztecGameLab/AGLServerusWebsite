@@ -2,6 +2,8 @@ import React from 'react';
 import Slider from 'react-slick';
 import GenericCard from '../common/cards/GenericCard';
 import { GetAllArticles } from '../AGL';
+import SlickNextArrow from '../common/arrows/SlickNextArrow';
+import SlickPrevArrow from '../common/arrows/SlickPrevArrow';
 import reactStyles from '../../styles/react-slick.css';
 
 export default class NewsFeed extends React.Component {
@@ -79,17 +81,3 @@ var markdownStyle = {
     textAlign: 'center',
     backgroundColor: 'gray'
 };
-
-const SlickNextArrow = (props) => {
-    const {className, style, onClick} = props;
-    return(
-        <button className="slick-next" onClick={onClick}/>
-    )
-}
-
-const SlickPrevArrow = (props) => {
-    const {className, style, onClick} = props;
-    return(
-        <button className="slick-prev" onClick={onClick}/>
-    )
-}

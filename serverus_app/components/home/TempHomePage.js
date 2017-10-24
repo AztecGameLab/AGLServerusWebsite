@@ -105,8 +105,7 @@ export default class TempHome extends React.Component {
     }
 
     selectButton() {
-        debugger;
-        if (this.state.selectorPosition == '24') {
+        if (this.state.selectorPosition == '24'){
             this.props.showModal(0);
         }
         else {

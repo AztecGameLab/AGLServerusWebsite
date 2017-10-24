@@ -72,7 +72,7 @@ export const GetAllArticles = async () => {
     return Object.values(articles.data);
 }
 
-export const CreatePost = (post, type, id, edit) => {
+export const SubmitPost = (post, type, id, edit) => {
     let url;
     if (id) {
         if (edit) {
@@ -122,7 +122,7 @@ export const CloudinaryUpload = async (image) => {
     return axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/cloudinary-UploadToCloudinary', { imgUrl }, {
         headers: {
             "hostname": "api.cloudinary.com",
-            "host" : "api.cloudinary.com",
+            "host": "api.cloudinary.com",
             family: 4,
             port: 443,
         }
@@ -227,12 +227,12 @@ export const AGLEncryption = async (password) => {
     //encrypted resposne
 }
 
-export const AGLRencryption = async (username, password) => {
+export const AGLRencryption = async (email, password) => {
 
-    let response  = await axios.post(
+    let response = await axios.post(
         'https://us-central1-serverus-15f25.cloudfunctions.net/security-AGLRencryption',
         {
-            username: username,
+            email: email,
             password: password
         });
 
@@ -308,10 +308,15 @@ export const EditProfile = async (username, uid, newDataObj) => {
     );
 }
 
+export const LoadUsernames = async () => {
+    let response = await axios.get('http://localhost:5000/serverus-15f25/us-central1/LoadUsernames');
+    return response.data;
+}
+
+
 export const LoadAllUsers = async (component) => {
     let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/users-LoadAllUserProfiles');
     if (component == "dashboard") {
-
         response.data.map(user => {
             var data = {
                 key: user.data.uid,
@@ -332,11 +337,27 @@ export const NumberOfUsers = async () => {
     return length.data;
 }
 
-export const UserPagination = async (pageNumber, numOfResults) => {
-    let url = 'https://us-central1-serverus-15f25.cloudfunctions.net/users-QueryUserPage?page=' + pageNumber + '&results=' + numOfResults;
+export const UserPagination = async (pageNumber, numOfResults, roles) => {
+    let url = '';
+    if (roles) {
+        url = 'http://localhost:5000/serverus-15f25/us-central1/QueryUserPage?page=' + pageNumber + '&roles=' + encodeURIComponent(roles) + '&results=' + numOfResults;
+    } else {
+        url = 'http://localhost:5000/serverus-15f25/us-central1/QueryUserPage?page=' + pageNumber + '&results=' + numOfResults;
+    }
     let response = await axios.get(url);
     return response.data;
 }
+
+export const FilterRoles = (roles, pageNumber) => {
+    var url = "http://localhost:5000/serverus-15f25/us-central1/FilterRoles?page=" + pageNumber + '&roles=' + encodeURIComponent(roles);
+    return axios.get(url).then(response => {
+        return response.data;
+    }).catch(error => {
+        return Promise.reject(error);
+    });
+}
+
+
 
 export const InboxWatch = async (username) => {
     let url = 'https://us-central1-serverus-15f25.cloudfunctions.net/inbox-GetInboxData?=' + username;
@@ -363,6 +384,24 @@ export const AcceptFriendRequest = async () => {
 
 }
 
+
+export const SendMessageTest = (message) => {
+    axios.post('http://localhost:5000/serverus-15f25/us-central1/SendMessageTest',
+        { data: message }).then(response => {
+            console.log("Success! ", response.data);
+        }).catch(err => {
+            console.error(err);
+        });
+}
+
+
+export const SubmitGame = (gamePost) => {
+    return axios.post("http://localhost:5000/serverus-15f25/us-central1/SubmitGame", { gamePost }).then(response => {
+        return response.data;
+    }).catch(error => {
+        return new Promise.reject(error);
+    });
+}
 // export const UpdateUser = async (userData) => {
 //     let storageAcc = firebase.storage().ref('accounts/' + userData.info.username + '.json');
 //     let userFile = new Blob([JSON.stringify(userData)], { type: 'application/json' });
