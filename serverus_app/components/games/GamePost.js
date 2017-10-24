@@ -95,14 +95,13 @@ class GamePost extends React.Component {
     }
 
     componentWillUnmount() {
-
-        if (!this.state.submitted) {
+        if (!this.state.submitted)  {
             if (this.state.gamePostData.showcase.public_id) {
                 CloudinaryDelete(this.state.gamePostData.showcase.public_id).then((response) => {
                     console.log(response);
                 });
             }
-            if (this.state.gamePostData.screenshots != []) {
+            if (this.state.gamePostData.screenshots.length > 0) {
                 this.state.gamePostData.screenshots.forEach(sc => {
                     CloudinaryDelete(sc.public_id);
                 });
