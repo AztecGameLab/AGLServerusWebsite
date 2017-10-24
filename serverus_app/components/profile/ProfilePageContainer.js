@@ -141,15 +141,20 @@ class ProfilePageContainer extends React.Component {
             } 
         }
     }
-    
+
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.accounts.length > 0) {
+            this.setState({
+                loggedIn: true,
+                yourAccount: IsYourProfile(this.props.accounts, this.props.match.params.username),
+            });  
+        }
+    }
     async componentWillMount() {
         let userData = await LoadProfile(this.props.match.params.username);
-        let isLoggedIn = IsLoggedIn(this.state.accounts);
         
         this.setState({
             profileObject: userData,
-            loggedIn: isLoggedIn,
-            yourAccount: IsYourProfile(this.props.accounts, this.props.match.params.username),
             rolesSelected: userData.roles,
             bio: userData.bio
         });        
@@ -163,7 +168,7 @@ class ProfilePageContainer extends React.Component {
                 <ProfilePage
                     profileObject={this.state.profileObject}
                     editMode={this.state.editMode}
-                    editModeOn={false}
+                    editModeOn={this.editModeOn}
                     editModeOff={this.editModeOff}
                     loggedIn={loggedIn}
                     yourAccount={this.state.yourAccount}

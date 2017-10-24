@@ -275,7 +275,7 @@ const ProfilePage = (props) => {
                 </Grid.Column>
                 <Grid.Column width={2}>
                     {
-                    props.yourAccount && false &&
+                    props.yourAccount &&
                     <div>
                         <Button 
                             fluid 
@@ -320,7 +320,5 @@ var profileEdit = {
 /* padding: 0; */
 /*margin-left: 15px;*/
 /* background-color: black; */
-
-
 
 export default ProfilePage;

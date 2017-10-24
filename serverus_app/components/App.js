@@ -121,7 +121,7 @@ class App extends React.Component {
                     <div style={AppStyle.mainContent}>
                         {/* {React.cloneElement(<HomePage/>, { showModal: this.openLogin})} */}
                         <Routes showModal={this.openLogin} />
-                        <HeaderMenu style={AppStyle.transparentOverlay} loggedIn={this.state.loggedIn} handleSearch={this.handleSearch} search={this.search}></HeaderMenu>
+                        <HeaderMenu style={AppStyle.transparentOverlay} loggedIn={this.state.loggedIn} handleSearch={this.handleSearch} search={this.search} signOut = {this.signOut}></HeaderMenu>
                     </div>
                     <Footer />
                     <LoginModel activeIndex={this.state.activeIndex} isOpen={this.state.modelIsOpen} close={this.closeLogin} changeTab={this.changeTabIndex} signedUp={this.signedUp} />
