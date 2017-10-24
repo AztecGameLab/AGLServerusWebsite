@@ -24,20 +24,14 @@ class GameCard extends React.Component {
                 downloadLinks: this.props.gamePostData.downloadLinks
             });
         }
-        if (this.props.gamePostData.screenshots.url[0]) {
-            var imageUrls = [];
-            for (var i = 0; i < this.props.gamePostData.screenshots.url.length; i++) {
-                var reader = new FileReader();
-                reader.readAsDataURL(this.props.gamePostData.screenshots.url[i]);
-                var imageUrl = await new Promise((resolve, reject) => {
-                    reader.onload = () => {
-                        resolve(reader.result);
-                    }
-                });
-                if (imageUrl) {
-                    imageUrls.push({ src: imageUrl });
+        if (this.props.gamePostData.screenshots) {
+            let imageUrls = this.props.gamePostData.screenshots.map(image => {
+                return {
+                    public_id: image.public_id,
+                    src: image.url,
+                    url: image.url
                 }
-            }
+            });
             this.setState({
                 screenshots: imageUrls
             });
@@ -50,7 +44,9 @@ class GameCard extends React.Component {
     createScreenshots = (value, key) => {
         return (
             <div style={{ textAlign: 'center' }} key={key}>
-                <Image style={{ maxHeight: 250, borderRadius: 5, cursor: 'zoom-in' }} onDoubleClick={this.showScreenshot} src={value.src} />
+                    <Image style={{ maxHeight: 250, borderRadius: 5, cursor: 'zoom-in' }} 
+                    onDoubleClick={this.showScreenshot} 
+                    src={value.url} />
             </div>
         );
     }
@@ -174,7 +170,7 @@ class GameCard extends React.Component {
                         <div style={{ width: '100%', fontSize: '1.5em' }}>
                             <Grid.Row style={gameStyle.screenshotsRow}>
                                 <Slider {...settings}>
-                                    {screenshots ? screenshots : <div><div>Image 1</div><div>Image 2</div><div>Image 3</div></div>}
+                                        {screenshots ? screenshots : <div><div>Image 1</div><div>Image 2</div><div>Image 3</div></div>}
                                 </Slider>
                                 {lightBox}
                             </Grid.Row>

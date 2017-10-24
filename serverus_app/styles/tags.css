@@ -105,7 +105,8 @@ btn-arrow-right,
 }
 
 .selectedIcon {
-    background: black;
+    background: white;
+    color: black;
 }
 .unselectedIcon {
     background: #1b1c1d;

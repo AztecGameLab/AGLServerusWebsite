@@ -1,8 +1,8 @@
 import React from 'react';
 import stylesheet from '../../styles/markdown.css';
-import {Button, Checkbox, Dropdown, Form, Grid, Icon, Input, Label, Modal, Popup, TextArea} from 'semantic-ui-react';
-import {connect} from 'react-redux';
-import {CloudinaryUpload, CloudinaryDelete, GetGamePost, IsLoggedIn, LoadUsernames, SubmitGame, SaveGame} from '../AGL';
+import { Button, Checkbox, Dropdown, Form, Grid, Icon, Input, Label, Message, Modal, Popup, Progress, TextArea } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { CloudinaryUpload, CloudinaryDelete, GetGamePost, IsLoggedIn, LoadUsernames, SubmitGame, SaveGame } from '../AGL';
 import GamePage from './GamePage';
 import genreOptions from '../common/options/genreOptions.json';
 import styles from '../../styles/game/game.css';
@@ -11,15 +11,15 @@ const platforms = [{
     key: "WIN",
     text: "Windows",
     value: "Windows",
-    icon: {className: "custom-icon-windows"}
-}, {key: "MAC", text: "Mac", value: "Mac", icon: {className: "custom-icon-mac"}},
-    {key: "AND", text: "Android", value: "Android", icon: {className: "custom-icon-android"}}, {
-        key: "IOS",
-        text: "iOS",
-        value: "iOS",
-        icon: {className: "custom-icon-ios"}
-    },
-    {key: "LIN", text: "Linux", value: "Linux", icon: {className: "custom-icon-linux"}}];
+    icon: { className: "custom-icon-windows" }
+}, { key: "MAC", text: "Mac", value: "Mac", icon: { className: "custom-icon-mac" } },
+{ key: "AND", text: "Android", value: "Android", icon: { className: "custom-icon-android" } }, {
+    key: "IOS",
+    text: "iOS",
+    value: "iOS",
+    icon: { className: "custom-icon-ios" }
+},
+{ key: "LIN", text: "Linux", value: "Linux", icon: { className: "custom-icon-linux" } }];
 
 class GamePost extends React.Component {
     constructor(props) {
@@ -43,7 +43,7 @@ class GamePost extends React.Component {
                     url: null,
                     allowZoomOut: true,
                     width: window.innerWidth,
-                    height: 400,
+                    height: 600,
                     scale: 0.6
                 },
                 screenshots: {
@@ -53,13 +53,21 @@ class GamePost extends React.Component {
                 rating: 0
             },
             contributors: [],
-            tags: [{text: '#extra', value: 'extra'}, {text: '#thicc', value: 'thicc'}],
+            tags: [{ text: '#extra', value: 'extra' }, { text: '#thicc', value: 'thicc' }],
             genres: genreOptions.genre,
             uploaded: false,
             savedPost: false,
             cloudUpload: false,
             changeShowcase: false,
-            changeScreenshot: false
+            changeScreenshot: false,
+            showcaseProgressBar: false,
+            showcaseSuccess: false,
+            showcaseError: false,
+            screenshotProgressBar: false,
+            screenshotSuccess: false,
+            screenshotError: false,
+            terms: false,
+            submitted: false
         };
     }
 
@@ -67,7 +75,7 @@ class GamePost extends React.Component {
         await this.initGame();
         let contributors = await LoadUsernames();
         var currentState = this.state.gamePostData;
-        currentState.type = {text: "Game", id: 'green'};
+        currentState.type = { text: "Game", id: 'green' };
         this.setState({
             gamePostData: currentState,
             contributors: contributors
@@ -84,6 +92,22 @@ class GamePost extends React.Component {
                 gamePostData: currentState
             });
         });
+    }
+
+    componentWillUnmount() {
+
+        if (!this.state.submitted) {
+            if (this.state.gamePostData.showcase.public_id) {
+                CloudinaryDelete(this.state.gamePostData.showcase.public_id).then((response) => {
+                    console.log(response);
+                });
+            }
+            if (this.state.gamePostData.screenshots != []) {
+                this.state.gamePostData.screenshots.forEach(sc => {
+                    CloudinaryDelete(sc.public_id);
+                });
+            }
+        }
     }
 
     initGame = () => {
@@ -150,7 +174,9 @@ class GamePost extends React.Component {
         }
     }
 
-    handleTagAddition = (e, {value}, init) => {
+
+
+    handleTagAddition = (e, { value }, init) => {
         var counter = 0;
         this.state.tags.forEach(item => {
             if (item.value == value)
@@ -158,42 +184,42 @@ class GamePost extends React.Component {
         });
         if (init) {
             this.setState({
-                tags: [{text: '#' + init, value: init}, ...this.state.tags]
+                tags: [{ text: '#' + init, value: init }, ...this.state.tags]
             });
         } else {
             if (counter < 1) {
                 this.setState({
-                    tags: [{text: '#' + value, value}, ...this.state.tags]
+                    tags: [{ text: '#' + value, value }, ...this.state.tags]
                 });
             }
         }
     }
 
-    handleTags = (e, {value}) => {
+    handleTags = (e, { value }) => {
         let currentState = Object.assign({}, this.state.gamePostData);
         currentState.selectedTags = value;
-        this.setState({gamePostData: currentState});
+        this.setState({ gamePostData: currentState });
     }
 
-    handleAuthors = (e, {value}) => {
+    handleAuthors = (e, { value }) => {
         let currentState = Object.assign({}, this.state.gamePostData);
         currentState.authors = value;
-        this.setState({gamePostData: currentState});
+        this.setState({ gamePostData: currentState });
     }
 
-    handlePlatforms = (e, {value}) => {
+    handlePlatforms = (e, { value }) => {
         let currentState = Object.assign({}, this.state.gamePostData);
         currentState.selectedPlatforms = value;
-        this.setState({gamePostData: currentState});
+        this.setState({ gamePostData: currentState });
     }
 
     createDownloadLinks = (value, key) => {
         return (
-            <div key={key} style={{marginBottom: 15}}>
-                <label style={{fontSize: '1.5em'}}> Download link for {value} platform</label>
+            <div key={key} style={{ marginBottom: 15 }}>
+                <label style={{ fontSize: '1.5em' }}> Download link for {value} platform</label>
                 <Input onChange={(e) => {
                     this.handleDownloadLinks(e, value, key)
-                }} placeholder={"Add a download link!"}/>
+                }} placeholder={"Add a download link!"} />
             </div>
         );
     }
@@ -209,11 +235,11 @@ class GamePost extends React.Component {
         } else {
             currentState.downloadLinks[value.toUpperCase()].value = e.target.value;
         }
-        this.setState({gamePostData: currentState});
+        this.setState({ gamePostData: currentState });
     }
 
 
-    handleGenre = (e, {value}) => {
+    handleGenre = (e, { value }) => {
         let currentState = Object.assign({}, this.state.gamePostData);
         let objGenre = [];
         genreOptions.genre.map(genre => {
@@ -224,47 +250,126 @@ class GamePost extends React.Component {
             });
         });
         currentState.selectedGenres = objGenre;
-        this.setState({gamePostData: currentState});
+        this.setState({ gamePostData: currentState });
     }
 
-    handleShowcase = e => {
+    handleShowcase = async (e) => {
+        var that = this;
+        e.persist();
         const currentState = Object.assign({}, this.state.gamePostData);
-        let {changeShowcase} = this.state;
+        let { changeShowcase } = this.state;
         if (currentState.showcase.public_id) {
             changeShowcase = true;
         }
-        currentState.showcase.url = e.target.files[0];
-        this.setState({
-            gamePostData: currentState,
-            changeScreenshot: changeShowcase
-        });
+        //User re-select image -> delete old image from cloudinary
+        if (this.state.gamePostData.showcase.url && this.state.gamePostData.showcase.public_id) {
+            CloudinaryDelete(this.state.gamePostData.showcase.public_id);
+        }
+        //Less then 5 Mb
+        if (e.target.files[0].size < 5000000) {
+            this.setState({
+                showcaseProgressBar: true
+            }, async () => {
+                let showcaseImage = await CloudinaryUpload(e.target.files[0]);
+                that.setState({
+                    showcaseSuccess: true,
+                    showcaseError: false,
+                    showcaseProgressBar: false
+                });
+                if (showcaseImage) {
+                    currentState.showcase.public_id = showcaseImage.public_id;
+                    currentState.showcase.url = showcaseImage.url;
+                    that.setState({
+                        gamePostData: currentState
+                    });
+                } else {
+                    that.setState({
+                        showcaseSuccess: false,
+                        showcaseError: true,
+                        showcaseProgressBar: false
+                    });
+                }
+            });
+        } else {
+            this.setState({
+                showcaseSuccess: false,
+                showcaseError: true,
+                showcaseProgressBar: false,
+            });
+        }
     }
 
     handleScreenshots = e => {
+        e.persist();
+        var that = this;
         const currentState = Object.assign({}, this.state.gamePostData);
-        let {changeScreenshot} = this.state;
+        let { changeScreenshot } = this.state;
         if (currentState.screenshots.public_id) {
             changeScreenshot = true;
         }
-        currentState.screenshots.url = e.target.files;
-        this.setState({
-            gamePostData: currentState,
-            changeScreenshot: changeScreenshot
+        //User re-select image -> delete old image from cloudinary
+        if (this.state.gamePostData.screenshots[0]) {
+            if (this.state.gamePostData.screenshots[0].url && this.state.gamePostData.screenshots[0].public_id) {
+                this.state.gamePostData.screenshots.forEach(sc => {
+                    CloudinaryDelete(sc.public_id);
+                });
+            }
+        }
+        Object.values(e.target.files).forEach(file => {
+            if (file.size > 5000000) {
+                this.setState({
+                    screenshotError: true
+                });
+            }
         });
+        if (!this.state.screenshotError) {
+            currentState.screenshots = [];
+            this.setState({
+                screenshotProgressBar: true
+            }, async () => {
+                var promises = [];
+                Object.values(e.target.files).forEach(file => {
+                    promises.push(CloudinaryUpload(file));
+                });
+                let results = await Promise.all(promises);
+                that.setState({
+                    screenshotSuccess: true,
+                    screenshotError: false,
+                    screenshotProgressBar: false
+                });
+                if (results) {
+                    results.forEach(sc => {
+                        var screenshot = {
+                            public_id: sc.public_id,
+                            url: sc.url
+                        };
+                        currentState.screenshots.push(screenshot);
+                    });
+                    that.setState({
+                        gamePostData: currentState
+                    });
+                } else {
+                    that.setState({
+                        screenshotSuccess: false,
+                        screenshotError: true,
+                        screenshotProgressBar: false
+                    });
+                }
+            });
+        }
     }
-
 
     handleScale = e => {
         const scale = parseFloat(e.target.value)
         const currentState = Object.assign({}, this.state.gamePostData);
         currentState.showcase.scale = scale;
-        this.setState({gamePostData: currentState});
+        this.setState({ gamePostData: currentState });
     }
 
-    handleAllowZoomOut = ({target: {checked: allowZoomOut}}) => {
+    handleAllowZoomOut = ({ target: { checked: allowZoomOut } }) => {
         const currentState = Object.assign({}, this.state.gamePostData);
         currentState.showcase.allowZoomOut = allowZoomOut;
-        this.setState({gamePostData: currentState});
+        this.setState({ gamePostData: currentState });
     }
 
     buttonDisable = () => {
@@ -305,159 +410,72 @@ class GamePost extends React.Component {
         });
     }
 
-    saveGame = async () => {
-        var that = this;
-        var now = new Date();
-        now = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
-        let cloudinaryImage = await
-            this.sendToCloudinary();
-        var data = {
-            title: this.state.gamePostData.title,
-            authors: this.state.gamePostData.authors,
-            date: now,
-            text: this.state.gamePostData.text,
-            selectedTags: this.state.gamePostData.selectedTags,
-            type: this.state.gamePostData.type,
-        };
-        if (cloudinaryImage.public_id && cloudinaryImage.url) {
-            data.showcase = {
-                public_id: cloudinaryImage.public_id,
-                url: cloudinaryImage.url,
-                scale: this.state.gamePostData.showcase.scale
-            };
-        }
-        let id;
-        if (this.state.query) {
-            id = this.state.query[0];
-        }
-
-        let response = await
-            SavePost(data, this.props.match.params.type, this.state.savedPost, id);
-        console.log(response);
-        // window.location.reload('/create/announcement');
+    handleCheck = e => {
+        let { terms } = this.state;
+        this.setState({
+            terms: !terms
+        });
     }
 
     submitGame = async () => {
-        var data = {
-            title: "Game Title",
-            authors: ["username1", "username2",],
-            teamName: "Team Name",
-            date: new Date().toDateString(),
-            description: "Game description",
-            downloadLinks: {
-                WINDOWS: "googledrivelink",
-                ANDROID: "googledrivelink"
-            },
-            sourceCode: "githublink",
-            selectedTags: ["tag1, tag2"],
-            selectedGenres: ["action", "rpg", "shooter"],
-            selectedPlatforms: ["Windows", "Android"],
-            type: {
-                text: "Game",
-                id: 'green'
-            },
-            showcase: {
-                public_id: "public_id",
-                url: "showcase_url",
-                allowZoomOut: true,
-                width: 600,
-                height: 400,
-                scale: 0.5
-            },
-            screenshots: {
-                public_id: ["public_id1", "public_id2", "public_id3"],
-                url: ["url1", "url2", "url3"]
-            }
-        };
-        // var that = this;
-        // var now = new Date();
-        // now = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
-        // //public_id of image
-        // let cloudinaryImage = await this.sendToCloudinary("publish");
-        // var data = {
-        //     title: this.state.gamePostData.title,
-        //     authors: this.state.gamePostData.authors,
-        //     date: now,
-        //     text: this.state.gamePostData.text,
-        //     selectedTags: this.state.gamePostData.selectedTags,
-        //     type: this.state.gamePostData.type
-        // };
-        // if (cloudinaryImage.public_id && cloudinaryImage.url) {
-        //     data.showcase = {
-        //         public_id: cloudinaryImage.public_id,
-        //         url: cloudinaryImage.url,
-        //         scale: this.state.gamePostData.showcase.scale
-        //     };
-        // }
-        // if (this.state.query) {
-        //     if (this.state.editPost) {
-        //         let response = await SubmitPost(data, this.props.match.params.type, this.state.query[0], true);
-        //         console.log(response);
-        //     } else if (this.state.savedPost) {
-        //         let response = await SubmitPost(data, this.props.match.params.type, this.state.query[0]);
-        //         console.log(response);
-        //     } else console.error("Incorrect URL parameters.");
-        // } else {
-        //     let response = await SubmitPost(data, this.props.match.params.type);
-        //     console.log(response);
-        // }
+        var currentState = this.state.gamePostData;
+        var now = new Date();
+        now = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+        currentState.date = now;
+        var that = this;
+        let response = await SubmitGame(currentState);
+        console.log(response);
+        this.setState({
+            submitted: true
+        });
         // window.location.reload();
     }
 
-    //Fix changeShowcase screenshot logic for upload/delete multiple
-    sendToCloudinary = (type) => {
-        if (this.state.gamePostData.showcase.url) {
-            if (typeof this.state.gamePostData.showcase.url == "object") {
-                return CloudinaryUpload(this.state.gamePostData.showcase.url).then(response => {
-                    if (this.state.changeImage) {
-                        CloudinaryDelete(this.state.gamePostData.showcase.public_id).then(resp => {
-                            console.log(resp);
-                        }).catch(err => {
-                            console.error(err);
-                        });
-                    }
-                    return response;
-                }).catch(error => {
-                    console.error(error);
-                });
-            } else {
-                return this.state.gamePostData.showcase;
-            }
-        } else {
-            return this.state.gamePostData.showcase;
-        }
-    }
 
     render() {
         var loggedIn = IsLoggedIn(this.props.accounts);
         var isAdmin = this.props.access;
+        var disablePreview = !(this.state.showcaseSuccess && this.state.screenshotSuccess);
+
+        var disableGame = (
+            this.state.gamePostData.title == "" ||
+            this.state.gamePostData.authors == [] ||
+            this.state.gamePostData.teamName == "" ||
+            this.state.gamePostData.description == "" ||
+            this.state.gamePostData.selectedGenres == {} ||
+            this.state.gamePostData.downloadLinks == {} ||
+            this.state.gamePostData.sourceCode == "" ||
+            this.state.gamePostData.showcase.public_id == "" ||
+            this.state.gamePostData.screenshots == []) ||
+            !this.state.terms;
+
         if (loggedIn && isAdmin) {
             return (
                 <div className="container-fluid">
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
                     <div className="row col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3">
                         <Form>
-                            <h1 style={{fontSize: '3em', textAlign: 'center', marginBottom: 15}}>Create a Game!</h1>
+                            <h1 style={{ fontSize: '3em', textAlign: 'center', marginBottom: 15 }}>Create a Game!</h1>
                             <Form.Field className="game">
                                 <label>Title</label>
-                                <Input onChange={this.onTitleChange} placeholder="Add a game title!"/>
+                                <Input onChange={this.onTitleChange} placeholder="Add a game title!" />
                             </Form.Field>
                             <Form.Field className="game">
                                 <label style={gameForm.label}>Team Name</label> <Input onChange={this.onTeamChange}
-                                                                                       placeholder="Add a team!"/>
+                                    placeholder="Add a team!" />
                             </Form.Field>
                             <Form.Field className="game">
                                 <label>Contributors</label>
                                 {this.state.gamePostData.authors.length > 5 &&
-                                <Label basic color='red' pointing='below'>Teams cannot consist more than 5
+                                    <Label basic color='red' pointing='below'>Teams cannot consist more than 5
                                     members!</Label>}
                                 <Dropdown
                                     options={this.state.contributors}
@@ -469,11 +487,11 @@ class GamePost extends React.Component {
                                     multiple
                                     error={this.state.gamePostData.authors.length > 5}
                                     defaultValue={this.state.gamePostData.authors}
-                                    onChange={this.handleAuthors}/>
+                                    onChange={this.handleAuthors} />
                             </Form.Field>
                             <Form.Field className="game">
                                 <label>Game Description</label>
-                                <TextArea onChange={this.onDescriptionChange} placeholder="Tell us about your game!"/>
+                                <TextArea onChange={this.onDescriptionChange} placeholder="Tell us about your game!" />
                             </Form.Field>
                             <Form.Field className="game">
                                 <label>Tags</label>
@@ -487,82 +505,135 @@ class GamePost extends React.Component {
                                     allowAdditions
                                     defaultValue={this.state.gamePostData.selectedTags}
                                     onAddItem={this.handleTagAddition}
-                                    onChange={this.handleTags}/>
+                                    onChange={this.handleTags} />
                             </Form.Field>
                             <Form.Field className="game">
                                 <label>Genre</label>
                                 <Dropdown placeholder='Add a genre!' fluid multiple selection
-                                          defaultValue={this.state.gamePostData.selectedGenres}
-                                          onChange={this.handleGenre}
-                                          options={genreOptions.genre}/>
+                                    defaultValue={this.state.gamePostData.selectedGenres}
+                                    onChange={this.handleGenre}
+                                    options={genreOptions.genre} />
                             </Form.Field>
                             <Form.Field className="game">
                                 <label>Platforms</label>
                                 <Dropdown placeholder='Add compatible platforms!' fluid multiple selection
-                                          defaultValue={this.state.gamePostData.selectedPlatforms}
-                                          onChange={this.handlePlatforms}
-                                          options={platforms}/>
+                                    defaultValue={this.state.gamePostData.selectedPlatforms}
+                                    onChange={this.handlePlatforms}
+                                    options={platforms} />
                             </Form.Field>
                             <Form.Field>
                                 {this.state.gamePostData.selectedPlatforms.map(this.createDownloadLinks)}
                             </Form.Field>
+
+
                             <Form.Field className="game">
                                 <label>Showcase Image</label>
-                                <Input type='file' accept=".jpg, .jpeg, .png" onChange={this.handleShowcase}/>
+                                <Input type='file' accept=".jpg, .jpeg, .png" onChange={this.handleShowcase} />
+                                <br />
+                                {this.state.showcaseProgressBar ?
+                                    <Progress className='progressBar' percent={90} active color='green' style={{ height: 20, backgroundColor: 'transparent', color: 'black' }}>
+                                        <Icon name='spinner' loading color='teal' /> Uploading Files
+                                    </Progress>
+                                    : null
+                                }
                             </Form.Field>
+                            {this.state.showcaseSuccess && !this.state.showcaseProgressBar ?
+                                <Message icon success style={{ display: 'inline-flex' }}>
+                                    <Icon name='check' />
+                                    <Message.Content>
+                                        <Message.Header>Success</Message.Header>
+                                        Successfully uploaded!
+                                    </Message.Content>
+                                </Message>
+                                : null}
+                            {this.state.showcaseError && !this.state.showcaseProgressBar ?
+                                <Message icon error style={{ display: 'inline-flex' }}>
+                                    <Icon name='stack overflow' />
+                                    <Message.Content>
+                                        <Message.Header>Failed</Message.Header>
+                                        Your file was too big! Make sure it is under 10 MB and is under our accepted formats!
+                                    </Message.Content>
+                                </Message> : null}
+
                             <Form.Field className="game">
                                 <label>Screenshots</label>
                                 <Input type='file' multiple accept=".jpg, .jpeg, .png"
-                                       onChange={this.handleScreenshots}/>
+                                    onChange={this.handleScreenshots} />
+                                <br />
+                                {this.state.screenshotProgressBar ?
+                                    <Progress className='progressBar' percent={90} active color='green' style={{ height: 20, backgroundColor: 'transparent', color: 'black' }}>
+                                        <Icon name='spinner' loading color='teal' /> Uploading Files
+                                    </Progress>
+                                    : null
+                                }
                             </Form.Field>
+                            {this.state.screenshotSuccess && !this.state.screenshotProgressBar ?
+                                <Message icon success style={{ display: 'inline-flex' }}>
+                                    <Icon name='check' />
+                                    <Message.Content>
+                                        <Message.Header>Success</Message.Header>
+                                        Successfully uploaded!
+                                    </Message.Content>
+                                </Message>
+                                : null}
+                            {this.state.screenshotError && !this.state.screenshotProgressBar ?
+                                <Message icon error style={{ display: 'inline-flex' }}>
+                                    <Icon name='stack overflow' />
+                                    <Message.Content>
+                                        <Message.Header>Failed</Message.Header>
+                                        Your files was too big! Make sure each file is under 10 MB and is under our accepted formats!
+                                    </Message.Content>
+                                </Message> : null}
+
                             <Form.Field className="game">
                                 <label>Source Code</label>
-                                <Input onChange={this.onSourceCodeChange} placeholder="Add source code!"/>
+                                <Input onChange={this.onSourceCodeChange} placeholder="Add source code!" />
                             </Form.Field>
                             <Form.Field className="game">
-                                <Checkbox label="I agree to AGL game submission terms and conditions"/>
+                                <Checkbox onClick={this.handleCheck} label="I agree to AGL game submission terms and conditions" />
                             </Form.Field>
                             <Form.Field>
-                                <Modal trigger={<Button>Preview Game!</Button>}
-                                       className="gameModal" size="fullscreen" basic closeIcon>
+                                <Modal trigger={<Button disabled={disablePreview}
+                                >Preview Game!</Button>}
+                                    className="gameModal" size="fullscreen" basic closeIcon>
                                     <Popup on="click" inverted size="huge"
-                                           trigger={
-                                               <Button color="teal"
-                                                       style={{marginTop: 55, display: 'block', float: 'right'}}>
-                                                   Edit Showcase Image
+                                        trigger={
+                                            <Button color="teal"
+                                                style={{ marginTop: 55, display: 'block', float: 'right' }}>
+                                                Edit Showcase Image
                                                </Button>}
-                                           content={
-                                               <div style={gameForm.editShowcase}>
-                                                   {'Scaling Mode: '}
+                                        content={
+                                            <div style={gameForm.editShowcase}>
+                                                {'Scaling Mode: '}
+                                                <input
+                                                    style={{ color: 'black' }}
+                                                    name='allowZoomOut'
+                                                    type='checkbox'
+                                                    onChange={this.handleAllowZoomOut}
+                                                    checked={this.state.gamePostData.showcase.allowZoomOut} />
+                                                <br /><br />
+                                                Zoom:
                                                    <input
-                                                       style={{color: 'black'}}
-                                                       name='allowZoomOut'
-                                                       type='checkbox'
-                                                       onChange={this.handleAllowZoomOut}
-                                                       checked={this.state.gamePostData.showcase.allowZoomOut}/>
-                                                   <br/><br/>
-                                                   Zoom:
-                                                   <input
-                                                       name='scale'
-                                                       type='range'
-                                                       onChange={this.handleScale}
-                                                       min={this.state.gamePostData.showcase.allowZoomOut ? '0.1' : '1'}
-                                                       max='2'
-                                                       step='0.01'
-                                                       defaultValue={this.state.gamePostData.showcase.scale}/>
-                                               </div>}
+                                                    name='scale'
+                                                    type='range'
+                                                    onChange={this.handleScale}
+                                                    min={this.state.gamePostData.showcase.allowZoomOut ? '0.1' : '1'}
+                                                    max='2'
+                                                    step='0.01'
+                                                    defaultValue={this.state.gamePostData.showcase.scale} />
+                                            </div>}
                                     />
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <GamePage gamePostData={this.state.gamePostData} {...this.props} edit={true}/>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <GamePage gamePostData={this.state.gamePostData} {...this.props} edit={true} />
                                 </Modal>
-                                <Button onClick={this.submitGame}>Submit Game!</Button>
+                                <Button disabled={disableGame} onClick={this.submitGame}>Submit Game!</Button>
                             </Form.Field>
                         </Form>
                     </div>

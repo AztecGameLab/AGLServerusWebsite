@@ -69,3 +69,14 @@ svg.game.genres path {
 /* svg.game-platforms path {
     fill: white;
 } */
+
+
+@-webkit-keyframes realFakeProgressBars {
+  from { width: 0%; }
+  to { width: 100% }
+}
+
+.progressBar {
+  -webkit-animation-name: realFakeProgressBars;
+  -webkit-animation-duration: 30s;
+}
