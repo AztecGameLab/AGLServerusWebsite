@@ -11,4 +11,21 @@ h1 {
     font-weight: normal;
     font-style:normal;
     font-size: 170%
-    }
+}
+
+@font-face {
+    font-family: "ImaginaryFriend";
+    src: url("./My_Imaginary_Friend.eot");
+    src: 
+    url("./My Imaginary Friend.woff") format("woff"),
+    url("./My Imaginary Friend.svg") format("svg");
+}
+
+h3 {
+    font-family: "ImaginaryFriend", Arial, sans-serif;
+    font-weight: normal;
+    font-style:normal;
+    font-size: 170%
+}
+
+    

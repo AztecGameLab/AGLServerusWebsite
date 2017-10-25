@@ -359,8 +359,23 @@ export const SendFriendRequest = async (myInfo, friendInfo) => {
         });
 }
 
-export const AcceptFriendRequest = async () => {
+export const enrollInGameJam = async (userData, username) => {
+    let response = await axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/game-enrollInGameJam',
+    {
+        userData: userData,
+        username: username
+    });
+    return response.data;
+}   
 
+export const fetchTeamlessMembers = async (userData, username) => {
+    let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-fetchTeamlessMembers');
+    return Object.values(response.data);
+}   
+
+export const checkSignInAlready = async (username) => {
+    let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-checkSignUpAlready');
+    return response.data;
 }
 
 // export const UpdateUser = async (userData) => {

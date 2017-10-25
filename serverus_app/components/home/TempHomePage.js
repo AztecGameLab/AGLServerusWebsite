@@ -236,7 +236,7 @@ export default class TempHome extends React.Component {
                         <Grid.Row>
                             <Grid.Column textAlign='center' width={6}>
                                 <Fade left delay={300}>
-                                    <h3>What is Aztec Game Lab?</h3>
+                                    <p>What is Aztec Game Lab?</p>
                                 </Fade>
                                 <Fade right delay={350}>
                                     <h1>We are glad you asked!</h1>
