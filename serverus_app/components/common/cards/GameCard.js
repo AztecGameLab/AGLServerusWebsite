@@ -29,6 +29,13 @@ class GameCard extends React.Component {
         } catch (error) {
             console.error(error);
         }
+        if (gamePostData.downloadLinks) {
+            gamePostData.downloadLinks.SOURCECODE = {
+                key: "SRC",
+                text: "Source Code",
+                value: gamePostData.sourceCode
+            };
+        }
         if (gamePostData.screenshots) {
             gamePostData.screenshots = gamePostData.screenshots.map(image => {
                 return {

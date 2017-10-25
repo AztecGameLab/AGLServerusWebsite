@@ -44,11 +44,11 @@ class AdminGameSubmission extends Component {
             showGames = Object.keys(pendingGames).map((gameId, key) => {
                 return (
                     <h1 key={key}>
-                        <div className="col-lg-10 col-md-10">
+                        <div className="col-lg-9 col-md-9">
                             <Link style={{ color: 'black' }} to={'/g/' + gameId}><u>{pendingGames[gameId].title}</u></Link>
                         </div>
                         {pendingGames[gameId].approved == "pending" ?
-                            <div>
+                            <div className="col-lg-3 col-md-3" style={{ textAlign: 'right' }}>
                                 <Button onClick={() => this.approveGame(gameId)} color="green" >Approve</Button>
                                 <Button onClick={() => this.disapproveGame(gameId)} color="red" >Reject</Button>
                             </div> :
@@ -56,7 +56,7 @@ class AdminGameSubmission extends Component {
                         <hr />
                     </h1>
                 );
-            })
+            });
         }
         return (
             <div>

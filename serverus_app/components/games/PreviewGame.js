@@ -20,8 +20,12 @@ class PreviewGame extends React.Component {
 
     async componentWillMount() {
         if (this.props.gamePostData.downloadLinks) {
+            var downloadLinks = Object.assign({}, this.props.gamePostData.downloadLinks);
+            downloadLinks.SOURCECODE = {
+                key: "SRC", text: "Source Code", value: this.props.gamePostData.sourceCode
+            };
             this.setState({
-                downloadLinks: this.props.gamePostData.downloadLinks
+                downloadLinks: downloadLinks
             });
         }
         if (this.props.gamePostData.screenshots) {
