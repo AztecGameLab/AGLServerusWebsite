@@ -6,14 +6,15 @@ import AdminJSONEditor from './AdminJSONEditor';
 import AdminHome from './AdminHome';
 import AdminEmail from './AdminEmail';
 import AdminWriter from './AdminWriter';
+import AdminGameSubmission from './AdminGameSubmission';
 import styles from '../../styles/admin.css';
 
 const panes = [
     { menuItem: { icon: 'home', content: 'Home', key: "1" }, render: () => <Tab.Pane className='adminPane'><AdminHome /></Tab.Pane> },
     { menuItem: { content: 'Writer', icon: 'book', key: "2" }, render: () => <Tab.Pane className='adminPane'><AdminWriter /></Tab.Pane> },
     { menuItem: { content: 'Email', icon: 'mail', key: "3" }, render: () => <Tab.Pane className='adminPane'><AdminEmail /></Tab.Pane> },
-    { menuItem: { content: 'JSON', icon: 'tasks', key: "4" }, render: () => <Tab.Pane className='adminPanel'> <AdminJSONEditor /> </Tab.Pane> }
-
+    { menuItem: { content: 'JSON', icon: 'tasks', key: "4" }, render: () => <Tab.Pane className='adminPanel'> <AdminJSONEditor /> </Tab.Pane> },
+    { menuItem: { content: 'Game Submissions', icon: 'snapchat ghost', key: "5" }, render: () => <Tab.Pane className='adminPanel'> <AdminGameSubmission /> </Tab.Pane> }
 ]
 
 class AdminDashboard extends React.Component {
@@ -25,6 +26,14 @@ class AdminDashboard extends React.Component {
             isAdmin: "loading",
             count: 0
         };
+    }
+
+    componentWillMount() {
+        if (this.props.access) {
+        this.setState({
+            isAdmin: "isAdmin"
+        });
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -50,6 +59,11 @@ class AdminDashboard extends React.Component {
     render() {
         return (
             <div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
                 {this.state.isAdmin == "loading" ?
                     null
                     :

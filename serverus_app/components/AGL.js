@@ -34,7 +34,7 @@ export const IsAdmin = (id) => {
     return axios.get(url).then(response => {
         return response.data;
     }).catch(error => {
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     });
 }
 export const GetAllEmails = async () => {
@@ -63,7 +63,7 @@ export const GetArticle = (status, key) => {
     return axios.get(url).then(article => {
         return article.data;
     }).catch(error => {
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     });
 }
 
@@ -86,7 +86,7 @@ export const SubmitPost = (post, type, id, edit) => {
     return axios.post(url, post).then(response => {
         return response;
     }).catch(err => {
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     });
 }
 
@@ -96,7 +96,7 @@ export const SavePost = (post, type, overwrite, key) => {
     return axios.post(url, { post, overwrite, key }).then(response => {
         return response.data;
     }).catch(err => {
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     });
 }
 
@@ -129,7 +129,7 @@ export const CloudinaryUpload = async (image) => {
     }).then(response => {
         return response.data;
     }).catch(error => {
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     });
 }
 
@@ -137,7 +137,7 @@ export const CloudinaryDelete = (public_id) => {
     return axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/cloudinary-DeleteFromCloudinary', { public_id }).then(response => {
         return response.data;
     }).catch(error => {
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     });
 }
 
@@ -204,7 +204,7 @@ export const usernameToEmail = async (username) => {
 export const addToNewsletter = async (email) => {
     let response = await axios.post(
         'https://us-central1-serverus-15f25.cloudfunctions.net/email-addToNewsletter',
-        {email:email});
+        { email: email });
     return response.data;
 }
 
@@ -353,7 +353,7 @@ export const FilterRoles = (roles, pageNumber) => {
     return axios.get(url).then(response => {
         return response.data;
     }).catch(error => {
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     });
 }
 
@@ -399,9 +399,38 @@ export const SubmitGame = (gamePost) => {
     return axios.post("http://localhost:5000/serverus-15f25/us-central1/SubmitGame", { gamePost }).then(response => {
         return response.data;
     }).catch(error => {
-        return new Promise.reject(error);
+        return Promise.reject(error.response.data);
     });
 }
+
+export const LoadGames = () => {
+    return axios.get('http://localhost:5000/serverus-15f25/us-central1/LoadGames').then(response => {
+        return response.data;
+    }).catch(error => {
+        return Promise.reject(error.response.data);
+    });
+}
+
+export const ApproveGame = (gameId) => {
+    return axios.put('http://localhost:5000/serverus-15f25/us-central1/ApproveGame', { gameId }).then(response => {
+        return response.data;
+
+    }).catch(error => {
+        return Promise.reject(error.response.data);
+    });
+}
+
+export const DisapproveGame = (gameId) => {
+    axios.put('http://localhost:5000/serverus-15f25/us-central1/DisapproveGame', { gameId }).then(response => {
+        return response.data
+
+    }).catch(error => {
+        return Promise.reject(error.response.data);
+    });
+}
+
+
+
 // export const UpdateUser = async (userData) => {
 //     let storageAcc = firebase.storage().ref('accounts/' + userData.info.username + '.json');
 //     let userFile = new Blob([JSON.stringify(userData)], { type: 'application/json' });
@@ -436,6 +465,6 @@ export const SubmitGame = (gamePost) => {
 //     return axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/admin-WildCard').then(response => {
 //         return response.data;
 //     }).catch(error => {
-//         return Promise.reject(error);
+//         return Promise.reject(error.response.data);
 //     });
 // }

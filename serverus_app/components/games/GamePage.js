@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid } from 'semantic-ui-react';
 import { GetGamePost } from '../AGL';
-import GameCard from '../common/cards/GameCard';
+import PreviewGame from './PreviewGame';
 
 class GamePage extends Component {
     constructor(props) {
@@ -31,7 +31,7 @@ class GamePage extends Component {
     render() {
         return (
             <Grid style={{ marginTop: 0 }}>
-                <GameCard gamePostData={this.state.gamePostData} edit={this.state.edit} />
+                <PreviewGame gamePostData={this.state.gamePostData} edit={this.state.edit} />
             </Grid>
         );
     }

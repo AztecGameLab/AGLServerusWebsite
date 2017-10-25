@@ -27,6 +27,7 @@ class GamePost extends React.Component {
 
         this.state = {
             gamePostData: {
+                approved: "pending",
                 title: "",
                 authors: [],
                 teamName: "",
@@ -509,7 +510,6 @@ class GamePost extends React.Component {
                             <Form.Field className="game">
                                 <label>Genre</label>
                                 <Dropdown placeholder='Add a genre!' fluid multiple selection
-                                    defaultValue={this.state.gamePostData.selectedGenres}
                                     onChange={this.handleGenre}
                                     options={genreOptions.genre} />
                             </Form.Field>
