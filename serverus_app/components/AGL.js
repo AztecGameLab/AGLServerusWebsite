@@ -392,7 +392,7 @@ export const enrollInGameJam = async (userData, username) => {
 export const fetchTeamlessMembers = async () => {
     let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-fetchTeamlessMembers');
     debugger;
-    return Object.keys(response.data);
+    return response.data;
 }   
 
 export const checkSignUpAlready = async (username) => {
