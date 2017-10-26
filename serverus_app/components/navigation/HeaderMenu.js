@@ -47,18 +47,19 @@ class HeaderMenu extends React.Component {
                             </div>
                         </Menu.Item>
                         <Popup
-                            trigger={<Menu.Item disabled name='competitions' active={activeItem === 'competitions'} ><Icon size='big' name='trophy' />Competitions</Menu.Item>}
-                            content='First Competition Coming Soon!'
+                            inverted
+                            trigger={<Menu.Item name='competitions' active={activeItem === 'competitions'} onClick={this.handleItemClick} as={Link} to='/competitions'><Icon size='big' name='trophy' />Competitions</Menu.Item>}
+                            content='Woot! Come enter in AGLs first ever game jam!'
                             size='large'
                         />
                         <Popup
                             trigger={<Menu.Item disabled name='games' active={activeItem === 'games'} ><Icon size='big' name='gamepad' />Game Directory</Menu.Item>}
-                            content='Game Submissions Coming Soon!'
+                            content='Game directory coming soon!'
                             size='large'
                         />
-                        <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/messageTest'><Icon size='big' name='edit' />Message Tester</Menu.Item>                        
+                        {false && <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='newspaper' />Article Posts</Menu.Item>}                        
                         <Menu.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} as={Link} to='/u/'><Icon size='big' name='users' />User Directory</Menu.Item>
-                        <Menu.Item name='sponsors' active={activeItem === 'sponsors'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='heart' />Sponsors</Menu.Item>                        
+                        {false && <Menu.Item name='sponsors' active={activeItem === 'sponsors'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='heart' />Sponsors</Menu.Item>  }                      
                         <Menu.Item name='patchNotes' active={activeItem === 'patchNodes'} onClick={this.handleItemClick} as={Link} to='/patchnotes'><Icon size='big' name='bug' />Patch Notes</Menu.Item>                        
                         
                           {this.state.loggedIn ?
@@ -73,14 +74,14 @@ class HeaderMenu extends React.Component {
                                 :
                                 /*<Menu.Item name='articles' active={activeItem === 'articles'}><Icon name='newspaper' size='big' />View All Articles</Menu.Item>*/ null
                             :
-                            <Menu.Item name='articles' active={activeItem === 'articles'}><Icon name='newspaper' size='big' />View All Articles</Menu.Item>
+                            /*<Menu.Item name='articles' active={activeItem === 'articles'}><Icon name='newspaper' size='big' />View All Articles</Menu.Item>*/ null
                         }
                         {this.state.loggedIn ?
                             this.props.access ?
                                 <Menu.Item name="admin" active={activeItem === 'admin'} onClick={this.handleItemClick} as={Link} to="/admin"><Icon name="dashboard" />Dashboard</Menu.Item>
                                 : <div />
                             : <div />
-                        }
+                        }                        
 
                         {this.state.loggedIn ?
                             <Menu.Menu position='right'>

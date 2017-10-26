@@ -60,7 +60,7 @@ class SignUpTwo extends React.Component {
           <Icon name = 'rocket' size = 'big' />
         </Grid.Column>
         <Grid.Column width = {11}>
-        <h3>New player? Whats your name?  </h3>
+        <h2>New player? Whats your name?  </h2>
         </Grid.Column>
       </Grid>
       <hr/>

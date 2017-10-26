@@ -36,7 +36,6 @@ class SignUpOne extends React.Component {
     var that = this;
     const emailCheck = await EmailTakenCheck(e.target.value);
     const containsProfanity = emailCheck.profanity;
-    console.log(containsProfanity);
     const isValid = emailCheck.validEmail;
     const isTaken = emailCheck.emailTaken;
     if (containsProfanity) {

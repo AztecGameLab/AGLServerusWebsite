@@ -156,7 +156,7 @@ class LoginForm extends Component {
                     <Icon name = 'flag checkered' size = 'big' />
                 </Grid.Column>
                 <Grid.Column width = {11}>
-                    <h3>Load your save file!</h3>
+                    <h2>Load your save file!</h2>
                 </Grid.Column>
             </Grid>
             <hr/>

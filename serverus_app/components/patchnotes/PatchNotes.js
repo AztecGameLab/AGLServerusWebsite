@@ -15,7 +15,7 @@ const PatchNotes = (props) => {
 
     const MonthHeader = (text) => {
         return(
-            <h3 style = {{textAlign: 'center'}}> {text}</h3>
+            <h1 style = {{textAlign: 'center'}}> {text}</h1>
         );
     }
     const DatabaseNote = (text) => {
