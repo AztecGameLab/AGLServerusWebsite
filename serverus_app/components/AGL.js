@@ -373,9 +373,8 @@ export const fetchTeamlessMembers = async (userData, username) => {
     return Object.values(response.data);
 }   
 
-export const checkSignInAlready = async (username) => {
-    let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-checkSignUpAlready', 
-    {username: username});
+export const checkSignUpAlready = async (username) => {
+    let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-checkSignUpAlready?username=' + username);
     return response.data;
 }
 

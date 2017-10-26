@@ -42,12 +42,13 @@ class TempHome extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.accounts[0] && this.props.accounts == []) {
-            this.refL.focus();
+            this.refL.focus();            
         }
     }
 
     handleLeftRef = c => {
         this.refL = c;
+        this.refL.focus();        
     }
     handleRightRef = c => {
         this.refR = c;
@@ -57,8 +58,6 @@ class TempHome extends React.Component {
         this.setState({
             loading: true
         });
-        debugger;
-        console.log(this.state.email);
         let emailCheck = await EmailTakenCheck(this.state.email);
         const isTaken = emailCheck.emailTaken;
         const isValid = emailCheck.validEmail;
@@ -82,7 +81,6 @@ class TempHome extends React.Component {
         }
         else {
             let response = await addToNewsletter(this.state.email);
-            debugger;
             this.setState({
                 emailTaken: false,
                 successMessage: response,
@@ -95,7 +93,6 @@ class TempHome extends React.Component {
         this.setState({
             email: e.target.value
         });
-        console.log(this.state.email);
     }
 
     selectLeft() {
@@ -107,7 +104,6 @@ class TempHome extends React.Component {
     }
 
     selectRight() {
-        debugger;
         this.refR.focus();
         this.setState({
             selectorPosition: '74',
@@ -116,7 +112,6 @@ class TempHome extends React.Component {
     }
 
     selectButton() {
-        debugger;
         if (this.state.selectorPosition == '24') {
             this.props.showModal(0);
         }
@@ -126,7 +121,6 @@ class TempHome extends React.Component {
     }
 
     konami = () => {
-        debugger;
         this.setState({
             konami: true
         });

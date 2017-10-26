@@ -3,7 +3,7 @@ import { Grid, Icon, Button, List, Label, Popup } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { flipInX } from 'react-animations';
 import Radium, { StyleRoot } from 'radium';
-import { enrollInGameJam, checkSignInAlready } from '../AGL';
+import { enrollInGameJam, checkSignUpAlready } from '../AGL';
 import styles from './glitch.css';
 
 const animations = {
@@ -31,7 +31,7 @@ class CompetitionsPage extends React.Component {
     async componentWillReceiveProps(nextProps) {
         if (nextProps.accounts.length > 0) {
             //check if already entered
-            let response = await checkSignInAlready(nextProps.accounts[0].username);
+            let response = await checkSignUpAlready(nextProps.accounts[0].username);
             if (response == "Free to go") {
                 this.setState({
                     loggedIn: true,
@@ -87,7 +87,7 @@ class CompetitionsPage extends React.Component {
             if (days + hours + minutes + seconds == 0) {
                 document.getElementById("demo").innerHTML = "COMPETITION HAS CLOSED ON OCTOBER 30TH";
             }
-            if ((seconds <= 27 && seconds >= 24) || (seconds <= 54 && seconds >= 51) && minutes % 2 != 0) {
+            if ((seconds <= 27 && seconds >= 24) || (seconds <= 54 && seconds >= 51)) {
                 that.setState({
                     aliveClassName: 'glitch-ALIVE',
                     alive2ClassName:'glitch-ALIVE2',
