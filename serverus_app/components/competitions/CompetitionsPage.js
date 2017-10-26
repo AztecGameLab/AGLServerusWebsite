@@ -62,8 +62,8 @@ class CompetitionsPage extends React.Component {
 
     componentDidMount() {
         // Update the count down every 1 second
-        let time = setInterval(function () {
-            let countDownDate = new Date("October 28, 2017 23:59:59").getTime();
+        this.time = setInterval(function () {
+            let countDownDate = new Date("October 28, 2017 11:59:59").getTime();
             // Get todays date and time
             let now = new Date().getTime();
 
@@ -83,6 +83,10 @@ class CompetitionsPage extends React.Component {
                 document.getElementById("demo").innerHTML = "COMPETITION HAS CLOSED ON OCTOBER 30TH";
             }
         }, 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.time);
     }
 
     DatabaseNote = (text, color, icon) => {
