@@ -374,7 +374,8 @@ export const fetchTeamlessMembers = async (userData, username) => {
 }   
 
 export const checkSignInAlready = async (username) => {
-    let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-checkSignUpAlready?username=' + username);
+    let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-checkSignUpAlready', 
+    {username: username});
     return response.data;
 }
 
@@ -388,7 +389,7 @@ export const checkSignInAlready = async (username) => {
 //     });
 // }
 
-// export const UpdateAllUsers = async (accounts) => {
+// export const UpdateAllUsers = async (accounts) => {}
 //     Object.keys(accounts).map(user => {
 //         UpdateUser(user.info.username, user);
 //     });

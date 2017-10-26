@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { flipInX } from 'react-animations';
 import Radium, { StyleRoot } from 'radium';
 import { enrollInGameJam, checkSignInAlready } from '../AGL';
+import styles from './glitch.css';
 
 const animations = {
     flipInX: {
@@ -20,7 +21,10 @@ class CompetitionsPage extends React.Component {
         this.state = {
             loggedIn: false,
             buttonText: 'LOGIN TO JOIN',
-            loading: false
+            loading: false,
+            aliveClassName: '',
+            alive2ClassName:'',
+            glitchClassName: '' 
         }
     }
 
@@ -61,6 +65,7 @@ class CompetitionsPage extends React.Component {
 
 
     componentDidMount() {
+        var that = this;
         // Update the count down every 1 second
         this.time = setInterval(function () {
             let countDownDate = new Date("October 28, 2017 11:59:59").getTime();
@@ -81,6 +86,20 @@ class CompetitionsPage extends React.Component {
                 + minutes + " Minutes   :   " + seconds + " Seconds ";
             if (days + hours + minutes + seconds == 0) {
                 document.getElementById("demo").innerHTML = "COMPETITION HAS CLOSED ON OCTOBER 30TH";
+            }
+            if ((seconds <= 27 && seconds >= 24) || (seconds <= 54 && seconds >= 51) && minutes % 2 != 0) {
+                that.setState({
+                    aliveClassName: 'glitch-ALIVE',
+                    alive2ClassName:'glitch-ALIVE2',
+                    glitchClassName: 'glitch' 
+                });
+            }
+            else {
+                that.setState({
+                    aliveClassName: '',
+                    alive2ClassName:'',
+                    glitchClassName: '' 
+                });
             }
         }, 1000);
     }
@@ -104,7 +123,9 @@ class CompetitionsPage extends React.Component {
                     <br /><br /><br /><br /><br /><br />
                     <Grid centered columns={3} padded>
                         <Grid.Row>
-                            <h3 style={{ textAlign: 'center', fontSize: '10em', width: '100%' }}>Aztec Game Lab's Halloween Jam</h3>
+                            <h3 
+                                style={{ textAlign: 'center', fontSize: '10em', width: '100%' }} 
+                                className =  {this.state.glitchClassName} data-text = "Aztec Game Lab's Halloween Jam">Aztec Game Lab's Halloween Jam</h3>
                             {this.state.loggedIn}
                         </Grid.Row>
 
@@ -131,7 +152,8 @@ class CompetitionsPage extends React.Component {
                                 <br /><br />
                                 <h3 style={{ textAlign: 'center', fontSize: '3.3em' }}>ASSEMBLE YOUR MOB OF ONE TO FIVE</h3>
                                 <br /><br />
-                                <h3 style={{ textAlign: 'center', fontSize: '5em', fontWeight: 'bold' }}>MAKE A GAME THAT MAKES US FEEL ALIVE!</h3>
+                                <h3 style={{ textAlign: 'center', fontSize: '5em', fontWeight: 'bold' }}
+                                    className = {this.state.aliveClassName} data-text = "MAKE A GAME THAT MAKES US FEEL ALIVE!">MAKE A GAME THAT MAKES US FEEL ALIVE!</h3>
                                 <br /><br />
                                 <br /><br />
                                 <br /><br />
@@ -155,7 +177,8 @@ class CompetitionsPage extends React.Component {
                                 <br /><br />
                                 <br /><br />
                                 <br /><br />
-                                <h3 style={{ textAlign: 'center', fontSize: '8em' }}>TIME IS TICKING</h3>
+                                <h3 style={{ textAlign: 'center', fontSize: '10em' }}
+                                    className = {this.state.alive2ClassName} data-text = "TIME IS TICKING">TIME IS TICKING</h3>
                                 <br /><br />
                                 <h3 style={{ textAlign: 'center', fontSize: '3.8em' }} id='demo'></h3>
                                 <br /><br />
