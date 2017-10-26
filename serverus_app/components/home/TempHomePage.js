@@ -13,15 +13,16 @@ import {
 import NewsFeed from './NewsFeed';
 import Parallax from 'parallax-js';
 import Slider from 'react-slick';
+import { connect } from 'react-redux';
 import { CloudinaryContext, Image as CloudImage } from 'cloudinary-react';
 import { Fade, Flip, Rotate, Zoom } from 'react-reveal';
 var Mousetrap = require('mousetrap');
 import styles from './glowingAnimation.css';
 import stylings from '../../customfonts/alien.css';
 
-import {EmailTakenCheck, addToNewsletter} from '../AGL';
+import { EmailTakenCheck, addToNewsletter } from '../AGL';
 
-export default class TempHome extends React.Component {
+class TempHome extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -30,7 +31,7 @@ export default class TempHome extends React.Component {
             emailTaken: false,
             errorMessage: '',
             successMessage: '',
-            email:'',
+            email: '',
             loading: false,
             konami: false
         };
@@ -39,8 +40,18 @@ export default class TempHome extends React.Component {
         this.selectButton = this.selectButton.bind(this);
     }
 
-    handleLeftRef = c => (this.refL = c)
-    handleRightRef = c => (this.refR = c)
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.accounts[0] && this.props.accounts == []) {
+            this.refL.focus();
+        }
+    }
+
+    handleLeftRef = c => {
+        this.refL = c;
+    }
+    handleRightRef = c => {
+        this.refR = c;
+    }
 
     newsletterAdd = async () => {
         this.setState({
@@ -51,7 +62,7 @@ export default class TempHome extends React.Component {
         let emailCheck = await EmailTakenCheck(this.state.email);
         const isTaken = emailCheck.emailTaken;
         const isValid = emailCheck.validEmail;
-        if(isValid == false) {
+        if (isValid == false) {
             this.setState({
                 emailTaken: false,
                 errorMessage: 'Invalid email format, try again!',
@@ -60,7 +71,7 @@ export default class TempHome extends React.Component {
             });
             return;
         }
-        else if(isTaken ){
+        else if (isTaken) {
             this.setState({
                 emailTaken: true,
                 errorMessage: 'No worries, you are already signed up! :)',
@@ -128,7 +139,6 @@ export default class TempHome extends React.Component {
         Mousetrap.bind('left', this.selectLeft);
         Mousetrap.bind('right', this.selectRight);
         Mousetrap.bind('enter', this.selectButton);
-        this.refL.focus();
     }
 
     componentWillUnmount() {
@@ -154,51 +164,56 @@ export default class TempHome extends React.Component {
             speed: 350,
             slidesToShow: 1,
         };
-/*
-                            <CloudImage className="layer" data-hover-only={true} data-depth="0.01" publicId="WebsiteAssets/ParallaxV2/1.png" style={{ width: "100%" }} />
-                            <CloudImage className="layer" data-hover-only={true} data-depth="0.05" publicId="WebsiteAssets/ParallaxV2/2.png" style={{ width: "100%" }} />
-
-                            <CloudImage className="layer" data-hover-only={true} data-depth="0.1" publicId="WebsiteAssets/ParallaxV2/3.png" style={{ width: "100%" }} />
-                            <CloudImage className="layer" data-hover-only={true} data-depth="0.2" publicId="WebsiteAssets/ParallaxV2/4.png" style={{ width: "100%" }} />
-*/
+        /*
+                                    <CloudImage className="layer" data-hover-only={true} data-depth="0.01" publicId="WebsiteAssets/ParallaxV2/1.png" style={{ width: "100%" }} />
+                                    <CloudImage className="layer" data-hover-only={true} data-depth="0.05" publicId="WebsiteAssets/ParallaxV2/2.png" style={{ width: "100%" }} />
+        
+                                    <CloudImage className="layer" data-hover-only={true} data-depth="0.1" publicId="WebsiteAssets/ParallaxV2/3.png" style={{ width: "100%" }} />
+                                    <CloudImage className="layer" data-hover-only={true} data-depth="0.2" publicId="WebsiteAssets/ParallaxV2/4.png" style={{ width: "100%" }} />
+        */
         return (
             <div >
                 <CloudinaryContext cloudName='aztecgamelab-com'>
                     <div>
                         <div ref={el => this.scene = el}>
-                            {this.state.konami && <CloudImage className="layer" data-hover-only={true} data-depth="0.1"  publicId="WebsiteAssets/ParallaxV2/konami.png" style={{ width: "100%" }}/> }                  
+                            {this.state.konami && <CloudImage className="layer" data-hover-only={true} data-depth="0.1" publicId="WebsiteAssets/ParallaxV2/konami.png" style={{ width: "100%" }} />}
                             {!this.state.konami && <CloudImage className="layer" data-hover-only={true} data-depth="0.15" publicId="WebsiteAssets/ParallaxV2/0.png" style={{ width: "100%" }} />}
                             <CloudImage className="layer" data-hover-only={true} data-depth="0.3" publicId="WebsiteAssets/ParallaxV2/2.png" style={{ width: "100%" }} />
-                            <CloudImage className="layer" data-hover-only={true} data-depth="0.45" publicId="WebsiteAssets/ParallaxV2/3.png" style={{ width: "100%" }} /> 
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.45" publicId="WebsiteAssets/ParallaxV2/3.png" style={{ width: "100%" }} />
                             <CloudImage className="layer" data-hover-only={true} data-depth="0.55" publicId="WebsiteAssets/ParallaxV2/dva.png" style={{ width: "100%" }} />
-                            <CloudImage className="layer" data-hover-only={true} data-depth="0.55" publicId="WebsiteAssets/ParallaxV2/sombra.png" style={{ width: "100%" }} />                           
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.55" publicId="WebsiteAssets/ParallaxV2/sombra.png" style={{ width: "100%" }} />
                             <CloudImage className="layer" data-hover-only={true} data-depth="0.55" publicId="WebsiteAssets/ParallaxV2/6.png" style={{ width: "100%" }} />
-                            <CloudImage className="layer" data-hover-only={true} data-depth="0.9" publicId="WebsiteAssets/ParallaxV2/7.png" style={{ width: "100%" }} />                            
+                            <CloudImage className="layer" data-hover-only={true} data-depth="0.9" publicId="WebsiteAssets/ParallaxV2/7.png" style={{ width: "100%" }} />
                         </div>
                         {this.state.konami &&
-                        <div>
-                            <br/><br/>
-                            <br/><br/>
-                            <br/><br/>
-                            <br/><br/>
-                            <br/><br/>
-                            <br/><br/>
-                            <br/><br/>
-                            <br/><br/>
-                            <br/><br/>                            
-                        </div>}
-                        <Button inverted size='massive' className='loadSave' style={homeStyle.buttonLeft} onClick={() => this.props.showModal(0)} ref={this.handleLeftRef} >LOAD SAVE</Button>
-                        <Button inverted size='massive' className='newSave' style={homeStyle.buttonRight} onClick={() => this.props.showModal(1)} ref={this.handleRightRef} >NEW GAME</Button>
-                        <Icon className='selectorBlink' name='caret up' size='huge'
-                            style=
-                            {{
-                                //caret up
-                                //hand outline up
-                                position: 'absolute',
-                                left: `${this.state.selectorPosition}%`,
-                                top: '75%',
-                            }}
-                        />
+                            <div>
+                                <br /><br />
+                                <br /><br />
+                                <br /><br />
+                                <br /><br />
+                                <br /><br />
+                                <br /><br />
+                                <br /><br />
+                                <br /><br />
+                                <br /><br />
+                            </div>}
+                        {this.props.accounts[0] ?
+                            null
+                            :
+                            <div>
+                                <Button inverted size='massive' className='loadSave' style={homeStyle.buttonLeft} onClick={() => this.props.showModal(0)} ref={this.handleLeftRef} >LOAD SAVE</Button>
+                                <Button inverted size='massive' className='newSave' style={homeStyle.buttonRight} onClick={() => this.props.showModal(1)} ref={this.handleRightRef} >NEW GAME</Button>
+                                <Icon className='selectorBlink' name='caret up' size='huge'
+                                    style=
+                                    {{
+                                        //caret up
+                                        //hand outline up
+                                        position: 'absolute',
+                                        left: `${this.state.selectorPosition}%`,
+                                        top: '75%',
+                                    }}
+                                />
+                            </div>}
 
                     </div>
                     <Grid columns={2} padded>
@@ -210,12 +225,12 @@ export default class TempHome extends React.Component {
                             </Grid.Column>
 
                             <Grid.Column width={7} textAlign='center'>
-                                <Fade right delay = {200}>
+                                <Fade right delay={200}>
                                     <div>
                                         <h1>Check out our upcoming events!</h1>
                                         <hr />
                                         <p>
-                                            <Icon name = 'marker' size = 'big'/> We meet every Friday at 2:00 pm in Adams Humanities 1120!
+                                            <Icon name='marker' size='big' /> We meet every Friday at 2:00 pm in Adams Humanities 1120!
                                         </p>
                                         <Slider {...settings} >
                                             <CloudImage publicId="WebsiteAssets/Step1.jpg" />
@@ -231,8 +246,8 @@ export default class TempHome extends React.Component {
                                 </Fade>
                             </Grid.Column>
                         </Grid.Row>
-                        <br/>
-                        <br/>
+                        <br />
+                        <br />
                         <Grid.Row>
                             <Grid.Column textAlign='center' width={6}>
                                 <Fade left delay={300}>
@@ -261,24 +276,24 @@ export default class TempHome extends React.Component {
                                 </Fade>
 
                             </Grid.Column>
-                            <br/>
-                            <br/>
+                            <br />
+                            <br />
                             <Grid.Column width={9} floated='right'>
                                 <CloudImage style={homeStyle.groupPhoto} publicId="WebsiteAssets/groupPhoto.jpg" />
                             </Grid.Column>
                         </Grid.Row>
 
-                        <Grid.Row>    
-                            <Grid.Column width = {7}>
+                        <Grid.Row>
+                            <Grid.Column width={7}>
                                 <Fade left delay={850}>
-                                <CloudImage style = {{width: '100%'}} publicId="WebsiteAssets/testenv.png"  />
+                                    <CloudImage style={{ width: '100%' }} publicId="WebsiteAssets/testenv.png" />
                                 </Fade>
                             </Grid.Column>
-                            <Grid.Column width = {8} textAlign= 'center'>
-                                <Zoom delay = {1000}>
+                            <Grid.Column width={8} textAlign='center'>
+                                <Zoom delay={1000}>
                                     <div>
                                         <h1> Let's get in touch!</h1>
-                                        <hr/>
+                                        <hr />
                                         <p>We would love to hear from you! Feel free to shoot us an email and drop by!</p>
                                         <List divided relaxed horizontal inverted>
                                             <List.Item icon='users' content='Aztec Game Lab' />
@@ -286,7 +301,7 @@ export default class TempHome extends React.Component {
                                             <List.Item icon='mail' content={<a href='mailto:aztecgamelab@gmail.com'>aztecgamelab@gmail.com</a>} />
                                             <List.Item icon='linkify' content={<a href='https://aztecgamelab.com/'>aztecgamelab.com</a>} />
                                         </List>
-                                        <br/><br/>
+                                        <br /><br />
                                         <p> Join our social media groups and slack channel!</p>
                                         <List divided relaxed horizontal inverted>
                                             <List.Item icon='facebook' content={<a href='https://www.facebook.com/groups/aztecgamelab/'>Facebook</a>} />
@@ -294,37 +309,45 @@ export default class TempHome extends React.Component {
                                             <List.Item icon='twitter' content={<a href='https://twitter.com/AztecGameLab'>Twitter</a>} />
                                             <List.Item icon='slack' content={<a href='http://ec2-13-59-179-171.us-east-2.compute.amazonaws.com:3000/'>Slack Invite</a>} />
                                         </List>
-                                        <br/><br/><br/><br/><br/>
+                                        <br /><br /><br /><br /><br />
                                         <p>Prefer email? Awesome! Sign up for our weekly newsletter!</p>
-                                            <Input type = 'text' placeholder = "Email Address" action>
-                                                <input onChange = {this.handleEmailInput}/>
-                                                <Button
-                                                    color='red'
-                                                    content='Submit'
-                                                    icon='mail'
-                                                    onClick = {this.newsletterAdd}
-                                                    loading = {this.state.loading}
-                                                />
-                                            </Input>
-                                            {this.state.errorMessage.length > 0 && <Message info>
-                                                <Message.Header>Heads up!</Message.Header>
-                                                    <p>{this.state.errorMessage}</p>
-                                            </Message>}
-                                            {this.state.successMessage.length > 0 && <Message positive>
-                                                <Message.Header>Success!</Message.Header>
-                                                <p>{this.state.successMessage}</p>
-                                              </Message>}
-                                        </div>
+                                        <Input type='text' placeholder="Email Address" action>
+                                            <input onChange={this.handleEmailInput} />
+                                            <Button
+                                                color='red'
+                                                content='Submit'
+                                                icon='mail'
+                                                onClick={this.newsletterAdd}
+                                                loading={this.state.loading}
+                                            />
+                                        </Input>
+                                        {this.state.errorMessage.length > 0 && <Message info>
+                                            <Message.Header>Heads up!</Message.Header>
+                                            <p>{this.state.errorMessage}</p>
+                                        </Message>}
+                                        {this.state.successMessage.length > 0 && <Message positive>
+                                            <Message.Header>Success!</Message.Header>
+                                            <p>{this.state.successMessage}</p>
+                                        </Message>}
+                                    </div>
                                 </Zoom>
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
-                    <br/>
+                    <br />
                 </CloudinaryContext>
             </div>
         );
     }
 }
+
+function mapStateToProps(state, ownProps) {
+    return {
+        accounts: state.accounts
+    };
+}
+
+export default connect(mapStateToProps, null)(TempHome)
 
 // <Grid columns={3} fluid>
 // <Grid.Column textAlign = 'center' color= "black">
