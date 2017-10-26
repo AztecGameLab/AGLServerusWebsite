@@ -47,8 +47,7 @@ class TempHome extends React.Component {
     }
 
     handleLeftRef = c => {
-        this.refL = c;
-        this.refL.focus();        
+            this.refL = c;
     }
     handleRightRef = c => {
         this.refR = c;
@@ -141,7 +140,6 @@ class TempHome extends React.Component {
         Mousetrap.unbind('left', this.selectLeft);
         Mousetrap.unbind('right', this.selectRight);
         Mousetrap.unbind('enter', this.selectButton);
-
     }
 
     mrBlinkyxD = () => {

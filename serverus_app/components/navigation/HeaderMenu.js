@@ -16,9 +16,10 @@ class HeaderMenu extends React.Component {
             accounts: null,
             headerIcon: null
         }
-        this.handleItemClick = this.handleItemClick.bind(this);
     }
-    handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+    handleItemClick = (e, {name}) => {
+        this.setState({ activeItem: name });
+    }
 
 
 
@@ -48,7 +49,7 @@ class HeaderMenu extends React.Component {
                         </Menu.Item>
                         <Popup
                             inverted
-                            trigger={<Menu.Item name='competitions' active={activeItem === 'competitions'} onClick={this.handleItemClick} as={Link} to='/competitions'><Icon size='big' name='trophy' />Competitions</Menu.Item>}
+                            trigger={<Menu.Item name='competitions' active={activeItem === 'competitions'} as={Link} to='/competitions'><Icon size='big' name='trophy' />Competitions</Menu.Item>}
                             content='Woot! Come enter in AGLs first ever game jam!'
                             size='large'
                         />

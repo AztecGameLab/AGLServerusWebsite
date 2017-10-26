@@ -340,16 +340,16 @@ export const NumberOfUsers = async () => {
 export const UserPagination = async (pageNumber, numOfResults, roles) => {
     let url = '';
     if (roles) {
-        url = 'http://localhost:5000/serverus-15f25/us-central1/QueryUserPage?page=' + pageNumber + '&roles=' + encodeURIComponent(roles) + '&results=' + numOfResults;
+        url = 'https://us-central1-serverus-15f25.cloudfunctions.net/users-QueryUserPage?page=' + pageNumber + '&roles=' + encodeURIComponent(roles) + '&results=' + numOfResults;
     } else {
-        url = 'http://localhost:5000/serverus-15f25/us-central1/QueryUserPage?page=' + pageNumber + '&results=' + numOfResults;
+        url = 'https://us-central1-serverus-15f25.cloudfunctions.net/users-QueryUserPage?page=' + pageNumber + '&results=' + numOfResults;
     }
     let response = await axios.get(url);
     return response.data;
 }
 
 export const FilterRoles = (roles, pageNumber) => {
-    var url = "http://localhost:5000/serverus-15f25/us-central1/FilterRoles?page=" + pageNumber + '&roles=' + encodeURIComponent(roles);
+    var url = "https://us-central1-serverus-15f25.cloudfunctions.net/users-FilterRoles?page=" + pageNumber + '&roles=' + encodeURIComponent(roles);
     return axios.get(url).then(response => {
         return response.data;
     }).catch(error => {
@@ -389,9 +389,10 @@ export const enrollInGameJam = async (userData, username) => {
     return response.data;
 }   
 
-export const fetchTeamlessMembers = async (userData, username) => {
+export const fetchTeamlessMembers = async () => {
     let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-fetchTeamlessMembers');
-    return Object.values(response.data);
+    debugger;
+    return Object.keys(response.data);
 }   
 
 export const checkSignUpAlready = async (username) => {

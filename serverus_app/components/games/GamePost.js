@@ -2,7 +2,7 @@ import React from 'react';
 import stylesheet from '../../styles/markdown.css';
 import { Button, Checkbox, Dropdown, Form, Grid, Icon, Input, Label, Message, Modal, Popup, Progress, TextArea } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { CloudinaryUpload, CloudinaryDelete, GetGamePost, IsLoggedIn, LoadUsernames, SubmitGame, SaveGame } from '../AGL';
+import { CloudinaryUpload, CloudinaryDelete, GetGamePost, IsLoggedIn, fetchTeamlessMembers, SubmitGame, SaveGame } from '../AGL';
 import GamePage from './GamePage';
 import genreOptions from '../common/options/genreOptions.json';
 import styles from '../../styles/game/game.css';
@@ -74,7 +74,7 @@ class GamePost extends React.Component {
 
     async componentWillMount() {
         await this.initGame();
-        let contributors = await LoadUsernames();
+        let contributors = await fetchTeamlessMembers();
         var currentState = this.state.gamePostData;
         currentState.type = { text: "Game", id: 'green' };
         this.setState({
