@@ -86,10 +86,12 @@ class RequestReset extends React.Component{
                             <hr/>
                             <Card.Description>
                             <Popup trigger = {
-                                <Input fluid placeholder = 'Email address' iconPosition = 'left'>
-                                <Icon name='mail outline' />
-                                <input onChange={this.handleEmailInput}  />
-                            </Input>
+                                <div>
+                                <Input fluid placeholder = 'Email address' iconPosition = 'left' >
+                                    <Icon name='mail outline' />
+                                    <input onChange={this.handleEmailInput}  />
+                                </Input>
+                            </div>
                             }
                             content = 'Case sensitive'/>
                             </Card.Description>

@@ -126,20 +126,26 @@ class PasswordReset extends React.Component {
                             <hr/>
                             <Card.Description>
                             <Popup trigger = {
+                                <div>
+                                <h1>Security Code</h1>
                                 <Input fluid placeholder = 'Security Code' iconPosition = 'left'>
-                                <Icon name='barcode' />
-                                <input onChange={this.handleCodeInput}  />
-                            </Input>
+                                    <Icon name='barcode' />
+                                    <input onChange={this.handleCodeInput}  />
+                                </Input>
+                                </div>
                             }
                             content = 'Case sensitive'/>
                             </Card.Description>
                                     <br/>
                             <Card.Description>
                             <Popup trigger = {
-                                <Input fluid placeholder = 'New Password' iconPosition = 'left' type='password'>
-                                <Icon name='key' />
-                                <input onChange={this.handlePassInput}  />
-                            </Input>
+                                <div>
+                                <h1>New Password</h1>
+                                    <Input fluid placeholder = 'New Password' iconPosition = 'left' type='password'>
+                                        <Icon name='key' />
+                                        <input onChange={this.handlePassInput}  />
+                                    </Input>
+                                </div>
                             }
                             content = 'Case sensitive'/>
                             </Card.Description>
