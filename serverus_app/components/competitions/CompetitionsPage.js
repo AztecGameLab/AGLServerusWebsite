@@ -62,6 +62,9 @@ class CompetitionsPage extends React.Component {
                 });
             }
             //push to Halloween Jam/
+            if(this.state.buttonText == 'LOGIN TO JOIN'){ 
+                window.location.reload(); 
+            } 
         }
     }
 
