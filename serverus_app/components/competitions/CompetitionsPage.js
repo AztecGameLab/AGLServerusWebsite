@@ -3,8 +3,9 @@ import { Grid, Icon, Button, List, Label, Popup } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { flipInX } from 'react-animations';
 import Radium, { StyleRoot } from 'radium';
-import { enrollInGameJam, checkSignUpAlready } from '../AGL';
+import { enrollInGameJam, checkSignUpAlready, getJammers } from '../AGL';
 import styles from './glitch.css';
+import { Image as CloudImage, CloudinaryContext } from 'cloudinary-react';
 
 const animations = {
     flipInX: {
@@ -24,7 +25,8 @@ class CompetitionsPage extends React.Component {
             loading: false,
             aliveClassName: '',
             alive2ClassName:'',
-            glitchClassName: '' 
+            glitchClassName: '',
+            jammers: {} 
         }
     }
 
@@ -63,7 +65,13 @@ class CompetitionsPage extends React.Component {
         }
     }
 
+    async componentWillMount () {
+        let jammers = await getJammers();
+        this.setState({
+            jammers: jammers
+        });
 
+    }
     componentDidMount() {
         var that = this;
         // Update the count down every 1 second
@@ -87,7 +95,7 @@ class CompetitionsPage extends React.Component {
             if (days + hours + minutes + seconds == 0) {
                 document.getElementById("demo").innerHTML = "COMPETITION HAS CLOSED ON OCTOBER 30TH";
             }
-            if ((seconds <= 27 && seconds >= 24) || (seconds <= 54 && seconds >= 51)) {
+            if ((seconds <= 27 && seconds >= 22) || (seconds <= 54 && seconds >= 49)) {
                 that.setState({
                     aliveClassName: 'glitch-ALIVE',
                     alive2ClassName:'glitch-ALIVE2',
@@ -114,6 +122,24 @@ class CompetitionsPage extends React.Component {
                 <Label color={color} horizontal> <Icon name={icon} size='large' />{text}</Label>
             </List.Item>
         );
+    }
+    minify = (profileUrl) => {
+        let headerImage = profileUrl;
+        headerImage = headerImage.slice(0, headerImage.indexOf("Small")) + "Extra" + headerImage.slice(headerImage.indexOf("Small"));        
+        return headerImage;
+    }
+    mapJammers = (jammers) => {
+        let usernameList = Object.keys(jammers);
+        debugger
+        const userComponentList = usernameList.map(username => {
+                return(
+                <List.Item key = {username}>
+                    <CloudImage publicId = {this.minify(jammers[username].profilePic)}></CloudImage>
+                    <h3 style = {{display: 'inline-block', marginLeft: '30px'}}>{username}</h3>
+                </List.Item>
+            );
+        });
+        return userComponentList;
     }
 
     render() {
@@ -179,6 +205,9 @@ class CompetitionsPage extends React.Component {
                                 <br /><br />
                                 <h3 style={{ textAlign: 'center', fontSize: '10em' }}
                                     className = {this.state.alive2ClassName} data-text = "TIME IS TICKING">TIME IS TICKING</h3>
+                                <br/>
+                                <h3 style={{ textAlign: 'center', fontSize: '3.8em' }}>TIME LEFT TO JOIN</h3>
+                                    
                                 <br /><br />
                                 <h3 style={{ textAlign: 'center', fontSize: '3.8em' }} id='demo'></h3>
                                 <br /><br />
@@ -195,10 +224,14 @@ class CompetitionsPage extends React.Component {
                                 <br /><br />
                                 <br /><br />
                                 <h3 style={{ textAlign: 'center', fontSize: '3.8em' }}>we all float down here</h3>
+                                    <CloudinaryContext cloudName='aztecgamelab-com'>                                  
+                                        <List animated relaxed divided selection inverted>
+                                            {Object.keys(this.state.jammers).length != 0 ? this.mapJammers(this.state.jammers) : null} 
+                                        </List>               
+                                    </CloudinaryContext>                 
                                 <br />
                             </Grid.Column>
                         </Grid.Row>
-
                     </Grid>
                     <br /><br /><br />
                 </StyleRoot>

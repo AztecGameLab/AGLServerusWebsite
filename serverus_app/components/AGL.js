@@ -391,9 +391,13 @@ export const enrollInGameJam = async (userData, username) => {
 
 export const fetchTeamlessMembers = async () => {
     let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-fetchTeamlessMembers');
-    debugger;
     return response.data;
 }   
+
+export const getJammers = async () => {
+    let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-getJammers');
+    return response.data;
+}
 
 export const checkSignUpAlready = async (username) => {
     let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-checkSignUpAlready?username=' + username);
@@ -412,7 +416,7 @@ export const SendMessageTest = (message) => {
 
 
 export const SubmitGame = (gamePost) => {
-    return axios.post("http://localhost:5000/serverus-15f25/us-central1/SubmitGame", { gamePost }).then(response => {
+    return axios.post("https://us-central1-serverus-15f25.cloudfunctions.net/game-SubmitGame", { gamePost }).then(response => {
         return response.data;
     }).catch(error => {
         return Promise.reject(error.response.data);
@@ -420,7 +424,7 @@ export const SubmitGame = (gamePost) => {
 }
 
 export const LoadGames = () => {
-    return axios.get('http://localhost:5000/serverus-15f25/us-central1/LoadGames').then(response => {
+    return axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-LoadGames').then(response => {
         return response.data;
     }).catch(error => {
         return Promise.reject(error.response.data);
@@ -428,7 +432,7 @@ export const LoadGames = () => {
 }
 
 export const ApproveGame = (gameId) => {
-    return axios.put('http://localhost:5000/serverus-15f25/us-central1/ApproveGame', { gameId }).then(response => {
+    return axios.put('https://us-central1-serverus-15f25.cloudfunctions.net/game-ApproveGame', { gameId }).then(response => {
         return response.data;
 
     }).catch(error => {
@@ -437,7 +441,7 @@ export const ApproveGame = (gameId) => {
 }
 
 export const DisapproveGame = (gameId) => {
-    axios.put('http://localhost:5000/serverus-15f25/us-central1/DisapproveGame', { gameId }).then(response => {
+    axios.put('https://us-central1-serverus-15f25.cloudfunctions.net/game-DisapproveGame', { gameId }).then(response => {
         return response.data
 
     }).catch(error => {

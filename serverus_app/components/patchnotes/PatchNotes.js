@@ -154,14 +154,19 @@ const PatchNotes = (props) => {
                 {ConfigurationNote('Updated NPM packages (react, router, babel-env, webpack, semantic)')}
                 {DevelopmentNote('Parallax and Home Page Visual Update')}
                 {DevelopmentNote('Newsletter Sign Up feature')}
+                {DevelopmentNote('Game Creation')}
+                {DevelopmentNote('Competition Game')}
+                {BugfixNote('Pagination & Sign Out')}
+
 
                 <h1 style = {{textAlign: 'center'}}>Road Map</h1>
-                {InProgressNote('Game Creation')}
                 {InProgressNote('Game Directory')}
-                {InProgressNote('Competitions Page')}
                 {InProgressNote('Reintroducing Friends and Request System')}
                 {InProgressNote('Finalizing Admin Dash')}
-                {BugfixNote('Pagination & Sign Out')}
+                {InProgressNote('Polling and Survey')}
+                {InProgressNote('Resources and Help Page')}
+                {InProgressNote('Release Article & Tutorial Directory')}
+                
                 
             </List>
             <br/>

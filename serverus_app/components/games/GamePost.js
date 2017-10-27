@@ -54,7 +54,7 @@ class GamePost extends React.Component {
                 rating: 0
             },
             contributors: [],
-            tags: [{ text: '#extra', value: 'extra' }, { text: '#thicc', value: 'thicc' }],
+            tags: [{ text: '#halloween', value: 'halloween' }, { text: '#gamejam', value: 'gamejam' }],
             genres: genreOptions.genre,
             uploaded: false,
             savedPost: false,
@@ -93,6 +93,19 @@ class GamePost extends React.Component {
                 gamePostData: currentState
             });
         });
+    }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.accounts[0] && this.props.accounts[0]) {
+            var currentState = this.state.gamePostData;
+            var data = {
+                value: [nextProps.accounts[0].username]
+            }
+            this.handleAuthors(null, data );
+            this.setState({
+                gamePostData: currentState,
+                defaultAuthor: [nextProps.accounts[0].username]
+            });
+        }
     }
 
     componentWillUnmount() {
@@ -204,7 +217,10 @@ class GamePost extends React.Component {
     handleAuthors = (e, { value }) => {
         let currentState = Object.assign({}, this.state.gamePostData);
         currentState.authors = value;
-        this.setState({ gamePostData: currentState });
+        this.setState({ 
+            gamePostData: currentState,
+            contributorLength: value.length
+         });
     }
 
     handlePlatforms = (e, { value }) => {
@@ -216,7 +232,7 @@ class GamePost extends React.Component {
     createDownloadLinks = (value, key) => {
         return (
             <div key={key} style={{ marginBottom: 15 }}>
-                <label style={{ fontSize: '1.5em' }}> Download link for {value} platform</label>
+                <h1 style={{ fontSize: '1.5em' }}> Download link for {value} platform</h1>
                 <Input onChange={(e) => {
                     this.handleDownloadLinks(e, value, key)
                 }} placeholder={"Add a download link!"} />
@@ -440,6 +456,7 @@ class GamePost extends React.Component {
         var disableGame = (
             this.state.gamePostData.title == "" ||
             this.state.gamePostData.authors == [] ||
+            this.state.contributorLength > 5 ||
             this.state.gamePostData.teamName == "" ||
             this.state.gamePostData.description == "" ||
             this.state.gamePostData.selectedGenres == {} ||
@@ -461,19 +478,19 @@ class GamePost extends React.Component {
                     <br />
                     <br />
                     <br />
-                    <div className="row col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3">
+                    <h1 style={{ fontSize: '10em', textAlign: 'center', marginBottom: 15 }}>SUBMIT YOUR GAME!</h1>                    
+                    <div className="row col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
                         <Form>
-                            <h1 style={{ fontSize: '3em', textAlign: 'center', marginBottom: 15 }}>Create a Game!</h1>
                             <Form.Field className="game">
-                                <label>Title</label>
+                                <h1>Game Title!</h1>
                                 <Input onChange={this.onTitleChange} placeholder="Add a game title!" />
                             </Form.Field>
                             <Form.Field className="game">
-                                <label style={gameForm.label}>Team Name</label> <Input onChange={this.onTeamChange}
+                                <h1 style={gameForm.label}>Team Name!</h1> <Input onChange={this.onTeamChange}
                                     placeholder="Add a team!" />
                             </Form.Field>
                             <Form.Field className="game">
-                                <label>Contributors</label>
+                                <h1>Game Creators! (including you)</h1>
                                 {this.state.gamePostData.authors.length > 5 &&
                                     <Label basic color='red' pointing='below'>Teams cannot consist more than 5
                                     members!</Label>}
@@ -486,15 +503,15 @@ class GamePost extends React.Component {
                                     fluid
                                     multiple
                                     error={this.state.gamePostData.authors.length > 5}
-                                    defaultValue={this.state.gamePostData.authors}
+                                    defaultValue={this.state.defaultAuthor}
                                     onChange={this.handleAuthors} />
                             </Form.Field>
                             <Form.Field className="game">
-                                <label>Game Description</label>
+                                <h1>Game Description!</h1>
                                 <TextArea onChange={this.onDescriptionChange} placeholder="Tell us about your game!" />
                             </Form.Field>
                             <Form.Field className="game">
-                                <label>Tags</label>
+                                <h1>Search Tags to associate with your game!</h1>
                                 <Dropdown
                                     options={this.state.tags}
                                     placeholder='Add a tag!'
@@ -508,13 +525,13 @@ class GamePost extends React.Component {
                                     onChange={this.handleTags} />
                             </Form.Field>
                             <Form.Field className="game">
-                                <label>Genre</label>
+                                <h1>Game Genres!</h1>
                                 <Dropdown placeholder='Add a genre!' fluid multiple selection
                                     onChange={this.handleGenre}
                                     options={genreOptions.genre} />
                             </Form.Field>
                             <Form.Field className="game">
-                                <label>Platforms</label>
+                                <h1>Supported Platforms!</h1>
                                 <Dropdown placeholder='Add compatible platforms!' fluid multiple selection
                                     defaultValue={this.state.gamePostData.selectedPlatforms}
                                     onChange={this.handlePlatforms}
@@ -526,7 +543,7 @@ class GamePost extends React.Component {
 
 
                             <Form.Field className="game">
-                                <label>Showcase Image</label>
+                                <h1>A LARGE Banner Image to Showcase your game!</h1>
                                 <Input type='file' accept=".jpg, .jpeg, .png" onChange={this.handleShowcase} />
                                 <br />
                                 {this.state.showcaseProgressBar ?
@@ -555,7 +572,7 @@ class GamePost extends React.Component {
                                 </Message> : null}
 
                             <Form.Field className="game">
-                                <label>Screenshots</label>
+                                <h1>IN Game Screenshots!</h1>
                                 <Input type='file' multiple accept=".jpg, .jpeg, .png"
                                     onChange={this.handleScreenshots} />
                                 <br />
@@ -585,7 +602,7 @@ class GamePost extends React.Component {
                                 </Message> : null}
 
                             <Form.Field className="game">
-                                <label>Source Code</label>
+                                <h1>Link of Source Code with Github or Google Drive)</h1>
                                 <Input onChange={this.onSourceCodeChange} placeholder="Add source code!" />
                             </Form.Field>
                             <Form.Field className="game">
@@ -636,6 +653,12 @@ class GamePost extends React.Component {
                             </Form.Field>
                         </Form>
                     </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
                 </div>
             );
         } else return null;
