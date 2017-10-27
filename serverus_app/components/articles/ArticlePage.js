@@ -16,8 +16,8 @@ class ArticlePage extends React.Component {
     }
 
     async componentWillMount() {
-        if (this.props.routeParams.articleId) {
-            let article = await GetArticle("all", this.props.routeParams.articleId);
+        if (this.props.match.params.articleId) {
+            let article = await GetArticle("all", this.props.match.params.articleId);
             this.setState({
                 postData: article
             });

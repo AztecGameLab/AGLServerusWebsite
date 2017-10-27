@@ -1,22 +1,21 @@
 import React from 'react';
-import {
-    Grid,
-    Icon,
-    Button,
-    Container,
-    Segment,
-    Header,
-    Menu,
-    Tab
-} from 'semantic-ui-react';
-import firebase from 'firebase';
-import axios from 'axios';
+import { Button, Container, Grid, Header, Icon, Menu, Segment, Tab } from 'semantic-ui-react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import AdminJSONEditor from './AdminJSONEditor';
 import AdminHome from './AdminHome';
 import AdminEmail from './AdminEmail';
 import AdminWriter from './AdminWriter';
+import AdminGameSubmission from './AdminGameSubmission';
 import styles from '../../styles/admin.css';
+
+const panes = [
+    { menuItem: { icon: 'home', content: 'Home', key: "1" }, render: () => <Tab.Pane className='adminPane'><AdminHome /></Tab.Pane> },
+    { menuItem: { content: 'Writer', icon: 'book', key: "2" }, render: () => <Tab.Pane className='adminPane'><AdminWriter /></Tab.Pane> },
+    { menuItem: { content: 'Email', icon: 'mail', key: "3" }, render: () => <Tab.Pane className='adminPane'><AdminEmail /></Tab.Pane> },
+    { menuItem: { content: 'JSON', icon: 'tasks', key: "4" }, render: () => <Tab.Pane className='adminPanel'> <AdminJSONEditor /> </Tab.Pane> },
+    { menuItem: { content: 'Game Submissions', icon: 'snapchat ghost', key: "5" }, render: () => <Tab.Pane className='adminPanel'> <AdminGameSubmission /> </Tab.Pane> }
+]
 
 class AdminDashboard extends React.Component {
     constructor(props) {
@@ -24,49 +23,65 @@ class AdminDashboard extends React.Component {
         this.state = {
             accounts: null,
             accountLevel: 0,
-            userName: ""
+            isAdmin: "loading",
+            count: 0
         };
-        this.storage = firebase.storage();
+    }
+
+    componentWillMount() {
+        if (this.props.access) {
+        this.setState({
+            isAdmin: "isAdmin"
+        });
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.state.count > 0) {
+            if (nextProps.access) {
+                this.setState({
+                    isAdmin: "isAdmin"
+                });
+            } else {
+                this.setState({
+                    isAdmin: "isNotAdmin"
+                });
+            }
+        } else {
+            let currentState = this.state.count;
+            currentState++;
+            this.setState({
+                count: currentState
+            });
+        }
     }
 
     render() {
-        //var loggedIn = this.props.accounts[0].length > 0 ? this.props.accounts[0].info.accountLevel == 2 ? 'admin' : 'notAdmin' : false;
-        let loggedIn = '';
-        if(this.props.accounts.length > 0){
-            if(this.props.accounts[0].authLevel == 2){
-                loggedIn = 'admin';
-            }else{
-                loggedIn = 'notAdmin'
-            }
-        }
-        const panes = [
-            { menuItem: { icon: 'home', content: 'Home' }, render: () => <Tab.Pane className='adminPane'><AdminHome /></Tab.Pane> },
-            { menuItem: { content: 'Writer', icon: 'book' }, render: () => <Tab.Pane className='adminPane'><AdminWriter /></Tab.Pane> },
-            { menuItem: { content: 'Email', icon: 'mail' }, render: () => <Tab.Pane className='adminPane'><AdminEmail /></Tab.Pane> },
-            { menuItem: { content: 'JSON', icon:'tasks' }, render: () => <Tab.Pane className='adminPanel'> <AdminJSONEditor/> </Tab.Pane> }
-        ]
-        if (loggedIn == 'admin') {
-            return (
-                <div>
-                    <Segment raised>
-                        <Tab menu={{ fluid: true, vertical: true }} panes={panes} />
-                    </Segment>
-                </div>
-            );
-        }else if(loggedIn == 'notAdmin'){
-            return(<div>
-                {this.props.history.push("/404")}
-            </div>);
-        }else{
-            console.log("Returned to nothing");
-            return(<div></div>);
-        }
-
+        return (
+            <div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                {this.state.isAdmin == "loading" ?
+                    null
+                    :
+                    this.state.isAdmin == "isAdmin" ?
+                        <Segment raised>
+                            <Tab menu={{ fluid: true, vertical: true }} panes={panes} />
+                        </Segment>
+                        :
+                        <Redirect to="/404" />
+                }
+            </div>
+        )
     }
 }
 
 function mapStateToProps(state, ownProps) {
     return {
+        access: state.access,
         accounts: state.accounts
     };
 }

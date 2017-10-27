@@ -34,7 +34,7 @@ export const IsAdmin = (id) => {
     return axios.get(url).then(response => {
         return response.data;
     }).catch(error => {
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     });
 }
 export const GetAllEmails = async () => {
@@ -63,7 +63,7 @@ export const GetArticle = (status, key) => {
     return axios.get(url).then(article => {
         return article.data;
     }).catch(error => {
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     });
 }
 
@@ -72,7 +72,7 @@ export const GetAllArticles = async () => {
     return Object.values(articles.data);
 }
 
-export const CreatePost = (post, type, id, edit) => {
+export const SubmitPost = (post, type, id, edit) => {
     let url;
     if (id) {
         if (edit) {
@@ -86,7 +86,7 @@ export const CreatePost = (post, type, id, edit) => {
     return axios.post(url, post).then(response => {
         return response;
     }).catch(err => {
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     });
 }
 
@@ -96,7 +96,7 @@ export const SavePost = (post, type, overwrite, key) => {
     return axios.post(url, { post, overwrite, key }).then(response => {
         return response.data;
     }).catch(err => {
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     });
 }
 
@@ -122,14 +122,14 @@ export const CloudinaryUpload = async (image) => {
     return axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/cloudinary-UploadToCloudinary', { imgUrl }, {
         headers: {
             "hostname": "api.cloudinary.com",
-            "host" : "api.cloudinary.com",
+            "host": "api.cloudinary.com",
             family: 4,
             port: 443,
         }
     }).then(response => {
         return response.data;
     }).catch(error => {
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     });
 }
 
@@ -137,7 +137,7 @@ export const CloudinaryDelete = (public_id) => {
     return axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/cloudinary-DeleteFromCloudinary', { public_id }).then(response => {
         return response.data;
     }).catch(error => {
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     });
 }
 
@@ -201,6 +201,13 @@ export const usernameToEmail = async (username) => {
     return response.data;
 }
 
+export const addToNewsletter = async (email) => {
+    let response = await axios.post(
+        'https://us-central1-serverus-15f25.cloudfunctions.net/email-addToNewsletter',
+        { email: email });
+    return response.data;
+}
+
 
 /*
 ______                                   _    _                 ______                    _    _                    
@@ -222,7 +229,7 @@ export const AGLEncryption = async (password) => {
 
 export const AGLRencryption = async (email, password) => {
 
-    let response  = await axios.post(
+    let response = await axios.post(
         'https://us-central1-serverus-15f25.cloudfunctions.net/security-AGLRencryption',
         {
             email: email,
@@ -301,10 +308,15 @@ export const EditProfile = async (username, uid, newDataObj) => {
     );
 }
 
+export const LoadUsernames = async () => {
+    let response = await axios.get('http://localhost:5000/serverus-15f25/us-central1/LoadUsernames');
+    return response.data;
+}
+
+
 export const LoadAllUsers = async (component) => {
     let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/users-LoadAllUserProfiles');
     if (component == "dashboard") {
-
         response.data.map(user => {
             var data = {
                 key: user.data.uid,
@@ -325,11 +337,27 @@ export const NumberOfUsers = async () => {
     return length.data;
 }
 
-export const UserPagination = async (pageNumber, numOfResults) => {
-    let url = 'https://us-central1-serverus-15f25.cloudfunctions.net/users-QueryUserPage?page=' + pageNumber + '&results=' + numOfResults;
+export const UserPagination = async (pageNumber, numOfResults, roles) => {
+    let url = '';
+    if (roles) {
+        url = 'https://us-central1-serverus-15f25.cloudfunctions.net/users-QueryUserPage?page=' + pageNumber + '&roles=' + encodeURIComponent(roles) + '&results=' + numOfResults;
+    } else {
+        url = 'https://us-central1-serverus-15f25.cloudfunctions.net/users-QueryUserPage?page=' + pageNumber + '&results=' + numOfResults;
+    }
     let response = await axios.get(url);
     return response.data;
 }
+
+export const FilterRoles = (roles, pageNumber) => {
+    var url = "https://us-central1-serverus-15f25.cloudfunctions.net/users-FilterRoles?page=" + pageNumber + '&roles=' + encodeURIComponent(roles);
+    return axios.get(url).then(response => {
+        return response.data;
+    }).catch(error => {
+        return Promise.reject(error.response.data);
+    });
+}
+
+
 
 export const InboxWatch = async (username) => {
     let url = 'https://us-central1-serverus-15f25.cloudfunctions.net/inbox-GetInboxData?=' + username;
@@ -352,9 +380,76 @@ export const SendFriendRequest = async (myInfo, friendInfo) => {
         });
 }
 
-export const AcceptFriendRequest = async () => {
+export const enrollInGameJam = async (userData, username) => {
+    let response = await axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/game-enrollInGameJam',
+    {
+        userData: userData,
+        username: username
+    });
+    return response.data;
+}   
 
+export const fetchTeamlessMembers = async () => {
+    let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-fetchTeamlessMembers');
+    return response.data;
+}   
+
+export const getJammers = async () => {
+    let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-getJammers');
+    return response.data;
 }
+
+export const checkSignUpAlready = async (username) => {
+    let response = await axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-checkSignUpAlready?username=' + username);
+    return response.data;
+}
+
+
+export const SendMessageTest = (message) => {
+    axios.post('http://localhost:5000/serverus-15f25/us-central1/SendMessageTest',
+        { data: message }).then(response => {
+            console.log("Success! ", response.data);
+        }).catch(err => {
+            console.error(err);
+        });
+}
+
+
+export const SubmitGame = (gamePost) => {
+    return axios.post("https://us-central1-serverus-15f25.cloudfunctions.net/game-SubmitGame", { gamePost }).then(response => {
+        return response.data;
+    }).catch(error => {
+        return Promise.reject(error.response.data);
+    });
+}
+
+export const LoadGames = () => {
+    return axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-LoadGames').then(response => {
+        return response.data;
+    }).catch(error => {
+        return Promise.reject(error.response.data);
+    });
+}
+
+export const ApproveGame = (gameId) => {
+    return axios.put('https://us-central1-serverus-15f25.cloudfunctions.net/game-ApproveGame', { gameId }).then(response => {
+        return response.data;
+
+    }).catch(error => {
+        return Promise.reject(error.response.data);
+    });
+}
+
+export const DisapproveGame = (gameId) => {
+    axios.put('https://us-central1-serverus-15f25.cloudfunctions.net/game-DisapproveGame', { gameId }).then(response => {
+        return response.data
+
+    }).catch(error => {
+        return Promise.reject(error.response.data);
+    });
+}
+
+
 
 // export const UpdateUser = async (userData) => {
 //     let storageAcc = firebase.storage().ref('accounts/' + userData.info.username + '.json');
@@ -366,7 +461,7 @@ export const AcceptFriendRequest = async () => {
 //     });
 // }
 
-// export const UpdateAllUsers = async (accounts) => {
+// export const UpdateAllUsers = async (accounts) => {}
 //     Object.keys(accounts).map(user => {
 //         UpdateUser(user.info.username, user);
 //     });
@@ -390,6 +485,6 @@ export const AcceptFriendRequest = async () => {
 //     return axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/admin-WildCard').then(response => {
 //         return response.data;
 //     }).catch(error => {
-//         return Promise.reject(error);
+//         return Promise.reject(error.response.data);
 //     });
 // }

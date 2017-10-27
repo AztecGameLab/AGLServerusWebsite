@@ -1,12 +1,11 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, browserHistory } from 'react-router';
-import routes from './routes';
+import App from './components/App';
 import firebase from 'firebase';
 import { StyleRoot } from 'radium';
 import configureStore from './components/redux/store/configureStore';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import CountdownPage from './components/common/prelaunch/CountdownPage';
 
 const config = {
@@ -25,17 +24,17 @@ let mode = 'lol';
 const store = configureStore(); //can pass initial state (overrides default params in reducer)
 
 ReactDOM.render(
-  <Provider store = {store}>
+  <Provider store={store}>
     <StyleRoot style={rootStyle}>
       {
-        function prelaunch(){
-          if(new Date().getMonth() + 1 >= 8 && new Date().getDate() >= 28 && new Date().getFullYear >= 2017){
+        function prelaunch() {
+          if (new Date().getMonth() + 1 >= 8 && new Date().getDate() >= 28 && new Date().getFullYear >= 2017) {
             mode = "Ayy lmao";
           }
-          if(mode == 'dev'){
-            return <CountdownPage/>;
-          }else{
-            return <Router history={browserHistory} routes={routes} />;
+          if (mode == 'dev') {
+            return <CountdownPage />;
+          } else {
+            return <App/>
           }
         }()
       }

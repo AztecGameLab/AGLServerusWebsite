@@ -94,13 +94,21 @@ body {
 /*############# Dropdown bar ################*/
 
 /*############# Hover Active elements ################*/
-
+/*
 .navlink:hover, .ps-dropdown:hover {background-color:#DF0000;}
 .dropdown-content a:hover {background-color: #DF0000;}
 .ps-dropdown:hover .dropdown-content {display: block;}
 .ps-dropdown:hover .ps-btn:active {background-color: black}
 .navlink:active {background-color: black}
 .dropdown-content a:active {background-color: black;}
+*/
+
+.ui.inverted.menu .dropdown.item:hover, .ui.inverted.menu .link.item:hover, .ui.inverted.menu a.item:hover, .ui.link.inverted.menu .item:hover{
+    background: transparent;
+    color: lightblue;
+    position: 'absolute' !important;
+    top: 0;
+}
 /*############# Hover Active elements ################*/
 
 /* Mobile adjustments*/

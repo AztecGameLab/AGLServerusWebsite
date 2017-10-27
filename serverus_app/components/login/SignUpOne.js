@@ -36,7 +36,6 @@ class SignUpOne extends React.Component {
     var that = this;
     const emailCheck = await EmailTakenCheck(e.target.value);
     const containsProfanity = emailCheck.profanity;
-    console.log(containsProfanity);
     const isValid = emailCheck.validEmail;
     const isTaken = emailCheck.emailTaken;
     if (containsProfanity) {
@@ -156,7 +155,7 @@ class SignUpOne extends React.Component {
     return (
       <div>
         <div style={modalStyle.spacing}>
-          <Form.Field>
+          <Form.Field className="login">
             <Popup
               trigger={
                 <div>
@@ -176,7 +175,7 @@ class SignUpOne extends React.Component {
           </Form.Field>
         </div>
         <div style={modalStyle.spacing}>
-          <Form.Field>
+          <Form.Field className="login">
             <Popup
               trigger={
                 <div>
@@ -195,7 +194,7 @@ class SignUpOne extends React.Component {
           </Form.Field>
         </div>
         <div style={{ padding: '5px' }}>
-          <Form.Field>
+          <Form.Field className="login">
             <Checkbox label='By signing up you agree to AGL terms and conditions:  ' onClick={this.termsAccepted} />
             <Button icon color="teal" floated="right" onClick={() => { window.open('https://docs.google.com/document/d/1R6tGpquyGkJQlrIz-iO-xCoMH5pjsymbRFWiCd6qYQ4/edit?usp=sharing', '_blank') }} >
               <Icon name='file text' />

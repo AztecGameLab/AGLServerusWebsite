@@ -1,6 +1,6 @@
 import { Card, Label, Divider, Grid, Image, Icon } from 'semantic-ui-react';
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as accountActions from '../../redux/actions/accountActions';

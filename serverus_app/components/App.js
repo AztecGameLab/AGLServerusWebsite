@@ -1,15 +1,21 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import axios from 'axios';
+import { Router } from 'react-router-dom';
+import createHistory from 'history/createBrowserHistory';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as accountActions from './redux/actions/accountActions';
 import * as adminActions from './redux/actions/adminActions';
+import Routes from '../routes';
 import HeaderMenu from './navigation/HeaderMenu';
 import Footer from './navigation/Footer';
 import LoginModel from './login/LoginModel';
 import tags from '../styles/tags.css';
 import { IsAdmin, LoadProfile, WildCard } from './AGL';
+import HomePage from './home/TempHomePage';
+
+const history = createHistory();
 require('../../favicon.ico');
 
 class App extends React.Component {
@@ -20,7 +26,8 @@ class App extends React.Component {
             loggedIn: false,
             signedUp: false,
             modelIsOpen: false,
-            activeIndex: 0
+            activeIndex: 0,
+            history: history
         };
         this.openLogin = this.openLogin.bind(this);
         this.closeLogin = this.closeLogin.bind(this);
@@ -102,19 +109,24 @@ class App extends React.Component {
         e.stopPropagation();
 
         //Redirects to specified path
-        this.context.router.push("/search/" + this.state.search);
+        history.push("/search/" + this.state.search);
         //AGL API call to retrieve search data, I was thinking we could firebase here to store in redux store for faster async results and 
         //in the SearchDirectory component we can have a componentDidUpdate to listen for a flag when query results are successfully pushed into store.
     }
-
+    //{this.props.children }
     render() {
         return (
-            <div>
-                <HeaderMenu loggedIn={this.state.loggedIn} showModel={this.openLogin} signOut={this.signOut} handleSearch={this.handleSearch} search={this.search}></HeaderMenu>
-                <div style={AppStyle.mainContent}>{this.props.children}</div>
-                <Footer />
-                <LoginModel activeIndex={this.state.activeIndex} isOpen={this.state.modelIsOpen} close={this.closeLogin} changeTab={this.changeTabIndex} signedUp={this.signedUp} />
-            </div>
+            <Router history={history} >
+                <div>
+                    <div style={AppStyle.mainContent}>
+                        {/* {React.cloneElement(<HomePage/>, { showModal: this.openLogin})} */}
+                        <Routes showModal={this.openLogin} />
+                        <HeaderMenu style={AppStyle.transparentOverlay} loggedIn={this.state.loggedIn} handleSearch={this.handleSearch} search={this.search} signOut = {this.signOut}></HeaderMenu>
+                    </div>
+                    <Footer />
+                    <LoginModel activeIndex={this.state.activeIndex} isOpen={this.state.modelIsOpen} close={this.closeLogin} changeTab={this.changeTabIndex} signedUp={this.signedUp} />
+                </div>
+            </Router>
         );
     }
 }
@@ -141,14 +153,12 @@ var AppStyle = {
         marginLeft: 0,
         fontSize: '1.5em',
         zIndex: -1
+    },
+    transparentOverlay: {
+        position: 'absolute',
+        top: 0
     }
 };
 
-App.propTypes = {
-    children: PropTypes.object
-};
-App.contextTypes = {
-    router: PropTypes.object.isRequired
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

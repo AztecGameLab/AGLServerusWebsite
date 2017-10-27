@@ -1,0 +1,258 @@
+
+
+.glitch{
+  position:relative;
+}
+
+.glitch-ALIVE{
+  position:relative;  
+}
+.glitch-ALIVE2{
+  position:relative;  
+}
+@keyframes noise-anim{
+  0% {
+    clip: rect(300px, 1600px, 425px, 0);
+    color:white;
+    width: 100%;
+    content:"KILL THEM ALL KILL THEM ALL KILL THEM ALL KILL THEM ALL KILL THEM ALL KILL THEM ALL KILL THEM ALL KILL THEM ALL  ";    
+    left:-20px;
+    
+  }
+  19% {
+    clip: rect(300px, 1600px, 425px, 0);
+    color:white;
+    width: 100%;  
+    content:"KILL THEM ALL KILL THEM ALL KILL THEM ALL KILL THEM ALL KILL THEM ALL KILL THEM ALL KILL THEM ALL KILL THEM ALL  ";    
+    left:-19px;
+    
+  }
+  20% {
+    clip: rect(245px, 1600px, 280px, 0);
+    color:black;   
+    left: 35px;
+    
+  }
+  39% {
+    clip: rect(245px, 1600px, 280px, 0);
+    color:black;   
+    left: 33px;
+    
+  }
+  40% {
+    clip: rect(475px, 1600px, 515px, 0);
+    color:white;  
+    left: -25px;
+  }
+  59% {
+    clip: rect(475px, 1600px, 515px, 0);
+    color:white;  
+    left: -25px;
+  }
+  60% {
+    clip: rect(150px, 1600px, 390px, 0);
+    color:black;   
+    left: 60px;
+    
+  }
+  79% {
+    clip: rect(150px, 1600px, 390px, 0);
+    color:black;   
+    left: 60px;
+    
+  }
+  80% {
+    clip: rect(75px, 1600px, 65px, 0);
+    color:white;
+    left:-5px;
+    
+  }
+  99% {
+    clip: rect(75px, 1600px, 65px, 0);
+    color:white;
+    left:-5px;
+  }
+  100% {
+    clip: rect(75px, 1600px, 65px, 0);
+    color:white;
+    left:-5px;
+  }
+}
+.glitch:after{
+  content:attr(data-text);
+  position:absolute;
+  left:20px;
+  text-shadow:-6px 0 rgb(145, 20, 20);
+  top:0;
+  color:white;
+  background:black;
+  overflow:hidden;
+  clip:rect(0,900px,0,0); 
+  animation:noise-anim 2.7s infinite linear alternate-reverse;
+}
+
+@keyframes noise-anim2{
+  0% {
+    clip: rect(150px, 1600px, 215px, 0);
+    color:white;
+    width: 100%;
+    content:"ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE  ";    
+    left:-20px;
+    
+  }
+  19% {
+    clip: rect(150px, 1600px, 215px, 0);
+    color:white;
+    width: 100%;  
+    content:"ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE ALIVE  ";    
+    left:-19px;
+    
+  }
+  20% {
+    clip: rect(145px, 1600px, 180px, 0);
+    color:black;   
+    left: 35px;
+    
+  }
+  39% {
+    clip: rect(145px, 1600px, 180px, 0);
+    color:black;   
+    left: 33px;
+    
+  }
+  40% {
+    clip: rect(275px, 1600px, 215px, 0);
+    color:white;  
+    left: -25px;
+  }
+  59% {
+    clip: rect(275px, 1600px, 215px, 0);
+    color:white;  
+    left: -25px;
+  }
+  60% {
+    clip: rect(50px, 1600px, 190px, 0);
+    color:black;   
+    left: 60px;
+    
+  }
+  79% {
+    clip: rect(50px, 1600px, 190px, 0);
+    color:black;   
+    left: 60px;
+    
+  }
+  80% {
+    clip: rect(35px, 1600px, 65px, 0);
+    color:white;
+    left:-5px;
+    
+  }
+  99% {
+    clip: rect(35px, 1600px, 65px, 0);
+    color:white;
+    left:-5px;
+  }
+  100% {
+    clip: rect(35px, 1600px, 35px, 0);
+    color:white;
+    left:-5px;
+  }
+}
+
+
+@keyframes noise-anim-float{
+  0% {
+    clip: rect(100px, 1600px, 197px, 0);
+    color:white;
+    width: 100%;
+    font-weight: bold;
+    content:"YOULL FLOAT TOO YOULL FLOAT TOO YOULL FLOAT TOO YOULL FLOAT TOO YOULL FLOAT TOO YOULL FLOAT TOO YOULL FLOAT TOO ";    
+    left:52px;
+    
+  }
+  19% {
+    clip: rect(100px, 1600px, 197px, 0);
+    color:white;
+    width: 100%;  
+    font-weight: bold;    
+    content:"YOULL FLOAT TOO YOULL FLOAT TOO YOULL FLOAT TOO YOULL FLOAT TOO YOULL FLOAT TOO YOULL FLOAT TOO YOULL FLOAT TOO ";    
+    left:52px;
+    
+  }
+  20% {
+    clip: rect(145px, 1600px, 180px, 0);
+    color:black;   
+    left: 33px;
+    
+  }
+  39% {
+    clip: rect(145px, 1600px, 180px, 0);
+    color:black;   
+    left: 33px;
+    
+  }
+  40% {
+    clip: rect(275px, 1600px, 215px, 0);
+    color:white;  
+    left: -25px;
+  }
+  59% {
+    clip: rect(275px, 1600px, 215px, 0);
+    color:white;  
+    left: -25px;
+  }
+  60% {
+    clip: rect(50px, 1600px, 190px, 0);
+    color:black;   
+    left: 60px;
+    
+  }
+  79% {
+    clip: rect(50px, 1600px, 190px, 0);
+    color:black;   
+    left: 60px;
+    
+  }
+  80% {
+    clip: rect(35px, 1600px, 65px, 0);
+    color:white;
+    left:-5px;
+    
+  }
+  99% {
+    clip: rect(35px, 1600px, 65px, 0);
+    color:white;
+    left:-5px;
+  }
+  100% {
+    clip: rect(35px, 1600px, 35px, 0);
+    color:white;
+    left:-5px;
+  }
+}
+.glitch-ALIVE:after{
+  content:attr(data-text);
+  position:absolute;
+  left:20px;
+  text-shadow:-6px 0 rgb(145, 20, 20);
+  top:0;
+  color:white;
+  background:black;
+  overflow:hidden;
+  clip:rect(0,900px,0,0); 
+  animation:noise-anim2 2.7s infinite linear alternate;
+}
+
+.glitch-ALIVE2:after{
+  content:attr(data-text);
+  position:absolute;
+  left:20px;
+  text-shadow:-6px 0 rgb(145, 20, 20);
+  top:0;
+  color:white;
+  background:black;
+  overflow:hidden;
+  clip:rect(0,900px,0,0); 
+  animation:noise-anim-float 2.7s infinite ease-in-out;
+}

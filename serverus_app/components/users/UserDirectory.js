@@ -1,11 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 import redux from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { Button, Divider, Grid, Icon, Menu, Search, Loader } from 'semantic-ui-react';
 import UserCard from '../common/cards/UserCard';
 import roleOptions from '../common/options/roleOptions.json';
-import { NumberOfUsers, UserPagination } from '../AGL';
+import { FilterRoles, NumberOfUsers, UserPagination } from '../AGL';
+import { CloudinaryContext, Image as CloudImage } from 'cloudinary-react';
 
 
 export default class UserDirectory extends React.Component {
@@ -19,7 +20,8 @@ export default class UserDirectory extends React.Component {
             selected: [],
             resultsToShow: 24,
             numberOfUsers: 0,
-            numberOfPages: 0
+            numberOfPages: 0,
+            currentPage: 1
         }
         this.findUserCard = this.findUserCard.bind(this);
         this.roleFix = this.roleFix.bind(this);
@@ -29,9 +31,9 @@ export default class UserDirectory extends React.Component {
     }
 
     async componentWillMount() {
-        let length = await NumberOfUsers();
-        let numberOfPages = Math.ceil(length / this.state.resultsToShow);
-        let accountsObj = await UserPagination(0, this.state.resultsToShow);
+        let result = await UserPagination(0, this.state.resultsToShow);
+        let accountsObj = result[0];
+        let numberOfPages = result[1];
         const currentState = this.state;
         Object.values(accountsObj).map(user => {
             currentState.userData.push(user);
@@ -47,41 +49,41 @@ export default class UserDirectory extends React.Component {
     }
 
     //Loads User Cards into Directory. URL should be gotten from firebase.
-    findUserCard(role, idx) {
+    async findUserCard(role, idx) {
         var { selected, selectedRoles, userData } = this.state;
-        let tempUsers = [];
+        let filteredRoles;
+        let numberOfPages;
+        let currentPage;
         if (selected[idx] == 'unselectedIcon') {
             selected[idx] = 'selectedIcon';
             selectedRoles.push(role);
-            userData.map(user => {
-                selectedRoles.forEach(sRole => {
-                    if (user.roles.includes(sRole)) {
-                        if (!tempUsers.includes(user))
-                            tempUsers.push(user);
-                    }
-                });
-            });
+            var result = await FilterRoles(selectedRoles, this.state.currentPage - 1);
+            filteredRoles = result[0];
+            numberOfPages = result[1];
         } else {
+            var result;
             selected[idx] = 'unselectedIcon';
             selectedRoles.splice(selectedRoles.indexOf(role), 1);
-            userData.map(user => {
-                selectedRoles.forEach(sRole => {
-                    if (user.roles.includes(sRole)) {
-                        if (!tempUsers.includes(user))
-                            tempUsers.push(user);
-                    }
-                });
-            });
-        }
-        if (selectedRoles.length == 0) {
-            tempUsers = userData;
+            if (selectedRoles.length == 0) {
+                result = await UserPagination(0, this.state.resultsToShow);
+            } else {
+                result = await FilterRoles(selectedRoles, 0);
+            }
+            filteredRoles = result[0];
+            numberOfPages = result[1];
+            currentPage = 1;
         }
         this.setState({
             selected: selected,
-            showUsers: tempUsers,
-            selectedRoles: selectedRoles
+            userData: filteredRoles,
+            showUsers: Object.values(filteredRoles),
+            selectedRoles: selectedRoles,
+            numberOfPages: numberOfPages,
+            currentPage: currentPage ? currentPage : this.state.currentPage
         });
     }
+
+
     roleFix(roleText) {
         if (roleText.slice(-3) == 'ing') {
             return roleText = roleText.slice(0, -3) + 'ors';
@@ -103,59 +105,59 @@ export default class UserDirectory extends React.Component {
     }
 
     async selectPage(e) {
-        window.scrollTo(0, 0);        
+        e.persist();
+        window.scrollTo(0, 0);
         //tell kdo to restore accounts username keys lowercase or uppercase or consistency when querying
-        let accountsObj = await UserPagination(e.target.value, this.state.resultsToShow);
+        let result = await UserPagination(e.target.value, this.state.resultsToShow, this.state.selectedRoles);
+        let accountsObj = result[0];
         const currentState = this.state;
         currentState.userData = [];
-        currentState.selected = [];
         Object.values(accountsObj).map(user => {
             currentState.userData.push(user);
-            currentState.selected.push('unselectedIcon');
         });
         this.setState({
             userData: currentState.userData,
             showUsers: currentState.userData,
+            currentPage: e.target.value - 1
         });
     }
 
     render() {
-        var { roles } = this.state;
-        var { userData } = this.state;
+        var { roles, selected, showUsers, userData } = this.state;
         var pages = this.listPageNumbers();
         return (
-            <div>
-                <br />
-                {this.state.userData.length < 5 && <Loader inverted content='Loading' />}
-                <Menu stackable inverted>
-                    <Grid columns={12} style={UserDirStyle.menu}>
-                        <Grid.Column />
-                        {roleOptions.roles.map((role, idx) => {
-                            return (<Grid.Column className={this.state.selected[idx]}
-                                key={idx} style={{ marginTop: 15, marginBottom: 15, cursor: "pointer" }}
-                                onClick={() => this.findUserCard(role.text, idx)} >
-                                <br /><Icon link size="huge" color="teal" name={role.icon} /><br />{
-                                    this.roleFix(role.text)
-                                }</Grid.Column>)
-                        })}
-                        <Grid.Column />
-                    </Grid>
-                </Menu>
-                <br />
-                <div className="container-fluid">
-                    <div className="row col-lg-12 col-lg-offset-1" style={UserDirStyle.grid}>
-                        <div className="col-lg-10" style={UserDirStyle.grid}>
-                            <Grid columns={3} >
-                                {this.state.showUsers.map((user, idx) => {
-                                    return <Grid.Column key={idx}><UserCard user={user}></UserCard></Grid.Column>
-                                })}
-                            </Grid>
+                <div>
+                <br/><br/><br/><br/><br/><br/><br/><br/>
+                    {this.state.userData.length < 5 && <Loader inverted content='Loading' />}
+                    <Menu stackable >
+                        <Grid columns={12} style={UserDirStyle.menu}>
+                            <Grid.Column />
+                            {roleOptions.roles.map((role, idx) => {
+                                return (<Grid.Column className={selected[idx]}
+                                    key={idx} style={{ marginTop: 15, marginBottom: 15, cursor: "pointer" }}
+                                    onClick={() => this.findUserCard(role.text, idx)} >
+                                    <br /><Icon link size="huge" color="teal" name={role.icon} /><br />{
+                                        this.roleFix(role.text)
+                                    }</Grid.Column>)
+                            })}
+                            <Grid.Column />
+                        </Grid>
+                    </Menu>
+                    <br />
+                    <div className="container-fluid">
+                        <div className="row col-lg-12 col-lg-offset-1" style={UserDirStyle.grid}>
+                            <div className="col-lg-10" style={UserDirStyle.grid}>
+                                <Grid columns={3} >
+                                    {showUsers.map((user, idx) => {
+                                        return <Grid.Column key={idx}><UserCard user={user}></UserCard></Grid.Column>
+                                    })}
+                                </Grid>
+                            </div>
                         </div>
                     </div>
+                    <div style={{ textAlign: 'center', marginTop: 15 }}>{pages}</div>
+                    <br /><br /><br />
                 </div>
-                <div style={{ textAlign: 'center', marginTop: 15 }}>{pages}</div>
-                <br /><br /><br />
-            </div>
         );
     }
 }

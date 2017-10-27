@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Image, CloudinaryContext } from 'cloudinary-react';
+import { Image as CloudImage, CloudinaryContext } from 'cloudinary-react';
 import { Grid, Icon, Card, Tab, Button, List, Popup, Feed, Dropdown, TextArea, Input, Label } from 'semantic-ui-react';
 import IconPicker from '../common/icon/IconPicker';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import roleOptions from '../common/options/roleOptions.json';
 import badgeOptions from '../common/options/badgeOptions.json';
 import md5 from 'md5';
@@ -13,7 +13,7 @@ import roleNames from '../common/options/roleNamesOnly.json';
 const ProfilePage = (props) => {
     const userData = props.profileObject;
 
-    const imageLarge = (originalLink) => {
+    const ImageLarge = (originalLink) => {
         return originalLink.replace("Small", "Large");
     };
 
@@ -63,7 +63,7 @@ const ProfilePage = (props) => {
         return (badges.map((badge, idx) =>
             <Popup
                 key={idx}
-                trigger={<Image publicId={badge}></Image>}
+                trigger={<CloudImage publicId={badge}></CloudImage>}
                 header={'Early Adopter'}
                 content={'Joined AGL in its first semester!'}
             />
@@ -84,14 +84,14 @@ const ProfilePage = (props) => {
 
     return (
         <div>
-        <br/><br/>
+        <br/><br/><br/><br/><br/><br/><br/><br/>
             <Grid columns={4} inverted padded>
                 <Grid.Column width={1}>
                 </Grid.Column>
                 <Grid.Column width={3} >
                     <Card fluid>
                         <IconPicker
-                            startingIcon={imageLarge(userData.showcaseImage)}
+                            startingIcon={ImageLarge(userData.showcaseImage)}
                             handleProfileInput={props.handleProfileInput}
                             editEnabled={props.editMode} />
                         <Card.Content>
@@ -275,7 +275,7 @@ const ProfilePage = (props) => {
                 </Grid.Column>
                 <Grid.Column width={2}>
                     {
-                    props.yourAccount && false &&
+                    props.yourAccount &&
                     <div>
                         <Button 
                             fluid 
@@ -320,7 +320,5 @@ var profileEdit = {
 /* padding: 0; */
 /*margin-left: 15px;*/
 /* background-color: black; */
-
-
 
 export default ProfilePage;

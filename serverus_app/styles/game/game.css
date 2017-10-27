@@ -1,0 +1,82 @@
+.ui.form .field.game>label {
+    font-size: 1.5em !important;
+}
+.field.game {
+    margin-bottom: 25px !important;
+}
+.ui.fullscreen.modal.gameModal {
+    width: 100% !important;
+    left: 0 !important;
+    overflow-y: auto;
+}
+
+/* Genre Icons */
+i.icon.custom-icon-action {
+    content: url('./mailed-fist.svg');
+}
+i.icon.custom-icon-adventure {
+    content: url('./pikeman.svg');
+}
+i.icon.custom-icon-horror {
+    content: url('./imp-laugh.svg');
+}
+i.icon.custom-icon-mystery {
+    content: url('./magnifying-glass.svg');
+}
+i.icon.custom-icon-race {
+    content: url('./steering-wheel.svg');
+}
+i.icon.custom-icon-rpg {
+    content: url('./battle-gear.svg');
+}
+i.icon.custom-icon-shooter {
+    content: url('./desert-eagle.svg');
+    fill: black;
+}
+i.icon.custom-icon-sports {
+    content: url('./volleyball-ball.svg');
+}
+i.icon.custom-icon-two-d {
+    content: url('./007-retro-game-controller.svg');
+}
+i.icon.custom-icon-three-d {
+    content: url('./001-squares.svg');
+}
+i.icon.custom-icon-vr {
+    content: url('./002-virtual-reality.svg');
+}
+
+/* Platform icons */
+i.icon.custom-icon-android {
+    content: url('./004-android-logo.svg');
+}
+i.icon.custom-icon-ios{
+    content: url('./005-apple-logo.svg');
+}
+i.icon.custom-icon-linux{
+    content: url('./008-linux-logo.svg');
+}
+i.icon.custom-icon-mac {
+    content: url('./006-happy-mac-logo.svg');
+}
+i.icon.custom-icon-windows {
+    content: url('./003-windows-8.svg');
+}
+
+svg.game.genres path {
+    fill: #008c86;
+}
+/* svg.game-platforms path {
+    fill: white;
+} */
+
+
+@-webkit-keyframes realFakeProgressBars {
+  from { width: 0%; }
+  to { width: 100% }
+}
+
+.progressBar {
+  -webkit-animation-name: realFakeProgressBars;
+  -webkit-animation-duration: 30s;
+}

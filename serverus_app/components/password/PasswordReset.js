@@ -60,7 +60,7 @@ class PasswordReset extends React.Component {
     async componentWillMount() {
         //Check for validity
         
-        let exists = await resetRequestExists (this.props.routeParams.hash);
+        let exists = await resetRequestExists (this.props.match.params.hash);
         
         if (exists){
             this.setState({
@@ -79,7 +79,7 @@ class PasswordReset extends React.Component {
             loading: true
         });
         
-          let status= await resetPassword(this.state.securityCode, this.props.routeParams.hash, this.state.newPassword);
+          let status= await resetPassword(this.state.securityCode, this.props.match.params.hash, this.state.newPassword);
           
           if (status == 'Your password has been reset! :)'){
               this.setState({
