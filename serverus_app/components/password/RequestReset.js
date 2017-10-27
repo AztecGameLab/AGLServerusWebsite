@@ -68,6 +68,12 @@ class RequestReset extends React.Component{
             <br/>
             <br/>
             <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
                 <Grid centered columns = {2}>
                     <Grid.Column width = {5}>
                         <Card centered raised fluid >
