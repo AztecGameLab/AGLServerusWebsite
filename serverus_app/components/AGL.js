@@ -423,6 +423,31 @@ export const SubmitGame = (gamePost) => {
     });
 }
 
+export const UpdateUserRating = (gameID, userId) => {
+    //TODO Implement This.
+    console.log("TODO- Implement UpdateUserRating");
+}
+
+/**
+ * Submits Rating for game.
+ * @param {string} gameID 
+ * @param {Ratings Object} gameRatingObject 
+ */
+export const SubmitGameRating = (gameID, gameRatingObject) => {
+    //TODO Implement this
+    console.log("TODO - Implement SubmitGameRating");
+}
+
+/**
+ * Submits Comment to Game Page
+ * @param {string} gameID 
+ * @param {Game Comment Object} gameComment 
+ */
+export const SubmitGameComment = (gameID, gameComment) => {
+    //TODO Implement this
+    console.log("TODO - Implement SubmitGameComment");
+}
+
 export const LoadGames = () => {
     return axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-LoadGames').then(response => {
         return response.data;
@@ -431,6 +456,10 @@ export const LoadGames = () => {
     });
 }
 
+/**
+ * Approves Game
+ * @param {*} gameId 
+ */
 export const ApproveGame = (gameId) => {
     return axios.put('https://us-central1-serverus-15f25.cloudfunctions.net/game-ApproveGame', { gameId }).then(response => {
         return response.data;
