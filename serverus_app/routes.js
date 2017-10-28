@@ -21,6 +21,7 @@ import PasswordReset from './components/password/PasswordReset';
 import RequestReset from './components/password/RequestReset';
 import MessageTest from './components/message/MessageTest';
 import PatchNodes from './components/patchnotes/PatchNotes';
+import GamePageDynam from './components/games/GamePageDynam';
 
 const Routes = (appProps) => {
     return (
@@ -34,7 +35,7 @@ const Routes = (appProps) => {
             <Route exact path="/create/announcement" component={ArticlePost} />
             <Route exact path="/create/tutorial" component={ArticlePost} />
             <Route exact path="/create/game" component={GamePost} />
-            <Route exact path="/g/:gameId" component={GameCard} />
+            <Route exact path="/g/:gameId" component={GamePageDynam} />
             {/* <Route exact path="/create/game" component={MessageTest} /> */}
             <Route exact path="/games" component={GameDirectory} />
             <Route exact path="/patchnotes" component={PatchNodes} />
