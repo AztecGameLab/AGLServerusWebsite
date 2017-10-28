@@ -47,14 +47,16 @@ class RequestReset extends React.Component{
             let status= await sendPasswordReset(this.state.email);
                 this.setState({
                     loading: false,
-                    success: status
+                    success: status,
+                    error: ''
                 });
                 return;
           }
           else {
               this.setState({
                   loading: false,
-                  error: "User not found."
+                  error: "User not found.",
+                  success: ''
               });
               return;
           }
@@ -63,6 +65,12 @@ class RequestReset extends React.Component{
     render() {
         return(
             <div style={{ justifyContent: 'center', padding: '20px'}}>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
             <br/>
             <br/>
             <br/>
@@ -78,10 +86,12 @@ class RequestReset extends React.Component{
                             <hr/>
                             <Card.Description>
                             <Popup trigger = {
-                                <Input fluid placeholder = 'Email address' iconPosition = 'left'>
-                                <Icon name='mail outline' />
-                                <input onChange={this.handleEmailInput}  />
-                            </Input>
+                                <div>
+                                <Input fluid placeholder = 'Email address' iconPosition = 'left' >
+                                    <Icon name='mail outline' />
+                                    <input onChange={this.handleEmailInput}  />
+                                </Input>
+                            </div>
                             }
                             content = 'Case sensitive'/>
                             </Card.Description>

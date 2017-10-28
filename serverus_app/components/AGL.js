@@ -162,7 +162,7 @@ export const createAGLUser = async (username, email, password, newDataObj) => {
             password: password,
             newDataObj: newDataObj
         });
-
+    return response;
 };
 
 export const UsernameTakenCheck = async (username) => {

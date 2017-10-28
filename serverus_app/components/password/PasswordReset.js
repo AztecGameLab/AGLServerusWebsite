@@ -84,7 +84,8 @@ class PasswordReset extends React.Component {
           if (status == 'Your password has been reset! :)'){
               this.setState({
                   loading: false,
-                  success: status
+                  success: status,
+                  error: ''
               });
               setTimeout(()=> {
                 window.location.replace("https://aztecgamelab.com/");
@@ -94,7 +95,8 @@ class PasswordReset extends React.Component {
             else {
                 this.setState({
                     loading: false,
-                    error: status
+                    error: status,
+                    success: ''
                 })
             }
     }
@@ -103,6 +105,12 @@ class PasswordReset extends React.Component {
         var exists = this.state.requestExists;
         let dom = exists ? 
             <div style={{ justifyContent: 'center', padding: '20px'}}>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
             <br/>
             <br/>
             <br/>
@@ -118,20 +126,26 @@ class PasswordReset extends React.Component {
                             <hr/>
                             <Card.Description>
                             <Popup trigger = {
+                                <div>
+                                <h1>Security Code</h1>
                                 <Input fluid placeholder = 'Security Code' iconPosition = 'left'>
-                                <Icon name='barcode' />
-                                <input onChange={this.handleCodeInput}  />
-                            </Input>
+                                    <Icon name='barcode' />
+                                    <input onChange={this.handleCodeInput}  />
+                                </Input>
+                                </div>
                             }
                             content = 'Case sensitive'/>
                             </Card.Description>
                                     <br/>
                             <Card.Description>
                             <Popup trigger = {
-                                <Input fluid placeholder = 'New Password' iconPosition = 'left'>
-                                <Icon name='key' />
-                                <input onChange={this.handlePassInput}  />
-                            </Input>
+                                <div>
+                                <h1>New Password</h1>
+                                    <Input fluid placeholder = 'New Password' iconPosition = 'left' type='password'>
+                                        <Icon name='key' />
+                                        <input onChange={this.handlePassInput}  />
+                                    </Input>
+                                </div>
                             }
                             content = 'Case sensitive'/>
                             </Card.Description>
@@ -173,6 +187,7 @@ class PasswordReset extends React.Component {
                 error header='AGL Password Reset Security'
                 list={[
                     'Try refreshing the page',
+                    'Give the page a second!',
                     'Either this password reset has expired',
                     'Or you are not authorized to access this page.']}/>
             <br/>

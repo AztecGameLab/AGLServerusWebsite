@@ -6,6 +6,7 @@ import Radium, { StyleRoot } from 'radium';
 import { enrollInGameJam, checkSignUpAlready, getJammers } from '../AGL';
 import styles from './glitch.css';
 import { Image as CloudImage, CloudinaryContext } from 'cloudinary-react';
+import { Link } from 'react-router-dom';
 
 const animations = {
     flipInX: {
@@ -63,6 +64,10 @@ class CompetitionsPage extends React.Component {
             }
             //push to Halloween Jam/
         }
+        else { 
+            debugger;
+            window.location.reload(); 
+        } 
     }
 
     async componentWillMount () {
@@ -133,7 +138,7 @@ class CompetitionsPage extends React.Component {
         debugger
         const userComponentList = usernameList.map(username => {
                 return(
-                <List.Item key = {username}>
+                <List.Item key = {username} as={Link} to={"/u/" + username}>
                     <CloudImage publicId = {this.minify(jammers[username].profilePic)}></CloudImage>
                     <h3 style = {{display: 'inline-block', marginLeft: '30px'}}>{username}</h3>
                 </List.Item>
