@@ -9,15 +9,18 @@ import {
     Comment,
     Header,
     Form,
-    Dropdown
+    Dropdown,
+    Icon
 } from 'semantic-ui-react';
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom';
 import * as agl from './../AGL';
 
 class GamePageDynam extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            title: "",
             authors: [],
             date: "",
             description: "Game Description is here.. Lorem ispum fuck this shit.",
@@ -41,10 +44,11 @@ class GamePageDynam extends React.Component {
             author: "genericEric",
             text: "Nice Post Bro"
         });
-        let authors = ["genericEric", "edgyEddie"];
+        let authors = ["genericEric", "edgyEddie","danq"];
         this.setState({ comments: comment,
         category: "Adventure",
-        authors: authors });
+        authors: authors,
+        title: "Example Game" });
     }
 
     handleSubmitComment(){
@@ -76,7 +80,7 @@ class GamePageDynam extends React.Component {
                 <Grid.Column width={9}>
                     <Card fluid>
                         <Card.Content>
-                            <Card.Header>Game Title</Card.Header>
+                            <Card.Header>{this.state.title}</Card.Header>
                             <br />{/*TODO Load Cloudinary*/}
                             <br />
                             <br />
@@ -208,9 +212,10 @@ class GamePageDynam extends React.Component {
                                             {
                                                 this.state.authors.map((authors) => {
                                                     return(
-                                                    <div>
-                                                        {authors}
-                                                    </div>)
+                                                        <div>
+                                                            <Label basic as={Link} to={"/u/"+authors}><Icon name="user"/>{authors}</Label>
+                                                        </div>
+                                                    )
                                                 })
                                             }
                                         </Table.Cell>
