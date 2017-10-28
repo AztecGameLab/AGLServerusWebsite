@@ -81,7 +81,7 @@ class CompetitionsPage extends React.Component {
         var that = this;
         // Update the count down every 1 second
         this.time = setInterval(function () {
-            let countDownDate = new Date("October 28, 2017 11:59:59").getTime();
+            let countDownDate = new Date("October 28, 2017 17:59:59").getTime();
             // Get todays date and time
             let now = new Date().getTime();
 
