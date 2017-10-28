@@ -25,14 +25,16 @@ class CompetitionsPage extends React.Component {
             buttonText: 'LOGIN TO JOIN',
             loading: false,
             aliveClassName: '',
-            alive2ClassName:'',
+            alive2ClassName: '',
             glitchClassName: '',
-            jammers: {} 
+            jammers: {}
         }
     }
 
+
     async componentWillReceiveProps(nextProps) {
-        if (nextProps.accounts.length > 0) {
+        debugger;
+        if (nextProps.accounts[0] && this.props.accounts.length == 0) {
             //check if already entered
             let response = await checkSignUpAlready(nextProps.accounts[0].username);
             if (response == "Free to go") {
@@ -64,17 +66,31 @@ class CompetitionsPage extends React.Component {
             }
             //push to Halloween Jam/
         }
-        else { 
-            debugger;
-            window.location.reload(); 
-        } 
+        else {
+            window.location.reload();
+        }
     }
 
-    async componentWillMount () {
+    async componentWillMount() {
         let jammers = await getJammers();
         this.setState({
             jammers: jammers
         });
+        if (this.props.accounts.length > 0) {
+            let response = await checkSignUpAlready(this.props.accounts[0].username);
+            if (response == "Free to go") {
+                this.setState({
+                    loggedIn: true,
+                    buttonText: 'JOIN NOW'
+                });
+            }
+            else {
+                this.setState({
+                    loggedIn: true,
+                    buttonText: 'YOU ARE ONE OF US'
+                });
+            }
+        }
 
     }
     componentDidMount() {
@@ -103,15 +119,15 @@ class CompetitionsPage extends React.Component {
             if ((seconds <= 27 && seconds >= 22) || (seconds <= 54 && seconds >= 49)) {
                 that.setState({
                     aliveClassName: 'glitch-ALIVE',
-                    alive2ClassName:'glitch-ALIVE2',
-                    glitchClassName: 'glitch' 
+                    alive2ClassName: 'glitch-ALIVE2',
+                    glitchClassName: 'glitch'
                 });
             }
             else {
                 that.setState({
                     aliveClassName: '',
-                    alive2ClassName:'',
-                    glitchClassName: '' 
+                    alive2ClassName: '',
+                    glitchClassName: ''
                 });
             }
         }, 1000);
@@ -130,17 +146,16 @@ class CompetitionsPage extends React.Component {
     }
     minify = (profileUrl) => {
         let headerImage = profileUrl;
-        headerImage = headerImage.slice(0, headerImage.indexOf("Small")) + "Extra" + headerImage.slice(headerImage.indexOf("Small"));        
+        headerImage = headerImage.slice(0, headerImage.indexOf("Small")) + "Extra" + headerImage.slice(headerImage.indexOf("Small"));
         return headerImage;
     }
     mapJammers = (jammers) => {
         let usernameList = Object.keys(jammers);
-        debugger
         const userComponentList = usernameList.map(username => {
-                return(
-                <List.Item key = {username} as={Link} to={"/u/" + username}>
-                    <CloudImage publicId = {this.minify(jammers[username].profilePic)}></CloudImage>
-                    <h3 style = {{display: 'inline-block', marginLeft: '30px'}}>{username}</h3>
+            return (
+                <List.Item key={username} as={Link} to={"/u/" + username}>
+                    <CloudImage publicId={this.minify(jammers[username].profilePic)}></CloudImage>
+                    <h3 style={{ display: 'inline-block', marginLeft: '30px' }}>{username}</h3>
                 </List.Item>
             );
         });
@@ -154,9 +169,9 @@ class CompetitionsPage extends React.Component {
                     <br /><br /><br /><br /><br /><br />
                     <Grid centered columns={3} padded>
                         <Grid.Row>
-                            <h3 
-                                style={{ textAlign: 'center', fontSize: '10em', width: '100%' }} 
-                                className =  {this.state.glitchClassName} data-text = "Aztec Game Lab's Halloween Jam">Aztec Game Lab's Halloween Jam</h3>
+                            <h3
+                                style={{ textAlign: 'center', fontSize: '10em', width: '100%' }}
+                                className={this.state.glitchClassName} data-text="Aztec Game Lab's Halloween Jam">Aztec Game Lab's Halloween Jam</h3>
                             {this.state.loggedIn}
                         </Grid.Row>
 
@@ -184,7 +199,7 @@ class CompetitionsPage extends React.Component {
                                 <h3 style={{ textAlign: 'center', fontSize: '3.3em' }}>ASSEMBLE YOUR MOB OF ONE TO FIVE</h3>
                                 <br /><br />
                                 <h3 style={{ textAlign: 'center', fontSize: '5em', fontWeight: 'bold' }}
-                                    className = {this.state.aliveClassName} data-text = "MAKE A GAME THAT MAKES US FEEL ALIVE!">MAKE A GAME THAT MAKES US FEEL ALIVE!</h3>
+                                    className={this.state.aliveClassName} data-text="MAKE A GAME THAT MAKES US FEEL ALIVE!">MAKE A GAME THAT MAKES US FEEL ALIVE!</h3>
                                 <br /><br />
                                 <br /><br />
                                 <br /><br />
@@ -209,10 +224,10 @@ class CompetitionsPage extends React.Component {
                                 <br /><br />
                                 <br /><br />
                                 <h3 style={{ textAlign: 'center', fontSize: '10em' }}
-                                    className = {this.state.alive2ClassName} data-text = "TIME IS TICKING">TIME IS TICKING</h3>
-                                <br/>
+                                    className={this.state.alive2ClassName} data-text="TIME IS TICKING">TIME IS TICKING</h3>
+                                <br />
                                 <h3 style={{ textAlign: 'center', fontSize: '3.8em' }}>TIME LEFT TO JOIN</h3>
-                                    
+
                                 <br /><br />
                                 <h3 style={{ textAlign: 'center', fontSize: '3.8em' }} id='demo'></h3>
                                 <br /><br />
@@ -229,11 +244,11 @@ class CompetitionsPage extends React.Component {
                                 <br /><br />
                                 <br /><br />
                                 <h3 style={{ textAlign: 'center', fontSize: '3.8em' }}>we all float down here</h3>
-                                    <CloudinaryContext cloudName='aztecgamelab-com'>                                  
-                                        <List animated relaxed divided selection inverted>
-                                            {Object.keys(this.state.jammers).length != 0 ? this.mapJammers(this.state.jammers) : null} 
-                                        </List>               
-                                    </CloudinaryContext>                 
+                                <CloudinaryContext cloudName='aztecgamelab-com'>
+                                    <List animated relaxed divided selection inverted>
+                                        {Object.keys(this.state.jammers).length != 0 ? this.mapJammers(this.state.jammers) : null}
+                                    </List>
+                                </CloudinaryContext>
                                 <br />
                             </Grid.Column>
                         </Grid.Row>
