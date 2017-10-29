@@ -34,6 +34,7 @@ class GamePost extends React.Component {
                 date: new Date().toDateString(),
                 description: "",
                 downloadLinks: {},
+                dlCount: 0,
                 sourceCode: "",
                 selectedTags: [],
                 selectedGenres: {},
@@ -51,7 +52,13 @@ class GamePost extends React.Component {
                     public_id: [],
                     url: []
                 },
-                rating: 0
+                rating: [
+                    { type: 'Mechanics', total: 0, num: 0 },
+                    { type: 'Aesthetics', total: 0, num: 0 },
+                    { type: 'Innovation', total: 0, num: 0 },
+                    { type: 'Theme', total: 0, num: 0 }
+                ],
+                comments: []
             },
             contributors: [],
             tags: [{ text: '#halloween', value: 'halloween' }, { text: '#gamejam', value: 'gamejam' }],
@@ -86,12 +93,12 @@ class GamePost extends React.Component {
             jammers: Object.keys(jammers)
         });
         if (this.props.accounts.length > 0) {
-            if(Object.keys(jammers).includes(this.props.accounts[0].username)){
+            if (Object.keys(jammers).includes(this.props.accounts[0].username)) {
                 this.setState({
                     isJammer: true
                 });
             }
-            
+
         }
     }
 
@@ -108,10 +115,10 @@ class GamePost extends React.Component {
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.accounts[0] && this.props.accounts.length == 0) {
-      // if (nextProps.accounts.length > 0) {
-            
+            // if (nextProps.accounts.length > 0) {
+
             var currentState = this.state.gamePostData;
-            if(this.state.jammers.includes(nextProps.accounts[0].username)){
+            if (this.state.jammers.includes(nextProps.accounts[0].username)) {
                 this.setState({
                     isJammer: true
                 });
@@ -119,7 +126,7 @@ class GamePost extends React.Component {
             var data = {
                 value: [nextProps.accounts[0].username]
             }
-            this.handleAuthors(null, data );
+            this.handleAuthors(null, data);
             this.setState({
                 gamePostData: currentState,
                 defaultAuthor: [nextProps.accounts[0].username]
@@ -128,7 +135,7 @@ class GamePost extends React.Component {
     }
 
     componentWillUnmount() {
-        if (!this.state.submitted)  {
+        if (!this.state.submitted) {
             if (this.state.gamePostData.showcase.public_id) {
                 CloudinaryDelete(this.state.gamePostData.showcase.public_id).then((response) => {
                     console.log(response);
@@ -236,10 +243,10 @@ class GamePost extends React.Component {
     handleAuthors = (e, { value }) => {
         let currentState = this.state.gamePostData;
         currentState.authors = value;
-        this.setState({ 
+        this.setState({
             gamePostData: currentState,
             contributorLength: value.length
-         });
+        });
     }
 
     handlePlatforms = (e, { value }) => {
@@ -498,7 +505,7 @@ class GamePost extends React.Component {
                     <br />
                     <br />
                     <br />
-                    <h1 style={{ fontSize: '10em', textAlign: 'center', marginBottom: 15 }}>SUBMIT YOUR GAME!</h1>                    
+                    <h1 style={{ fontSize: '10em', textAlign: 'center', marginBottom: 15 }}>SUBMIT YOUR GAME!</h1>
                     <div className="row col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
                         <Form>
                             <Form.Field className="game">
@@ -683,22 +690,22 @@ class GamePost extends React.Component {
             );
         } else return (
             <div>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                    <Message negative>
-                        <Message.Header>Authentication</Message.Header>
-                        <p>Hi! You must be logged in and entered in the competition to submit a game!</p>
-                    </Message>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>                
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <Message negative>
+                    <Message.Header>Authentication</Message.Header>
+                    <p>Hi! You must be logged in and entered in the competition to submit a game!</p>
+                </Message>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
             </div>
         );
     }
