@@ -38,6 +38,7 @@ class GamePost extends React.Component {
                 selectedTags: [],
                 selectedGenres: {},
                 selectedPlatforms: [],
+                dlCount: 0,                     //Download Count
                 type: {},
                 showcase: {
                     public_id: null,
@@ -51,7 +52,15 @@ class GamePost extends React.Component {
                     public_id: [],
                     url: []
                 },
-                rating: 0
+                rating: [
+                    {type: 'Mechanics', total: 0, num: 0},
+                    {type: 'Aesthetics', total: 0, num: 0},
+                    {type: 'Innovation', total: 0, num: 0},
+                    {type: 'Theme', total: 0, num: 0}
+                ],
+                comments: [
+
+                ]
             },
             contributors: [],
             tags: [{ text: '#halloween', value: 'halloween' }, { text: '#gamejam', value: 'gamejam' }],
