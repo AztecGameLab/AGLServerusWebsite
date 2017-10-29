@@ -234,7 +234,7 @@ class GamePost extends React.Component {
     }
 
     handleAuthors = (e, { value }) => {
-        let currentState = Object.assign({}, this.state.gamePostData);
+        let currentState = this.state.gamePostData;
         currentState.authors = value;
         this.setState({ 
             gamePostData: currentState,
