@@ -97,7 +97,7 @@ class CompetitionsPage extends React.Component {
         var that = this;
         // Update the count down every 1 second
         this.time = setInterval(function () {
-            let countDownDate = new Date("October 28, 2017 17:59:59").getTime();
+            let countDownDate = new Date("October 30, 2017 23:59:59").getTime();
             // Get todays date and time
             let now = new Date().getTime();
 
@@ -113,9 +113,6 @@ class CompetitionsPage extends React.Component {
             // Output the result in an element with id="demo"
             document.getElementById("demo").innerHTML = days + " Days   :   " + hours + " Hours    :   "
                 + minutes + " Minutes   :   " + seconds + " Seconds ";
-            if (days + hours + minutes + seconds == 0) {
-                document.getElementById("demo").innerHTML = "COMPETITION HAS CLOSED ON OCTOBER 30TH";
-            }
             if ((seconds <= 27 && seconds >= 22) || (seconds <= 54 && seconds >= 49)) {
                 that.setState({
                     aliveClassName: 'glitch-ALIVE',
@@ -224,10 +221,11 @@ class CompetitionsPage extends React.Component {
                                 <br /><br />
                                 <br /><br />
                                 <h3 style={{ textAlign: 'center', fontSize: '10em' }}
-                                    className={this.state.alive2ClassName} data-text="TIME IS TICKING">TIME IS TICKING</h3>
-                                <br />
-                                <h3 style={{ textAlign: 'center', fontSize: '3.8em' }}>TIME LEFT TO JOIN</h3>
-
+                                    className = {this.state.alive2ClassName} data-text = "TIME IS TICKING">TIME IS TICKING</h3>
+                                <br/>
+                                <h3 style={{ textAlign: 'center', fontSize: '3.8em' }}>COMPETITION ENTRANCE HAS CLOSED</h3>
+                                <br /><br />
+                                <h3 style={{ textAlign: 'center', fontSize: '3.8em' }}>TIME LEFT TO SUBMIT</h3>
                                 <br /><br />
                                 <h3 style={{ textAlign: 'center', fontSize: '3.8em' }} id='demo'></h3>
                                 <br /><br />
@@ -235,9 +233,9 @@ class CompetitionsPage extends React.Component {
                                     loading={this.state.loading}
                                     inverted size='massive'
                                     style={{ fontFamily: 'ImaginaryFriend', fontSize: '6em' }}
-                                    onClick={this.handleJoin}>
+                                    as={Link} to={"/create/game"}>
 
-                                    {this.state.buttonText}
+                                    SUBMIT YOUR GAME
 
                                 </Button>
                                 <br /><br />
