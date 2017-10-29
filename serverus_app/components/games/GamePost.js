@@ -2,7 +2,7 @@ import React from 'react';
 import stylesheet from '../../styles/markdown.css';
 import { Button, Checkbox, Dropdown, Form, Grid, Icon, Input, Label, Message, Modal, Popup, Progress, TextArea } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { CloudinaryUpload, CloudinaryDelete, GetGamePost, IsLoggedIn, fetchTeamlessMembers, SubmitGame, SaveGame } from '../AGL';
+import { CloudinaryUpload, CloudinaryDelete, GetGamePost, IsLoggedIn, fetchTeamlessMembers, SubmitGame, SaveGame, getJammers } from '../AGL';
 import GamePage from './GamePage';
 import genreOptions from '../common/options/genreOptions.json';
 import styles from '../../styles/game/game.css';
@@ -68,19 +68,31 @@ class GamePost extends React.Component {
             screenshotSuccess: false,
             screenshotError: false,
             terms: false,
-            submitted: false
+            submitted: false,
+            jammers: [],
+            isJammer: false
         };
     }
 
     async componentWillMount() {
         await this.initGame();
         let contributors = await fetchTeamlessMembers();
+        let jammers = await getJammers();
         var currentState = this.state.gamePostData;
         currentState.type = { text: "Game", id: 'green' };
         this.setState({
             gamePostData: currentState,
-            contributors: contributors
+            contributors: contributors,
+            jammers: Object.keys(jammers)
         });
+        if (this.props.accounts.length > 0) {
+            if(Object.keys(jammers).includes(this.props.accounts[0].username)){
+                this.setState({
+                    isJammer: true
+                });
+            }
+            
+        }
     }
 
     componentDidMount() {
@@ -95,8 +107,15 @@ class GamePost extends React.Component {
         });
     }
     componentWillReceiveProps(nextProps) {
-        if (nextProps.accounts[0] && this.props.accounts[0]) {
+        if (nextProps.accounts[0] && this.props.accounts.length == 0) {
+      // if (nextProps.accounts.length > 0) {
+            
             var currentState = this.state.gamePostData;
+            if(this.state.jammers.includes(nextProps.accounts[0].username)){
+                this.setState({
+                    isJammer: true
+                });
+            }
             var data = {
                 value: [nextProps.accounts[0].username]
             }
@@ -215,7 +234,7 @@ class GamePost extends React.Component {
     }
 
     handleAuthors = (e, { value }) => {
-        let currentState = Object.assign({}, this.state.gamePostData);
+        let currentState = this.state.gamePostData;
         currentState.authors = value;
         this.setState({ 
             gamePostData: currentState,
@@ -450,6 +469,7 @@ class GamePost extends React.Component {
 
     render() {
         var loggedIn = IsLoggedIn(this.props.accounts);
+        var isJammer = this.state.isJammer;
         var isAdmin = this.props.access;
         var disablePreview = !(this.state.showcaseSuccess && this.state.screenshotSuccess);
 
@@ -466,7 +486,7 @@ class GamePost extends React.Component {
             this.state.gamePostData.screenshots == []) ||
             !this.state.terms;
 
-        if (loggedIn && isAdmin) {
+        if (loggedIn && isJammer) {
             return (
                 <div className="container-fluid">
                     <br />
@@ -661,7 +681,26 @@ class GamePost extends React.Component {
                     <br />
                 </div>
             );
-        } else return null;
+        } else return (
+            <div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                    <Message negative>
+                        <Message.Header>Authentication</Message.Header>
+                        <p>Hi! You must be logged in and entered in the competition to submit a game!</p>
+                    </Message>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>                
+            </div>
+        );
     }
 }
 
