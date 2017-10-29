@@ -81,7 +81,7 @@ class GamePageDynam extends React.Component {
                     <Card fluid>
                         <Card.Content>
                             <Card.Header>{this.state.title}</Card.Header>
-                            <br />{/*TODO Load Cloudinary*/}
+                            <br />
                             <br />
                             <br />
                             <br />
