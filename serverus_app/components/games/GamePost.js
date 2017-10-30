@@ -85,7 +85,8 @@ class GamePost extends React.Component {
             terms: false,
             submitted: false,
             jammers: [],
-            isJammer: false
+            isJammer: false,
+            loading: false
         };
     }
 
@@ -468,6 +469,9 @@ class GamePost extends React.Component {
     }
 
     submitGame = async () => {
+        this.setState({
+            loading:true
+        });
         var currentState = this.state.gamePostData;
         var now = new Date();
         now = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
@@ -476,7 +480,8 @@ class GamePost extends React.Component {
         let response = await SubmitGame(currentState);
         console.log(response);
         this.setState({
-            submitted: true
+            submitted: true,
+            loading: false
         });
         // window.location.reload();
     }
@@ -684,7 +689,12 @@ class GamePost extends React.Component {
                                     <br />
                                     <GamePage gamePostData={this.state.gamePostData} {...this.props} edit={true} />
                                 </Modal>
-                                <Button disabled={disableGame} onClick={this.submitGame}>Submit Game!</Button>
+                                <Button disabled={disableGame} loading = {this.state.loading} onClick={this.submitGame}>Submit Game!</Button>
+                                {this.state.submitted && <Message
+                                    success
+                                    header='Success! Your game was submitted!'
+                                    content='Thanks for participating!'
+                                />}
                             </Form.Field>
                         </Form>
                     </div>
