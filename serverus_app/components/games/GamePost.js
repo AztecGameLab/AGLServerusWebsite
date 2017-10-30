@@ -17,7 +17,15 @@ const platforms = [{
     key: "IOS",
     text: "iOS",
     value: "iOS",
-    icon: { className: "custom-icon-ios" }
+    icon: {
+        className: "custom-icon-ios",
+    }
+},
+{
+    key: "Web",
+    text: "Website",
+    value: "Website",
+    icon: 'cloud'
 },
 { key: "LIN", text: "Linux", value: "Linux", icon: { className: "custom-icon-linux" } }];
 
