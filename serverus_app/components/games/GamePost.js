@@ -483,6 +483,9 @@ class GamePost extends React.Component {
             submitted: true,
             loading: false
         });
+        setTimeout(function () {
+            window.location.href = 'https://aztecgamelab.com/competitions';
+        }, 10000);
         // window.location.reload();
     }
 
@@ -694,6 +697,7 @@ class GamePost extends React.Component {
                                     success
                                     header='Success! Your game was submitted!'
                                     content='Thanks for participating!'
+                                    size = 'massive'
                                 />}
                             </Form.Field>
                         </Form>
