@@ -509,7 +509,7 @@ class GamePost extends React.Component {
             this.state.gamePostData.screenshots == []) ||
             !this.state.terms;
 
-        if (loggedIn && isJammer) {
+        if (1 < 0) {
             return (
                 <div className="container-fluid">
                     <br />

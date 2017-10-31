@@ -225,17 +225,14 @@ class CompetitionsPage extends React.Component {
                                 <br/>
                                 <h3 style={{ textAlign: 'center', fontSize: '3.8em' }}>COMPETITION ENTRANCE HAS CLOSED</h3>
                                 <br /><br />
-                                <h3 style={{ textAlign: 'center', fontSize: '3.8em' }}>TIME LEFT TO SUBMIT</h3>
+                                <h3 style={{ textAlign: 'center', fontSize: '3.8em' }}>GAME SUBMISSION HAS CLOSED</h3>
                                 <br /><br />
-                                <h3 style={{ textAlign: 'center', fontSize: '3.8em' }} id='demo'></h3>
                                 <br /><br />
                                 <Button
-                                    loading={this.state.loading}
                                     inverted size='massive'
-                                    style={{ fontFamily: 'ImaginaryFriend', fontSize: '6em' }}
-                                    as={Link} to={"/create/game"}>
+                                    style={{ fontFamily: 'ImaginaryFriend', fontSize: '6em' }}>
 
-                                    SUBMIT YOUR GAME
+                                    THANK YOU FOR JOINING
 
                                 </Button>
                                 <br /><br />
