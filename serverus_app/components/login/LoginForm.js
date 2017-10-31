@@ -25,7 +25,16 @@ class LoginForm extends Component {
     }
 
     async componentWillMount() {
-
+        // const halloweenJammers = firebase.database().ref("Halloween Jam");
+        // halloweenJammers.once('value', function(snapshot){
+        //     Object.keys(snapshot.val()).forEach( username => {
+        //         debugger;
+        //         let userRef = firebase.database().ref("Halloween Jam/" + username);
+        //         userRef.update({
+        //             "gamesVoted": [" "]
+        //         });
+        //     })
+        // });
 
             // let emailList = await GetAllEmails();
             // 

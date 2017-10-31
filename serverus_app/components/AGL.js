@@ -423,6 +423,12 @@ export const SubmitGame = (gamePost) => {
     });
 }
 
+export const incrementDownloadCount = async (gameId) => {
+    let response = await axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/game-incrementDownloadCount', 
+    {gameId});
+    return response.data;
+}
+
 export const UpdateUserRating = (gameID, userId) => {
     //TODO Implement This.
     console.log("TODO- Implement UpdateUserRating");
@@ -449,6 +455,11 @@ export const SubmitGameComment = (gameID, gameComment) => {
 }
 
 export const LoadGames = () => {
+    // return axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-LoadGames').then(response => {
+    //     return response.data;
+    // }).catch(error => {
+    //     return Promise.reject(error.response.data);
+    // });
     return axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-LoadGames').then(response => {
         return response.data;
     }).catch(error => {

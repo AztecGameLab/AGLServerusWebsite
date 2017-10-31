@@ -10,24 +10,31 @@ import {
     Header,
     Form,
     Dropdown,
-    Icon
+    Icon,
+    Message
 } from 'semantic-ui-react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom';
 import * as agl from './../AGL';
 import CustomIcon from './../common/cards/CustomIcon';
+import {getJammers, incrementDownloadCount} from '../AGL';
+import { Image as CloudImage, CloudinaryContext } from 'cloudinary-react';
 
 class GamePageDynam extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            loggedIn: false,
+            isJammer: false,
+            jammerList: [],
+            jammerInfo: {},
             title: "",
             team: "",
             authors: [],
             date: "",
             description: "Game Description is here.. Lorem ispum fuck this shit.",
             tags: [],
-            comments: [],
+            comments: {},
             dlCount: 0,
             dlLinks: [],
             hasVoted: false,
@@ -54,9 +61,11 @@ class GamePageDynam extends React.Component {
     async componentWillMount() {
         //Populate State from game.
         let id = this.props.match.params.gameId;
-        let result = await agl.LoadGames(id);
-        let gameData = Object.values(result)[0];
-        let comment = this.state.comments;
+        let jammers = await getJammers();
+        let result = await agl.LoadGames();
+        let keyInd = Object.keys(result).indexOf(id);
+        let gameData = Object.values(result)[keyInd];
+        let comments = gameData.comments;
         gameData.downloadLinks.SOURCECODE = {
             key: "SRC",
             text: "Source Code",
@@ -65,7 +74,7 @@ class GamePageDynam extends React.Component {
         }
         this.setState({
             gameID: id,
-            comments: comment,
+            comments: comments,
             category: "HORROR",
             authors: gameData.authors,
             title: gameData.title,
@@ -75,10 +84,36 @@ class GamePageDynam extends React.Component {
             dlCount: gameData.dlCount,
             dlLinks: gameData.downloadLinks,
             team: gameData.teamName,
-            category: gameData.selectedGenres
+            category: gameData.selectedGenres,
+            jammerList: Object.keys(jammers),
+            jammerObj: jammers
         });
     }
 
+
+    async componentWillReceiveProps(nextProps) {
+        debugger;
+        if (nextProps.accounts[0] && this.props.accounts.length == 0) {
+            //check if already entered
+            const jammerObj = this.state.jammerObj;
+            const username = nextProps.accounts[0].username;
+            debugger;
+            if(this.state.jammerList.includes(username)){
+                this.setState({
+                    isJammer: true,
+                    loggedIn: true,
+                    jammerInfo: jammerObj[username]
+                });
+            }
+            else {
+                this.setState({
+                    isJammer: false,
+                    loggedIn: true
+                });
+            }
+        }
+    }
+    
     showGenresIcons = (genre, key) => {
         return (
             <CustomIcon key={key} value={genre.value} />
@@ -149,10 +184,18 @@ class GamePageDynam extends React.Component {
         agl.SubmitGameRating();
     }
 
-    handleRequestDownload(e, {value}) {
+    async handleRequestDownload(e, {value}) {
         console.log("Incrementing Value as well");
-        agl.IncrementDownloadCount(this.state.gameID);
+        let response = await incrementDownloadCount(this.state.gameID);
+        //refresh page?
+        window.location.reload();
         window.open(value);
+    }
+
+    minify = (profileUrl) => {
+        let headerImage = profileUrl;
+        headerImage = headerImage.slice(0, headerImage.indexOf("Small")) + "Extra" + headerImage.slice(headerImage.indexOf("Small"));
+        return headerImage;
     }
 
     render() {
@@ -169,7 +212,7 @@ class GamePageDynam extends React.Component {
                 <Grid.Column width={9}>
                     <Card fluid>
                         <Card.Content>
-                            <Card.Header>{this.state.title}</Card.Header>
+                            <Card.Header><h3 style = {{textAlign: 'center', fontSize: '5em'}}>{this.state.title}</h3></Card.Header>
                             <br />
                             <br />
                             <br />
@@ -195,14 +238,17 @@ class GamePageDynam extends React.Component {
                             <br />
                             <Header dividing/>
                             <Card.Description>
-                                {this.state.description}
+                                <h3 style = {{fontSize: '3em'}}>{this.state.description}</h3>
                             </Card.Description>
                         </Card.Content>
                     </Card>
                     <Card fluid>
                         <Card.Content>
+
+
                             <Card.Description>
                                 <Header as="h3" dividing>Ratings</Header>
+                                {this.state.isJammer ? 
                                 <Grid columns={2}>
                                     <Grid.Column width={12}>
                                         <Table size="small" basic="very">
@@ -246,49 +292,76 @@ class GamePageDynam extends React.Component {
                                         <Button fluid color="green" onClick={this.handleSubmitRating}>Rate!</Button>
                                     </Grid.Column>
                                 </Grid>
+                                :
+                                <Message info>
+                                    <Message.Header>Ratings Section</Message.Header>
+                                    <p>In order to keep voting safe, you must be a jam participant and logged in to vote! </p>
+                                </Message>}
                             </Card.Description>
+
+
                         </Card.Content>
                     </Card>
                     <Card fluid>
                         <Card.Content>
+
+
                             <Card.Description>
                                 <Comment.Group>
                                     <Header as="h3" dividing> Comments </Header>
+                                    <CloudinaryContext cloudName='aztecgamelab-com'>
                                     {
-                                        this.state.comments.map((comment) => {
+                                        Object.keys(this.state.comments).map((username) => {
                                             return (
-                                                <div>
+                                                <div key = {new Date().getTime()}>
+                                                
                                                     <Comment>
-                                                        Icon Goes Here.
+                                                        <Comment.Avatar>
+                                                            <CloudImage className = 'avatar' publicId = {this.minify(this.state.comments[username].profilePic)}></CloudImage>                                                      
+                                                        </Comment.Avatar>
                                                         <Comment.Content>
-                                                            <Comment.Author>{comment.author}</Comment.Author>
-                                                            <Comment.Text>{comment.text}</Comment.Text>
+                                                            <Comment.Author as={Link} to={"/u/" + username}>
+                                                                {username}
+                                                            </Comment.Author>
+                                                            <Comment.Metadata>
+                                                                <div>{this.state.comments[username].date}</div>
+                                                            </Comment.Metadata>
+                                                            <Comment.Text>
+                                                                {this.state.comments[username].text}
+                                                            </Comment.Text>
                                                         </Comment.Content>
                                                     </Comment>
                                                 </div>
                                             )
                                         })
                                     }
-                                    <Form>
+                                    </CloudinaryContext>
+                                    {this.state.isJammer ? <Form>
                                         <Form.TextArea onChange={this.handleCommentStr}/>
                                         <Button content="Post Comment" color="green" icon="edit" onClick={this.handleSubmitComment} />
                                     </Form>
+                                    :
+                                    <Message info>
+                                        <Message.Header>Comments Section</Message.Header>
+                                        <p>In order to keep the comment section safe you must be a jam participant to comment! </p>
+                                    </Message>
+                                }
                                 </Comment.Group>
                             </Card.Description>
+                        
+
+
                         </Card.Content>
                     </Card>
                 </Grid.Column>
                 <Grid.Column width={4}>
                     <Card fluid>
                         <Card.Content>
-                            <Card.Header>
-                                Info
-                            </Card.Header>
                             <Table basic="very" size="small">
                                 <Table.Body>
                                     <Table.Row>
                                         <Table.Cell>
-                                            Team
+                                            <h3>Team</h3>
                                         </Table.Cell>
                                         <Table.Cell>
                                             {this.state.team}
@@ -296,7 +369,7 @@ class GamePageDynam extends React.Component {
                                     </Table.Row>
                                     <Table.Row>
                                         <Table.Cell>
-                                            Author
+                                            <h3>Author</h3>
                                         </Table.Cell>
                                         <Table.Cell>
                                             {
@@ -312,7 +385,7 @@ class GamePageDynam extends React.Component {
                                     </Table.Row>
                                     <Table.Row>
                                         <Table.Cell>
-                                            Date
+                                            <h3>Date</h3>
                                         </Table.Cell>
                                         <Table.Cell>
                                             {this.state.date}
@@ -320,7 +393,7 @@ class GamePageDynam extends React.Component {
                                     </Table.Row>
                                     <Table.Row>
                                         <Table.Cell>
-                                            Category
+                                            <h3>Category</h3>
                                         </Table.Cell>
                                         <Table.Cell>
                                             {genreIcons}
@@ -328,15 +401,15 @@ class GamePageDynam extends React.Component {
                                     </Table.Row>
                                     <Table.Row>
                                         <Table.Cell>
-                                            Downloaded
+                                            <h3>Downloaded</h3>
                                         </Table.Cell>
                                         <Table.Cell>
-                                            {this.state.dlCount} times!
+                                            {this.state.dlCount} <h3>times!</h3>
                                         </Table.Cell>
                                     </Table.Row>
                                     <Table.Row>
                                         <Table.Cell>
-                                            Tags
+                                            <h3>Tags</h3>
                                         </Table.Cell>
                                         <Table.Cell>
                                             {
@@ -360,7 +433,9 @@ class GamePageDynam extends React.Component {
                                     onChange={this.handleRequestDownload}
                                     trigger={
                                         <span>
-                                            <Button size="big" fluid color="green">Download</Button>
+                                            <Button size="big" fluid color="green">
+                                                <h3>Download</h3>
+                                            </Button>
                                         </span>
                                     }/>
                             </div>
@@ -368,6 +443,7 @@ class GamePageDynam extends React.Component {
                     </Card>
                 </Grid.Column>
             </Grid>
+            <br/><br/><br/><br/><br/><br/>
         </div>);
     }
 }
