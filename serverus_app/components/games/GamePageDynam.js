@@ -42,7 +42,7 @@ class GamePageDynam extends React.Component {
             team: "",
             authors: [],
             date: "",
-            description: "Game Description is here.. Lorem ispum fuck this shit.",
+            description: "Loading Description...",
             tags: [],
             comments: {},
             dlCount: 0,
@@ -336,7 +336,7 @@ class GamePageDynam extends React.Component {
         let response = await incrementDownloadCount(this.state.gameID);
         //refresh page?
         window.location.reload();
-        window.open(value);
+        window.open(value, '_blank', 'toolbar=yes, location=yes, status=yes, menubar=yes, scrollbars=yes');
     }
 
     minify = (profileUrl) => {
@@ -417,6 +417,8 @@ class GamePageDynam extends React.Component {
                 <br />
                 <br />
                 <br />
+                <br />
+                <br />
                 <Grid columns={5} padded inverted>
                     <Grid.Column width={2} />
                     <Grid.Column width={9}>
@@ -426,18 +428,17 @@ class GamePageDynam extends React.Component {
                                 <br />
                                 <CloudImage publicId={this.state.headerImage} style={{ width: '100%', textAlign: 'center' }}></CloudImage>
                                 <hr/>
-                                <br />
-                                <br />
-                                <br />
-                                <br />
-                                <br />
-                                <Slider {...settings}>
-                                    {screenshots}
-                                </Slider>
-                                {lightBox}
-                                <br />
-                                <br />
-
+                                <div style = {{background: 'black', color: 'white'}}>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <Slider {...settings}>
+                                        {screenshots}
+                                    </Slider>
+                                    {lightBox}
+                                    <br />
+                                    <br />
+                                </div>
                                 <Header dividing />
                                 <Card.Description>
                                     <p style={{ color: 'black', textAlign: 'center' }}>{this.state.description}</p>
