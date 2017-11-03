@@ -439,9 +439,14 @@ export const UpdateUserRating = (gameID, userId) => {
  * @param {string} gameID 
  * @param {Ratings Object} gameRatingObject 
  */
-export const SubmitGameRating = (gameID, gameRatingObject) => {
+export const SubmitGameRating = async (gameId, ratingObj) => {
     //TODO Implement this
-    console.log("TODO - Implement SubmitGameRating");
+    debugger;
+    let response = await axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/game-submitRating',{
+        gameId: gameId,
+        ratingObj: ratingObj
+    });
+    return response.data;
 }
 
 /**
@@ -449,9 +454,13 @@ export const SubmitGameRating = (gameID, gameRatingObject) => {
  * @param {string} gameID 
  * @param {Game Comment Object} gameComment 
  */
-export const SubmitGameComment = (gameID, gameComment) => {
+export const SubmitGameComment = async (gameId, commentObj) => {
     //TODO Implement this
-    console.log("TODO - Implement SubmitGameComment");
+    let response = await axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/game-submitComment',{
+        gameId: gameId,
+        commentObj: commentObj
+    });
+    return response.data;
 }
 
 export const LoadGames = () => {

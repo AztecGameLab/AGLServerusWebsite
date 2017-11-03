@@ -28,4 +28,8 @@ h3 {
     font-size: 170%
 }
 
+.ui.comments .comment .avatar img, .ui.comments .comment img.avatar {
+    width: auto !important;
+    height: auto !important;
     
+}

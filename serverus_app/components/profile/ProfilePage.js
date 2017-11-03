@@ -215,7 +215,7 @@ const ProfilePage = (props) => {
                                             placeholder='Hi tell us about yourself! :)' 
                                             onChange = {props.handleBioInput}
                                             value = {props.bio}/>
-                                            <div>{"Word Count: " + props.bio.length + " (must be less than 300 characters)"}</div>
+                                            <div>{300 - props.bio.length} characters left</div>
                                     </div>
                                     : userData.bio}
                                 <Icon name='quote right' size = 'small'/>

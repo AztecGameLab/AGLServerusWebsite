@@ -11,21 +11,26 @@ import {
     Form,
     Dropdown,
     Icon,
-    Message
+    Message,
+    Popup
 } from 'semantic-ui-react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom';
 import * as agl from './../AGL';
 import CustomIcon from './../common/cards/CustomIcon';
-import {getJammers, incrementDownloadCount} from '../AGL';
+import {getJammers, incrementDownloadCount, SubmitGameComment, SubmitGameRating} from '../AGL';
 import { Image as CloudImage, CloudinaryContext } from 'cloudinary-react';
 
 class GamePageDynam extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            ratingButtonLoading: false,            
+            commentButtonLoading: false,
             loggedIn: false,
             isJammer: false,
+            commentsLoaded: false,
+            submitRatingsDisable: true,
             jammerList: [],
             jammerInfo: {},
             title: "",
@@ -42,10 +47,11 @@ class GamePageDynam extends React.Component {
             category: [],
             commentStr: "",          //User comment str;,
             gameID: "",
-            mechRatingScore: 0,
+            MechRatingScore: 0,
             AestRatingScore: 0,
             InnoRatingScore: 0,
-            ThemRatingSCore: 0
+            ThemRatingScore: 0,
+            alreadyVoted: false
         };
         //Ordered this way because it looks pretty. 
         this.handleCommentStr = this.handleCommentStr.bind(this);
@@ -66,6 +72,7 @@ class GamePageDynam extends React.Component {
         let keyInd = Object.keys(result).indexOf(id);
         let gameData = Object.values(result)[keyInd];
         let comments = gameData.comments;
+        let prevVoters = Object.keys(gameData.rating.voters);
         gameData.downloadLinks.SOURCECODE = {
             key: "SRC",
             text: "Source Code",
@@ -86,23 +93,57 @@ class GamePageDynam extends React.Component {
             team: gameData.teamName,
             category: gameData.selectedGenres,
             jammerList: Object.keys(jammers),
-            jammerObj: jammers
+            jammerObj: jammers,
+            commentsLoaded: true,
+            prevVoters: Object.keys(gameData.rating.voters)
         });
+
+        if (this.props.accounts.length > 0) {
+            //check if already entered
+            let jammersObj = await getJammers();            
+            const jammerList = Object.keys(jammersObj);
+            const username = this.props.accounts[0].username;
+            debugger;
+            if(jammerList.includes(username)){
+                this.setState({
+                    isJammer: true,
+                    loggedIn: true,
+                    jammerInfo: jammersObj[username]
+                });
+            }
+            if(prevVoters.includes(username)){
+                debugger;
+                this.setState({
+                    alreadyVoted: true
+                });
+            }
+            else {
+                this.setState({
+                    isJammer: false,
+                    loggedIn: true
+                });
+            }
+        }
     }
 
 
     async componentWillReceiveProps(nextProps) {
-        debugger;
         if (nextProps.accounts[0] && this.props.accounts.length == 0) {
             //check if already entered
             const jammerObj = this.state.jammerObj;
+            const prevVoters = this.state.prevVoters;
             const username = nextProps.accounts[0].username;
-            debugger;
             if(this.state.jammerList.includes(username)){
                 this.setState({
                     isJammer: true,
                     loggedIn: true,
                     jammerInfo: jammerObj[username]
+                });
+            }
+            if(prevVoters.includes(username)){
+                debugger;
+                this.setState({
+                    alreadyVoted: true
                 });
             }
             else {
@@ -134,7 +175,7 @@ class GamePageDynam extends React.Component {
      * @param {*} param1 
      */
     handleMechanicRating(e , {rating}){
-        this.setState({mechRatingScore: rating});
+        this.setState({MechRatingScore: rating});
     }
 
     /**
@@ -161,27 +202,60 @@ class GamePageDynam extends React.Component {
      * @param {*} param1 
      */
     handleThemeRating(e, {rating}){
-        this.setState({ThemRatingSCore: rating});
+        this.setState({ThemRatingScore: rating});
     }
 
     /**
      * Handles submission of comment to webserver
      */
-    handleSubmitComment() {
+    async handleSubmitComment() {
+        this.setState({
+            commentButtonLoading: true
+        });
         console.log("Submitting for: " + this.props.accounts[0].username);
-        let gameid = this.props.match.params.gameId;
-        let commentObject = {
-            userProf: this.props.accounts[0].username,
-            date: Date().toDateString(),
-            comment: this.state.commentStr
+        let gameId = this.props.match.params.gameId;
+        var now = new Date();
+        now = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+        let timeSubmmited = new Date().getTime();
+        let commentObj = {
+            [timeSubmmited]: {
+                username: this.props.accounts[0].username,
+                text: this.state.commentStr,
+                profilePic: this.props.accounts[0].showcaseImage,
+                timeSubmitted: now
+            }
         };
-        agl.SubmitGameComment(gameid, commentObject);
+        let response = await SubmitGameComment(gameId, commentObj);
+        if(response= 'Successful comment'){
+            window.location.reload();
+            this.setState({
+                commentButtonLoading: false
+            });
+        }
     }
 
     //Handle submission of ratings
-    handleSubmitRating() {
+    async handleSubmitRating() {
+        this.setState({
+            ratingButtonLoading: true
+        });
+        const ratingObj = {
+            username: this.props.accounts[0].username,
+            AestRatingScore: this.state.AestRatingScore,
+            InnoRatingScore: this.state.InnoRatingScore,
+            MechRatingScore: this.state.MechRatingScore,
+            ThemRatingScore: this.state.ThemRatingScore
+        };
+
         console.log("Handling Score Submission");
-        agl.SubmitGameRating();
+        let response = await SubmitGameRating(this.props.match.params.gameId, ratingObj);
+        debugger;
+        if(response = "Successful rating submission"){
+            window.location.reload();
+            this.setState({
+                ratingButtonLoading: false
+            });
+        }
     }
 
     async handleRequestDownload(e, {value}) {
@@ -198,8 +272,40 @@ class GamePageDynam extends React.Component {
         return headerImage;
     }
 
+    mapComments = (comments) => {
+        const sortedByTime = Object.keys(comments).sort((a,b) => a-b);
+        const commentList =  sortedByTime.map((time) => {
+             return(
+                <div key = {time} >
+                    <Comment>
+                            <CloudImage className = 'avatar' publicId = {this.minify(this.state.comments[time].profilePic)}></CloudImage>                                                      
+                        <Comment.Content>
+                            <Comment.Author as={Link} to={"/u/" + this.state.comments[time].username}>
+                                {this.state.comments[time].username}
+                            </Comment.Author>
+                            <Comment.Metadata>
+                                <div>{this.state.comments[time].timeSubmitted}</div>
+                            </Comment.Metadata>
+                            <Comment.Text>
+                                {this.state.comments[time].text}
+                            </Comment.Text>
+                        </Comment.Content>
+                    </Comment>
+                </div>);
+            });
+        return commentList;
+    }
+
     render() {
         var genreIcons = this.state.category.length > 0 ? this.state.category.map(this.showGenresIcons) : null;
+        var commentList = <div></div>;
+        if (typeof this.state.comments !== 'undefined'){
+            var commentList = (Object.keys(this.state.comments).length > 0) ? this.mapComments(this.state.comments) : <div></div>;
+        } 
+        var ratingsWarningMessage = this.state.alreadyVoted ? <p>Thanks for voting!  </p> 
+        : 
+        <p>In order to keep voting safe, you must be a jam participant and logged in to vote! </p>;
+            
         return (<div>
             <br />
             <br />
@@ -238,7 +344,7 @@ class GamePageDynam extends React.Component {
                             <br />
                             <Header dividing/>
                             <Card.Description>
-                                <h3 style = {{fontSize: '3em'}}>{this.state.description}</h3>
+                                <p style = {{ color: 'black', textAlign: 'center'}}>{this.state.description}</p>
                             </Card.Description>
                         </Card.Content>
                     </Card>
@@ -248,7 +354,7 @@ class GamePageDynam extends React.Component {
 
                             <Card.Description>
                                 <Header as="h3" dividing>Ratings</Header>
-                                {this.state.isJammer ? 
+                                {this.state.isJammer && !this.state.alreadyVoted ? 
                                 <Grid columns={2}>
                                     <Grid.Column width={12}>
                                         <Table size="small" basic="very">
@@ -289,14 +395,22 @@ class GamePageDynam extends React.Component {
                                         </Table>
                                     </Grid.Column>
                                     <Grid.Column width={4}>
-                                        <Button fluid color="green" onClick={this.handleSubmitRating}>Rate!</Button>
+                                        <Button 
+                                            fluid color="green" onClick={this.handleSubmitRating} loading = {this.state.ratingButtonLoading} 
+                                            disabled = 
+                                            {
+                                                !(this.state.MechRatingScore > 0 && this.state.AestRatingScore > 0 && this.state.InnoRatingScore && this.state.ThemRatingScore > 0)
+                                            }>
+                                                Submit Rating
+                                            </Button>
                                     </Grid.Column>
                                 </Grid>
                                 :
                                 <Message info>
                                     <Message.Header>Ratings Section</Message.Header>
-                                    <p>In order to keep voting safe, you must be a jam participant and logged in to vote! </p>
-                                </Message>}
+                                    {ratingsWarningMessage}
+                                </Message>
+                            }
                             </Card.Description>
 
 
@@ -310,35 +424,12 @@ class GamePageDynam extends React.Component {
                                 <Comment.Group>
                                     <Header as="h3" dividing> Comments </Header>
                                     <CloudinaryContext cloudName='aztecgamelab-com'>
-                                    {
-                                        Object.keys(this.state.comments).map((username) => {
-                                            return (
-                                                <div key = {new Date().getTime()}>
-                                                
-                                                    <Comment>
-                                                        <Comment.Avatar>
-                                                            <CloudImage className = 'avatar' publicId = {this.minify(this.state.comments[username].profilePic)}></CloudImage>                                                      
-                                                        </Comment.Avatar>
-                                                        <Comment.Content>
-                                                            <Comment.Author as={Link} to={"/u/" + username}>
-                                                                {username}
-                                                            </Comment.Author>
-                                                            <Comment.Metadata>
-                                                                <div>{this.state.comments[username].date}</div>
-                                                            </Comment.Metadata>
-                                                            <Comment.Text>
-                                                                {this.state.comments[username].text}
-                                                            </Comment.Text>
-                                                        </Comment.Content>
-                                                    </Comment>
-                                                </div>
-                                            )
-                                        })
-                                    }
+                                    { commentList }
                                     </CloudinaryContext>
                                     {this.state.isJammer ? <Form>
                                         <Form.TextArea onChange={this.handleCommentStr}/>
-                                        <Button content="Post Comment" color="green" icon="edit" onClick={this.handleSubmitComment} />
+                                        <Button loading = {this.state.commentButtonLoading} disabled = {!(this.state.commentStr.length > 0 && this.state.commentStr.length < 150)}content="Post Comment" color="green" icon="edit" onClick={this.handleSubmitComment} />
+                                        <div>{150 -this.state.commentStr.length} characters left</div>
                                     </Form>
                                     :
                                     <Message info>
