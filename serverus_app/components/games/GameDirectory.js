@@ -11,6 +11,7 @@ import {
 } from 'semantic-ui-react';
 import { Image as CloudImage, CloudinaryContext } from 'cloudinary-react';
 import { Link } from 'react-router-dom';
+import style from './gameDirectoryStyle.css';
 
 export class GameDirectory extends React.Component {
     constructor(props) {
@@ -73,28 +74,29 @@ export class GameDirectory extends React.Component {
                 <br />
                 <br />
                 <h1 style = {{textAlign: 'center'}}>Game Directory</h1>
+                <hr/>
                 <Grid centered inverted padded columns={4} >
                     <CloudinaryContext cloudName='aztecgamelab-com'>
                         <Grid.Column as={Link} to={"/g/-KxiO8LO1Har4zNHnzBB"}>
-                            <CloudImage publicId = "ArticlePictures/gt6zyjswiqpyu726xmwr.png" style = {{width: "100%"}}>
+                            <CloudImage className = 'gameDirectoryImage' publicId = "ArticlePictures/gt6zyjswiqpyu726xmwr.png">
                             </CloudImage>
                         </Grid.Column>
-
+                    <hr/>
                         <Grid.Column as={Link} to={"/g/-Kxiafi_0ie7NgAp3UCx"}>
-                            <CloudImage publicId = "ArticlePictures/kcmpktylpituaeufdjlh.png" style = {{width: "100%"}}>
+                            <CloudImage className = 'gameDirectoryImage' publicId = "ArticlePictures/kcmpktylpituaeufdjlh.png" >
                         </CloudImage>
                         </Grid.Column>
-
+                    <hr/>
                         <Grid.Column as={Link} to={"/g/-KxkiEsNvWBOgr1s-2uq"}>
-                            <CloudImage publicId = "ArticlePictures/txppshioq8t3cptpvbis.png" style = {{width: "100%"}}>
+                            <CloudImage className = 'gameDirectoryImage' publicId = "ArticlePictures/txppshioq8t3cptpvbis.png" >
                             </CloudImage>
                         </Grid.Column>
-
+                    <hr/>
                         <Grid.Column as={Link} to={"/g/-KxkpO08o5tf2aWKOFqP"}>
-                            <CloudImage publicId="ArticlePictures/vhbegowxjuz8blimpir3.png" style = {{width: "100%"}}>
+                            <CloudImage className = 'gameDirectoryImage' publicId="ArticlePictures/vhbegowxjuz8blimpir3.png" >
                             </CloudImage>
                         </Grid.Column>
-
+                    <hr/>
                     </CloudinaryContext>
                 </Grid>
                 <br />

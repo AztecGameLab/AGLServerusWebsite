@@ -1,0 +1,11 @@
+.gameDirectoryImage {
+    width: 75%;
+    display: 'block';
+    -webkit-transition: all .3s;
+}
+
+.gameDirectoryImage:hover {
+    -webkit-filter:  hue-rotate(-20deg) invert(100%);
+}
+
+.invert {-webkit-filter: invert(50%);}
