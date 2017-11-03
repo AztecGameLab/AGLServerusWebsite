@@ -106,21 +106,27 @@ class GamePageDynam extends React.Component {
             debugger;
             if(jammerList.includes(username)){
                 this.setState({
+                    jammerList: jammerList,
                     isJammer: true,
                     loggedIn: true,
                     jammerInfo: jammersObj[username]
                 });
-            }
-            if(prevVoters.includes(username)){
-                debugger;
-                this.setState({
-                    alreadyVoted: true
-                });
+                if(prevVoters.includes(username)){
+                    this.setState({
+                        alreadyVoted: true
+                    });
+                }
+                else {
+                    this.setState({
+                        alreadyVoted: false
+                    });
+                }
             }
             else {
                 this.setState({
+                    jammerList: jammerList,
                     isJammer: false,
-                    loggedIn: true
+                    loggedIn: true,
                 });
             }
         }
@@ -130,26 +136,38 @@ class GamePageDynam extends React.Component {
     async componentWillReceiveProps(nextProps) {
         if (nextProps.accounts[0] && this.props.accounts.length == 0) {
             //check if already entered
-            const jammerObj = this.state.jammerObj;
-            const prevVoters = this.state.prevVoters;
+            let id = this.props.match.params.gameId;
+            let jammersObj = await getJammers();
+            const jammerList = Object.keys(jammersObj);
+            let result = await agl.LoadGames();
+            let keyInd = Object.keys(result).indexOf(id);
+            let gameData = Object.values(result)[keyInd];
             const username = nextProps.accounts[0].username;
-            if(this.state.jammerList.includes(username)){
+            const prevVoters = Object.keys(gameData.rating.voters);
+            debugger;
+            if(jammerList.includes(username)){
                 this.setState({
+                    jammerList: jammerList,
                     isJammer: true,
                     loggedIn: true,
-                    jammerInfo: jammerObj[username]
+                    jammerInfo: jammersObj[username]
                 });
-            }
-            if(prevVoters.includes(username)){
-                debugger;
-                this.setState({
-                    alreadyVoted: true
-                });
+                if(prevVoters.includes(username)){
+                    this.setState({
+                        alreadyVoted: true
+                    });
+                }
+                else {
+                    this.setState({
+                        alreadyVoted: false
+                    });
+                }
             }
             else {
                 this.setState({
+                    jammerList: jammerList,
                     isJammer: false,
-                    loggedIn: true
+                    loggedIn: true,
                 });
             }
         }
