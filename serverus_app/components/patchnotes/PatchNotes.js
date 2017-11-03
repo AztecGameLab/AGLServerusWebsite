@@ -155,12 +155,21 @@ const PatchNotes = (props) => {
                 {DevelopmentNote('Parallax and Home Page Visual Update')}
                 {DevelopmentNote('Newsletter Sign Up feature')}
                 {DevelopmentNote('Game Creation')}
-                {DevelopmentNote('Competition Game')}
+                {DevelopmentNote('Competition Post')}
+                {DevelopmentNote('Game Submission')}
                 {BugfixNote('Pagination & Sign Out')}
-
+                {DevelopmentNote('Dynamic Game Pages')}
+                {DevelopmentNote('Game comments')}
+                {DevelopmentNote('Game ratings')}
+                {DatabaseNote('Comments and Ratings')}
+                {DatabaseNote('Safe voter and commenter mode')}
+                {DatabaseNote('Game screenshots and pictures')}
+                
+                {MonthHeader('November 2017')}
+                {DevelopmentNote('Game Directory Temporary v1')}
+                
 
                 <h1 style = {{textAlign: 'center'}}>Road Map</h1>
-                {InProgressNote('Game Directory')}
                 {InProgressNote('Reintroducing Friends and Request System')}
                 {InProgressNote('Finalizing Admin Dash')}
                 {InProgressNote('Polling and Survey')}

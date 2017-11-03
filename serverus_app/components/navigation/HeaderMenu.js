@@ -48,14 +48,13 @@ class HeaderMenu extends React.Component {
                             </div>
                         </Menu.Item>
                         <Popup
-                            inverted
                             trigger={<Menu.Item name='competitions' active={activeItem === 'competitions'} as={Link} to='/competitions'><Icon size='big' name='trophy' />Competitions</Menu.Item>}
-                            content='Woot! Come enter in AGLs first ever game jam!'
+                            content='The Halloween Jam recently concluded! Check out the jam info!!'
                             size='large'
                         />
                         <Popup
-                            trigger={<Menu.Item disabled name='games' active={activeItem === 'games'} ><Icon size='big' name='gamepad' />Game Directory</Menu.Item>}
-                            content='Game directory coming soon!'
+                            trigger={<Menu.Item name='games' active={activeItem === 'games'} as={Link} to='/g'><Icon size='big' name='gamepad' />Game Directory</Menu.Item>}
+                            content='Come check out the recent games from the Halloween Jam!!'
                             size='large'
                         />
                         {false && <Menu.Item name='articles' active={activeItem === 'articles'} onClick={this.handleItemClick} as={Link} to='/'><Icon size='big' name='newspaper' />Article Posts</Menu.Item>}                        

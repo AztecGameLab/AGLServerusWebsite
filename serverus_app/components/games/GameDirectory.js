@@ -9,8 +9,10 @@ import {
     Select,
     Input
 } from 'semantic-ui-react';
+import { Image as CloudImage, CloudinaryContext } from 'cloudinary-react';
+import { Link } from 'react-router-dom';
 
-class GameDirectory extends React.Component {
+export class GameDirectory extends React.Component {
     constructor(props) {
         super(props);
 
@@ -68,9 +70,47 @@ class GameDirectory extends React.Component {
                 <br />
                 <br />
                 <br />
-                <h2>Game Directory</h2>
-                <Grid inverted padded columns={5}>
-                    <Grid.Column width={1} />
+                <br />
+                <br />
+                <h1 style = {{textAlign: 'center'}}>Game Directory</h1>
+                <Grid centered inverted padded columns={4} >
+                    <CloudinaryContext cloudName='aztecgamelab-com'>
+                        <Grid.Column as={Link} to={"/g/-KxiO8LO1Har4zNHnzBB"}>
+                            <CloudImage publicId = "ArticlePictures/gt6zyjswiqpyu726xmwr.png" style = {{width: "100%"}}>
+                            </CloudImage>
+                        </Grid.Column>
+
+                        <Grid.Column as={Link} to={"/g/-Kxiafi_0ie7NgAp3UCx"}>
+                            <CloudImage publicId = "ArticlePictures/kcmpktylpituaeufdjlh.png" style = {{width: "100%"}}>
+                        </CloudImage>
+                        </Grid.Column>
+
+                        <Grid.Column as={Link} to={"/g/-KxkiEsNvWBOgr1s-2uq"}>
+                            <CloudImage publicId = "ArticlePictures/txppshioq8t3cptpvbis.png" style = {{width: "100%"}}>
+                            </CloudImage>
+                        </Grid.Column>
+
+                        <Grid.Column as={Link} to={"/g/-KxkpO08o5tf2aWKOFqP"}>
+                            <CloudImage publicId="ArticlePictures/vhbegowxjuz8blimpir3.png" style = {{width: "100%"}}>
+                            </CloudImage>
+                        </Grid.Column>
+
+                    </CloudinaryContext>
+                </Grid>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+            </div>
+        );
+    }
+}
+
+export default GameDirectory;
+
+/*
+<Grid.Column width={1} />
                     <Grid.Column width={11}>
                         <Card fluid>
                             <Card.Content>
@@ -92,10 +132,4 @@ class GameDirectory extends React.Component {
                             </Card.Content>
                         </Card>
                     </Grid.Column>
-                </Grid>
-            </div>
-        );
-    }
-}
-
-export default GameDirectory;
+                    */

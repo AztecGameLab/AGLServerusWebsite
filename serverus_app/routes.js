@@ -35,6 +35,7 @@ const Routes = (appProps) => {
             <Route exact path="/create/announcement" component={ArticlePost} />
             <Route exact path="/create/tutorial" component={ArticlePost} />
             <Route exact path="/create/game" component={GamePost} />
+            <Route exact path="/g/" component={GameDirectory} />
             <Route exact path="/g/:gameId" component={GamePageDynam} />
             {/* <Route exact path="/create/game" component={MessageTest} /> */}
             <Route exact path="/games" component={GameDirectory} />
