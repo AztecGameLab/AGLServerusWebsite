@@ -332,11 +332,11 @@ class GamePageDynam extends React.Component {
     }
 
     async handleRequestDownload(e, { value }) {
+        window.open(value, '_blank');
         console.log("Incrementing Value as well");
         let response = await incrementDownloadCount(this.state.gameID);
         //refresh page?
         window.location.reload();
-        window.open(value, '_blank', 'toolbar=yes, location=yes, status=yes, menubar=yes, scrollbars=yes');
     }
 
     minify = (profileUrl) => {
