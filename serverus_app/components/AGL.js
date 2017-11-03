@@ -423,7 +423,52 @@ export const SubmitGame = (gamePost) => {
     });
 }
 
+export const incrementDownloadCount = async (gameId) => {
+    let response = await axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/game-incrementDownloadCount', 
+    {gameId});
+    return response.data;
+}
+
+export const UpdateUserRating = (gameID, userId) => {
+    //TODO Implement This.
+    console.log("TODO- Implement UpdateUserRating");
+}
+
+/**
+ * Submits Rating for game.
+ * @param {string} gameID 
+ * @param {Ratings Object} gameRatingObject 
+ */
+export const SubmitGameRating = async (gameId, ratingObj) => {
+    //TODO Implement this
+    debugger;
+    let response = await axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/game-submitRating',{
+        gameId: gameId,
+        ratingObj: ratingObj
+    });
+    return response.data;
+}
+
+/**
+ * Submits Comment to Game Page
+ * @param {string} gameID 
+ * @param {Game Comment Object} gameComment 
+ */
+export const SubmitGameComment = async (gameId, commentObj) => {
+    //TODO Implement this
+    let response = await axios.post('https://us-central1-serverus-15f25.cloudfunctions.net/game-submitComment',{
+        gameId: gameId,
+        commentObj: commentObj
+    });
+    return response.data;
+}
+
 export const LoadGames = () => {
+    // return axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-LoadGames').then(response => {
+    //     return response.data;
+    // }).catch(error => {
+    //     return Promise.reject(error.response.data);
+    // });
     return axios.get('https://us-central1-serverus-15f25.cloudfunctions.net/game-LoadGames').then(response => {
         return response.data;
     }).catch(error => {
@@ -431,6 +476,10 @@ export const LoadGames = () => {
     });
 }
 
+/**
+ * Approves Game
+ * @param {*} gameId 
+ */
 export const ApproveGame = (gameId) => {
     return axios.put('https://us-central1-serverus-15f25.cloudfunctions.net/game-ApproveGame', { gameId }).then(response => {
         return response.data;
