@@ -1,4 +1,3 @@
-//Create Custom History Singleton
 import createHistory from 'history/createBrowserHistory';
 import {replace} from 'react-router-redux';
 

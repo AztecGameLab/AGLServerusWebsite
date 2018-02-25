@@ -13,7 +13,7 @@ import storage from 'redux-persist/lib/storage'
 
 //Create Config (only session persist)
 const persistConfig = {
-    key: 'root',
+    key: 'AGL',
     storage,
     whitelist: ['session'],
 }

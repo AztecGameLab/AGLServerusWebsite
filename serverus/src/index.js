@@ -16,7 +16,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
     <Provider store = {store}>
-        <PersistGate persistor = {persistor} loading = {<div> Loading</div>}>
+        <PersistGate persistor = {persistor} loading = {<div>hi</div>}>
             <ConnectedRouter history = {history}>
                 <div>
                     <App/>
