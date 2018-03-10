@@ -6,12 +6,6 @@ export {history};
 
 
 //History Redirect Actions
-export const redirectToLobby = () => {
-    return dispatch => {
-        dispatch(replace('/lobby'));
-    }
-}
-
 export const redirectToHome = () => {
     return dispatch => {
         dispatch(replace('/'));
