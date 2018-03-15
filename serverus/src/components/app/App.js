@@ -1,20 +1,19 @@
 import React, { Component } from "react";
-import { Route } from "react-router-dom";
+import { Route, Router } from "react-router-dom";
+import { history } from "../../features/API/History_API/historyFunctions";
 
 //Components
 import Home from "../home/Home";
 import HeaderMenu from "../header/Header";
-import SignUp from "../signup/SignUp";
 
 class App extends Component {
   render() {
     return (
       <div>
         <HeaderMenu />
-        <main className="App">
+        <Router history={history}>
           <Route exact path="/" component={Home} />
-          <Route exact path="/signup" component={SignUp} />
-        </main>
+        </Router>
       </div>
     );
   }
