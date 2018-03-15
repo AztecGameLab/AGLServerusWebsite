@@ -24,7 +24,7 @@ Relevant Plugins
 ## Development Process
 
 1.  Pull dev
-2.  Create branch dev/ "task-feature"
+2.  Create branch dev-"task-feature"
 3.  Commit changes locally
 4.  Write unit tests
 5.  Push and merge into dev on completion
@@ -44,6 +44,6 @@ yarn dev
 cd serverus
 firebase login
 yarn build
-rm -rf build/static/js/*.map
+rm -rf build/static/js/*.js.map
 firebase deploy
 ```

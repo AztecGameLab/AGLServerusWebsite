@@ -1,6 +1,7 @@
 // React + React-Redux + Router
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Router } from "react-router-dom";
+import { history } from "../../features/API/History_API/historyFunctions";
 
 // Components
 import { Icon, Menu, Button } from "semantic-ui-react";
@@ -10,10 +11,11 @@ const Header = () => {
   // Create list of Menu Items with settings
   const MenuObjects = [
     { name: "Competitions", logo: "trophy", route: "/competitions" },
-    { name: "Game Directory", logo: "gamepad", route: "/g" },
-    { name: "User Directory", logo: "users", route: "/u/" },
+    { name: "Game Directory", logo: "gamepad", route: "/games" },
+    { name: "User Directory", logo: "users", route: "/users" },
     { name: "Resources", logo: "cubes", route: "/resources" }
   ];
+
   // Construct Menu Item Components using list
   const MenuItemComponents = MenuObjects.map(obj => {
     return (
@@ -24,7 +26,7 @@ const Header = () => {
     );
   });
   return (
-    <div>
+    <Router history={history}>
       <Menu secondary stackable borderless>
         <Menu.Item key="home" as={Link} to="/">
           <CloudinaryContext cloudName="aztecgamelab-com">
@@ -40,7 +42,7 @@ const Header = () => {
           </Menu.Item>
         </Menu.Menu>
       </Menu>
-    </div>
+    </Router>
   );
 };
 

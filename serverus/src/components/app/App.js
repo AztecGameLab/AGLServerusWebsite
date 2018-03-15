@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Route } from "react-router-dom";
+import { Route, Router } from "react-router-dom";
+import { history } from "../../features/API/History_API/historyFunctions";
 
 //Components
 import Home from "../home/Home";
@@ -10,9 +11,9 @@ class App extends Component {
     return (
       <div>
         <HeaderMenu />
-        <main className="App">
+        <Router history={history}>
           <Route exact path="/" component={Home} />
-        </main>
+        </Router>
       </div>
     );
   }

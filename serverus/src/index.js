@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { ConnectedRouter } from "react-router-redux";
 import { store, persistor } from "./features/configStore";
-import { history } from "./features/history/historyAPI";
+import { history } from "./features/API/History_API/historyFunctions";
 
 //Persist
 import { PersistGate } from "redux-persist/lib/integration/react";
