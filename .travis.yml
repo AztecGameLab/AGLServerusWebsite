@@ -17,4 +17,4 @@ script:
   - npm run build
   
 after_script:
-  - npm test -a
+  - npm test
