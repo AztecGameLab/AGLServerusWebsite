@@ -1,6 +1,6 @@
 //Redux
 import { createStore, applyMiddleware } from "redux";
-import { history } from "../features/API/History_API/historyFunctions";
+import { history } from "./API/History_API/historyFunctions";
 import rootReducer from "./rootReducer";
 
 //Middleware
@@ -25,7 +25,11 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 const middleware = [thunk, routerMiddleware(history)];
 
 //Create Store and Persistor
-const store = createStore(persistedReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), applyMiddleware(...middleware));
+const store = createStore(
+  persistedReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  applyMiddleware(...middleware)
+);
 
 const persistor = persistStore(store);
 
