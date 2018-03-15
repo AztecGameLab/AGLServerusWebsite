@@ -1,0 +1,5 @@
+{
+  "printWidth": 200,
+  "parser": "flow",
+  "editor.formatOnSave": true
+}
