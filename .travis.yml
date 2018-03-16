@@ -1,0 +1,24 @@
+language: node_js
+
+branches:
+  only:
+    - master
+    - dev
+
+node_js:
+  - 9.8.0
+
+cache:
+  directories:
+    - node_modules
+
+before_install: 
+  - cd serverus
+
+install: 
+  - npm install
+
+script:
+  - npm run build
+  - npm run travis
+

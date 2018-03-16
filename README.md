@@ -1,6 +1,6 @@
-# Serverus
+# Aztec Game Lab Website
 
----
+## [![Build Status](https://travis-ci.org/AztecGameLab/AGLServerusWebsite.svg?branch=master)](https://travis-ci.org/AztecGameLab/AGLServerusWebsite)
 
 ## Getting Started
 
@@ -42,6 +42,7 @@ yarn dev
 
 ```node
 cd serverus
+yarn test -a
 firebase login
 yarn build
 rm -rf build/static/js/*.js.map
