@@ -1,5 +1,10 @@
 language: node_js
 
+branches:
+  only:
+    - master
+    - dev
+
 node_js:
   - 9.8.0
 
@@ -15,6 +20,5 @@ install:
 
 script:
   - npm run build
-  
-after_script:
-  - npm test
+  - npm run travis
+
