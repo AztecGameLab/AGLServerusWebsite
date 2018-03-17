@@ -11,6 +11,7 @@ import { selectIsGameDirectoryCached, selectGameDirectory, selectLoadGameDirecto
 
 //Components
 import { Button } from "semantic-ui-react";
+import GameGrid from "./GameGrid";
 
 class GameDirectory extends Component {
   componentDidMount() {
@@ -22,11 +23,10 @@ class GameDirectory extends Component {
   }
 
   render() {
-    const { loadGames } = this.props;
+    const { loadGames, games } = this.props;
     return (
       <div>
-        Game Directory
-        <Button onClick={loadGames}>Load Games</Button>
+        <GameGrid games={games} />
       </div>
     );
   }
@@ -35,7 +35,7 @@ class GameDirectory extends Component {
 const mapStateToProps = state => {
   return {
     isGameDirectoryCached: selectIsGameDirectoryCached(state),
-    gameDirectory: selectGameDirectory(state),
+    games: selectGameDirectory(state),
     gameDirectoryLoadStatus: selectLoadGameDirectoryStatus(state)
   };
 };

@@ -4,7 +4,8 @@ import {
   LOAD_USERS_FAILURE,
   LOAD_GAMES_PROGRESS,
   LOAD_GAMES_SUCCESS,
-  LOAD_GAMES_FAILURE
+  LOAD_GAMES_FAILURE,
+  CLEAR_SITE_DATA
 } from "./siteDataConstants";
 
 // Progress States -> "idle" -> "loading" -> ("succeeded" or "failed")
@@ -31,6 +32,8 @@ export default (state = initialSiteDataState, action) => {
       return Object.assign({}, state, { loadGameDirectoryStatus: "succeeded", gameDirectory: action.payload });
     case LOAD_GAMES_FAILURE:
       return Object.assign({}, state, { loadGameDirectoryStatus: "failed", error: action.payload });
+    case CLEAR_SITE_DATA:
+      return { ...initialSiteDataState };
     default:
       return state;
   }

@@ -7,7 +7,8 @@ import {
   LOAD_GAMES_PROGRESS,
   LOAD_GAMES_SUCCESS,
   LOAD_GAMES_FAILURE,
-  FILTER_GAMES
+  FILTER_GAMES,
+  CLEAR_SITE_DATA
 } from "./siteDataConstants";
 
 //API
@@ -55,5 +56,11 @@ export const loadGames = () => {
           payload: error
         });
       });
+  };
+};
+
+export const clearSiteData = () => {
+  return dispatch => {
+    dispatch({ type: CLEAR_SITE_DATA });
   };
 };

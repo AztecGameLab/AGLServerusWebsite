@@ -12,3 +12,5 @@ export const FILTER_GAMES = "FILTER_GAMES";
 
 //TODO: Team Directory
 //TODO: Executive Board Directory
+
+export const CLEAR_SITE_DATA = "CLEAR_SITE_DATA";
