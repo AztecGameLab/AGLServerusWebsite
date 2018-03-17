@@ -1,0 +1,14 @@
+.ui.page.dimmer {
+    display: flex !important;
+}
+.ui.active.modal {
+    text-align: center;
+}
+.loginForm {
+    width: 60%;
+    text-align: '-webkit-center';
+    display: inline-block;
+}
+.formContents {
+    width: 100%;
+}
