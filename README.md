@@ -8,6 +8,7 @@
   * Install [Visual Studio Code](https://code.visualstudio.com/)
   * Install [Gitkraken](https://www.gitkraken.com/)
   * Install [Redux Dev Tools](https://github.com/gaearon/redux-devtools)
+  * Install [Yarn CLI](https://yarnpkg.com/lang/en/docs/install/)
 
 Relevant Plugins
 

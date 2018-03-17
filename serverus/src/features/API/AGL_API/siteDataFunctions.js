@@ -12,3 +12,9 @@ export const LoadAllUsers = async component => {
   const response = await axios.get("https://us-central1-serverus-15f25.cloudfunctions.net/users-LoadAllUserProfiles");
   return response.data;
 };
+
+//Load games for the Game Directory
+export const LoadAllGames = async () => {
+  const response = await axios.get("https://us-central1-serverus-15f25.cloudfunctions.net/game-LoadGames");
+  return response.data;
+};

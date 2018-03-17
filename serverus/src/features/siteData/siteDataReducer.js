@@ -1,9 +1,17 @@
-import { LOAD_USERS_PROGRESS, LOAD_USERS_SUCCESS, LOAD_USERS_FAILURE } from "./siteDataConstants";
+import {
+  LOAD_USERS_PROGRESS,
+  LOAD_USERS_SUCCESS,
+  LOAD_USERS_FAILURE,
+  LOAD_GAMES_PROGRESS,
+  LOAD_GAMES_SUCCESS,
+  LOAD_GAMES_FAILURE
+} from "./siteDataConstants";
 
 // Progress States -> "idle" -> "loading" -> ("succeeded" or "failed")
 const initialSiteDataState = {
   loadUserDirectoryStatus: "idle",
   userDirectory: {},
+  loadGameDirectoryStatus: "idle",
   gameDirectory: {},
   error: {}
 };
@@ -17,6 +25,12 @@ export default (state = initialSiteDataState, action) => {
       return Object.assign({}, state, { loadUserDirectoryStatus: "succeeded", userDirectory: action.payload });
     case LOAD_USERS_FAILURE:
       return Object.assign({}, state, { loadUserDirectoryStatus: "failed", error: action.payload });
+    case LOAD_GAMES_PROGRESS:
+      return Object.assign({}, state, { loadGameDirectoryStatus: "loading" });
+    case LOAD_GAMES_SUCCESS:
+      return Object.assign({}, state, { loadGameDirectoryStatus: "succeeded", gameDirectory: action.payload });
+    case LOAD_GAMES_FAILURE:
+      return Object.assign({}, state, { loadGameDirectoryStatus: "failed", error: action.payload });
     default:
       return state;
   }

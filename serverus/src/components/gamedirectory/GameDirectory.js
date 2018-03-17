@@ -4,30 +4,29 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 //Actions
-import { loadUsers, filterUserDirectory } from "../../features/siteData/siteDataActions";
+import { loadGames } from "../../features/siteData/siteDataActions";
 
 //Selectors
-import { selectIsUserDirectoryCached, selectUserDirectory, selectLoadUserDirectoryStatus } from "../../features/siteData/siteDataSelectors";
+import { selectIsGameDirectoryCached, selectGameDirectory, selectLoadGameDirectoryStatus } from "../../features/siteData/siteDataSelectors";
 
 //Components
 import { Button } from "semantic-ui-react";
 
 class GameDirectory extends Component {
-  componentWillMount() {
-    const { isUserDirectoryCached, loadUsers } = this.props;
-    if (!isUserDirectoryCached) {
-      console.log("not cached", isUserDirectoryCached);
-      loadUsers();
+  componentDidMount() {
+    const { isGameDirectoryCached, loadGames } = this.props;
+    if (!isGameDirectoryCached) {
+      loadGames();
     }
+    console.log("Games already cached:", isGameDirectoryCached);
   }
 
   render() {
-    const { loadUsers, filterUserDirectory } = this.props;
+    const { loadGames } = this.props;
     return (
       <div>
         Game Directory
-        <Button onClick={loadUsers}>Load Users</Button>
-        <Button onClick={filterUserDirectory}>Filter Users</Button>
+        <Button onClick={loadGames}>Load Games</Button>
       </div>
     );
   }
@@ -35,17 +34,16 @@ class GameDirectory extends Component {
 
 const mapStateToProps = state => {
   return {
-    isUserDirectoryCached: selectIsUserDirectoryCached(state),
-    userDirectory: selectUserDirectory(state),
-    userDirectoryLoadStatus: selectLoadUserDirectoryStatus(state)
+    isGameDirectoryCached: selectIsGameDirectoryCached(state),
+    gameDirectory: selectGameDirectory(state),
+    gameDirectoryLoadStatus: selectLoadGameDirectoryStatus(state)
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      loadUsers,
-      filterUserDirectory
+      loadGames
     },
     dispatch
   );

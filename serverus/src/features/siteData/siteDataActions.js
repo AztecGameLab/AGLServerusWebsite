@@ -1,8 +1,17 @@
 //Constants
-import { LOAD_USERS_PROGRESS, LOAD_USERS_SUCCESS, LOAD_USERS_FAILURE, FILTER_USERS } from "./siteDataConstants";
+import {
+  LOAD_USERS_PROGRESS,
+  LOAD_USERS_SUCCESS,
+  LOAD_USERS_FAILURE,
+  FILTER_USERS,
+  LOAD_GAMES_PROGRESS,
+  LOAD_GAMES_SUCCESS,
+  LOAD_GAMES_FAILURE,
+  FILTER_GAMES
+} from "./siteDataConstants";
 
 //API
-import { LoadAllUsers } from "../API/AGL_API/siteDataFunctions";
+import { LoadAllUsers, LoadAllGames } from "../API/AGL_API/siteDataFunctions";
 
 //User Directory Actions
 export const loadUsers = () => {
@@ -27,5 +36,24 @@ export const loadUsers = () => {
 export const filterUserDirectory = () => {
   return dispatch => {
     dispatch({ type: FILTER_USERS });
+  };
+};
+
+export const loadGames = () => {
+  return dispatch => {
+    dispatch({ type: LOAD_GAMES_PROGRESS });
+    LoadAllGames()
+      .then(games => {
+        dispatch({
+          type: LOAD_GAMES_SUCCESS,
+          payload: games
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: LOAD_GAMES_FAILURE,
+          payload: error
+        });
+      });
   };
 };
