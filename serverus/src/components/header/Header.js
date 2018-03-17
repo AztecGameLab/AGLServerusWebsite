@@ -1,27 +1,24 @@
 // React + React-Redux + Router
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { Link, Router } from "react-router-dom";
 import { history } from "../../features/API/History_API/historyFunctions";
 import { bindActionCreators } from "redux";
-import { openLoginModal } from '../../features/login/loginAction';
-import { connect } from 'react-redux';
+import { } from "../../features/login/loginAction";
+import { connect } from "react-redux";
 // Components
 import { Icon, Modal, Menu, Button } from "semantic-ui-react";
 import { Image as CloudImage, CloudinaryContext } from "cloudinary-react";
-import LoginModal from '../register/LoginModal';
-import SignUp from '../register/SignUpModal';
-
+import RegisterModal from "../register/RegisterModal";
 
 // Create list of Menu Items with settings
 const MenuObjects = [
   { name: "Competitions", logo: "trophy", route: "/competitions" },
   { name: "Game Directory", logo: "gamepad", route: "/games" },
   { name: "User Directory", logo: "users", route: "/users" },
-  { name: "Resources", logo: "cubes", route: "/resources" },
+  { name: "Resources", logo: "cubes", route: "/resources" }
 ];
 
 class Header extends Component {
-
   // Construct Menu Item Components using list
   MenuItemComponents = MenuObjects.map(obj => {
     return (
@@ -34,7 +31,7 @@ class Header extends Component {
 
   render() {
     return (
-      <Router history={history} >
+      <Router history={history}>
         <Menu secondary stackable borderless>
           <Menu.Item key="home" as={Link} to="/">
             <CloudinaryContext cloudName="aztecgamelab-com">
@@ -47,14 +44,14 @@ class Header extends Component {
           <Menu.Menu position="right">
             <Menu.Item name="Login">
               <Modal trigger={<Button>Login</Button>}>
-              <LoginModal/>
+                <RegisterModal />
               </Modal>
             </Menu.Item>
           </Menu.Menu>
         </Menu>
       </Router>
     );
-  };
+  }
 }
 
 function mapStateToProps(state, ownProps) {
@@ -65,7 +62,6 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    openLoginModal: bindActionCreators(openLoginModal, dispatch)
   };
 }
 

@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "dev": "react-scripts start",
+    "dev": "cross-env REACT_APP_FIREBASE_URL=http://localhost:5000/serverus-15f25/us-central1 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "travis": "cross-env CI=true react-scripts test --env=jsdom",
