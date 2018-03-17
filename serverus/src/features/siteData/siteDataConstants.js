@@ -10,5 +10,5 @@ export const LOAD_GAMES_SUCCESS = "LOAD_GAMES_SUCCESS";
 export const LOAD_GAMES_FAILURE = "LOAD_GAMES_FAILURE";
 export const FILTER_GAMES = "FILTER_GAMES";
 
-// Team Directory
-// Executive Board Directory
+//TODO: Team Directory
+//TODO: Executive Board Directory
