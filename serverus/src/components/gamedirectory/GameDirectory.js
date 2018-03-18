@@ -10,7 +10,6 @@ import { loadGames } from "../../features/siteData/siteDataActions";
 import { selectIsGameDirectoryCached, selectGameDirectory, selectLoadGameDirectoryStatus } from "../../features/siteData/siteDataSelectors";
 
 //Components
-import { Button } from "semantic-ui-react";
 import GameGrid from "./GameGrid";
 
 class GameDirectory extends Component {
@@ -18,11 +17,13 @@ class GameDirectory extends Component {
     const { isGameDirectoryCached, loadGames } = this.props;
     if (!isGameDirectoryCached) {
       loadGames();
+    } else {
+      return <div>?</div>;
     }
   }
 
   render() {
-    const { loadGames, games } = this.props;
+    const { games } = this.props;
     return (
       <div>
         <GameGrid games={games} />

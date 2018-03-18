@@ -10,7 +10,7 @@ import { loadUsers, filterUserDirectory } from "../../features/siteData/siteData
 import { selectIsUserDirectoryCached, selectUserDirectory, selectLoadUserDirectoryStatus } from "../../features/siteData/siteDataSelectors";
 
 //Components
-import { Button } from "semantic-ui-react";
+import UserGrid from "./UserGrid";
 
 class UserDirectory extends Component {
   componentDidMount() {
@@ -21,12 +21,10 @@ class UserDirectory extends Component {
   }
 
   render() {
-    const { loadUsers, filterUserDirectory } = this.props;
+    const { users } = this.props;
     return (
       <div>
-        User Directory
-        <Button onClick={loadUsers}>Load Users</Button>
-        <Button onClick={filterUserDirectory}>Filter Users</Button>
+        <UserGrid users={users} />
       </div>
     );
   }
@@ -35,7 +33,7 @@ class UserDirectory extends Component {
 const mapStateToProps = state => {
   return {
     isUserDirectoryCached: selectIsUserDirectoryCached(state),
-    userDirectory: selectUserDirectory(state),
+    users: selectUserDirectory(state),
     userDirectoryLoadStatus: selectLoadUserDirectoryStatus(state)
   };
 };
