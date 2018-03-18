@@ -19,7 +19,6 @@ class GameDirectory extends Component {
     if (!isGameDirectoryCached) {
       loadGames();
     }
-    console.log("Games already cached:", isGameDirectoryCached);
   }
 
   render() {

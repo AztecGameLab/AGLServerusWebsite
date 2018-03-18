@@ -18,7 +18,6 @@ class UserDirectory extends Component {
     if (!isUserDirectoryCached) {
       loadUsers();
     }
-    console.log("Users already cached:", isUserDirectoryCached);
   }
 
   render() {
