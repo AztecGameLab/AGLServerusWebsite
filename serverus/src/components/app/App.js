@@ -5,6 +5,7 @@ import { history } from "../../features/API/History_API/historyFunctions";
 //Components
 import Home from "../home/Home";
 import HeaderMenu from "../header/Header";
+import Footer from "../footer/Footer";
 import UserDirectory from "../userdirectory/UserDirectory";
 import GameDirectory from "../gamedirectory/GameDirectory";
 
@@ -20,6 +21,7 @@ class App extends Component {
             <Route exact path="/games" component={GameDirectory} />
           </Switch>
         </Router>
+        <Footer/>
       </div>
     );
   }
