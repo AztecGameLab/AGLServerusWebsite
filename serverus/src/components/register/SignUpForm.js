@@ -15,13 +15,13 @@ const SignUpForm = props => {
       <br />
       <Divider horizontal>or</Divider>
       <Form className="loginForm" onSubmit={() => props.signUpAccount(props.formData)}>
-        <Input className="formContents" placeholder="Username" icon="user" onChange={props.handleUsername} />
+        <Input className="formContents" placeholder="Username" icon="user" onChange={e => props.handleFieldInput(e, "username")} />
         <br />
         <br />
-        <Input className="formContents" placeholder="Email Address" icon="mail" onChange={props.handleEmail} />
+        <Input className="formContents" placeholder="Email Address" icon="mail" onChange={e => props.handleFieldInput(e, "email")} />
         <br />
         <br />
-        <Input className="formContents" type="password" placeholder="Password" icon="lock" onChange={props.handlePassword} />
+        <Input className="formContents" type="password" placeholder="Password" icon="lock" onChange={e => props.handleFieldInput(e, "password")} />
         <br />
         <br />
         <Grid columns={2}>

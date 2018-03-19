@@ -3,8 +3,9 @@ import React, { Component } from "react";
 import { Link, Router } from "react-router-dom";
 import { history } from "../../features/API/History_API/historyFunctions";
 import { connect } from "react-redux";
+
 // Components
-import { Icon, Modal, Menu, Button } from "semantic-ui-react";
+import { Icon, Menu } from "semantic-ui-react";
 import { Image as CloudImage, CloudinaryContext } from "cloudinary-react";
 import RegistrationModal from "../register/RegistrationModal";
 
@@ -40,21 +41,8 @@ class Header extends Component {
           {this.MenuItemComponents}
 
           <Menu.Menu position="right">
-            <Menu.Item name="Login">
-              <Modal
-                trigger={
-                  <div>
-                    <Button basic color="light blue">
-                      Sign In
-                    </Button>{" "}
-                    <Button basic color="green">
-                      Sign Up
-                    </Button>
-                  </div>
-                }
-              >
-                <RegistrationModal />
-              </Modal>
+            <Menu.Item>
+              <RegistrationModal />
             </Menu.Item>
           </Menu.Menu>
         </Menu>

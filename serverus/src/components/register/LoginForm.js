@@ -1,10 +1,9 @@
 import React from "react";
 
 //Components
-import GridColumn, { Button, Checkbox, Divider, Form, Grid, Input, Modal, Segment, Icon } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Button, Checkbox, Divider, Form, Grid, Icon } from "semantic-ui-react";
 
-const Login = props => {
+const LoginForm = props => {
   return (
     <div>
       <Button color="facebook">
@@ -16,8 +15,19 @@ const Login = props => {
       <br />
       <Divider horizontal>or</Divider>
       <Form className="loginForm" onSubmit={() => props.loginAccount(props.formData)}>
-        <Form.Input className="formContents" placeholder="Username or Email Address" icon="user" onChange={props.handleUsername} />
-        <Form.Input className="formContents" type="password" placeholder="Password" icon="lock" onChange={props.handlePassword} />
+        <Form.Input
+          className="formContents"
+          placeholder="Username or Email Address"
+          icon="user"
+          onChange={e => props.handleFieldInput(e, "username")}
+        />
+        <Form.Input
+          className="formContents"
+          type="password"
+          placeholder="Password"
+          icon="lock"
+          onChange={e => props.handleFieldInput(e, "password")}
+        />
         <Grid columns={2}>
           <Grid.Column textAlign="left">
             <Checkbox label="Remember me" />
@@ -31,7 +41,7 @@ const Login = props => {
           </Grid.Column>
         </Grid>
         <br />
-        <Form.Button fluid primary className="formContents" color="light blue">
+        <Form.Button fluid primary className="formContents" color="blue">
           Sign In
         </Form.Button>
       </Form>
@@ -43,4 +53,4 @@ const Login = props => {
   );
 };
 
-export default Login;
+export default LoginForm;

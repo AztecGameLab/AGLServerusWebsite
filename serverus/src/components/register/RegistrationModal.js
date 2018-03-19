@@ -11,12 +11,12 @@ import { RedirectToForgot } from "../../features/API/History_API/historyFunction
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
 import { Image as CloudImage, CloudinaryContext, Transformation } from "cloudinary-react";
-import { Modal } from "semantic-ui-react";
+import { Modal, Button } from "semantic-ui-react";
 
 //Styling
 import "./RegistrationModal.css";
 
-class RegisterModal extends Component {
+class RegistrationModal extends Component {
   constructor(props) {
     super(props);
 
@@ -26,72 +26,82 @@ class RegisterModal extends Component {
         username: "",
         email: "",
         password: ""
-      }
+      },
+      fieldError: ""
     };
   }
 
-  switchModal = () => {
-    const { loginMode } = this.state;
+  switchToLoginMode = () => {
     this.setState({
-      loginMode: !loginMode
+      loginMode: true
     });
   };
 
-  handleUsername = data => {
-    const { formData } = this.state;
-    formData.username = data.target.value;
+  switchToRegisterMode = () => {
     this.setState({
-      formData
+      loginMode: false
     });
   };
 
-  handleEmail = data => {
-    const { formData } = this.state;
-    formData.email = data.target.value;
-    this.setState({
-      formData
-    });
-  };
-
-  handlePassword = data => {
-    const { formData } = this.state;
-    formData.password = data.target.value;
-    this.setState({
-      formData
-    });
+  handleFieldInput = (e, fieldName) => {
+    try {
+      let currentForm = this.state.formData;
+      currentForm[fieldName] = e.target.value;
+      this.setState({
+        formData: currentForm
+      });
+    } catch (error) {
+      this.setState({
+        fieldError: error.message
+      });
+    }
   };
 
   render() {
     const { loginAccount, signUpAccount, RedirectToForgot } = this.props;
     const { loginMode, formData } = this.state;
     return (
-      <Modal.Content>
-        <CloudinaryContext cloudName="aztecgamelab-com">
-          <CloudImage publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer2.png">
-            <Transformation width="300" crop="scale" />
-          </CloudImage>
-        </CloudinaryContext>
-        <br />
-        {loginMode ? (
-          <LoginForm
-            switchModal={this.switchModal}
-            formData={formData}
-            handleUsername={this.handleUsername}
-            handlePassword={this.handlePassword}
-            loginAccount={loginAccount}
-            forgotRedirect={RedirectToForgot}
-          />
-        ) : (
-          <SignUpForm
-            switchModal={this.switchModal}
-            formData={formData}
-            handleUsername={this.handleUsername}
-            handleEmail={this.handleEmail}
-            handlePassword={this.handlePassword}
-            signUpAccount={signUpAccount}
-          />
-        )}
-      </Modal.Content>
+      <Modal
+        closeIcon
+        trigger={
+          <div>
+            <Button basic color="blue" onClick={this.switchToLoginMode}>
+              Sign In
+            </Button>
+            <Button basic color="green" onClick={this.switchToRegisterMode}>
+              Sign Up
+            </Button>
+          </div>
+        }
+      >
+        <Modal.Content>
+          <CloudinaryContext cloudName="aztecgamelab-com">
+            <CloudImage publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer2.png">
+              <Transformation width="300" crop="scale" />
+            </CloudImage>
+          </CloudinaryContext>
+          <br />
+          {loginMode ? (
+            <LoginForm
+              switchModal={this.switchToRegisterMode}
+              formData={formData}
+              handleFieldInput={this.handleFieldInput}
+              loginAccount={loginAccount}
+              forgotRedirect={RedirectToForgot}
+            />
+          ) : (
+            <SignUpForm
+              switchModal={this.switchToLoginMode}
+              formData={formData}
+              handleFieldInput={this.handleFieldInput}
+              handleUsername={this.handleUsername}
+              handleEmail={this.handleEmail}
+              handlePassword={this.handlePassword}
+              signUpAccount={signUpAccount}
+            />
+          )}
+        </Modal.Content>
+      </Modal>
     );
   }
 }
@@ -111,4 +121,4 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterModal);
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationModal);
