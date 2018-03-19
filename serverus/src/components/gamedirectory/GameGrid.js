@@ -11,6 +11,8 @@ const GameGrid = props => {
   const gameCards = Object.keys(props.games).map(gameKey => {
     if (isObject(props.games[gameKey])) {
       return <GameCard key={gameKey} gameData={props.games[gameKey]} route={gameKey} />;
+    } else {
+      return <div>?</div>;
     }
   });
   return (

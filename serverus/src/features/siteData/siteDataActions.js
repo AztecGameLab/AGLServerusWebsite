@@ -59,6 +59,12 @@ export const loadGames = () => {
   };
 };
 
+export const filterGameDirectory = () => {
+  return dispatch => {
+    dispatch({ type: FILTER_GAMES });
+  };
+};
+
 export const clearSiteData = () => {
   return dispatch => {
     dispatch({ type: CLEAR_SITE_DATA });
