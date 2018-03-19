@@ -94,9 +94,6 @@ class RegistrationModal extends Component {
               switchModal={this.switchToLoginMode}
               formData={formData}
               handleFieldInput={this.handleFieldInput}
-              handleUsername={this.handleUsername}
-              handleEmail={this.handleEmail}
-              handlePassword={this.handlePassword}
               signUpAccount={signUpAccount}
             />
           )}
@@ -116,7 +113,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       RedirectToForgot,
-      loginAccount
+      loginAccount,
+      signUpAccount
     },
     dispatch
   );

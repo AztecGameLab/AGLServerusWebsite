@@ -1,9 +1,4 @@
-import {
-  SIGN_IN_LOADING,
-  SIGN_IN_SUCCESS,
-  SIGN_IN_FAILURE,
-  SIGN_OUT
-} from "./loginConstants";
+import { SIGN_IN_LOADING, SIGN_IN_SUCCESS, SIGN_IN_FAILURE, SIGN_OUT } from "./loginConstants";
 
 // Progress States -> "idle" -> "loading" -> ("succeeded" || "failed")
 const initialLoginState = {

@@ -12,6 +12,9 @@ const LoginForm = props => {
       <Button color="google plus">
         <Icon name="google" />Login with Google
       </Button>
+      <Button color="grey">
+        <Icon name="github" /> Github
+      </Button>
       <br />
       <Divider horizontal>or</Divider>
       <Form className="loginForm" onSubmit={() => props.loginAccount(props.formData)}>

@@ -6,12 +6,17 @@ import { Button, Checkbox, Divider, Form, Grid, Input, Icon } from "semantic-ui-
 const SignUpForm = props => {
   return (
     <div>
-      <Button color="facebook">
-        <Icon name="facebook" />Sign up with Facebook
-      </Button>
-      <Button color="google plus">
-        <Icon name="google" />Sign up with Google
-      </Button>
+      <Button.Group widths="3" style={{ width: "60%" }}>
+        <Button color="facebook">
+          <Icon name="facebook" />Facebook
+        </Button>
+        <Button color="google plus">
+          <Icon name="google" />Google
+        </Button>
+        <Button color="grey">
+          <Icon name="github" />Github
+        </Button>
+      </Button.Group>
       <br />
       <Divider horizontal>or</Divider>
       <Form className="loginForm" onSubmit={() => props.signUpAccount(props.formData)}>
