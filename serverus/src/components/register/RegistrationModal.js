@@ -1,18 +1,27 @@
+//React + Redux
 import React, { Component } from "react";
-import GridColumn, { Button, Checkbox, Divider, Form, Grid, Input, Modal, Segment } from "semantic-ui-react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { loginAccount, signUpAccount } from "../../features/login/loginAction";
-import LoginModal from "./LoginModal";
-import SignUpModal from "./SignUpModal";
-import styles from "./RegisterModal.css";
+
+//Actions
+import { loginAccount, signUpAccount } from "../../features/login/loginActions";
+import { RedirectToForgot } from "../../features/API/History_API/historyFunctions";
+
+//Components
+import LoginForm from "./LoginForm";
+import SignUpForm from "./SignUpForm";
+import { Image as CloudImage, CloudinaryContext, Transformation } from "cloudinary-react";
+import { Modal } from "semantic-ui-react";
+
+//Styling
+import "./RegistrationModal.css";
 
 class RegisterModal extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      loginForm: true,
+      loginMode: true,
       formData: {
         username: "",
         email: "",
@@ -22,9 +31,9 @@ class RegisterModal extends Component {
   }
 
   switchModal = () => {
-    const { loginForm } = this.state;
+    const { loginMode } = this.state;
     this.setState({
-      loginForm: !loginForm
+      loginMode: !loginMode
     });
   };
 
@@ -53,22 +62,29 @@ class RegisterModal extends Component {
   };
 
   render() {
-    const { loginAccount, signUpAccount } = this.props;
-    const { loginForm } = this.state;
+    const { loginAccount, signUpAccount, RedirectToForgot } = this.props;
+    const { loginMode, formData } = this.state;
     return (
       <Modal.Content>
-        {loginForm ? (
-          <LoginModal
+        <CloudinaryContext cloudName="aztecgamelab-com">
+          <CloudImage publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer2.png">
+            <Transformation width="300" crop="scale" />
+          </CloudImage>
+        </CloudinaryContext>
+        <br />
+        {loginMode ? (
+          <LoginForm
             switchModal={this.switchModal}
-            formData={this.state.formData}
+            formData={formData}
             handleUsername={this.handleUsername}
             handlePassword={this.handlePassword}
             loginAccount={loginAccount}
+            forgotRedirect={RedirectToForgot}
           />
         ) : (
-          <SignUpModal
+          <SignUpForm
             switchModal={this.switchModal}
-            formData={this.state.formData}
+            formData={formData}
             handleUsername={this.handleUsername}
             handleEmail={this.handleEmail}
             handlePassword={this.handlePassword}
@@ -80,22 +96,19 @@ class RegisterModal extends Component {
   }
 }
 
-// function mapStateToProps(state, ownProps) {
-//     return {
-//       user: state.user
-//     };
-//   }
-
-function mapStateToProps(state, ownProps) {
+const mapStateToProps = (state, ownProps) => {
   return {
     login: state.login
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
-  return {
-    loginAccount: bindActionCreators(loginAccount, dispatch),
-    signUpAccount: bindActionCreators(signUpAccount, dispatch)
-  };
-}
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      RedirectToForgot,
+      loginAccount
+    },
+    dispatch
+  );
+
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterModal);

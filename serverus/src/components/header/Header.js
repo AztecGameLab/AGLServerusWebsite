@@ -2,13 +2,11 @@
 import React, { Component } from "react";
 import { Link, Router } from "react-router-dom";
 import { history } from "../../features/API/History_API/historyFunctions";
-import { bindActionCreators } from "redux";
-import { } from "../../features/login/loginAction";
 import { connect } from "react-redux";
 // Components
 import { Icon, Modal, Menu, Button } from "semantic-ui-react";
 import { Image as CloudImage, CloudinaryContext } from "cloudinary-react";
-import RegisterModal from "../register/RegisterModal";
+import RegistrationModal from "../register/RegistrationModal";
 
 // Create list of Menu Items with settings
 const MenuObjects = [
@@ -43,8 +41,19 @@ class Header extends Component {
 
           <Menu.Menu position="right">
             <Menu.Item name="Login">
-              <Modal trigger={<Button>Login</Button>}>
-                <RegisterModal />
+              <Modal
+                trigger={
+                  <div>
+                    <Button basic color="light blue">
+                      Sign In
+                    </Button>{" "}
+                    <Button basic color="green">
+                      Sign Up
+                    </Button>
+                  </div>
+                }
+              >
+                <RegistrationModal />
               </Modal>
             </Menu.Item>
           </Menu.Menu>
@@ -60,9 +69,4 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, null)(Header);

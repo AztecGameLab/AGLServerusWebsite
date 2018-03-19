@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
 
 class Home extends Component {
   render() {
@@ -8,9 +6,4 @@ class Home extends Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
-  return {
-    login: state.login
-  };
-}
-export default connect(mapStateToProps, null)(Home);
+export default Home;
