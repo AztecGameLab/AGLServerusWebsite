@@ -4,8 +4,9 @@ import { Link, Router } from "react-router-dom";
 import { history } from "../../features/API/History_API/historyFunctions";
 
 // Components
-import { Icon, Menu, Button } from "semantic-ui-react";
+import { Icon, Menu } from "semantic-ui-react";
 import { Image as CloudImage, CloudinaryContext, Transformation } from "cloudinary-react";
+import HeaderDropdown from "../usercomponents/headerdropdown/HeaderDropdown";
 
 const Header = () => {
   // Create list of Menu Items with settings
@@ -37,9 +38,9 @@ const Header = () => {
 
         {MenuItemComponents}
 
-        <Menu.Menu position="right">
-          <Menu.Item as={Link} to="/signup">
-            <Button>Sign Up!</Button>
+        <Menu.Menu position="right" style={{ paddingRight: "20px" }}>
+          <Menu.Item>
+            <HeaderDropdown />
           </Menu.Item>
         </Menu.Menu>
       </Menu>
