@@ -7,10 +7,11 @@ import { bindActionCreators } from "redux";
 import { loadGames } from "../../features/siteData/siteDataActions";
 
 //Selectors
-import { selectIsGameDirectoryCached, selectGameDirectory, selectLoadGameDirectoryStatus } from "../../features/siteData/siteDataSelectors";
+import { selectIsGameDirectoryCached, selectGameDirectory, selectSiteDataStatus } from "../../features/siteData/siteDataSelectors";
 
 //Components
 import GameGrid from "./GameGrid";
+import Loading from "../utility/Loading";
 
 class GameDirectory extends Component {
   componentDidMount() {
@@ -23,12 +24,8 @@ class GameDirectory extends Component {
   }
 
   render() {
-    const { games } = this.props;
-    return (
-      <div>
-        <GameGrid games={games} />
-      </div>
-    );
+    const { games, loadingStatus } = this.props;
+    return <div>{loadingStatus === "loading" ? <Loading loadingMessage="Retrieving Games..." /> : <GameGrid games={games} />}</div>;
   }
 }
 
@@ -36,7 +33,7 @@ const mapStateToProps = state => {
   return {
     isGameDirectoryCached: selectIsGameDirectoryCached(state),
     games: selectGameDirectory(state),
-    gameDirectoryLoadStatus: selectLoadGameDirectoryStatus(state)
+    loadingStatus: selectSiteDataStatus(state).gameDirectory
   };
 };
 

@@ -7,10 +7,11 @@ import { bindActionCreators } from "redux";
 import { loadUsers, filterUserDirectory } from "../../features/siteData/siteDataActions";
 
 //Selectors
-import { selectIsUserDirectoryCached, selectUserDirectory, selectLoadUserDirectoryStatus } from "../../features/siteData/siteDataSelectors";
+import { selectIsUserDirectoryCached, selectUserDirectory, selectSiteDataStatus } from "../../features/siteData/siteDataSelectors";
 
 //Components
 import UserGrid from "./UserGrid";
+import Loading from "../utility/Loading";
 
 class UserDirectory extends Component {
   componentDidMount() {
@@ -21,12 +22,8 @@ class UserDirectory extends Component {
   }
 
   render() {
-    const { users } = this.props;
-    return (
-      <div>
-        <UserGrid users={users} />
-      </div>
-    );
+    const { users, loadingStatus } = this.props;
+    return <div>{loadingStatus === "loading" ? <Loading loadingMessage="Retrieving Users..." /> : <UserGrid users={users} />}</div>;
   }
 }
 
@@ -34,7 +31,7 @@ const mapStateToProps = state => {
   return {
     isUserDirectoryCached: selectIsUserDirectoryCached(state),
     users: selectUserDirectory(state),
-    userDirectoryLoadStatus: selectLoadUserDirectoryStatus(state)
+    loadingStatus: selectSiteDataStatus(state).userDirectory
   };
 };
 
