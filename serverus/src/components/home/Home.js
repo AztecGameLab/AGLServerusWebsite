@@ -1,43 +1,59 @@
 import React, { Component } from "react";
-import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
-import 'react-vertical-timeline-component/style.min.css';
-import {Helmet} from 'react-helmet';
-// import { Icon } from 'semantic-ui-react';
 
 class Home extends Component {
   render() {
     return (
-      <div>
-        <Helmet>
-          <style>{'body { background-color: gray; }'}</style>
-        </Helmet>
-        <VerticalTimeline>
-          <VerticalTimelineElement
-            className="vertical-timeline-element--work"
-            iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-            // icon={<Icon name='heartbeat' size='huge' />}
-          >
-            <h3 className="vertical-timeline-element-title">Hackathon (Coming soon!)</h3>
-            <h4 className="vertical-timeline-element-subtitle">Room 410</h4>
-            <p>
-              Come join us in our Hackathon!
-            </p>
-          </VerticalTimelineElement>
-          <VerticalTimelineElement
-            className="vertical-timeline-element--work"
-            iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-            // icon={<Icon name='heartbeat' size='huge' />}
-          >
-            <h3>Title</h3>
-            <h4>Subtitle</h4>
-            <p>
-              Come join us in our Hackathon!
-            </p>
-          </VerticalTimelineElement>
-        </VerticalTimeline>
+      <div class = "Page Contents">
+        <div class = "ui inverted vertical masthead center aligned segment" style = {firstPart}>
+          <div class = "ui text container">
+            <h1 class = "ui inverted header" style = {headerText}>
+              Greetings adventurers!
+            </h1>
+            <h2>
+              The "Aztec Game Lab" guild welcomes you!
+            </h2>
+            <div class = "Timeline">
+            </div>
+          </div>
+        </div>
+        <div class = "ui vertical stripe segment" style = {secondPart}>
+          <div class = "Directions">
+            <div class = "ui raised very padded text container segment">
+              <h2 class = "ui header">Directions to our guild?</h2>
+              <p>Wander no further, the directions are here. Lots of text.
+              Wander no further, the directions are here. Lots of text.
+              Wander no further, the directions are here. Lots of text.
+              Wander no further, the directions are here. Lots of text.
+              Wander no further, the directions are here. Lots of text.
+              Wander no further, the directions are here. Lots of text.
+              </p>
+            </div>
+          </div>
+          <div class = "Community Pictures">
+          </div>
+        </div>
       </div>
     )
   }
+}
+
+// Inline Styles
+const firstPart = {
+  background: "#1B1C1D",
+  minHeight: "700px",
+  textAlign: "center",
+}
+
+const secondPart = {
+  background: "#FFFFFF",
+  padding: "8em"
+}
+
+const headerText = {
+  marginTop: "3em",
+  marginBottom: "0em",
+  fontSize: "4em",
+  fontWeight: "normal",
 }
 
 export default Home;
