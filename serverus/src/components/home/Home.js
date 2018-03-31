@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+// Import Timeline
+// Import form of parallax or cool intro background
 
 class Home extends Component {
   render() {
@@ -17,19 +19,39 @@ class Home extends Component {
           </div>
         </div>
         <div class = "ui vertical stripe segment" style = {secondPart}>
-          <div class = "Directions">
-            <div class = "ui raised very padded text container segment">
-              <h2 class = "ui header">Directions to our guild?</h2>
-              <p>Wander no further, the directions are here. Lots of text.
-              Wander no further, the directions are here. Lots of text.
-              Wander no further, the directions are here. Lots of text.
-              Wander no further, the directions are here. Lots of text.
-              Wander no further, the directions are here. Lots of text.
-              Wander no further, the directions are here. Lots of text.
-              </p>
+          <div class = "ui middle aligned stackable grid container">
+            <div class = "row">
+              <div class = "eight wide column">
+                <div class = "ui raised very padded text container segment">
+                  <h2 class = "ui header">Directions to our guild?</h2>
+                  <p>Wander no further, the directions are here. Lots of text.
+                  Wander no further, the directions are here. Lots of text.
+                  Wander no further, the directions are here. Lots of text.
+                  Wander no further, the directions are here. Lots of text.
+                  Wander no further, the directions are here. Lots of text.
+                  Wander no further, the directions are here. Lots of text.
+                  </p>
+                </div>
+              </div>
+              <div class = "six wide right floated column">
+              </div>
             </div>
-          </div>
-          <div class = "Community Pictures">
+            <div class = "row">
+              <div class = "six wide column">
+              </div>
+              <div class = "eight wide right floated column">
+                <div class = "ui raised very padded text container segment">
+                  <h2 class = "ui header">What community events do we hold?</h2>
+                  <p>Wander no further, the directions are here. Lots of text.
+                  Wander no further, the directions are here. Lots of text.
+                  Wander no further, the directions are here. Lots of text.
+                  Wander no further, the directions are here. Lots of text.
+                  Wander no further, the directions are here. Lots of text.
+                  Wander no further, the directions are here. Lots of text.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -38,6 +60,14 @@ class Home extends Component {
 }
 
 // Inline Styles
+
+const headerText = {
+  marginTop: "3em",
+  marginBottom: "0em",
+  fontSize: "4em",
+  fontWeight: "normal",
+}
+
 const firstPart = {
   background: "#1B1C1D",
   minHeight: "700px",
@@ -47,13 +77,6 @@ const firstPart = {
 const secondPart = {
   background: "#FFFFFF",
   padding: "8em"
-}
-
-const headerText = {
-  marginTop: "3em",
-  marginBottom: "0em",
-  fontSize: "4em",
-  fontWeight: "normal",
 }
 
 export default Home;
