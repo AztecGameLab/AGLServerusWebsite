@@ -10,6 +10,11 @@ export const LOAD_GAMES_SUCCESS = "LOAD_GAMES_SUCCESS";
 export const LOAD_GAMES_FAILURE = "LOAD_GAMES_FAILURE";
 export const FILTER_GAMES = "FILTER_GAMES";
 
+//User Profile
+export const LOAD_USER_PROGRESS = "LOAD_USER_PROGRESS";
+export const LOAD_USER_SUCCESS = "LOAD_USER_SUCCESS";
+export const LOAD_USER_FAILURE = "LOAD_USER_FAILURE";
+
 //TODO: Team Directory
 //TODO: Executive Board Directory
 

@@ -5,9 +5,9 @@ import { isEmpty } from "lodash";
 
 //Input Selectors
 const getUserDirectory = state => state.siteData.userDirectory;
-const getUserDirectoryStatus = state => state.siteData.loadUserDirectoryStatus;
 const getGameDirectory = state => state.siteData.gameDirectory;
-const getGameDirectoryStatus = state => state.siteData.loadGameDirectoryStatus;
+const getSiteDataStatus = state => state.siteData.status;
+const getPreloadedUser = (state, props) => state.siteData.preloadedUserProfiles[props.match.params.username];
 
 //Memoized Selectors
 export const selectUserDirectory = createSelector([getUserDirectory], users => {
@@ -18,7 +18,7 @@ export const selectIsUserDirectoryCached = createSelector([getUserDirectory], us
   return !isEmpty(users);
 });
 
-export const selectLoadUserDirectoryStatus = createSelector([getUserDirectoryStatus], status => {
+export const selectSiteDataStatus = createSelector([getSiteDataStatus], status => {
   return status;
 });
 
@@ -30,6 +30,8 @@ export const selectIsGameDirectoryCached = createSelector([getGameDirectory], ga
   return !isEmpty(games);
 });
 
-export const selectLoadGameDirectoryStatus = createSelector([getGameDirectoryStatus], status => {
-  return status;
-});
+export const makeSelectUser = () => {
+  return createSelector([getPreloadedUser], user => {
+    return user;
+  });
+};

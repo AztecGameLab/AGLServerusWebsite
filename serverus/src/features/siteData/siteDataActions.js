@@ -7,12 +7,15 @@ import {
   LOAD_GAMES_PROGRESS,
   LOAD_GAMES_SUCCESS,
   LOAD_GAMES_FAILURE,
+  LOAD_USER_PROGRESS,
   FILTER_GAMES,
-  CLEAR_SITE_DATA
+  CLEAR_SITE_DATA,
+  LOAD_USER,
+  LOAD_USER_SUCCESS
 } from "./siteDataConstants";
 
 //API
-import { LoadAllUsers, LoadAllGames } from "../API/AGL_API/siteDataFunctions";
+import { LoadAllUsers, LoadAllGames, LoadProfile } from "../API/AGL_API/siteDataFunctions";
 
 //User Directory Actions
 export const loadUsers = () => {
@@ -40,6 +43,7 @@ export const filterUserDirectory = () => {
   };
 };
 
+//Game Directory Actions
 export const loadGames = () => {
   return dispatch => {
     dispatch({ type: LOAD_GAMES_PROGRESS });
@@ -62,6 +66,17 @@ export const loadGames = () => {
 export const filterGameDirectory = () => {
   return dispatch => {
     dispatch({ type: FILTER_GAMES });
+  };
+};
+
+//User Profile Actions
+export const loadProfile = username => {
+  return (dispatch, getState) => {
+    dispatch({ type: LOAD_USER_PROGRESS });
+
+    LoadProfile(username).then(profileData => {
+      dispatch({ type: LOAD_USER_SUCCESS, payload: { [username]: profileData } });
+    });
   };
 };
 
