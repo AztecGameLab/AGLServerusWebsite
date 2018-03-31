@@ -48,7 +48,7 @@ export default (state = initialSiteDataState, action) => {
       return {
         ...state,
         status: { ...state.status, userProfile: "succeeded" },
-        preloadedUserProfiles: Object.assign({}, ...state.preloadedUserProfiles, action.payload)
+        preloadedUserProfiles: Object.assign({}, state.preloadedUserProfiles, action.payload)
       };
     case CLEAR_SITE_DATA:
       return initialSiteDataState;
