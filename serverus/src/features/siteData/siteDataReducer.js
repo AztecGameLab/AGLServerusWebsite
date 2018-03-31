@@ -50,6 +50,8 @@ export default (state = initialSiteDataState, action) => {
         status: { ...state.status, userProfile: "succeeded" },
         preloadedUserProfiles: Object.assign({}, state.preloadedUserProfiles, action.payload)
       };
+    case LOAD_USER_FAILURE:
+      return { ...state, status: { ...state.status, userProfile: "failed" }, error: action.payload };
     case CLEAR_SITE_DATA:
       return initialSiteDataState;
     default:

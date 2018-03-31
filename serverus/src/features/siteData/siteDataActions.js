@@ -10,7 +10,6 @@ import {
   LOAD_USER_PROGRESS,
   FILTER_GAMES,
   CLEAR_SITE_DATA,
-  LOAD_USER,
   LOAD_USER_SUCCESS
 } from "./siteDataConstants";
 
@@ -74,9 +73,19 @@ export const loadProfile = username => {
   return (dispatch, getState) => {
     dispatch({ type: LOAD_USER_PROGRESS });
 
-    LoadProfile(username).then(profileData => {
-      dispatch({ type: LOAD_USER_SUCCESS, payload: { [username]: profileData } });
-    });
+    LoadProfile(username)
+      .then(profileData => {
+        dispatch({
+          type: LOAD_USER_SUCCESS,
+          payload: { [username]: profileData }
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: LOAD_USERS_FAILURE,
+          payload: error
+        });
+      });
   };
 };
 
