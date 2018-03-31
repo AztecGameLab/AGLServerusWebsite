@@ -8,6 +8,7 @@ const getUserDirectory = state => state.siteData.userDirectory;
 const getGameDirectory = state => state.siteData.gameDirectory;
 const getSiteDataStatus = state => state.siteData.status;
 const getPreloadedUser = (state, props) => state.siteData.preloadedUserProfiles[props.match.params.username];
+const getGame = (state, props) => state.siteData.gameDirectory[props.match.params.gameID];
 
 //Memoized Selectors
 export const selectUserDirectory = createSelector([getUserDirectory], users => {
@@ -33,5 +34,11 @@ export const selectIsGameDirectoryCached = createSelector([getGameDirectory], ga
 export const makeSelectUser = () => {
   return createSelector([getPreloadedUser], user => {
     return user;
+  });
+};
+
+export const makeSelectGame = () => {
+  return createSelector([getGame], game => {
+    return game;
   });
 };

@@ -10,6 +10,7 @@ import Spacer from "../utility/Spacer";
 import UserDirectory from "../userdirectory/UserDirectory";
 import GameDirectory from "../gamedirectory/GameDirectory";
 import ProfilePage from "../usercomponents/profilepage/ProfilePage";
+import GamePage from "../gamecomponents/gamepage/GamePage";
 
 class App extends Component {
   render() {
@@ -23,6 +24,7 @@ class App extends Component {
             <Route exact path="/users" component={UserDirectory} />
             <Route exact path="/games" component={GameDirectory} />
             <Route exact path="/user/:username" component={ProfilePage} />
+            <Route exact path="/game/:gameID" component={GamePage} />
           </Switch>
         </Router>
         <Spacer lines={10} />
