@@ -17,7 +17,6 @@ class ProfilePage extends Component {
     const { loadProfile, currentUser } = this.props;
     const { username } = this.props.match.params;
     if (!currentUser) {
-      debugger;
       loadProfile(username);
     }
   }
