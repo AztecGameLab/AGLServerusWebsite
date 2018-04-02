@@ -39,7 +39,7 @@ const SignUpForm = props => {
         <br />
         <Grid columns={2}>
           <Grid.Column textAlign="left">
-            <Checkbox label="I accept the Terms & Conditions" />
+            <Checkbox label="I accept the Terms & Conditions" autoComplete="off" />
           </Grid.Column>
           <Grid.Column textAlign="right">
             <i>

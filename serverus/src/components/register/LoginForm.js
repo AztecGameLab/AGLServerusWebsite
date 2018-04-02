@@ -46,7 +46,7 @@ const LoginForm = props => {
         />
         <Grid columns={2}>
           <Grid.Column textAlign="left">
-            <Checkbox label="Remember me" />
+            <Checkbox label="Remember me" autoComplete="off" />
           </Grid.Column>
           <Grid.Column textAlign="right">
             <i>
