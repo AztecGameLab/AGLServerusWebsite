@@ -39,7 +39,7 @@ const SignUpForm = props => {
         <br />
         <Grid columns={2}>
           <Grid.Column textAlign="left">
-            <Checkbox label="I accept the Terms & Conditions" />
+            <Checkbox label="I accept the Terms & Conditions" autoComplete="off" />
           </Grid.Column>
           <Grid.Column textAlign="right">
             <i>
@@ -49,12 +49,12 @@ const SignUpForm = props => {
         </Grid>
         <br />
         <Form.Button fluid className="formContents" color="green">
-          Sign Up
+          Create Account!
         </Form.Button>
       </Form>
       <Divider horizontal>Already have an Aztec Game Lab account?</Divider>
       <Button basic onClick={props.switchModal}>
-        <Icon name="chevron left" />Sign In!
+        <Icon name="chevron left" />Log In!
       </Button>
     </div>
   );

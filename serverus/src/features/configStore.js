@@ -15,7 +15,7 @@ import storage from "redux-persist/lib/storage";
 const persistConfig = {
   key: "AGL",
   storage,
-  whitelist: ["auth", "siteData"]
+  whitelist: ["auth", "siteData", "userSession"]
 };
 
 //Persist Root Reducer
