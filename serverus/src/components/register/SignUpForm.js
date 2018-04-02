@@ -49,12 +49,12 @@ const SignUpForm = props => {
         </Grid>
         <br />
         <Form.Button fluid className="formContents" color="green">
-          Sign Up
+          Create Account!
         </Form.Button>
       </Form>
       <Divider horizontal>Already have an Aztec Game Lab account?</Divider>
       <Button basic onClick={props.switchModal}>
-        <Icon name="chevron left" />Sign In!
+        <Icon name="chevron left" />Log In!
       </Button>
     </div>
   );

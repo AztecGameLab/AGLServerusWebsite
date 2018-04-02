@@ -20,7 +20,7 @@ export default (state = initialAuthState, action) => {
     case LOG_IN_FAILURE:
       return { ...state, status: { ...state.status, login: "failed" }, error: action.payload };
     case LOG_IN_SUCCESS:
-      return { ...state, status: { ...state.status, login: "succeeded" } };
+      return { ...state, status: { ...state.status, login: "succeeded" }, loggedIn: true };
     case LOG_OUT:
       return initialAuthState;
     default:

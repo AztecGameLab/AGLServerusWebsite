@@ -8,13 +8,14 @@ import { loginAccount } from "../../features/auth/authActions";
 import { RedirectToForgot } from "../../features/API/History_API/historyFunctions";
 
 //Selectors
-import { selectAuthStatus } from "../../features/auth/authSelectors";
+import { selectAuthStatus, selectErrorMessage } from "../../features/auth/authSelectors";
 
 //Components
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
 import { Image as CloudImage, CloudinaryContext, Transformation } from "cloudinary-react";
 import { Modal, Button } from "semantic-ui-react";
+import ErrorMessage from "../utility/ErrorMessage";
 
 //Styling
 import "./RegistrationModal.css";
@@ -56,9 +57,16 @@ class RegistrationModal extends Component {
     }
   };
 
+  handleLogin = () => {
+    const { loginAccount } = this.props;
+    const { email, password } = this.state.formData;
+    loginAccount(email, password);
+  };
+
   render() {
-    const { loginAccount, RedirectToForgot, loginStatus } = this.props;
+    const { RedirectToForgot, loginStatus, errorMsg } = this.props;
     const { loginMode, formData } = this.state;
+    const errorComponent = <ErrorMessage message={errorMsg} />;
     return (
       <Modal
         closeIcon
@@ -85,12 +93,18 @@ class RegistrationModal extends Component {
               switchModal={this.switchToRegisterMode}
               formData={formData}
               handleFieldInput={this.handleFieldInput}
-              loginAccount={loginAccount}
+              loginAccount={this.handleLogin}
               forgotRedirect={RedirectToForgot}
               loginStatus={loginStatus}
+              errorComponent={errorComponent}
             />
           ) : (
-            <SignUpForm switchModal={this.switchToLoginMode} formData={formData} handleFieldInput={this.handleFieldInput} />
+            <SignUpForm
+              switchModal={this.switchToLoginMode}
+              formData={formData}
+              handleFieldInput={this.handleFieldInput}
+              errorComponent={errorComponent}
+            />
           )}
         </Modal.Content>
       </Modal>
@@ -100,7 +114,8 @@ class RegistrationModal extends Component {
 
 const mapStateToProps = state => {
   return {
-    loginStatus: selectAuthStatus(state).login
+    loginStatus: selectAuthStatus(state).login,
+    errorMsg: selectErrorMessage(state)
   };
 };
 

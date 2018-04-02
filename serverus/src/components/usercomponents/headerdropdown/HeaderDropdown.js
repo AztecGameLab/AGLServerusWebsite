@@ -1,9 +1,16 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
+//Components
 import { Dropdown, Label } from "semantic-ui-react";
+
+//Actions
+import { logOutAccount } from "../../../features/auth/authActions";
 
 class HeaderDropdown extends Component {
   render() {
+    const { logOutAccount } = this.props;
     return (
       <div>
         <Label circular color="blue" floating>
@@ -20,7 +27,7 @@ class HeaderDropdown extends Component {
             <Dropdown.Item icon="comment" text="Messages" description="3 New" />
             <Dropdown.Divider />
             <Dropdown.Item icon="help circle" text="Help" />
-            <Dropdown.Item icon="sign out" text="Log Out" />
+            <Dropdown.Item icon="sign out" text="Log Out" onClick={logOutAccount} />
           </Dropdown.Menu>
         </Dropdown>
       </div>
@@ -28,4 +35,12 @@ class HeaderDropdown extends Component {
   }
 }
 
-export default HeaderDropdown;
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      logOutAccount
+    },
+    dispatch
+  );
+
+export default connect(null, mapDispatchToProps)(HeaderDropdown);

@@ -29,12 +29,7 @@ const LoginForm = props => {
       <br />
       <Divider horizontal>or</Divider>
       <Form className="loginForm" onSubmit={() => props.loginAccount(props.formData)}>
-        <Form.Input
-          className="formContents"
-          placeholder="Username or Email Address"
-          icon="user"
-          onChange={e => props.handleFieldInput(e, "username")}
-        />
+        <Form.Input className="formContents" placeholder="Email Address" icon="user" onChange={e => props.handleFieldInput(e, "email")} />
         <Form.Input
           className="formContents"
           type="password"
@@ -55,9 +50,10 @@ const LoginForm = props => {
           </Grid.Column>
         </Grid>
         <br />
-        <Form.Button fluid primary className="formContents" color="blue" loading={props.loginStatus === "loading"}>
-          Sign In
+        <Form.Button fluid primary className="formContents" color="blue" loading={props.loginStatus === "loading"} onClick={props.loginAccount}>
+          Log In
         </Form.Button>
+        {props.loginStatus === "failed" && props.errorComponent}
       </Form>
       <Divider horizontal>Don't have an account?</Divider>
       <Button basic onClick={props.switchModal}>
