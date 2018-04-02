@@ -17,19 +17,15 @@ import { Modal, Button } from "semantic-ui-react";
 import "./RegistrationModal.css";
 
 class RegistrationModal extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loginMode: true,
-      formData: {
-        username: "",
-        email: "",
-        password: ""
-      },
-      fieldError: ""
-    };
-  }
+  state = {
+    loginMode: true,
+    formData: {
+      username: "",
+      email: "",
+      password: ""
+    },
+    fieldError: ""
+  };
 
   switchToLoginMode = () => {
     this.setState({

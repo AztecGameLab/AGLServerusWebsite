@@ -1,20 +1,31 @@
 import React from "react";
 
 //Components
-import { Button, Checkbox, Divider, Form, Grid, Icon } from "semantic-ui-react";
+import { Button, Checkbox, Divider, Form, Grid, Icon, Popup } from "semantic-ui-react";
 
 const LoginForm = props => {
   return (
     <div>
-      <Button color="facebook">
-        <Icon name="facebook" />Login with Facebook
-      </Button>
-      <Button color="google plus">
-        <Icon name="google" />Login with Google
-      </Button>
-      <Button color="grey">
-        <Icon name="github" /> Github
-      </Button>
+      <Popup
+        inverted
+        flowing
+        position="bottom center"
+        trigger={
+          <Button.Group widths="3" style={{ width: "60%" }}>
+            <Button color="facebook" disabled>
+              <Icon name="facebook" />Facebook
+            </Button>
+            <Button color="google plus" disabled>
+              <Icon name="google" />Google
+            </Button>
+            <Button color="grey" disabled>
+              <Icon name="github" />Github
+            </Button>
+          </Button.Group>
+        }
+        content="Login with Facebook, Google and Github coming soon!"
+      />
+
       <br />
       <Divider horizontal>or</Divider>
       <Form className="loginForm" onSubmit={() => props.loginAccount(props.formData)}>

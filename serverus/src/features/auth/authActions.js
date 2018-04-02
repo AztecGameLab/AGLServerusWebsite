@@ -1,4 +1,4 @@
-import { SIGN_IN_LOADING, SIGN_IN_SUCCESS, SIGN_IN_FAILURE, SIGN_OUT, SIGN_UP_LOADING, SIGN_UP_SUCCESS, SIGN_UP_FAILURE } from "./loginConstants";
+import { SIGN_IN_LOADING, SIGN_IN_SUCCESS, SIGN_IN_FAILURE, SIGN_OUT, SIGN_UP_LOADING, SIGN_UP_SUCCESS, SIGN_UP_FAILURE } from "./authConstants";
 import { Login } from "../API/AGL_API/loginFunctions";
 import { UsernameTakenCheck, RedIDTakenCheck, EmailTakenCheck } from "../API/AGL_API/signUpFunctions";
 
