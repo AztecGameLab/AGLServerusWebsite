@@ -11,11 +11,11 @@ import { routerMiddleware } from "react-router-redux";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-//Create Config (only session persist)
+//Create Config (only User persist)
 const persistConfig = {
   key: "AGL",
   storage,
-  whitelist: ["session", "siteData"]
+  whitelist: ["auth", "siteData"]
 };
 
 //Persist Root Reducer

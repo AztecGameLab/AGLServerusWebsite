@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Route, Router, Switch } from "react-router-dom";
 import { history } from "../../features/API/History_API/historyFunctions";
-
 //Components
 import Home from "../home/Home";
 import HeaderMenu from "../header/Header";
