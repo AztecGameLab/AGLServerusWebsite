@@ -26,7 +26,9 @@ class RegistrationModal extends Component {
     formData: {
       username: "",
       email: "",
-      password: ""
+      password: "",
+      rememberMe: false,
+      termsConditions: false
     },
     fieldError: ""
   };
@@ -73,10 +75,10 @@ class RegistrationModal extends Component {
         trigger={
           <div>
             <Button basic color="blue" onClick={this.switchToLoginMode}>
-              Sign In
+              Log In
             </Button>
             <Button basic color="green" onClick={this.switchToRegisterMode}>
-              Sign Up
+              Create Account
             </Button>
           </div>
         }
@@ -91,7 +93,6 @@ class RegistrationModal extends Component {
           {loginMode ? (
             <LoginForm
               switchModal={this.switchToRegisterMode}
-              formData={formData}
               handleFieldInput={this.handleFieldInput}
               loginAccount={this.handleLogin}
               forgotRedirect={RedirectToForgot}

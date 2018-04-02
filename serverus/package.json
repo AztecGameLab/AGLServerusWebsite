@@ -6,6 +6,7 @@
     "axios": "^0.18.0",
     "cloudinary-react": "^1.0.6",
     "cross-env": "^5.1.4",
+    "email-validator": "^1.1.1",
     "firebase": "^4.12.1",
     "formik": "^0.11.11",
     "history": "^4.7.2",
