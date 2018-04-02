@@ -55,7 +55,7 @@ const LoginForm = props => {
           </Grid.Column>
         </Grid>
         <br />
-        <Form.Button fluid primary className="formContents" color="blue">
+        <Form.Button fluid primary className="formContents" color="blue" loading={props.loginStatus === "loading"}>
           Sign In
         </Form.Button>
       </Form>

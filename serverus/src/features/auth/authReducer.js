@@ -1,11 +1,13 @@
-import { SIGN_IN_LOADING, SIGN_IN_SUCCESS, SIGN_IN_FAILURE, SIGN_OUT } from "./authConstants";
+import { LOG_IN_LOADING, LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_OUT } from "./authConstants";
 
 // Progress States -> "idle" -> "loading" -> ("succeeded" || "failed")
 const initialAuthState = {
-  signedIn: false,
+  loggedIn: false,
+  lastLogin: "",
   status: {
     login: "idle",
-    registration: "idle"
+    registration: "idle",
+    passwordReset: "idle"
   },
   error: {}
 };
@@ -13,13 +15,13 @@ const initialAuthState = {
 //User Reducer
 export default (state = initialAuthState, action) => {
   switch (action.type) {
-    case SIGN_IN_LOADING:
-      return { ...state, status: { ...state.status, login: "progress" } };
-    case SIGN_IN_FAILURE:
+    case LOG_IN_LOADING:
+      return { ...state, status: { ...state.status, login: "loading" } };
+    case LOG_IN_FAILURE:
       return { ...state, status: { ...state.status, login: "failed" }, error: action.payload };
-    case SIGN_IN_SUCCESS:
-      return Object.assign({}, state, action.payload.user, { signInProgress: "loaded" });
-    case SIGN_OUT:
+    case LOG_IN_SUCCESS:
+      return { ...state, status: { ...state.status, login: "succeeded" } };
+    case LOG_OUT:
       return initialAuthState;
     default:
       return state;

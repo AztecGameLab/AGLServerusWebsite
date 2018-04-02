@@ -4,8 +4,11 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
 //Actions
-import { loginAccount, signUpAccount } from "../../features/auth/authActions";
+import { loginAccount } from "../../features/auth/authActions";
 import { RedirectToForgot } from "../../features/API/History_API/historyFunctions";
+
+//Selectors
+import { selectAuthStatus } from "../../features/auth/authSelectors";
 
 //Components
 import LoginForm from "./LoginForm";
@@ -54,7 +57,7 @@ class RegistrationModal extends Component {
   };
 
   render() {
-    const { loginAccount, signUpAccount, RedirectToForgot } = this.props;
+    const { loginAccount, RedirectToForgot, loginStatus } = this.props;
     const { loginMode, formData } = this.state;
     return (
       <Modal
@@ -84,14 +87,10 @@ class RegistrationModal extends Component {
               handleFieldInput={this.handleFieldInput}
               loginAccount={loginAccount}
               forgotRedirect={RedirectToForgot}
+              loginStatus={loginStatus}
             />
           ) : (
-            <SignUpForm
-              switchModal={this.switchToLoginMode}
-              formData={formData}
-              handleFieldInput={this.handleFieldInput}
-              signUpAccount={signUpAccount}
-            />
+            <SignUpForm switchModal={this.switchToLoginMode} formData={formData} handleFieldInput={this.handleFieldInput} />
           )}
         </Modal.Content>
       </Modal>
@@ -99,9 +98,9 @@ class RegistrationModal extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => {
   return {
-    login: state.login
+    loginStatus: selectAuthStatus(state).login
   };
 };
 
@@ -109,8 +108,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       RedirectToForgot,
-      loginAccount,
-      signUpAccount
+      loginAccount
     },
     dispatch
   );
