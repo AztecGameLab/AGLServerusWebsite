@@ -61,6 +61,7 @@ const LoginForm = props => {
           Log In
         </Form.Button>
         {props.loginStatus === "failed" && props.errorComponent}
+        {props.needLoginHelp && props.helpComponent}
       </Form>
       <Divider horizontal>Don't have an account?</Divider>
       <Button basic onClick={props.switchModal}>

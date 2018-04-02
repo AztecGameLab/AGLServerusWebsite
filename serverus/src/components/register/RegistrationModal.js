@@ -8,7 +8,7 @@ import { loginAccount } from "../../features/auth/authActions";
 import { RedirectToForgot } from "../../features/API/History_API/historyFunctions";
 
 //Selectors
-import { selectAuthStatus, selectErrorMessage } from "../../features/auth/authSelectors";
+import { selectAuthStatus, selectErrorMessage, selectNeedLoginHelp } from "../../features/auth/authSelectors";
 
 //Components
 import LoginForm from "./LoginForm";
@@ -66,9 +66,10 @@ class RegistrationModal extends Component {
   };
 
   render() {
-    const { RedirectToForgot, loginStatus, errorMsg } = this.props;
+    const { RedirectToForgot, loginStatus, errorMsg, needLoginHelp } = this.props;
     const { loginMode, formData } = this.state;
     const errorComponent = <ErrorMessage message={errorMsg} />;
+    const needHelpComponent = <ErrorMessage message="Need help? Send us an email at aztecgamelab@gmail.com or click forgot password!"/>;
     return (
       <Modal
         closeIcon
@@ -98,6 +99,8 @@ class RegistrationModal extends Component {
               forgotRedirect={RedirectToForgot}
               loginStatus={loginStatus}
               errorComponent={errorComponent}
+              needLoginHelp={needLoginHelp}
+              helpComponent={needHelpComponent}
             />
           ) : (
             <SignUpForm
@@ -116,7 +119,8 @@ class RegistrationModal extends Component {
 const mapStateToProps = state => {
   return {
     loginStatus: selectAuthStatus(state).login,
-    errorMsg: selectErrorMessage(state)
+    errorMsg: selectErrorMessage(state),
+    needLoginHelp: selectNeedLoginHelp(state)
   };
 };
 

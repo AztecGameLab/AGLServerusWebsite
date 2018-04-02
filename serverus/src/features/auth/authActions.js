@@ -1,9 +1,12 @@
-import { LOG_IN_LOADING, LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_OUT } from "./authConstants";
+import { LOG_IN_LOADING, LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_OUT, DISPLAY_PASSWORD_HELP } from "./authConstants";
 
 //API
 import { AGL_Login, AGL_LogOut, EmailTakenCheck } from "../API/AGL_API/registrationFunctions";
 import { IsUserRencrypted, AGLEncryption, AGLRencryption } from "../API/AGL_API/encryptionFunctions";
 import * as EmailValidator from "email-validator";
+
+//Selectors
+import { selectNeedLoginHelp } from "./authSelectors";
 
 export const loginAccount = (email, password) => {
   return dispatch => {
@@ -18,14 +21,14 @@ export const loginAccount = (email, password) => {
                   dispatch({ type: LOG_IN_SUCCESS, payload: res });
                 })
                 .catch(error => {
-                  dispatch({ type: LOG_IN_FAILURE, payload: error });
+                  dispatch(loginFail(error));
                 });
             });
           } else {
             //Must Rencrypt
             AGLRencryption(email, password).then(res => {
               if (res.data === "Wrong Password") {
-                dispatch({ type: LOG_IN_FAILURE, payload: { message: "Wrong email or password" } });
+                dispatch(loginFail({ message: "Wrong email or password" }));
               } else {
                 AGLEncryption(password).then(encryptedPass => {
                   AGL_Login(email, encryptedPass)
@@ -33,7 +36,7 @@ export const loginAccount = (email, password) => {
                       dispatch({ type: LOG_IN_SUCCESS, payload: res });
                     })
                     .catch(error => {
-                      dispatch({ type: LOG_IN_FAILURE, payload: error });
+                      dispatch(loginFail(error));
                     });
                 });
               }
@@ -41,7 +44,7 @@ export const loginAccount = (email, password) => {
           }
         });
       } else {
-        dispatch({ type: LOG_IN_FAILURE, payload: { message: "Wrong email or password" } });
+        dispatch(loginFail({ message: "Wrong email or password" }));
       }
     });
   };
@@ -55,8 +58,18 @@ export const logOutAccount = () => {
   };
 };
 
-export const loginFormValidation = (email, password) => {
+//Helper Internal Functions
+const loginFormValidation = (email, password) => {
   return EmailTakenCheck(email).then(res => {
     return res.emailTaken && EmailValidator.validate(email) && password.length > 0;
   });
+};
+
+const loginFail = error => {
+  return (dispatch, getState) => {
+    dispatch({ type: LOG_IN_FAILURE, payload: error });
+    if (selectNeedLoginHelp(getState())) {
+      dispatch({ type: DISPLAY_PASSWORD_HELP });
+    }
+  };
 };
