@@ -4,13 +4,13 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 //Components
-import { Card, Form, Grid } from "semantic-ui-react";
+import { Card, Form, Grid, Message } from "semantic-ui-react";
 
 //Actions
 import { requestPasswordReset } from "../../features/auth/authActions";
 
 //Selectors
-import { selectAuthStatus } from "../../features/auth/authSelectors";
+import { selectAuthStatus, selectErrorMessage } from "../../features/auth/authSelectors";
 
 //Stylings
 import "./ForgotPassword.css";
@@ -23,7 +23,8 @@ class ForgotPassword extends Component {
     this.setState({ email: e.target.value });
   };
   render() {
-    const { requestPasswordReset, resetStatus } = this.props;
+    const { requestPasswordReset, resetStatus, errorMsg } = this.props;
+    const { email } = this.state;
     return (
       <Grid centered>
         <div className="forgotCard">
@@ -31,16 +32,17 @@ class ForgotPassword extends Component {
             <Card.Content>
               <h2>Reset Password</h2>
               <p>Enter the email address associated with your account, and we’ll email you a link to reset your password.</p>
-              <Form onSubmit={requestPasswordReset}>
+              <Form error={resetStatus === "failed"} success={resetStatus === "succeeded"} onSubmit={() => requestPasswordReset(email)}>
                 <br />
                 <Form.Input fluid placeholder="Email Address" icon="mail" onChange={this.handleEmailInput} autoComplete="on" />
                 <Form.Button fluid color="green" loading={resetStatus === "loading"} type="submit">
                   Send Reset Link
                 </Form.Button>
+                <Message error content={errorMsg} />
+                <Message success content="You've got mail!" />
               </Form>
             </Card.Content>
           </Card>
-          {this.state.email}
         </div>
       </Grid>
     );
@@ -49,7 +51,8 @@ class ForgotPassword extends Component {
 
 const mapStateToProps = state => {
   return {
-    resetStatus: selectAuthStatus(state).passwordReset
+    resetStatus: selectAuthStatus(state).passwordReset,
+    errorMsg: selectErrorMessage(state)
   };
 };
 

@@ -25,10 +25,12 @@ class HeaderDropdown extends Component {
             <Dropdown.Header>{"Logged in as " + userData.displayName}</Dropdown.Header>
             <Dropdown.Item as={Link} to={"/user/" + userData.displayName} icon="user" text="View Profile" />
             <Dropdown.Item disabled icon="users" text="View Teams" />
+            <Dropdown.Item disabled icon="group" text="View Friends" />
             <Dropdown.Divider />
+            <Dropdown.Item disabled icon="bar chart" text="Dashboard" />
             <Dropdown.Item disabled icon="edit" text="Edit Profile" />
             <Dropdown.Item disabled icon="setting" text="Account Settings" />
-            <Dropdown.Item disabled icon="comment" text="Messages" description="3 New" />
+            <Dropdown.Item disabled icon="comment" text="Messages" description="0 unread" />
             <Dropdown.Divider />
             <Dropdown.Item disabled icon="help circle" text="Help" />
             <Dropdown.Item icon="sign out" text="Log Out" onClick={logOutAccount} />
