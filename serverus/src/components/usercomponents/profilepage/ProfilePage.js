@@ -40,7 +40,7 @@ class ProfilePage extends Component {
   roleMapper = roles => {
     let objectList = [];
     roles.map(userRole => {
-      objectList.push(roleOptions.roles.find(role => role.value === userRole));
+      return objectList.push(roleOptions.roles.find(role => role.value === userRole));
     });
     return objectList.map((role, idx) => (
       <div key={idx}>
