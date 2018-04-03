@@ -17,7 +17,8 @@ import { selectLoggedIn } from "../../features/auth/authSelectors";
 const MenuObjects = [
   { name: "Competitions", logo: "trophy", route: "/competitions" },
   { name: "Game Directory", logo: "gamepad", route: "/games" },
-  { name: "User Directory", logo: "users", route: "/users" }
+  { name: "User Directory", logo: "users", route: "/users" },
+  { name: "Sponsors", logo: "shield", route: "/sponsors"}
 ];
 
 class Header extends Component {
