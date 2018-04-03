@@ -6,7 +6,8 @@ import {
   DISPLAY_PASSWORD_HELP,
   REQUEST_PASS_RESET,
   REQUEST_PASS_SUCCESS,
-  REQUEST_PASS_FAILURE
+  REQUEST_PASS_FAILURE,
+  REMEMBER_ME
 } from "./authConstants";
 
 // Progress States -> "idle" -> "loading" -> ("succeeded" || "failed")
@@ -16,6 +17,9 @@ const initialAuthState = {
     login: "idle",
     registration: "idle",
     passwordReset: "idle"
+  },
+  rememberMe: {
+    email: ""
   },
   failedLogins: 0,
   displayHelp: false,
@@ -39,8 +43,12 @@ export default (state = initialAuthState, action) => {
       return { ...state, status: { ...state.status, login: "idle", passwordReset: "succeeded" } };
     case REQUEST_PASS_FAILURE:
       return { ...state, status: { ...state.status, login: "idle", passwordReset: "failed" }, error: action.payload };
+    case REMEMBER_ME:
+      return { ...state, rememberMe: Object.assign({}, state.rememberMe, action.payload) };
     case LOG_OUT:
-      return initialAuthState;
+      const clearStoreWithRememberMe = initialAuthState;
+      delete clearStoreWithRememberMe.rememberMe;
+      return Object.assign({}, state, clearStoreWithRememberMe);
     default:
       return state;
   }

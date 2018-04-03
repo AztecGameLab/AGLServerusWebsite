@@ -33,6 +33,7 @@ class HeaderDropdown extends Component {
             <Dropdown.Item disabled icon="comment" text="Messages" description="0 unread" />
             <Dropdown.Divider />
             <Dropdown.Item disabled icon="help circle" text="Help" />
+            <Dropdown.Item disabled icon="flag" text="Submit Feedback" />
             <Dropdown.Item icon="sign out" text="Log Out" onClick={logOutAccount} />
           </Dropdown.Menu>
         </Dropdown>

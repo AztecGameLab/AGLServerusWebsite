@@ -8,7 +8,7 @@ import { loginAccount } from "../../features/auth/authActions";
 import { RedirectToForgot } from "../../features/API/History_API/historyFunctions";
 
 //Selectors
-import { selectAuthStatus, selectErrorMessage, selectNeedLoginHelp } from "../../features/auth/authSelectors";
+import { selectAuthStatus, selectErrorMessage, selectNeedLoginHelp, selectRememberMe } from "../../features/auth/authSelectors";
 
 //Components
 import LoginForm from "./LoginForm";
@@ -45,6 +45,14 @@ class RegistrationModal extends Component {
     });
   };
 
+  toggleCheckBox = (e, fieldName) => {
+    const newToggleState = !this.state.formData[fieldName];
+    this.setState({
+      ...this.state,
+      formData: { ...this.state.formData, [fieldName]: newToggleState }
+    });
+  };
+
   handleFieldInput = (e, fieldName) => {
     try {
       let currentForm = this.state.formData;
@@ -61,15 +69,15 @@ class RegistrationModal extends Component {
 
   handleLogin = () => {
     const { loginAccount } = this.props;
-    const { email, password } = this.state.formData;
-    loginAccount(email, password);
+    const { email, password, rememberMe } = this.state.formData;
+    loginAccount(email, password, rememberMe);
   };
 
   render() {
-    const { RedirectToForgot, loginStatus, errorMsg, needLoginHelp } = this.props;
+    const { RedirectToForgot, loginStatus, errorMsg, needLoginHelp, rememberMeEmail } = this.props;
     const { loginMode, formData } = this.state;
     const errorComponent = <ErrorMessage message={errorMsg} />;
-    const needHelpComponent = <ErrorMessage message="Need help? Send us an email at aztecgamelab@gmail.com or click forgot password!"/>;
+    const needHelpComponent = <ErrorMessage message="Need help? Send us an email at aztecgamelab@gmail.com or click forgot password!" />;
     return (
       <Modal
         closeIcon
@@ -91,16 +99,19 @@ class RegistrationModal extends Component {
             </CloudImage>
           </CloudinaryContext>
           <br />
+          {this.state.formData.rememberMe.toString()}
           {loginMode ? (
             <LoginForm
               switchModal={this.switchToRegisterMode}
               handleFieldInput={this.handleFieldInput}
               loginAccount={this.handleLogin}
+              toggleCheckBox={this.toggleCheckBox}
               forgotRedirect={RedirectToForgot}
               loginStatus={loginStatus}
               errorComponent={errorComponent}
               needLoginHelp={needLoginHelp}
               helpComponent={needHelpComponent}
+              rememberMeEmail={rememberMeEmail}
             />
           ) : (
             <SignUpForm
@@ -120,7 +131,8 @@ const mapStateToProps = state => {
   return {
     loginStatus: selectAuthStatus(state).login,
     errorMsg: selectErrorMessage(state),
-    needLoginHelp: selectNeedLoginHelp(state)
+    needLoginHelp: selectNeedLoginHelp(state),
+    rememberMeEmail: selectRememberMe(state).email
   };
 };
 
