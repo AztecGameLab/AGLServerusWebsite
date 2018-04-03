@@ -27,7 +27,7 @@ const Header = () => {
   });
   return (
     <Router history={history}>
-      <Menu secondary stackable borderless>
+      <Menu borderless>
         <Menu.Item key="home" as={Link} to="/">
           <CloudinaryContext cloudName="aztecgamelab-com">
             <CloudImage publicId="WebsiteAssets/blacklogo.png" />
