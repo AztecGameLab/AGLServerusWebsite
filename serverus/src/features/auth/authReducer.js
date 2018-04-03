@@ -1,4 +1,13 @@
-import { LOG_IN_LOADING, LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_OUT, DISPLAY_PASSWORD_HELP } from "./authConstants";
+import {
+  LOG_IN_LOADING,
+  LOG_IN_SUCCESS,
+  LOG_IN_FAILURE,
+  LOG_OUT,
+  DISPLAY_PASSWORD_HELP,
+  REQUEST_PASS_RESET,
+  REQUEST_PASS_SUCCESS,
+  REQUEST_PASS_FAILURE
+} from "./authConstants";
 
 // Progress States -> "idle" -> "loading" -> ("succeeded" || "failed")
 const initialAuthState = {
@@ -17,13 +26,19 @@ const initialAuthState = {
 export default (state = initialAuthState, action) => {
   switch (action.type) {
     case LOG_IN_LOADING:
-      return { ...state, status: { ...state.status, login: "loading" } };
+      return { ...state, status: { ...state.status, login: "loading", passwordReset: "idle" } };
     case LOG_IN_FAILURE:
-      return { ...state, status: { ...state.status, login: "failed" }, error: action.payload, ...(state.failedLogins += 1) };
+      return { ...state, status: { ...state.status, login: "failed", passwordReset: "idle" }, error: action.payload, ...(state.failedLogins += 1) };
     case LOG_IN_SUCCESS:
-      return { ...state, status: { ...state.status, login: "succeeded" }, loggedIn: true, displayHelp: false };
+      return { ...state, status: { ...state.status, login: "succeeded", passwordReset: "idle" }, loggedIn: true, displayHelp: false };
     case DISPLAY_PASSWORD_HELP:
       return { ...state, displayHelp: true };
+    case REQUEST_PASS_RESET:
+      return { ...state, status: { ...state.status, login: "idle", passwordReset: "loading" } };
+    case REQUEST_PASS_SUCCESS:
+      return { ...state, status: { ...state.status, login: "idle", passwordReset: "succeeded" } };
+    case REQUEST_PASS_FAILURE:
+      return { ...state, status: { ...state.status, login: "idle", passwordReset: "failed" }, error: action.payload };
     case LOG_OUT:
       return initialAuthState;
     default:
