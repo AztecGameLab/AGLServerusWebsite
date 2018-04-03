@@ -10,6 +10,7 @@ import UserDirectory from "../userdirectory/UserDirectory";
 import GameDirectory from "../gamedirectory/GameDirectory";
 import ProfilePage from "../usercomponents/profilepage/ProfilePage";
 import GamePage from "../gamecomponents/gamepage/GamePage";
+import ForgotPassword from "../forgot/ForgotPassword";
 
 class App extends Component {
   render() {
@@ -24,6 +25,7 @@ class App extends Component {
             <Route exact path="/games" component={GameDirectory} />
             <Route exact path="/user/:username" component={ProfilePage} />
             <Route exact path="/game/:gameID" component={GamePage} />
+            <Route exact path="/forgot" component={ForgotPassword} />
           </Switch>
         </Router>
         <Spacer lines={10} />

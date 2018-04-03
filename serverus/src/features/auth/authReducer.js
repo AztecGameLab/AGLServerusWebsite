@@ -1,4 +1,4 @@
-import { LOG_IN_LOADING, LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_OUT, DISPLAY_PASSWORD_HELP } from "./authConstants";
+import { LOG_IN_LOADING, LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_OUT, DISPLAY_PASSWORD_HELP, REQUEST_PASS_RESET } from "./authConstants";
 
 // Progress States -> "idle" -> "loading" -> ("succeeded" || "failed")
 const initialAuthState = {
@@ -24,6 +24,8 @@ export default (state = initialAuthState, action) => {
       return { ...state, status: { ...state.status, login: "succeeded" }, loggedIn: true, displayHelp: false };
     case DISPLAY_PASSWORD_HELP:
       return { ...state, displayHelp: true };
+    case REQUEST_PASS_RESET:
+      return { ...state, status: { ...state.status, passwordReset: "loading" } };
     case LOG_OUT:
       return initialAuthState;
     default:
