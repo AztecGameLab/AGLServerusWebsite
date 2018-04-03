@@ -7,7 +7,7 @@ import roleOptions from '../../assets/roles/roleOptions.json';
 import {RedirectToExternal} from '../../../features/API/History_API/historyFunctions'
 
 //Components
-// import Loading from "../../utility/Loading";
+import Loading from "../../utility/Loading";
 // import ReactJson from "react-json-view";
 
 //Actions
@@ -72,8 +72,8 @@ class ProfilePage extends Component {
   }
 
   render() {
-    const { currentUser } = this.props;
-    return <div>
+    const { loadingStatus, currentUser } = this.props;
+    return <div>{loadingStatus ==='loading' ? <Loading message="Wait your fucking turn"/> : 
       <Grid>
         <Grid.Column />
         <Grid.Column width={3}>
@@ -148,6 +148,7 @@ class ProfilePage extends Component {
         </Grid.Column>
         <Grid.Column />
       </Grid>
+    }
     </div>
   }
 }
