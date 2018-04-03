@@ -28,14 +28,19 @@ const LoginForm = props => {
 
       <br />
       <Divider horizontal>or</Divider>
-      <Form className="loginForm" onSubmit={() => props.loginAccount()}>
+
+    <Form className="loginForm" onSubmit={() => props.loginAccount()}>
         <Form.Input
           className="formContents"
           placeholder="Email Address"
           icon="user"
           onChange={e => props.handleFieldInput(e, "email")}
           autoComplete="on"
+          list="emailSuggestions"
         />
+        <datalist id="emailSuggestions">
+          <option value={props.rememberMeEmail}/>
+        </datalist>
         <Form.Input
           className="formContents"
           type="password"
@@ -46,7 +51,7 @@ const LoginForm = props => {
         />
         <Grid columns={2}>
           <Grid.Column textAlign="left">
-            <Checkbox label="Remember me" autoComplete="off" />
+            <Checkbox label="Remember me" autoComplete="off" onChange={e => props.toggleCheckBox(e, "rememberMe")} />
           </Grid.Column>
           <Grid.Column textAlign="right">
             <i>

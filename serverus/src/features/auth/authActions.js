@@ -6,7 +6,8 @@ import {
   DISPLAY_PASSWORD_HELP,
   REQUEST_PASS_RESET,
   REQUEST_PASS_SUCCESS,
-  REQUEST_PASS_FAILURE
+  REQUEST_PASS_FAILURE,
+  REMEMBER_ME
 } from "./authConstants";
 
 //API
@@ -18,9 +19,12 @@ import * as EmailValidator from "email-validator";
 //Selectors
 import { selectNeedLoginHelp } from "./authSelectors";
 
-export const loginAccount = (email, password) => {
+export const loginAccount = (email, password, rememberMe) => {
   return dispatch => {
     dispatch({ type: LOG_IN_LOADING });
+    if (rememberMe) {
+      dispatch(cacheLoginInput(email));
+    }
     return loginFormValidation(email, password).then(valid => {
       if (valid) {
         IsUserRencrypted(email).then(recrypted => {
@@ -100,5 +104,11 @@ const loginFail = error => {
     if (selectNeedLoginHelp(getState())) {
       dispatch({ type: DISPLAY_PASSWORD_HELP });
     }
+  };
+};
+
+const cacheLoginInput = email => {
+  return dispatch => {
+    dispatch({ type: REMEMBER_ME, payload: { email } });
   };
 };
