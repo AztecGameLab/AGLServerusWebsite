@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Grid, Image, Label, Header, Comment } from 'semantic-ui-react';
+import { Link } from "react-router-dom"; 
+import Lightbox from 'react-images';
+import Slider from 'react-slick';
+import SlickNextArrow from '../../assets/arrows/SlickNextArrow';
+import SlickPrevArrow from '../../assets/arrows/SlickPrevArrow';
+import { Card, Grid, Image, Label, Header, Comment, Icon } from 'semantic-ui-react';
 
 import { Image as CloudImage, CloudinaryContext } from 'cloudinary-react';
 
@@ -40,6 +45,26 @@ class GamePage extends Component {
     //TODO Implement this
   }
 
+  createScreenshots = (value, key) => {
+    return(
+      <div key={key} style={{textAlign: "center", key: {key}}}>
+        <Image style={{maxHeight: 250, borderRadias: 5, cursor: 'zoom-in'}} onDoubleClick={this.showScreenshot} src={value.url}/>
+      </div>
+    )
+  }
+
+  showScreenshot = e => {
+    
+  }
+
+  goToPrevious = () => {
+    //TODO Implement
+  }
+
+  goToNext = () => {
+    //TODO Implement
+  }
+
   minify = profileURL => {
     let headerImage = profileURL;
     headerImage = headerImage.slice(0, headerImage.indexOf("Small")) + "Extra" + headerImage.slice(headerImage.indexOf("Small"));
@@ -66,7 +91,33 @@ class GamePage extends Component {
   }
 
   render() {
-    const { loadingStatus, currentGame } = this.props;
+    const { loadingStatus, currentGame, currentUser } = this.props;
+    let that = this;
+    var screenshots;
+    if(currentGame.screenshots){
+      var slidesToShow = currentGame.screenshots.length < 3 ? 1 : 3;
+      var settings = {
+        accessibility: false,
+        centerMode: true,
+        centerPadding: 0,
+        customPaging: function(i){
+          return <a><img alt="" style={{ maxHeight: 24, height: '-webkit-fill-available' }} src={that.props.currentGame.screenshots[i].url} /></a>
+        },
+        dots: true,
+        dotsClass: 'slick-dots slick-thumb',
+        focusOnSelect: true,
+        infinite: true,
+        pauseOnHover: true,
+        speed: 400,
+        slidesToShow: slidesToShow,
+        nextArrow: <SlickNextArrow noArrow={false}/>,
+        prevArrow: <SlickPrevArrow noArrow={false}/>
+      }
+      screenshots = currentGame.screenshots.map(this.createScreenshots);
+      if(screenshots){
+        var lightBox = <Lightbox images={currentGame.screenshots} currentImage={0} enableKeyboardInput/>
+      }
+    }
     return <div>{loadingStatus === "loading" ? <Loading loadingMessage="Retrieving Game..." /> :
       <div>
         <CloudinaryContext cloudName="aztecgamelab-com">
@@ -76,12 +127,27 @@ class GamePage extends Component {
               <Card fluid>
                 <Card.Content>
                   <Card.Header><h3 style={{ textAlign: "center", fontSize: "5em" }}>{currentGame.title}</h3></Card.Header>
-                  Preview Image
+                  <div>
+                    <Slider {...settings}>
+                      {screenshots}
+                    </Slider>
+                    {lightBox}
+                  </div>
+                  <div>
+                    {currentGame.description}
+                  </div>
                 </Card.Content>
               </Card>
               <Card fluid>
                 <Card.Content>
-                  Votes
+                  {(!currentUser) ?
+                    <div>
+                      Can Vote
+                    </div> :
+                    <div>
+                      Can Not Vote
+                    </div>
+                  }
               </Card.Content>
               </Card>
               <Card fluid>
@@ -106,7 +172,20 @@ class GamePage extends Component {
                   </Grid>
                 </Card.Content>
                 <Card.Content>
-                  <Header>Author</Header>
+                  <Grid columns={2}>
+                    <Grid.Column>
+                      <Header>Authors</Header>
+                    </Grid.Column>
+                    <Grid.Column>
+                      {currentGame.authors.map((author, idx) => {
+                        return(
+                          <div key={idx}>
+                            <Label basic as={Link} to={"/user/"+author}><Icon name="user"/>{author}</Label>
+                          </div>
+                        );
+                      })}
+                    </Grid.Column>
+                  </Grid>
                 </Card.Content>
                 <Card.Content>
                   <Grid columns={2}>
