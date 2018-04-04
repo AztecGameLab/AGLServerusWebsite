@@ -107,9 +107,9 @@ class ChangePassword extends Component {
                   </Button>
                 </Form>
                 
-                  {changeStatus==="failed" && <Message error> {errorMsg} </Message> }
+                  {changeStatus==="failed" && <Message error> <p>{errorMsg}</p> </Message> }
                   {changeStatus==="succeeded" && <Message success> 
-                    Your email has successfully changed. 
+                    <p>Your email has successfully changed. </p>
                     <Button as={Link} to="/">Continue</Button>
                   </Message>}
 
