@@ -99,7 +99,6 @@ class RegistrationModal extends Component {
             </CloudImage>
           </CloudinaryContext>
           <br />
-          {this.state.formData.rememberMe.toString()}
           {loginMode ? (
             <LoginForm
               switchModal={this.switchToRegisterMode}

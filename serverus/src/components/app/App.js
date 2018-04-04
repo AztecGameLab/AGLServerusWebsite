@@ -11,6 +11,7 @@ import GameDirectory from "../gamedirectory/GameDirectory";
 import ProfilePage from "../usercomponents/profilepage/ProfilePage";
 import GamePage from "../gamecomponents/gamepage/GamePage";
 import ForgotPassword from "../forgot/ForgotPassword";
+import ChangePassword from "../forgot/ChangePassword";
 import SponsorPage from "../sponsors/SponsorPage";
 
 class App extends Component {
@@ -26,6 +27,7 @@ class App extends Component {
             <Route exact path="/games" component={GameDirectory} />
             <Route exact path="/user/:username" component={ProfilePage} />
             <Route exact path="/game/:gameID" component={GamePage} />
+            <Route exact path="/passwordreset/:resetID" component={ChangePassword} />
             <Route exact path="/forgot" component={ForgotPassword} />
             <Route exact path="/sponsors" component={SponsorPage} />
           </Switch>
