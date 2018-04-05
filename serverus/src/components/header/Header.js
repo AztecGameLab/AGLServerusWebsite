@@ -18,7 +18,8 @@ const MenuObjects = [
   { name: "Competitions", logo: "trophy", route: "/competitions" },
   { name: "Game Directory", logo: "gamepad", route: "/games" },
   { name: "User Directory", logo: "users", route: "/users" },
-  { name: "Sponsors", logo: "shield", route: "/sponsors"}
+  { name: "Sponsors", logo: "shield", route: "/sponsors"},
+  { name: "About Us", logo: "info", route: "/aboutus"}
 ];
 
 class Header extends Component {
