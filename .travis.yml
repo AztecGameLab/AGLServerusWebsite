@@ -9,16 +9,19 @@ node_js:
   - 9.8.0
 
 cache:
+  yarn: true
   directories:
     - node_modules
 
 before_install: 
+  #cd to our project
   - cd serverus
 
 install: 
-  - npm install
+  #install packages
+  - yarn
 
 script:
-  - npm run build
-  - npm run travis
+  - yarn build
+  - yarn travis
 

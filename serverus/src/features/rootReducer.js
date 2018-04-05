@@ -1,10 +1,12 @@
-import { combineReducers } from 'redux';
-import { routerReducer } from 'react-router-redux';
-import login from './login/loginReducer';
-import user from './user/userReducer';
+import { combineReducers } from "redux";
+import { routerReducer } from "react-router-redux";
+import siteData from "./siteData/siteDataReducer";
+import auth from "./auth/authReducer";
+import userSession from "./userSession/userReducer";
 
 export default combineReducers({
-    router: routerReducer,
-    login,
-    user,
+  router: routerReducer,
+  auth,
+  siteData,
+  userSession
 });

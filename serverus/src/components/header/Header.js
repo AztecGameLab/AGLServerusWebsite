@@ -2,20 +2,23 @@
 import React, { Component } from "react";
 import { Link, Router } from "react-router-dom";
 import { history } from "../../features/API/History_API/historyFunctions";
-import { bindActionCreators } from "redux";
-import { } from "../../features/login/loginAction";
 import { connect } from "react-redux";
+
 // Components
-import { Icon, Modal, Menu, Button } from "semantic-ui-react";
-import { Image as CloudImage, CloudinaryContext } from "cloudinary-react";
-import RegisterModal from "../register/RegisterModal";
+import { Icon, Menu } from "semantic-ui-react";
+import { Image as CloudImage, CloudinaryContext, Transformation } from "cloudinary-react";
+import RegistrationModal from "../register/RegistrationModal";
+import HeaderDropdown from "../usercomponents/headerdropdown/HeaderDropdown";
+
+//Selectors
+import { selectLoggedIn } from "../../features/auth/authSelectors";
 
 // Create list of Menu Items with settings
 const MenuObjects = [
   { name: "Competitions", logo: "trophy", route: "/competitions" },
   { name: "Game Directory", logo: "gamepad", route: "/games" },
   { name: "User Directory", logo: "users", route: "/users" },
-  { name: "Resources", logo: "cubes", route: "/resources" }
+  { name: "Sponsors", logo: "shield", route: "/sponsors"}
 ];
 
 class Header extends Component {
@@ -30,23 +33,22 @@ class Header extends Component {
   });
 
   render() {
+    const { loggedIn } = this.props;
     return (
       <Router history={history}>
         <Menu secondary stackable borderless>
           <Menu.Item key="home" as={Link} to="/">
             <CloudinaryContext cloudName="aztecgamelab-com">
-              <CloudImage publicId="WebsiteAssets/blacklogo.png" />
+              <CloudImage publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer2.png">
+                <Transformation width="150" crop="scale" />
+              </CloudImage>
             </CloudinaryContext>
           </Menu.Item>
 
           {this.MenuItemComponents}
 
           <Menu.Menu position="right">
-            <Menu.Item name="Login">
-              <Modal trigger={<Button>Login</Button>}>
-                <RegisterModal />
-              </Modal>
-            </Menu.Item>
+            <Menu.Item>{loggedIn ? <HeaderDropdown /> : <RegistrationModal />}</Menu.Item>
           </Menu.Menu>
         </Menu>
       </Router>
@@ -54,15 +56,10 @@ class Header extends Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+const mapStateToProps = state => {
   return {
-    user: state.user
+    loggedIn: selectLoggedIn(state)
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
-  return {
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, null)(Header);
