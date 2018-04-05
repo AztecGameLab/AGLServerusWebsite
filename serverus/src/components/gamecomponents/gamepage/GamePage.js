@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 import Lightbox from 'react-images';
 import Slider from 'react-slick';
 import SlickNextArrow from '../../assets/arrows/SlickNextArrow';
 import SlickPrevArrow from '../../assets/arrows/SlickPrevArrow';
-import { Card, Grid, Image, Label, Header, Comment, Icon } from 'semantic-ui-react';
+import Tab, { Card, Grid, Image, Label, Header, Comment, Icon, Table, Rating, Form, Button } from 'semantic-ui-react';
 
 import { Image as CloudImage, CloudinaryContext } from 'cloudinary-react';
 
@@ -18,11 +18,20 @@ import ReactJson from "react-json-view";
 
 //Selectors
 import { selectIsGameDirectoryCached, selectSiteDataStatus, makeSelectGame } from "../../../features/siteData/siteDataSelectors";
-
+import { selectUserData } from "../../../features/userSession/userSelectors";
 //Actions
 import { loadGames } from "../../../features/siteData/siteDataActions";
 
 class GamePage extends Component {
+  state = {
+    currentImageIndex: 0,
+    lightboxIsOpen: false,
+    MechRatingScore: 0,
+    AestRatingScore: 0,
+    InnoRatingScore: 0,
+    ThemRatingScore: 0,
+    commentStr: ""
+  }
   componentDidMount() {
     const { isGameDirectoryCached, loadGames } = this.props;
     if (!isGameDirectoryCached) {
@@ -46,23 +55,44 @@ class GamePage extends Component {
   }
 
   createScreenshots = (value, key) => {
-    return(
-      <div key={key} style={{textAlign: "center", key: {key}}}>
-        <Image style={{maxHeight: 250, borderRadias: 5, cursor: 'zoom-in'}} onDoubleClick={this.showScreenshot} src={value.url}/>
+    return (
+      <div key={key} style={{ textAlign: "center", key: { key } }}>
+        <Image style={{ maxHeight: 250, borderRadias: 5, cursor: 'zoom-in' }} onDoubleClick={this.showScreenshot} src={value.url} />
       </div>
     )
   }
 
   showScreenshot = e => {
-    
+
+  }
+
+  closeLightbox = () => {
+
   }
 
   goToPrevious = () => {
-    //TODO Implement
+    this.setState({ currentImageIndex: this.state.currentImageIndex - 1 });
   }
 
   goToNext = () => {
-    //TODO Implement
+    this.setState({ currentImageIndex: this.state.currentImageIndex + 1 });
+  }
+
+  //Ratings
+  handleMechanicsRating = (e, { rating }) => {
+    this.setState({ MechRatingScore: rating });
+  }
+
+  handleAestheticsRating = (e, { rating }) => {
+    this.setState({ AestRatingScore: rating });
+  }
+
+  handleInnovationRating = (e, { rating }) => {
+    this.setState({ InnoRatingScore: rating });
+  }
+
+  handleThemeRating = (e, { rating }) => {
+    this.setState({ ThemRatingScore: rating });
   }
 
   minify = profileURL => {
@@ -74,15 +104,23 @@ class GamePage extends Component {
   mapComments = comments => {
     const sortedByTime = Object.keys(comments).sort((a, b) => a - b);
     const commentList = sortedByTime.map((time) => {
-      return(
+      return (
         <div key={time}>
           <Comment>
-            <CloudImage className="avatar" publicId={this.minify(comments[time].profilePic)}/>
-            <Comment.Content>
-              <Comment.Author>{ comments[time].username }</Comment.Author>
-              <Comment.Metadata>{comments[time].timeSubmitted}</Comment.Metadata>
-              <Comment.Text>{comments[time].text}</Comment.Text>
-            </Comment.Content>
+            <Header dividing/>
+            <Grid>
+              <Grid.Column>
+                <CloudImage className="avatar" publicId={this.minify(comments[time].profilePic)} />
+              </Grid.Column>
+              <Grid.Column width={15}>
+                <Comment.Content>
+                  <div>
+                    <Label pointing="right" basic as={Link} to={"/user/" + comments[time].username}>{comments[time].username}</Label> | {comments[time].timeSubmitted}
+                  </div>
+                  <Comment.Text>{comments[time].text}</Comment.Text>
+                </Comment.Content>
+              </Grid.Column>
+            </Grid>
           </Comment>
         </div>
       );
@@ -91,16 +129,16 @@ class GamePage extends Component {
   }
 
   render() {
-    const { loadingStatus, currentGame, currentUser } = this.props;
+    const { loadingStatus, currentGame, userData } = this.props;
     let that = this;
     var screenshots;
-    if(currentGame.screenshots){
+    if (currentGame.screenshots) {
       var slidesToShow = currentGame.screenshots.length < 3 ? 1 : 3;
       var settings = {
         accessibility: false,
         centerMode: true,
         centerPadding: 0,
-        customPaging: function(i){
+        customPaging: function (i) {
           return <a><img alt="" style={{ maxHeight: 24, height: '-webkit-fill-available' }} src={that.props.currentGame.screenshots[i].url} /></a>
         },
         dots: true,
@@ -110,28 +148,39 @@ class GamePage extends Component {
         pauseOnHover: true,
         speed: 400,
         slidesToShow: slidesToShow,
-        nextArrow: <SlickNextArrow noArrow={false}/>,
-        prevArrow: <SlickPrevArrow noArrow={false}/>
+        nextArrow: <SlickNextArrow noArrow={false} />,
+        prevArrow: <SlickPrevArrow noArrow={false} />
       }
-      screenshots = currentGame.screenshots.map(this.createScreenshots);
-      if(screenshots){
-        var lightBox = <Lightbox images={currentGame.screenshots} currentImage={0} enableKeyboardInput/>
+      var screenShotUrls = currentGame.screenshots.map(image => {
+        return {
+          public_id: image.public_id,
+          src: image.url,
+          url: image.url
+        }
+      });
+      screenshots = screenShotUrls.map(this.createScreenshots);
+      if (screenshots) {
+        var lightBox = <Lightbox images={screenShotUrls} currentImage={this.state.currentImageIndex}
+          onClickNext={this.goToNext} onClickPrev={this.goToPrevious} enableKeyboardInput onClose={this.closeLightbox} />
       }
     }
+    debugger;
     return <div>{loadingStatus === "loading" ? <Loading loadingMessage="Retrieving Game..." /> :
       <div>
         <CloudinaryContext cloudName="aztecgamelab-com">
           <Grid>
             <Grid.Column />
-            <Grid.Column width={8}>
+            <Grid.Column width={10}>
               <Card fluid>
                 <Card.Content>
                   <Card.Header><h3 style={{ textAlign: "center", fontSize: "5em" }}>{currentGame.title}</h3></Card.Header>
                   <div>
+                    <br />
                     <Slider {...settings}>
                       {screenshots}
                     </Slider>
                     {lightBox}
+                    <br />
                   </div>
                   <div>
                     {currentGame.description}
@@ -140,15 +189,48 @@ class GamePage extends Component {
               </Card>
               <Card fluid>
                 <Card.Content>
-                  {(!currentUser) ?
-                    <div>
-                      Can Vote
-                    </div> :
+                  {(Object.keys(userData).length === 0) ?
                     <div>
                       Can Not Vote
+                    </div> :
+                    <div>
+                      <Table size="small" basic="very">
+                        <Table.Body>
+                          <Table.Row>
+                            <Table.Cell>Mechanics</Table.Cell>
+                            <Table.Cell>
+                              <Rating maxRating={5} onRate={this.handleMechanicsRating} />
+                            </Table.Cell>
+                          </Table.Row>
+                          <Table.Row>
+                            <Table.Cell>
+                              Aesthetics
+                            </Table.Cell>
+                            <Table.Cell>
+                              <Rating maxRating={5} onRate={this.handleAestheticsRating} />
+                            </Table.Cell>
+                          </Table.Row>
+                          <Table.Row>
+                            <Table.Cell>
+                              Innovation
+                            </Table.Cell>
+                            <Table.Cell>
+                              <Rating maxRating={5} onRate={this.handleInnovationRating} />
+                            </Table.Cell>
+                          </Table.Row>
+                          <Table.Row>
+                            <Table.Cell>
+                              Theme
+                            </Table.Cell>
+                            <Table.Cell>
+                              <Rating maxRating={5} onRate={this.handleThemeRating} />
+                            </Table.Cell>
+                          </Table.Row>
+                        </Table.Body>
+                      </Table>
                     </div>
                   }
-              </Card.Content>
+                </Card.Content>
               </Card>
               <Card fluid>
                 <Card.Content>
@@ -156,7 +238,19 @@ class GamePage extends Component {
                   <div>
                     {this.mapComments(currentGame.comments)}
                   </div>
-              </Card.Content>
+                  {Object.keys(userData).length === 0 ?
+                    <div>
+                      You must be logged in to comment
+                  </div> :
+                    <div>
+                      <Header dividing />
+                      <Form>
+                        <Form.TextArea />
+                        <Button color="green" floated="right">Submit</Button>
+                      </Form>
+                    </div>
+                  }
+                </Card.Content>
               </Card>
             </Grid.Column>
             <Grid.Column width={4}>
@@ -178,9 +272,9 @@ class GamePage extends Component {
                     </Grid.Column>
                     <Grid.Column>
                       {currentGame.authors.map((author, idx) => {
-                        return(
+                        return (
                           <div key={idx}>
-                            <Label basic as={Link} to={"/user/"+author}><Icon name="user"/>{author}</Label>
+                            <Label basic as={Link} to={"/user/" + author}><Icon name="user" />{author}</Label>
                           </div>
                         );
                       })}
@@ -218,7 +312,7 @@ class GamePage extends Component {
                     <Grid.Column>
                       {
                         currentGame.selectedTags.map((tag, idx) => {
-                          return(<Label key={idx} tag>{tag}</Label>);
+                          return (<Label key={idx} tag>{tag}</Label>);
                         })
                       }
                     </Grid.Column>
@@ -241,7 +335,8 @@ const makeMapStateToProps = () => {
     return {
       loadingStatus: selectSiteDataStatus(state).gameDirectory,
       isGameDirectoryCached: selectIsGameDirectoryCached(state),
-      currentGame: selectGame(state, props)
+      currentGame: selectGame(state, props),
+      userData: selectUserData(state)
     };
   };
   return mapStateToProps;
