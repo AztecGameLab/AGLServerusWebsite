@@ -106,6 +106,7 @@ class ProfilePage extends Component {
                   <Button color="twitter" circular icon="twitter" as="a" href={currentUser.twitterLink} />
                   <Button color="linkedin" circular icon="linkedin" as="a" href={currentUser.linkedInLink} />
                   <Button color="instagram" circular icon="instagram" as="a" href={currentUser.instagramLink} />
+                  <Popup color="slack" trigger={<Button circular icon="slack"/>} content={currentUser.slack}/>
                 </Card.Content>
               </Card>
             </Grid.Column>
@@ -113,30 +114,30 @@ class ProfilePage extends Component {
               <Card raised fluid>
                 <Card.Content>
                   <Header>
-                    <Icon name="question circle outline" size="massive" />About Me
+                    <Icon color="teal" name="question circle outline" size="massive" />About Me
                   </Header>
                   <div>{currentUser.bio}</div>
                 </Card.Content>
                 <Card.Content>
                   <Header>
-                    <Icon name="game" />Games
+                    <Icon color="teal" name="game" />Games
                   </Header>
                   <div>Coming Soon</div>
                 </Card.Content>
                 <Card.Content>
                   <Header>
-                    <Icon name="paint brush" />Art
+                    <Icon color="teal" name="paint brush" />Art
                   </Header>
                   <div>Coming Soon</div>
                 </Card.Content>
                 <Card.Content>
                   <Header>
-                    <Icon name="music" />Music
+                    <Icon color="teal" name="music" />Music
                   </Header>
                   <div>Coming Soon</div>
                 </Card.Content>
                 <Card.Content>
-                  <Header>Friends</Header>
+                  <Header><Icon color="teal" name="hand peace"/>Friends</Header>
                   <div>Coming Soon.</div>
                 </Card.Content>
               </Card>
