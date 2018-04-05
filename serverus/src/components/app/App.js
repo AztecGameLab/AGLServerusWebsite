@@ -6,6 +6,7 @@ import Home from "../home/Home";
 import HeaderMenu from "../header/Header";
 import Footer from "../footer/Footer";
 import Spacer from "../utility/Spacer";
+import CompetitionDirectory from '../competitiondirectory/CompetitionDirectory';
 import UserDirectory from "../userdirectory/UserDirectory";
 import GameDirectory from "../gamedirectory/GameDirectory";
 import ProfilePage from "../usercomponents/profilepage/ProfilePage";
@@ -23,6 +24,7 @@ class App extends Component {
         <Router history={history}>
           <Switch>
             <Route exact path="/" component={Home} />
+            <Route exact path="/competitions" component={CompetitionDirectory}/>
             <Route exact path="/users" component={UserDirectory} />
             <Route exact path="/games" component={GameDirectory} />
             <Route exact path="/user/:username" component={ProfilePage} />

@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import { Grid, Card, Header, Table } from "semantic-ui-react";
+
 //Actions
 import { loadGames } from "../../features/siteData/siteDataActions";
 
@@ -25,7 +27,23 @@ class GameDirectory extends Component {
 
   render() {
     const { games, loadingStatus } = this.props;
-    return <div>{loadingStatus === "loading" ? <Loading loadingMessage="Retrieving Games..." /> : <GameGrid games={games} />}</div>;
+    return <div>{loadingStatus === "loading" ? <Loading loadingMessage="Retrieving Games..." /> :
+      <div>
+        <Grid>
+          <Grid.Column width={3}>
+            <Card fluid>
+              <Card.Content>
+                <Header dividing>Games</Header>
+
+              </Card.Content>
+            </Card>
+          </Grid.Column>
+          <Grid.Column width={11}>
+            <GameGrid games={games} />
+          </Grid.Column>
+        </Grid>
+      </div>
+    }</div>;
   }
 }
 

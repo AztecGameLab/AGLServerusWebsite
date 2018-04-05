@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { Card, Grid, Header } from "semantic-ui-react";
 
 //Actions
 import { loadUsers, filterUserDirectory } from "../../features/siteData/siteDataActions";
@@ -23,7 +24,22 @@ class UserDirectory extends Component {
 
   render() {
     const { users, loadingStatus } = this.props;
-    return <div>{loadingStatus === "loading" ? <Loading loadingMessage="Retrieving Users..." /> : <UserGrid users={users} />}</div>;
+    return <div>{loadingStatus === "loading" ? <Loading loadingMessage="Retrieving Users..." /> :
+      <div>
+      <Grid>
+        <Grid.Column width={3}>
+          <Card fluid>
+            <Card.Content>
+              <Header dividing>Users</Header>
+            </Card.Content>
+          </Card>
+        </Grid.Column>
+        <Grid.Column width={12}>
+          <UserGrid users={users} />
+        </Grid.Column>
+      </Grid>
+
+      </div>}</div>;
   }
 }
 

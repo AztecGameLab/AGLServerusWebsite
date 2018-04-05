@@ -16,7 +16,7 @@ const UserGrid = props => {
     }
   });
   return (
-    <Card.Group centered itemsPerRow={4}>
+    <Card.Group centered itemsPerRow={3}>
       {UserCards}
     </Card.Group>
   );
