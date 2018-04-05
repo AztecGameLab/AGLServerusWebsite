@@ -1,16 +1,14 @@
 import React, { Component } from "react";
-// import HorizontalTimeline from "react-horizontal-timeline";
 import Tubular from "react-tubular";
 
 import "./Home.css";
 
 class Home extends Component {
-  state = { value: 0, previous: 0 };
   render() {
     return (
       <div class="Page Contents">
         <div class="ui vertical center aligned segment" style={firstPart}>
-          <Tubular // For this to show correctly, margin of ui menu must be 0 or find a different parallax
+          <Tubular
             ratio={16 / 9} // Choose 4/3 or 16/9
             videoId={"AQiAEczCASw"} // Retrowave
             mute={true}
@@ -26,10 +24,40 @@ class Home extends Component {
           <div class="ui active dimmer">
             <div class="content" style={headerText}>
               <img
-                src="https://res.cloudinary.com/aztecgamelab-com/image/upload/v1522890086/AGL_banner_transparent_wpjvbo.png"
+                src="http://res.cloudinary.com/aztecgamelab-com/image/upload/c_scale,h_675/v1522960410/AGL_banner_transparent_1_sjuzwm.png"
                 alt="We are the Aztec Game Lab"
               />
             </div>
+          </div>
+        </div>
+        <div class="ui vertical center aligned segment" style={thirdPart}>
+          <div class="ui three column grid">
+            <div class="three wide column" />
+            <div class="ten wide column">
+              <div class="ui inverted segment">
+                <div class="ui three huge statistics">
+                  <div class="ui red inverted statistic">
+                    <div class="value">
+                      <i aria-hidden="true" class="user circle icon" /> 160+
+                    </div>
+                    <div class="label">Team Members</div>
+                  </div>
+                  <div class="ui violet inverted statistic">
+                    <div class="value">
+                      <i aria-hidden="true" class="cogs icon" /> 3
+                    </div>
+                    <div class="label">Workshops</div>
+                  </div>
+                  <div class="ui purple inverted statistic">
+                    <div class="value">
+                      <i aria-hidden="true" class="gamepad icon" /> 2
+                    </div>
+                    <div class="label">Gamejams</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="three wide column" />
           </div>
         </div>
         <div class="ui vertical stripe segment" style={secondPart}>
@@ -106,8 +134,6 @@ class Home extends Component {
 // Inline Styles
 
 const headerText = {
-  marginTop: "-3em",
-  marginBottom: "0em",
   fontSize: "4em",
   fontWeight: "normal"
 };
