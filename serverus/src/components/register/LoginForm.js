@@ -28,23 +28,30 @@ const LoginForm = props => {
 
       <br />
       <Divider horizontal>or</Divider>
-      <Form className="loginForm" onSubmit={() => props.loginAccount(props.formData)}>
+
+    <Form className="loginForm" onSubmit={() => props.loginAccount()}>
         <Form.Input
           className="formContents"
-          placeholder="Username or Email Address"
+          placeholder="Email Address"
           icon="user"
-          onChange={e => props.handleFieldInput(e, "username")}
+          onChange={e => props.handleFieldInput(e, "email")}
+          autoComplete="on"
+          list="emailSuggestions"
         />
+        <datalist id="emailSuggestions">
+          <option value={props.rememberMeEmail}/>
+        </datalist>
         <Form.Input
           className="formContents"
           type="password"
           placeholder="Password"
           icon="lock"
           onChange={e => props.handleFieldInput(e, "password")}
+          autoComplete="on"
         />
         <Grid columns={2}>
           <Grid.Column textAlign="left">
-            <Checkbox label="Remember me" />
+            <Checkbox label="Remember me" autoComplete="off" onChange={e => props.toggleCheckBox(e, "rememberMe")} />
           </Grid.Column>
           <Grid.Column textAlign="right">
             <i>
@@ -55,13 +62,15 @@ const LoginForm = props => {
           </Grid.Column>
         </Grid>
         <br />
-        <Form.Button fluid primary className="formContents" color="blue">
-          Sign In
+        <Form.Button fluid primary className="formContents" color="blue" loading={props.loginStatus === "loading"} type="submit">
+          Log In
         </Form.Button>
+        {props.loginStatus === "failed" && props.errorComponent}
+        {props.needLoginHelp && props.helpComponent}
       </Form>
       <Divider horizontal>Don't have an account?</Divider>
       <Button basic onClick={props.switchModal}>
-        Sign up!
+        Sign up! <Icon name="chevron right" />
       </Button>
     </div>
   );

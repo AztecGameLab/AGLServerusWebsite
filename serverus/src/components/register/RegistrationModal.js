@@ -4,14 +4,18 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
 //Actions
-import { loginAccount, signUpAccount } from "../../features/login/loginActions";
+import { loginAccount } from "../../features/auth/authActions";
 import { RedirectToForgot } from "../../features/API/History_API/historyFunctions";
+
+//Selectors
+import { selectAuthStatus, selectErrorMessage, selectNeedLoginHelp, selectRememberMe } from "../../features/auth/authSelectors";
 
 //Components
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
 import { Image as CloudImage, CloudinaryContext, Transformation } from "cloudinary-react";
 import { Modal, Button } from "semantic-ui-react";
+import ErrorMessage from "../utility/ErrorMessage";
 
 //Styling
 import "./RegistrationModal.css";
@@ -22,7 +26,9 @@ class RegistrationModal extends Component {
     formData: {
       username: "",
       email: "",
-      password: ""
+      password: "",
+      rememberMe: false,
+      termsConditions: false
     },
     fieldError: ""
   };
@@ -36,6 +42,14 @@ class RegistrationModal extends Component {
   switchToRegisterMode = () => {
     this.setState({
       loginMode: false
+    });
+  };
+
+  toggleCheckBox = (e, fieldName) => {
+    const newToggleState = !this.state.formData[fieldName];
+    this.setState({
+      ...this.state,
+      formData: { ...this.state.formData, [fieldName]: newToggleState }
     });
   };
 
@@ -53,19 +67,27 @@ class RegistrationModal extends Component {
     }
   };
 
+  handleLogin = () => {
+    const { loginAccount } = this.props;
+    const { email, password, rememberMe } = this.state.formData;
+    loginAccount(email, password, rememberMe);
+  };
+
   render() {
-    const { loginAccount, signUpAccount, RedirectToForgot } = this.props;
+    const { RedirectToForgot, loginStatus, errorMsg, needLoginHelp, rememberMeEmail } = this.props;
     const { loginMode, formData } = this.state;
+    const errorComponent = <ErrorMessage message={errorMsg} />;
+    const needHelpComponent = <ErrorMessage message="Need help? Send us an email at aztecgamelab@gmail.com or click forgot password!" />;
     return (
       <Modal
         closeIcon
         trigger={
           <div>
             <Button basic color="blue" onClick={this.switchToLoginMode}>
-              Sign In
+              Log In
             </Button>
             <Button basic color="green" onClick={this.switchToRegisterMode}>
-              Sign Up
+              Create Account
             </Button>
           </div>
         }
@@ -80,17 +102,22 @@ class RegistrationModal extends Component {
           {loginMode ? (
             <LoginForm
               switchModal={this.switchToRegisterMode}
-              formData={formData}
               handleFieldInput={this.handleFieldInput}
-              loginAccount={loginAccount}
+              loginAccount={this.handleLogin}
+              toggleCheckBox={this.toggleCheckBox}
               forgotRedirect={RedirectToForgot}
+              loginStatus={loginStatus}
+              errorComponent={errorComponent}
+              needLoginHelp={needLoginHelp}
+              helpComponent={needHelpComponent}
+              rememberMeEmail={rememberMeEmail}
             />
           ) : (
             <SignUpForm
               switchModal={this.switchToLoginMode}
               formData={formData}
               handleFieldInput={this.handleFieldInput}
-              signUpAccount={signUpAccount}
+              errorComponent={errorComponent}
             />
           )}
         </Modal.Content>
@@ -99,9 +126,12 @@ class RegistrationModal extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => {
   return {
-    login: state.login
+    loginStatus: selectAuthStatus(state).login,
+    errorMsg: selectErrorMessage(state),
+    needLoginHelp: selectNeedLoginHelp(state),
+    rememberMeEmail: selectRememberMe(state).email
   };
 };
 
@@ -109,8 +139,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       RedirectToForgot,
-      loginAccount,
-      signUpAccount
+      loginAccount
     },
     dispatch
   );

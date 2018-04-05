@@ -16,3 +16,9 @@ export const RedirectToForgot = () => {
     dispatch(replace("/forgot"));
   };
 };
+
+export const RedirectToExternal = (site) => {
+  return dispatch => {
+    dispatch(replace(site));
+  };
+}

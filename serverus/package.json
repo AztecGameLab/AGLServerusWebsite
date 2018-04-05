@@ -6,8 +6,13 @@
     "axios": "^0.18.0",
     "cloudinary-react": "^1.0.6",
     "cross-env": "^5.1.4",
+    "email-validator": "^1.1.1",
+    "firebase": "^4.12.1",
     "formik": "^0.11.11",
     "history": "^4.7.2",
+    "lodash": "^4.17.5",
+    "normalize-path": "^2.1.1",
+    "npm": "^5.7.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-error-overlay": "^4.0.0",
@@ -25,11 +30,14 @@
     "yup": "^0.24.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "dev": "cross-env REACT_APP_FIREBASE_URL=http://localhost:5000/serverus-15f25/us-central1 react-scripts start",
-    "build": "react-scripts build",
+    "start": "cross-env REACT_APP_SERVER_URL=https://us-central1-serverus-15f25.cloudfunctions.net/ react-scripts start",
+    "dev": "cross-env REACT_APP_SERVER_URL=http://localhost:5000/serverus-15f25/ react-scripts start",
+    "build": "cross-env REACT_APP_SERVER_URL=https://us-central1-serverus-15f25.cloudfunctions.net/ react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "travis": "cross-env CI=true react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "react-json-view": "^1.16.1"
   }
 }
