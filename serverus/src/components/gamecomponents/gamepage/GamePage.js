@@ -174,7 +174,10 @@ class GamePage extends Component {
               <Card fluid>
                 <Card.Content>
                   <Card.Header><h3 style={{ textAlign: "center", fontSize: "5em" }}>{currentGame.title}</h3></Card.Header>
-                  <div>
+                  <br/>
+                  <CloudImage publicId={currentGame.showcase.public_id} style={{width: "100%", textAlign: "center"}}/>
+                  <br/>
+                  <div style={{background:"black", color: "white"}}>
                     <br />
                     <Slider {...settings}>
                       {screenshots}
