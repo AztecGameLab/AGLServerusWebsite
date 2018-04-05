@@ -4,6 +4,8 @@ import {
   LOG_IN_FAILURE,
   LOG_OUT,
   CREATE_ACCOUNT_LOADING,
+  CREATE_ACCOUNT_SUCCESS,
+  CREATE_ACCOUNT_FAILURE,
   DISPLAY_PASSWORD_HELP,
   REQUEST_PASS_RESET,
   REQUEST_PASS_SUCCESS,
@@ -16,10 +18,11 @@ import {
 } from "./authConstants";
 
 //API
-import { AGL_Login, AGL_LogOut, EmailTakenCheck, UsernameTakenCheck } from "../API/AGL_API/registrationFunctions";
+import { AGL_Login, AGL_LogOut, AGL_CreateAccount, EmailTakenCheck, UsernameTakenCheck } from "../API/AGL_API/registrationFunctions";
 import { IsUserRencrypted, AGLEncryption, AGLRencryption } from "../API/AGL_API/encryptionFunctions";
 import { SendPasswordReset, AGL_ResetPassword } from "../API/AGL_API/passwordResetFunctions";
 import * as EmailValidator from "email-validator";
+import newAccObj from "./defaultNewAccount";
 
 //Selectors
 import { selectNeedLoginHelp } from "./authSelectors";
@@ -31,7 +34,7 @@ export const loginAccount = (email, password, rememberMe) => {
     if (rememberMe) {
       dispatch(cacheLoginInput(email));
     }
-    return loginFormValidation(email, password).then(valid => {
+    return validateExistingEmail(email, password).then(valid => {
       if (valid) {
         IsUserRencrypted(email).then(recrypted => {
           if (recrypted) {
@@ -82,7 +85,7 @@ export const requestPasswordReset = email => {
   return dispatch => {
     dispatch(clearStatus());
     dispatch({ type: REQUEST_PASS_RESET });
-    return loginFormValidation(email, "password").then(valid => {
+    return validateExistingEmail(email, "password").then(valid => {
       if (valid) {
         SendPasswordReset(email)
           .then(res => {
@@ -125,26 +128,50 @@ export const createAccount = (username, email, password) => {
   return dispatch => {
     dispatch(clearStatus());
     dispatch({ type: CREATE_ACCOUNT_LOADING });
-    return createAccountFormValidation(username, email, password).then(valid => {
-      debugger;
-    });
+    const { valid, errorMsg } = createAccountFormValidation(username, email, password);
+    if (valid) {
+      return validateExistingAccount(username, email, password).then((emailTaken, usernameTaken, containsProfanity) => {
+        if (emailTaken || usernameTaken) {
+          dispatch({ type: CREATE_ACCOUNT_FAILURE, error: { message: "The username or email has already been used." } });
+        } else if (containsProfanity) {
+          dispatch({ type: CREATE_ACCOUNT_FAILURE, error: { message: "The username is inappropriate." } });
+        } else {
+          newAccObj.username = username;
+          newAccObj.email = email;
+          newAccObj.password = password;
+          debugger;
+          AGL_CreateAccount(username, email, password, newAccObj)
+            .then(status => {
+              debugger;
+            })
+            .catch(error => {
+              dispatch({ type: CHANGE_PASS_FAILURE, payload: { message: error.message } });
+            });
+        }
+      });
+    } else {
+      dispatch({ type: CREATE_ACCOUNT_FAILURE, payload: { message: errorMsg } });
+    }
   };
 };
 
 //Helper Internal Functions
-const loginFormValidation = (email, password) => {
+const validateExistingEmail = (email, password) => {
   return EmailTakenCheck(email).then(res => {
     return res.emailTaken && EmailValidator.validate(email) && password.length > 0 && email.length > 0;
   });
 };
 
-const createAccountFormValidation = (username, email, password) => {
-  return loginFormValidation().then(valid => {
+const validateExistingAccount = (username, email, password) => {
+  return validateExistingEmail(email, password).then(emailTaken => {
     debugger;
     return UsernameTakenCheck(username).then(res => {
       debugger;
-      return valid && res.usernameTaken && !res.profanity;
-      // '{usernameTaken: true/false, profanity: true/false}'
+      return {
+        emailTaken,
+        usernameTaken: res.usernameTaken,
+        containsProfanity: res.profanity
+      };
     });
   });
 };
@@ -173,6 +200,21 @@ const changePassFormValidation = (securityCode, newPassword, confirmPassword) =>
     errorMsg = "Please check the security code again.";
   } else if (newPassword !== confirmPassword) {
     errorMsg = "Your passwords did not match. Please try again.";
+  } else {
+    valid = true;
+  }
+  return { valid, errorMsg };
+};
+
+const createAccountFormValidation = (username, email, password) => {
+  let valid = false;
+  let errorMsg = "";
+  if (password.length < 8) {
+    errorMsg = "Your password must be at least 8 characters.";
+  } else if (!EmailValidator.validate(email)) {
+    errorMsg = "Invalid email.";
+  } else if (username.length < 2) {
+    errorMsg = "Your username must be at least 2 characters.";
   } else {
     valid = true;
   }

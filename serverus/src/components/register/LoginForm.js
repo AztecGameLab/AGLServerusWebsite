@@ -18,6 +18,7 @@ const LoginForm = props => {
           autoComplete="on"
           list="emailSuggestions"
           required
+          type="email"
         />
         <datalist id="emailSuggestions">
           <option value={props.rememberMeEmail} />

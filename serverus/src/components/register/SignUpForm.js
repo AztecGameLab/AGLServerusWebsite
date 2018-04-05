@@ -1,7 +1,7 @@
 import React from "react";
 
 //Components
-import { Button, Checkbox, Divider, Form, Grid, Icon, Popup } from "semantic-ui-react";
+import { Button, Checkbox, Divider, Form, Grid, Icon, Popup, Message } from "semantic-ui-react";
 
 const SignUpForm = props => {
   return (
@@ -9,7 +9,7 @@ const SignUpForm = props => {
       <SocialButtonGroup />
       <br />
       <Divider horizontal>or</Divider>
-      <Form className="loginForm" onSubmit={() => props.createAccount()}>
+      <Form error={props.createAccountStatus === "failed"} className="loginForm" onSubmit={() => props.createAccount()}>
         <Form.Input
           className="formContents"
           placeholder="Username"
@@ -25,6 +25,7 @@ const SignUpForm = props => {
           onChange={e => props.handleFieldInput(e, "email")}
           autoComplete="off"
           required
+          type="email"
         />
         <Form.Input
           className="formContents"
@@ -59,6 +60,7 @@ const SignUpForm = props => {
         >
           Create Account!
         </Form.Button>
+        <Message error contents={props.errorMsg} />
       </Form>
       <Divider horizontal>Already have an Aztec Game Lab account?</Divider>
       <Button basic onClick={props.switchModal}>

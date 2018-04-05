@@ -9,7 +9,7 @@ export const AGL_LogOut = (email, password) => {
   return auth.signOut();
 };
 
-export const CreateAGLUser = async (username, email, password, newDataObj) => {
+export const AGL_CreateAccount = async (username, email, password, newDataObj) => {
   let response = await axios.post("https://us-central1-serverus-15f25.cloudfunctions.net/login-createAGLUser", {
     username: username,
     email: email,

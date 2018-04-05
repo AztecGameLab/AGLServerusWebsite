@@ -12,7 +12,8 @@ import {
   CHANGE_PASS_LOADING,
   CHANGE_PASS_SUCCESS,
   CHANGE_PASS_FAILURE,
-  CLEAR_STATUS
+  CLEAR_STATUS,
+  CREATE_ACCOUNT_FAILURE
 } from "./authConstants";
 
 // Progress States -> "idle" -> "loading" -> ("succeeded" || "failed")
@@ -43,6 +44,8 @@ export default (state = initialAuthState, action) => {
       return { ...state, status: { ...state.status, login: "succeeded" }, loggedIn: true, displayHelp: false };
     case CREATE_ACCOUNT_LOADING:
       return { ...state, status: { ...state.status, createAccount: "loading" } };
+    case CREATE_ACCOUNT_FAILURE:
+      return { ...state, status: { ...state.status, createAccount: "failed" }, error: action.payload };
     case DISPLAY_PASSWORD_HELP:
       return { ...state, displayHelp: true };
     case REQUEST_PASS_RESET:

@@ -127,6 +127,7 @@ class RegistrationModal extends Component {
               handleFieldInput={this.handleFieldInput}
               createAccount={this.handleCreateAccount}
               toggleCheckBox={this.toggleCheckBox}
+              errorMsg={errorMsg}
               createAccountStatus={createAccountStatus}
               errorComponent={errorComponent}
               termsConditionsBoxChecked={termsConditions}
