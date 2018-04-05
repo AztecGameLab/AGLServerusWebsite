@@ -1,4 +1,18 @@
-import { LOG_IN_LOADING, LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_OUT, DISPLAY_PASSWORD_HELP } from "./authConstants";
+import {
+  LOG_IN_LOADING,
+  LOG_IN_SUCCESS,
+  LOG_IN_FAILURE,
+  LOG_OUT,
+  DISPLAY_PASSWORD_HELP,
+  REQUEST_PASS_RESET,
+  REQUEST_PASS_SUCCESS,
+  REQUEST_PASS_FAILURE,
+  REMEMBER_ME,
+  CHANGE_PASS_LOADING,
+  CHANGE_PASS_SUCCESS,
+  CHANGE_PASS_FAILURE,
+  CLEAR_STATUS
+} from "./authConstants";
 
 // Progress States -> "idle" -> "loading" -> ("succeeded" || "failed")
 const initialAuthState = {
@@ -6,7 +20,11 @@ const initialAuthState = {
   status: {
     login: "idle",
     registration: "idle",
-    passwordReset: "idle"
+    passwordReset: "idle",
+    changePassword: "idle"
+  },
+  rememberMe: {
+    email: ""
   },
   failedLogins: 0,
   displayHelp: false,
@@ -24,8 +42,26 @@ export default (state = initialAuthState, action) => {
       return { ...state, status: { ...state.status, login: "succeeded" }, loggedIn: true, displayHelp: false };
     case DISPLAY_PASSWORD_HELP:
       return { ...state, displayHelp: true };
+    case REQUEST_PASS_RESET:
+      return { ...state, status: { ...state.status, passwordReset: "loading" } };
+    case REQUEST_PASS_SUCCESS:
+      return { ...state, status: { ...state.status, passwordReset: "succeeded" } };
+    case REQUEST_PASS_FAILURE:
+      return { ...state, status: { ...state.status, passwordReset: "failed" }, error: action.payload };
+    case CHANGE_PASS_LOADING:
+      return { ...state, status: { ...state.status, changePassword: "loading" } };
+    case CHANGE_PASS_SUCCESS:
+      return { ...state, status: { ...state.status, changePassword: "succeeded" } };
+    case CHANGE_PASS_FAILURE:
+      return { ...state, status: { ...state.status, changePassword: "failed" }, error: action.payload };
+    case CLEAR_STATUS:
+      return { ...state, status: { ...initialAuthState.status } };
+    case REMEMBER_ME:
+      return { ...state, rememberMe: Object.assign({}, state.rememberMe, action.payload) };
     case LOG_OUT:
-      return initialAuthState;
+      const clearStoreWithRememberMe = initialAuthState;
+      delete clearStoreWithRememberMe.rememberMe;
+      return Object.assign({}, state, clearStoreWithRememberMe);
     default:
       return state;
   }

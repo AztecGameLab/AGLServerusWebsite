@@ -56,7 +56,6 @@ class ProfilePage extends Component {
    * Maps the Badges
    */
   badgeMapper = badges => {
-    //console.log(badgeOptions.badge);
     return badges.map((badge, idx) => (
       <Popup key={idx} trigger={<CloudImage publicId={badge} />} header={"Early Adopter"} content={"Joined AGL in its first semester!"} />
     ));
