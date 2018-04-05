@@ -3,6 +3,7 @@ import {
   LOG_IN_SUCCESS,
   LOG_IN_FAILURE,
   LOG_OUT,
+  CREATE_ACCOUNT_LOADING,
   DISPLAY_PASSWORD_HELP,
   REQUEST_PASS_RESET,
   REQUEST_PASS_SUCCESS,
@@ -15,7 +16,7 @@ import {
 } from "./authConstants";
 
 //API
-import { AGL_Login, AGL_LogOut, EmailTakenCheck } from "../API/AGL_API/registrationFunctions";
+import { AGL_Login, AGL_LogOut, EmailTakenCheck, UsernameTakenCheck } from "../API/AGL_API/registrationFunctions";
 import { IsUserRencrypted, AGLEncryption, AGLRencryption } from "../API/AGL_API/encryptionFunctions";
 import { SendPasswordReset, AGL_ResetPassword } from "../API/AGL_API/passwordResetFunctions";
 import * as EmailValidator from "email-validator";
@@ -120,10 +121,31 @@ export const changePassword = (resetID, securityCode, newPassword, confirmPasswo
   };
 };
 
+export const createAccount = (username, email, password) => {
+  return dispatch => {
+    dispatch(clearStatus());
+    dispatch({ type: CREATE_ACCOUNT_LOADING });
+    return createAccountFormValidation(username, email, password).then(valid => {
+      debugger;
+    });
+  };
+};
+
 //Helper Internal Functions
 const loginFormValidation = (email, password) => {
   return EmailTakenCheck(email).then(res => {
     return res.emailTaken && EmailValidator.validate(email) && password.length > 0 && email.length > 0;
+  });
+};
+
+const createAccountFormValidation = (username, email, password) => {
+  return loginFormValidation().then(valid => {
+    debugger;
+    return UsernameTakenCheck(username).then(res => {
+      debugger;
+      return valid && res.usernameTaken && !res.profanity;
+      // '{usernameTaken: true/false, profanity: true/false}'
+    });
   });
 };
 

@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
 //Actions
-import { loginAccount } from "../../features/auth/authActions";
+import { loginAccount, createAccount } from "../../features/auth/authActions";
 import { RedirectToForgot } from "../../features/API/History_API/historyFunctions";
 
 //Selectors
@@ -73,8 +73,16 @@ class RegistrationModal extends Component {
     loginAccount(email, password, rememberMe);
   };
 
+  handleCreateAccount = () => {
+    const { createAccount } = this.props;
+    const { username, email, password } = this.state.formData;
+    debugger;
+    createAccount(username, email, password);
+  };
+
   render() {
-    const { RedirectToForgot, loginStatus, errorMsg, needLoginHelp, rememberMeEmail } = this.props;
+    const { RedirectToForgot, loginStatus, errorMsg, needLoginHelp, rememberMeEmail, createAccountStatus } = this.props;
+    const { termsConditions } = this.state.formData;
     const { loginMode, formData } = this.state;
     const errorComponent = <ErrorMessage message={errorMsg} />;
     const needHelpComponent = <ErrorMessage message="Need help? Send us an email at aztecgamelab@gmail.com or click forgot password!" />;
@@ -98,6 +106,7 @@ class RegistrationModal extends Component {
               <Transformation width="300" crop="scale" />
             </CloudImage>
           </CloudinaryContext>
+          {JSON.stringify(this.state.formData)}
           <br />
           {loginMode ? (
             <LoginForm
@@ -115,9 +124,13 @@ class RegistrationModal extends Component {
           ) : (
             <SignUpForm
               switchModal={this.switchToLoginMode}
-              formData={formData}
               handleFieldInput={this.handleFieldInput}
+              createAccount={this.handleCreateAccount}
+              toggleCheckBox={this.toggleCheckBox}
+              createAccountStatus={createAccountStatus}
               errorComponent={errorComponent}
+              termsConditionsBoxChecked={termsConditions}
+              formData={formData}
             />
           )}
         </Modal.Content>
@@ -129,6 +142,7 @@ class RegistrationModal extends Component {
 const mapStateToProps = state => {
   return {
     loginStatus: selectAuthStatus(state).login,
+    createAccountStatus: selectAuthStatus(state).createAccount,
     errorMsg: selectErrorMessage(state),
     needLoginHelp: selectNeedLoginHelp(state),
     rememberMeEmail: selectRememberMe(state).email
@@ -139,7 +153,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       RedirectToForgot,
-      loginAccount
+      loginAccount,
+      createAccount
     },
     dispatch
   );

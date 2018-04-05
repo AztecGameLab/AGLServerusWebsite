@@ -3,6 +3,7 @@ import {
   LOG_IN_SUCCESS,
   LOG_IN_FAILURE,
   LOG_OUT,
+  CREATE_ACCOUNT_LOADING,
   DISPLAY_PASSWORD_HELP,
   REQUEST_PASS_RESET,
   REQUEST_PASS_SUCCESS,
@@ -19,7 +20,7 @@ const initialAuthState = {
   loggedIn: false,
   status: {
     login: "idle",
-    registration: "idle",
+    createAccount: "idle",
     passwordReset: "idle",
     changePassword: "idle"
   },
@@ -40,6 +41,8 @@ export default (state = initialAuthState, action) => {
       return { ...state, status: { ...state.status, login: "failed" }, error: action.payload, ...(state.failedLogins += 1) };
     case LOG_IN_SUCCESS:
       return { ...state, status: { ...state.status, login: "succeeded" }, loggedIn: true, displayHelp: false };
+    case CREATE_ACCOUNT_LOADING:
+      return { ...state, status: { ...state.status, createAccount: "loading" } };
     case DISPLAY_PASSWORD_HELP:
       return { ...state, displayHelp: true };
     case REQUEST_PASS_RESET:
