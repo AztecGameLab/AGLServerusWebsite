@@ -2,11 +2,10 @@ import React, { Component } from "react";
 // import HorizontalTimeline from "react-horizontal-timeline";
 import Tubular from "react-tubular";
 
-// const VALUES = [1, 2, 3];
+import "./Home.css";
 
 class Home extends Component {
   state = { value: 0, previous: 0 };
-
   render() {
     return (
       <div class="Page Contents">
@@ -25,11 +24,11 @@ class Home extends Component {
             }}
           />
           <div class="ui active dimmer">
-            <div class="content">
-              <h1 class="ui inverted header" style={headerText}>
-                Greetings game devs!
-              </h1>
-              <h2 class="ui inverted header">The "Aztec Game Lab" welcomes you!</h2>
+            <div class="content" style={headerText}>
+              <img
+                src="https://res.cloudinary.com/aztecgamelab-com/image/upload/v1522890086/AGL_banner_transparent_wpjvbo.png"
+                alt="We are the Aztec Game Lab"
+              />
             </div>
           </div>
         </div>

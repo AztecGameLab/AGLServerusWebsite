@@ -6,6 +6,7 @@ import { history } from "../../features/API/History_API/historyFunctions";
 // Components
 import { Icon, Menu, Button } from "semantic-ui-react";
 import { Image as CloudImage, CloudinaryContext } from "cloudinary-react";
+import "./Header.css";
 
 const Header = () => {
   // Create list of Menu Items with settings
@@ -27,7 +28,7 @@ const Header = () => {
   });
   return (
     <Router history={history}>
-      <Menu borderless>
+      <Menu borderless margin="0">
         <Menu.Item key="home" as={Link} to="/">
           <CloudinaryContext cloudName="aztecgamelab-com">
             <CloudImage publicId="WebsiteAssets/blacklogo.png" />
