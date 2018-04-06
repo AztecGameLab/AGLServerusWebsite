@@ -1,74 +1,44 @@
 import React, { Component } from "react";
-import { Image, Button, Header, Dimmer, Grid, Modal, Divider, Segment } from "semantic-ui-react";
 
+//Components
+import { Image, Grid, Modal, Divider, Card, Button } from "semantic-ui-react";
+
+//JSON Data
 import ExecBoardData from "./ExecutiveBoard";
 
 class About extends Component {
-  state = {};
-
-  handleShow = () => this.setState({ active: true });
-  /*handleHide = () => this.setState({ active: false })
-
-  handleDimmerEnter = (event, boardMember) => {
-    debugger;
-    this.setState({
-      [boardMember]: true
-    });
-  };
-  */
-
   render() {
-    const dimmedCard = this.state.dimmedCard;
-    //const ExecBoardData = this.state.ExecBoardData
-
     const execComponents = ExecBoardData.map(boardMemberData => {
-      /*
-      if (this.state[boardMemberData.name]) {
-        console.log("DIMMER", this.state[boardMemberData.name].toString);
-      }
-      */
       return (
-        <Grid.Column key={boardMemberData.name}>
+        <Grid.Column key={boardMemberData.name} width={3}>
           <Modal
+            basic
             trigger={
               <div>
-                <Dimmer.Dimmable
-                  key={boardMemberData.name}
-                  as={Image}
-                  /*dimmed={this.state[boardMemberData] || false}
-                  onMouseEnter={e => this.handleDimmerEnter(e, boardMemberData.name)}
-                  src={boardMemberData.imageURL}*/
-
-                  dimmed={dimmedCard === boardMemberData.name ? true : false}
-                  dimmer={{ active: dimmedCard === boardMemberData.name }}
-                  onMouseEnter={() => {
-                    this.handleShow(boardMemberData.name);
-                  }}
-                  onMouseLeave={() => {
-                    this.handleShow("");
-                  }}
-                  src={boardMemberData.imageURL}
-                />
-                {boardMemberData.name}
-                <p> </p>
-                {boardMemberData.title}
+                <Card raised key={boardMemberData.name} style={{ marginBottom: "1em" }}>
+                  <Image src={boardMemberData.imageURL} />
+                  <Card.Header> {boardMemberData.name}</Card.Header>
+                  <Card.Meta> {boardMemberData.title}</Card.Meta>
+                  <Card.Content extra>
+                    <p>Original Founding Team 2016</p>
+                  </Card.Content>
+                </Card>
               </div>
             }
           >
-            <Grid style={{ Align: "center" }} padded>
+            <Grid centered padded>
               <Grid.Row>
-                <h2 padded style={{ textAlign: "Center"}}>
-                  {boardMemberData.name} <p> </p> {boardMemberData.title}
+                <h2 style={{ textAlign: "center" }}>
+                  <div>{boardMemberData.name}</div>
+                  <div> {boardMemberData.title}</div>
                 </h2>
               </Grid.Row>
-              <Divider/>
+              <Divider />
               <Grid.Row>
-                <Grid.Column width={4}>
-                  <Image Align="center" size="small" src={boardMemberData.imageURL} />
+                <Grid.Column width={7}>
+                  <Image size="large" src={boardMemberData.imageURL} />
                 </Grid.Column>
-                <Grid.Column Align="center" width={9}>
-                  {boardMemberData.bio}
-                </Grid.Column>
+                <Grid.Column width={9}>{boardMemberData.bio}</Grid.Column>
               </Grid.Row>
             </Grid>
           </Modal>
@@ -80,7 +50,7 @@ class About extends Component {
       <div>
         <h1 style={{ textAlign: "center" }}>Aztec Game Lab</h1>
 
-        <Grid textAlign="center">
+        <Grid textAlign="center" padded>
           <Grid.Row>
             <Grid.Column width={4}>
               <Image src="https://scontent.fsan1-1.fna.fbcdn.net/v/t1.0-9/20729751_1587725544582112_5081200574316416443_n.jpg?_nc_cat=0&oh=0a63b6ad6a1a149264a07d537aa6a638&oe=5B2D458E" />
@@ -91,28 +61,20 @@ class About extends Component {
           </Grid.Row>
           <Divider />
           <Grid.Row>
-            <h2 style={{ textAlign: "center" }}>Exec Board 2017-2018</h2>
-          </Grid.Row>
-          <Grid.Row>
-            {" "}
-            <Image
-              size="large"
-              wrapped
-              src="https://scontent-lax3-1.xx.fbcdn.net/v/t31.0-8/21248531_288460691561684_5861760460387346584_o.jpg?_nc_cat=0&oh=5f06cb5da4f0c691ebc8c997d57002aa&oe=5B69D8B9"
-            />
+            <h2 style={{ textAlign: "center" }}>Executive Board</h2>
           </Grid.Row>
           <Grid.Row>{execComponents}</Grid.Row>
           <Divider />
           <Grid.Row>
-            <h1 style={{ textAlign: "center" }}>History</h1>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column width={9} textAlign="center">
-              <p>History of how we became about</p>
-            </Grid.Column>
-            <Grid.Column width={4}>
-              <Image src="https://scontent-lax3-1.xx.fbcdn.net/v/t31.0-8/21752559_292167087857711_9105781865774832213_o.jpg?_nc_cat=0&oh=918734f27d0d4a92bfba39388e3cbb10&oe=5B292524" />
-            </Grid.Column>
+            <Button
+              as="a"
+              href="https://docs.google.com/forms/d/1cy-1gNI7DelqkA_9QNTOng8usYsg8kREWTymt5Ov9dk/edit"
+              target="_blank"
+              color="green"
+              size="massive"
+            >
+              Interested in joining?
+            </Button>
           </Grid.Row>
         </Grid>
       </div>
