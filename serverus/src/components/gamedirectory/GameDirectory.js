@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { Grid, Card, Header, Table } from "semantic-ui-react";
+import { Grid, Card, Header, Table, Search, Dropdown } from "semantic-ui-react";
 
 //Actions
 import { loadGames } from "../../features/siteData/siteDataActions";
@@ -31,10 +31,17 @@ class GameDirectory extends Component {
       <div>
         <Grid>
           <Grid.Column width={3}>
-            <Card fluid>
+            <Card raised fluid>
               <Card.Content>
-                <Header dividing>Games</Header>
-
+                <Header dividing textAlign="center">Games</Header>
+                <Header as='h4'>Name</Header>
+                <Search placeholder="name" fluid/>
+                <hr/>
+                <Header as="h4">Category</Header>
+                <Dropdown multiple selection fluid/>
+                <hr/>
+                <Header as="h4">Jam</Header>
+                <Dropdown selection fluid/>
               </Card.Content>
             </Card>
           </Grid.Column>

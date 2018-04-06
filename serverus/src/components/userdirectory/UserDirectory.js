@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Grid, Header } from "semantic-ui-react";
+import { Card, Grid, Header, Search, Dropdown } from "semantic-ui-react";
 
 //Actions
 import { loadUsers, filterUserDirectory } from "../../features/siteData/siteDataActions";
@@ -28,9 +28,12 @@ class UserDirectory extends Component {
       <div>
       <Grid>
         <Grid.Column width={3}>
-          <Card fluid>
+          <Card fluid raised>
             <Card.Content>
-              <Header dividing>Users</Header>
+              <Header textAlign="center" dividing>Users</Header>
+              <Search fluid placeholder="Username"/>
+              <br/>
+              <Dropdown multiple selection fluid placeholder="Roles"/>
             </Card.Content>
           </Card>
         </Grid.Column>
