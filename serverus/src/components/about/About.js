@@ -1,41 +1,76 @@
 import React, { Component } from "react";
-import GridRow, { Image, Button, Header, Dimmer, Grid, Segment, Modal } from "semantic-ui-react";
+import { Image, Button, Header, Dimmer, Grid, Modal, Divider, Segment } from "semantic-ui-react";
 
 import ExecBoardData from "./ExecutiveBoard";
 
 class About extends Component {
   state = {};
 
-  handleDimmerEnter = (e, person) => {
+  handleShow = () => this.setState({ active: true });
+  /*handleHide = () => this.setState({ active: false })
+
+  handleDimmerEnter = (event, boardMember) => {
     debugger;
     this.setState({
-      [person]: true
+      [boardMember]: true
     });
   };
+  */
 
   render() {
-    const execComponents = ExecBoardData.map(personData => {
-      if (this.state[personData.name]) {
-        console.log("DIMMER", this.state[personData.name].toString);
+    const dimmedCard = this.state.dimmedCard;
+    //const ExecBoardData = this.state.ExecBoardData
+
+    const execComponents = ExecBoardData.map(boardMemberData => {
+      /*
+      if (this.state[boardMemberData.name]) {
+        console.log("DIMMER", this.state[boardMemberData.name].toString);
       }
+      */
       return (
-        <Grid.Column key={personData.name}>
+        <Grid.Column key={boardMemberData.name}>
           <Modal
             trigger={
               <div>
                 <Dimmer.Dimmable
+                  key={boardMemberData.name}
                   as={Image}
-                  dimmed={this.state[personData.name] || false}
-                  onMouseEnter={e => this.handleDimmerEnter(e, personData.name)}
-                  src={personData.imageURL}
+                  /*dimmed={this.state[boardMemberData] || false}
+                  onMouseEnter={e => this.handleDimmerEnter(e, boardMemberData.name)}
+                  src={boardMemberData.imageURL}*/
+
+                  dimmed={dimmedCard === boardMemberData.name ? true : false}
+                  dimmer={{ active: dimmedCard === boardMemberData.name }}
+                  onMouseEnter={() => {
+                    this.handleShow(boardMemberData.name);
+                  }}
+                  onMouseLeave={() => {
+                    this.handleShow("");
+                  }}
+                  src={boardMemberData.imageURL}
                 />
-                {personData.name}
-                {personData.title}
+                {boardMemberData.name}
+                <p> </p>
+                {boardMemberData.title}
               </div>
             }
           >
-            modal content
-            {personData.bio}
+            <Grid style={{ Align: "center" }} padded>
+              <Grid.Row>
+                <h2 padded style={{ textAlign: "Center"}}>
+                  {boardMemberData.name} <p> </p> {boardMemberData.title}
+                </h2>
+              </Grid.Row>
+              <Divider/>
+              <Grid.Row>
+                <Grid.Column width={4}>
+                  <Image Align="center" size="small" src={boardMemberData.imageURL} />
+                </Grid.Column>
+                <Grid.Column Align="center" width={9}>
+                  {boardMemberData.bio}
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
           </Modal>
         </Grid.Column>
       );
@@ -54,11 +89,23 @@ class About extends Component {
               <p>About us Description</p>
             </Grid.Column>
           </Grid.Row>
-          <h3 style={{ textAlign: "center" }}>Exec Board</h3>
-          <Grid.Row> <Image size ="large" wrapped src="https://scontent-lax3-1.xx.fbcdn.net/v/t31.0-8/21248531_288460691561684_5861760460387346584_o.jpg?_nc_cat=0&oh=5f06cb5da4f0c691ebc8c997d57002aa&oe=5B69D8B9" />
+          <Divider />
+          <Grid.Row>
+            <h2 style={{ textAlign: "center" }}>Exec Board 2017-2018</h2>
+          </Grid.Row>
+          <Grid.Row>
+            {" "}
+            <Image
+              size="large"
+              wrapped
+              src="https://scontent-lax3-1.xx.fbcdn.net/v/t31.0-8/21248531_288460691561684_5861760460387346584_o.jpg?_nc_cat=0&oh=5f06cb5da4f0c691ebc8c997d57002aa&oe=5B69D8B9"
+            />
           </Grid.Row>
           <Grid.Row>{execComponents}</Grid.Row>
-          <h1 style={{ textAlign: "center" }}>History</h1>
+          <Divider />
+          <Grid.Row>
+            <h1 style={{ textAlign: "center" }}>History</h1>
+          </Grid.Row>
           <Grid.Row>
             <Grid.Column width={9} textAlign="center">
               <p>History of how we became about</p>
