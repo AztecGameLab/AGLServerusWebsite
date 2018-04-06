@@ -1,25 +1,44 @@
 import React, { Component } from "react";
-import Tubular from "react-tubular";
+// import { connect } from "react-redux";
 
+//Components
+// import Tubular from "react-tubular";
+// import YouTube from "react-youtube";
+import ReactPlayer from "react-player";
+
+//Selectors
+// import { selectCurrentPage } from "../../features/siteData/siteDataSelectors";
+
+//Stylings
 import "./Home.css";
 
 class Home extends Component {
   render() {
+    // const { currentPageRoute } = this.props;
+
+    // const opts = {
+    //   height: "700px",
+    //   width: "100%",
+    //   playerVars: {
+    //     // https://developers.google.com/youtube/player_parameters
+    //     autoplay: 1,
+    //     loop: 1,
+    //     controls: 0,
+    //     showinfo: 0,
+    //     playlist: ["AQiAEczCASw"],
+    //     disablekb: 1,
+    //   }
+    // };
     return (
       <div class="Page Contents">
         <div class="ui vertical center aligned segment" style={firstPart}>
-          <Tubular
-            ratio={16 / 9} // Choose 4/3 or 16/9
-            videoId={"AQiAEczCASw"} // Retrowave
-            mute={true}
-            repeat={true}
-            width={window.innerWidth}
-            wrapperZIndex={-1}
-            increaseVolumeBy={0}
-            start={0}
-            ref={ref => {
-              this.tubular = ref;
-            }}
+          <ReactPlayer
+            url="https://www.youtube.com/embed/AQiAEczCASw"
+            playing="true"
+            loop="true"
+            muted="true"
+            height="1070px"
+            width="100%"
           />
           <div class="ui active dimmer">
             <div class="content" style={headerText}>
@@ -131,15 +150,20 @@ class Home extends Component {
   }
 }
 
-// Inline Styles
+// const mapStateToProps = state => {
+//   return {
+//     currentPageRoute: selectCurrentPage(state)
+//   };
+// };
 
+// Inline Styles
 const headerText = {
   fontSize: "4em",
   fontWeight: "normal"
 };
 
 const firstPart = {
-  minHeight: "700px",
+  height: "700px",
   textAlign: "center"
 };
 
@@ -153,4 +177,5 @@ const thirdPart = {
   padding: "6em"
 };
 
+// export default connect(mapStateToProps)(Home);
 export default Home;

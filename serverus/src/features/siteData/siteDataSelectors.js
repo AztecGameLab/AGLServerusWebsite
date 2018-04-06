@@ -9,6 +9,7 @@ const getGameDirectory = state => state.siteData.gameDirectory;
 const getSiteDataStatus = state => state.siteData.status;
 const getPreloadedUser = (state, props) => state.siteData.preloadedUserProfiles[props.match.params.username];
 const getGame = (state, props) => state.siteData.gameDirectory[props.match.params.gameID];
+const getCurrentPage = state => state.router.location.pathname;
 
 //Memoized Selectors
 export const selectUserDirectory = createSelector([getUserDirectory], users => {
@@ -42,3 +43,7 @@ export const makeSelectGame = () => {
     return game;
   });
 };
+
+export const selectCurrentPage = createSelector([getCurrentPage], pathname => {
+  return pathname;
+})

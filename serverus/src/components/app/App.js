@@ -5,7 +5,6 @@ import { history } from "../../features/API/History_API/historyFunctions";
 import Home from "../home/Home";
 import HeaderMenu from "../header/Header";
 import Footer from "../footer/Footer";
-import Spacer from "../utility/Spacer";
 import UserDirectory from "../userdirectory/UserDirectory";
 import GameDirectory from "../gamedirectory/GameDirectory";
 import ProfilePage from "../usercomponents/profilepage/ProfilePage";
@@ -19,7 +18,6 @@ class App extends Component {
     return (
       <div>
         <HeaderMenu />
-        <Spacer lines={3} />
         <Router history={history}>
           <Switch>
             <Route exact path="/" component={Home} />
@@ -32,7 +30,6 @@ class App extends Component {
             <Route exact path="/sponsors" component={SponsorPage} />
           </Switch>
         </Router>
-        <Spacer lines={10} />
         <Footer />
       </div>
     );

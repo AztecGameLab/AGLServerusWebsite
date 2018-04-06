@@ -1,3 +1,7 @@
 .ui.active.dimmer {
     background-color: rgba(0,0,0,.55) !important;
 }
+
+.ui.vertical.segment {
+    padding-top: 0em;
+}
