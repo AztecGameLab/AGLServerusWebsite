@@ -9,6 +9,7 @@ import { Icon, Menu } from "semantic-ui-react";
 import { Image as CloudImage, CloudinaryContext, Transformation } from "cloudinary-react";
 import RegistrationModal from "../register/RegistrationModal";
 import HeaderDropdown from "../usercomponents/headerdropdown/HeaderDropdown";
+import "./Header.css";
 
 //Selectors
 import { selectLoggedIn } from "../../features/auth/authSelectors";
