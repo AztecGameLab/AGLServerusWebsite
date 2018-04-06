@@ -65,13 +65,13 @@ class Home extends Component {
                     <div class="value">
                       <i aria-hidden="true" class="cogs icon" /> 3
                     </div>
-                    <div class="label">Workshops</div>
+                    <div class="label">Workshops Hosted</div>
                   </div>
                   <div class="ui purple inverted statistic">
                     <div class="value">
                       <i aria-hidden="true" class="gamepad icon" /> 2
                     </div>
-                    <div class="label">Gamejams</div>
+                    <div class="label">Gamejams Completed</div>
                   </div>
                 </div>
               </div>
