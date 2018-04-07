@@ -106,9 +106,7 @@ class RegistrationModal extends Component {
               <Transformation width="300" crop="scale" />
             </CloudImage>
           </CloudinaryContext>
-          {JSON.stringify(this.state.formData)}
           <br />
-
           <Dimmer active={loggingIn}>
             <Loader>Success! Welcome to Aztec Game Lab! Logging you in...</Loader>
           </Dimmer>
