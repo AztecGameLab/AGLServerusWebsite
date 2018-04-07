@@ -16,7 +16,7 @@ export default {
 
   //AGL Info
   username: "",
-  roles: [],
+  roles: ["Undecided"],
   bio: "hi, im new!",
   flare: "",
   goodBoyPoints: 0,

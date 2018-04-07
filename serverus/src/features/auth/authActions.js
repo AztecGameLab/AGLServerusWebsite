@@ -1,5 +1,6 @@
 import {
   LOG_IN_LOADING,
+  LOGGING_IN,
   LOG_IN_SUCCESS,
   LOG_IN_FAILURE,
   LOG_OUT,
@@ -23,9 +24,13 @@ import { IsUserRencrypted, AGLEncryption, AGLRencryption } from "../API/AGL_API/
 import { SendPasswordReset, AGL_ResetPassword } from "../API/AGL_API/passwordResetFunctions";
 import * as EmailValidator from "email-validator";
 import newAccObj from "./defaultNewAccount";
+import { persistor } from "../../features/configStore";
 
 //Selectors
 import { selectNeedLoginHelp } from "./authSelectors";
+
+//Create Account Wait
+const SUCCESS_WAIT = 2000;
 
 export const loginAccount = (email, password, rememberMe) => {
   return dispatch => {
@@ -40,23 +45,22 @@ export const loginAccount = (email, password, rememberMe) => {
           if (recrypted) {
             AGLEncryption(password).then(encryptedPass => {
               AGL_Login(email, encryptedPass)
-                .then(res => {
-                  dispatch({ type: LOG_IN_SUCCESS, payload: res });
+                .then(fireData => {
+                  dispatch(loginSuccess(fireData));
                 })
                 .catch(error => {
                   dispatch(loginFail(error));
                 });
             });
           } else {
-            //Must Rencrypt
             AGLRencryption(email, password).then(res => {
               if (res.data === "Wrong Password") {
                 dispatch(loginFail({ message: "Wrong email or password" }));
               } else {
                 AGLEncryption(password).then(encryptedPass => {
                   AGL_Login(email, encryptedPass)
-                    .then(res => {
-                      dispatch({ type: LOG_IN_SUCCESS, payload: res });
+                    .then(fireData => {
+                      dispatch(loginSuccess(fireData));
                     })
                     .catch(error => {
                       dispatch(loginFail(error));
@@ -77,6 +81,7 @@ export const logOutAccount = () => {
   return dispatch => {
     AGL_LogOut().then(res => {
       dispatch({ type: LOG_OUT });
+      persistor.purge();
     });
   };
 };
@@ -130,23 +135,28 @@ export const createAccount = (username, email, password) => {
     dispatch({ type: CREATE_ACCOUNT_LOADING });
     const { valid, errorMsg } = createAccountFormValidation(username, email, password);
     if (valid) {
-      return validateExistingAccount(username, email, password).then((emailTaken, usernameTaken, containsProfanity) => {
+      return validateExistingAccount(username, email, password).then(preExistCheck => {
+        const { emailTaken, usernameTaken, containsProfanity } = preExistCheck;
         if (emailTaken || usernameTaken) {
-          dispatch({ type: CREATE_ACCOUNT_FAILURE, error: { message: "The username or email has already been used." } });
+          dispatch({ type: CREATE_ACCOUNT_FAILURE, payload: { message: "The username or email has already been used." } });
         } else if (containsProfanity) {
-          dispatch({ type: CREATE_ACCOUNT_FAILURE, error: { message: "The username is inappropriate." } });
+          dispatch({ type: CREATE_ACCOUNT_FAILURE, payload: { message: "The username is inappropriate." } });
         } else {
-          newAccObj.username = username;
-          newAccObj.email = email;
-          newAccObj.password = password;
-          debugger;
-          AGL_CreateAccount(username, email, password, newAccObj)
-            .then(status => {
-              debugger;
-            })
-            .catch(error => {
-              dispatch({ type: CHANGE_PASS_FAILURE, payload: { message: error.message } });
-            });
+          return populateDefaultAccount(username, email, password).then(newAccObj => {
+            const encryptedPass = newAccObj.password;
+            AGL_CreateAccount(username, email, encryptedPass, newAccObj)
+              .then(status => {
+                if (status.data === "Successful account creation!") {
+                  dispatch({ type: CREATE_ACCOUNT_SUCCESS });
+                  dispatch(loginAccount(email, password, true));
+                } else {
+                  dispatch({ type: CHANGE_PASS_FAILURE, payload: { message: "Account creation failed. Please contact aztecgamelab@gmail.com" } });
+                }
+              })
+              .catch(error => {
+                dispatch({ type: CHANGE_PASS_FAILURE, payload: { message: error.message } });
+              });
+          });
         }
       });
     } else {
@@ -164,9 +174,7 @@ const validateExistingEmail = (email, password) => {
 
 const validateExistingAccount = (username, email, password) => {
   return validateExistingEmail(email, password).then(emailTaken => {
-    debugger;
     return UsernameTakenCheck(username).then(res => {
-      debugger;
       return {
         emailTaken,
         usernameTaken: res.usernameTaken,
@@ -182,6 +190,16 @@ const loginFail = error => {
     if (selectNeedLoginHelp(getState())) {
       dispatch({ type: DISPLAY_PASSWORD_HELP });
     }
+  };
+};
+
+const loginSuccess = fireData => {
+  return dispatch => {
+    dispatch({ type: LOGGING_IN });
+    const userData = filterFireLogin(fireData);
+    setTimeout(() => {
+      dispatch({ type: LOG_IN_SUCCESS, payload: userData });
+    }, SUCCESS_WAIT);
   };
 };
 
@@ -225,4 +243,24 @@ const clearStatus = () => {
   return dispatch => {
     dispatch({ type: CLEAR_STATUS });
   };
+};
+
+const populateDefaultAccount = (username, email, password) => {
+  return AGLEncryption(password).then(encryptedPass => {
+    newAccObj.username = username;
+    newAccObj.email = email;
+    newAccObj.password = encryptedPass;
+    let now = new Date();
+    now = now.toLocaleDateString() + " " + now.toLocaleTimeString();
+    newAccObj.dateJoined = now;
+    return newAccObj;
+  });
+};
+
+const filterFireLogin = res => {
+  delete res.apiKey;
+  delete res.authDomain;
+  delete res.stsTokenManager;
+  delete res.appNamel;
+  return res;
 };

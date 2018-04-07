@@ -10,14 +10,15 @@ import { routerMiddleware } from "react-router-redux";
 //Persist
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import hardSet from 'redux-persist/lib/stateReconciler/hardSet'
+import hardSet from "redux-persist/lib/stateReconciler/hardSet";
 
-//Persist Config 
+//Persist Config
 const persistConfig = {
   key: "AGL",
   storage,
-  whitelist: ["auth", "siteData", "userSession"],
-  stateReconciler: hardSet,
+  whitelist: ["auth", "userSession"],
+  blacklist: ["siteData"],
+  stateReconciler: hardSet
 };
 
 //Persist Root Reducer

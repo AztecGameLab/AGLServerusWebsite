@@ -14,7 +14,7 @@ import { selectAuthStatus, selectErrorMessage, selectNeedLoginHelp, selectRememb
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
 import { Image as CloudImage, CloudinaryContext, Transformation } from "cloudinary-react";
-import { Modal, Button } from "semantic-ui-react";
+import { Modal, Button, Message, Dimmer, Loader } from "semantic-ui-react";
 import ErrorMessage from "../utility/ErrorMessage";
 
 //Styling
@@ -76,16 +76,16 @@ class RegistrationModal extends Component {
   handleCreateAccount = () => {
     const { createAccount } = this.props;
     const { username, email, password } = this.state.formData;
-    debugger;
     createAccount(username, email, password);
   };
 
   render() {
-    const { RedirectToForgot, loginStatus, errorMsg, needLoginHelp, rememberMeEmail, createAccountStatus } = this.props;
+    const { RedirectToForgot, loginStatus, errorMsg, needLoginHelp, rememberMeEmail, createAccountStatus, loggingIn } = this.props;
     const { termsConditions } = this.state.formData;
     const { loginMode, formData } = this.state;
     const errorComponent = <ErrorMessage message={errorMsg} />;
     const needHelpComponent = <ErrorMessage message="Need help? Send us an email at aztecgamelab@gmail.com or click forgot password!" />;
+    const successComponent = <Message success content="Success! Logging you in..." />;
     return (
       <Modal
         closeIcon
@@ -108,6 +108,11 @@ class RegistrationModal extends Component {
           </CloudinaryContext>
           {JSON.stringify(this.state.formData)}
           <br />
+
+          <Dimmer active={loggingIn}>
+            <Loader>Success! Welcome to Aztec Game Lab! Logging you in...</Loader>
+          </Dimmer>
+
           {loginMode ? (
             <LoginForm
               switchModal={this.switchToRegisterMode}
@@ -128,8 +133,9 @@ class RegistrationModal extends Component {
               createAccount={this.handleCreateAccount}
               toggleCheckBox={this.toggleCheckBox}
               errorMsg={errorMsg}
-              createAccountStatus={createAccountStatus}
               errorComponent={errorComponent}
+              successComponent={successComponent}
+              createAccountStatus={createAccountStatus}
               termsConditionsBoxChecked={termsConditions}
               formData={formData}
             />
@@ -143,6 +149,7 @@ class RegistrationModal extends Component {
 const mapStateToProps = state => {
   return {
     loginStatus: selectAuthStatus(state).login,
+    loggingIn: selectAuthStatus(state).loggingIn,
     createAccountStatus: selectAuthStatus(state).createAccount,
     errorMsg: selectErrorMessage(state),
     needLoginHelp: selectNeedLoginHelp(state),
