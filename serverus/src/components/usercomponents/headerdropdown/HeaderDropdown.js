@@ -18,7 +18,7 @@ class HeaderDropdown extends Component {
   };
 
   toggleLogOutConfirm = () => {
-    this.setState({ confirmLogoutOpen: !this.state.confirmLogOut });
+    this.setState({ confirmLogoutOpen: !this.state.confirmLogoutOpen });
   };
 
   render() {
