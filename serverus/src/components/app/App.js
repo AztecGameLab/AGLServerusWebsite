@@ -12,6 +12,7 @@ import GamePage from "../gamecomponents/gamepage/GamePage";
 import ForgotPassword from "../forgot/ForgotPassword";
 import ChangePassword from "../forgot/ChangePassword";
 import SponsorPage from "../sponsors/SponsorPage";
+import EditProfilePage from "../usercomponents/editprofile/EditProfilePage";
 
 class App extends Component {
   render() {
@@ -28,6 +29,7 @@ class App extends Component {
             <Route exact path="/passwordreset/:resetID" component={ChangePassword} />
             <Route exact path="/forgot" component={ForgotPassword} />
             <Route exact path="/sponsors" component={SponsorPage} />
+            <Route exact path="/editprofile" component={EditProfilePage} />
           </Switch>
         </Router>
         <Footer />

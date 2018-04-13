@@ -37,7 +37,7 @@ class HeaderDropdown extends Component {
             <Dropdown.Item disabled icon="address book outline" text="View Friends" />
             <Dropdown.Divider />
             <Dropdown.Item disabled icon="bar chart" text="Dashboard" />
-            <Dropdown.Item disabled icon="edit" text="Edit Profile" />
+            <Dropdown.Item as={Link} to="/editprofile" icon="edit" text="Edit Profile" />
             <Dropdown.Item disabled icon="setting" text="Account Settings" />
             <Dropdown.Item disabled icon="comments" text="Messages" description="0 New" />
             <Dropdown.Divider />
