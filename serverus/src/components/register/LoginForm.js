@@ -6,26 +6,7 @@ import { Button, Checkbox, Divider, Form, Grid, Icon, Popup } from "semantic-ui-
 const LoginForm = props => {
   return (
     <div>
-      <Popup
-        inverted
-        flowing
-        position="bottom center"
-        trigger={
-          <Button.Group widths="3" style={{ width: "60%" }}>
-            <Button color="facebook" disabled>
-              <Icon name="facebook" />Facebook
-            </Button>
-            <Button color="google plus" disabled>
-              <Icon name="google" />Google
-            </Button>
-            <Button color="grey" disabled>
-              <Icon name="github" />Github
-            </Button>
-          </Button.Group>
-        }
-        content="Login with Facebook, Google and Github coming soon!"
-      />
-
+      <SocialButtonGroup />
       <br />
       <Divider horizontal>or</Divider>
       <Form className="loginForm" onSubmit={() => props.loginAccount()}>
@@ -35,7 +16,13 @@ const LoginForm = props => {
           icon="user"
           onChange={e => props.handleFieldInput(e, "email")}
           autoComplete="on"
+          list="emailSuggestions"
+          required
+          type="email"
         />
+        <datalist id="emailSuggestions">
+          <option value={props.rememberMeEmail} />
+        </datalist>
         <Form.Input
           className="formContents"
           type="password"
@@ -43,17 +30,14 @@ const LoginForm = props => {
           icon="lock"
           onChange={e => props.handleFieldInput(e, "password")}
           autoComplete="on"
+          required
         />
         <Grid columns={2}>
           <Grid.Column textAlign="left">
-            <Checkbox label="Remember me" autoComplete="off" />
+            <Checkbox label="Remember me" autoComplete="off" onChange={e => props.toggleCheckBox(e, "rememberMe")} />
           </Grid.Column>
           <Grid.Column textAlign="right">
-            <i>
-              <a href="" onClick={props.forgotRedirect}>
-                Forgot password?
-              </a>
-            </i>
+            <ForgotPassword forgotRedirect={props.forgotRedirect} />
           </Grid.Column>
         </Grid>
         <br />
@@ -72,3 +56,37 @@ const LoginForm = props => {
 };
 
 export default LoginForm;
+
+const SocialButtonGroup = () => {
+  return (
+    <Popup
+      inverted
+      flowing
+      position="bottom center"
+      trigger={
+        <Button.Group widths="3" style={{ width: "60%" }}>
+          <Button color="facebook" disabled>
+            <Icon name="facebook" />Facebook
+          </Button>
+          <Button color="google plus" disabled>
+            <Icon name="google" />Google
+          </Button>
+          <Button color="grey" disabled>
+            <Icon name="github" />Github
+          </Button>
+        </Button.Group>
+      }
+      content="Login with Facebook, Google and Github coming soon!"
+    />
+  );
+};
+
+const ForgotPassword = props => {
+  return (
+    <i>
+      <a href="" onClick={props.forgotRedirect}>
+        Forgot password?
+      </a>
+    </i>
+  );
+};

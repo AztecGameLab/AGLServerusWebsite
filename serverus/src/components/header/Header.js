@@ -9,6 +9,7 @@ import { Icon, Menu } from "semantic-ui-react";
 import { Image as CloudImage, CloudinaryContext, Transformation } from "cloudinary-react";
 import RegistrationModal from "../register/RegistrationModal";
 import HeaderDropdown from "../usercomponents/headerdropdown/HeaderDropdown";
+import "./Header.css";
 
 //Selectors
 import { selectLoggedIn } from "../../features/auth/authSelectors";
@@ -18,7 +19,7 @@ const MenuObjects = [
   { name: "Competitions", logo: "trophy", route: "/competitions" },
   { name: "Game Directory", logo: "gamepad", route: "/games" },
   { name: "User Directory", logo: "users", route: "/users" },
-  { name: "Sponsors", logo: "shield", route: "/sponsors"}
+  { name: "Sponsors", logo: "shield", route: "/sponsors" }
 ];
 
 class Header extends Component {
@@ -40,7 +41,7 @@ class Header extends Component {
           <Menu.Item key="home" as={Link} to="/">
             <CloudinaryContext cloudName="aztecgamelab-com">
               <CloudImage publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer2.png">
-                <Transformation width="150" crop="scale" />
+                <Transformation width="150" crop="scale" quality="auto" responsive />
               </CloudImage>
             </CloudinaryContext>
           </Menu.Item>
@@ -49,6 +50,7 @@ class Header extends Component {
 
           <Menu.Menu position="right">
             <Menu.Item>{loggedIn ? <HeaderDropdown /> : <RegistrationModal />}</Menu.Item>
+            <Menu.Item />
           </Menu.Menu>
         </Menu>
       </Router>

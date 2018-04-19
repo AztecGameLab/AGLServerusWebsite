@@ -30,13 +30,13 @@ class ForgotPassword extends Component {
         <div className="forgotCard">
           <Card raised fluid>
             <Card.Content>
-              <h2>Reset Password</h2>
+              <h2>Forgot your Password?</h2>
               <p>Enter the email address associated with your account, and we’ll email you a link to reset your password.</p>
               <Form error={resetStatus === "failed"} success={resetStatus === "succeeded"} onSubmit={() => requestPasswordReset(email)}>
                 <br />
                 <Form.Input fluid placeholder="Email Address" icon="mail" onChange={this.handleEmailInput} autoComplete="on" />
                 <Form.Button fluid color="green" loading={resetStatus === "loading"} type="submit">
-                  Send Reset Link
+                  Send Me Instructions
                 </Form.Button>
                 <Message error content={errorMsg} />
                 <Message success content="You've got mail!" />

@@ -5,6 +5,7 @@ const getAuthStatus = state => state.auth.status;
 const getLoggedIn = state => state.auth.loggedIn;
 const getErrorObj = state => state.auth.error;
 const getFailedLogins = state => state.auth.failedLogins;
+const getRememberMe = state => state.auth.rememberMe;
 
 //Constants
 const FAILED_LOGIN_LIMIT = 10;
@@ -24,4 +25,8 @@ export const selectErrorMessage = createSelector([getErrorObj], error => {
 
 export const selectNeedLoginHelp = createSelector([getFailedLogins], fails => {
   return fails > FAILED_LOGIN_LIMIT;
+});
+
+export const selectRememberMe = createSelector([getRememberMe], rememberMeObj => {
+  return rememberMeObj;
 });

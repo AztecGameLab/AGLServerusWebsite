@@ -8,9 +8,10 @@ import {
   LOAD_GAMES_SUCCESS,
   LOAD_GAMES_FAILURE,
   LOAD_USER_PROGRESS,
+  LOAD_USER_SUCCESS,
+  LOAD_USER_FAILURE,
   FILTER_GAMES,
-  CLEAR_SITE_DATA,
-  LOAD_USER_SUCCESS
+  CLEAR_SITE_DATA
 } from "./siteDataConstants";
 
 //API
@@ -72,8 +73,7 @@ export const filterGameDirectory = () => {
 export const loadProfile = username => {
   return (dispatch, getState) => {
     dispatch({ type: LOAD_USER_PROGRESS });
-
-    LoadProfile(username)
+    return LoadProfile(username)
       .then(profileData => {
         dispatch({
           type: LOAD_USER_SUCCESS,
@@ -82,7 +82,7 @@ export const loadProfile = username => {
       })
       .catch(error => {
         dispatch({
-          type: LOAD_USERS_FAILURE,
+          type: LOAD_USER_FAILURE,
           payload: error
         });
       });
