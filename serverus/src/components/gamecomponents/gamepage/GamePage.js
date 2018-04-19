@@ -6,7 +6,7 @@ import Lightbox from 'react-images';
 import Slider from 'react-slick';
 import SlickNextArrow from '../../assets/arrows/SlickNextArrow';
 import SlickPrevArrow from '../../assets/arrows/SlickPrevArrow';
-import Tab, { Card, Grid, Image, Label, Header, Comment, Icon, Table, Rating, Form, Button } from 'semantic-ui-react';
+import { Card, Grid, Image, Label, Header, Comment, Icon, Table, Rating, Form, Button, Message } from 'semantic-ui-react';
 
 import { Image as CloudImage, CloudinaryContext } from 'cloudinary-react';
 
@@ -30,7 +30,8 @@ class GamePage extends Component {
     AestRatingScore: 0,
     InnoRatingScore: 0,
     ThemRatingScore: 0,
-    commentStr: ""
+    commentStr: "",
+    screenshots: []
   }
   componentDidMount() {
     const { isGameDirectoryCached, loadGames } = this.props;
@@ -56,18 +57,24 @@ class GamePage extends Component {
 
   createScreenshots = (value, key) => {
     return (
-      <div key={key} style={{ textAlign: "center", key: { key } }}>
-        <Image style={{ maxHeight: 250, borderRadias: 5, cursor: 'zoom-in' }} onDoubleClick={this.showScreenshot} src={value.url} />
+      <div key={key} style={{ textAlign: "center" }}>
+        <Image key={key} style={{ maxHeight: 250, borderRadias: 5, cursor: 'zoom-in' }} onDoubleClick={this.showScreenshot} src={value.url} />
       </div>
     )
   }
 
   showScreenshot = e => {
-
+    var index = this.props.currentGame.screenshots.findIndex((image) => {
+      return e.target.url === image.url;
+    });
+    this.setState({
+      lightboxIsOpen: true,
+      currentImageIndex: index
+    });
   }
 
   closeLightbox = () => {
-
+    this.setState({lightboxIsOpen: false});
   }
 
   goToPrevious = () => {
@@ -132,6 +139,7 @@ class GamePage extends Component {
     const { loadingStatus, currentGame, userData } = this.props;
     let that = this;
     var screenshots;
+    var lightBox;
     if (currentGame.screenshots) {
       var slidesToShow = currentGame.screenshots.length < 3 ? 1 : 3;
       var settings = {
@@ -151,7 +159,7 @@ class GamePage extends Component {
         nextArrow: <SlickNextArrow noArrow={false} />,
         prevArrow: <SlickPrevArrow noArrow={false} />
       }
-      var screenShotUrls = currentGame.screenshots.map(image => {
+      var screenShotUrls = currentGame.screenshots.map((image) => {
         return {
           public_id: image.public_id,
           src: image.url,
@@ -160,11 +168,10 @@ class GamePage extends Component {
       });
       screenshots = screenShotUrls.map(this.createScreenshots);
       if (screenshots) {
-        var lightBox = <Lightbox images={screenShotUrls} currentImage={this.state.currentImageIndex}
+        lightBox = <Lightbox images={screenShotUrls} currentImage={this.state.currentImageIndex} isOpen={this.state.lightboxIsOpen}
           onClickNext={this.goToNext} onClickPrev={this.goToPrevious} enableKeyboardInput onClose={this.closeLightbox} />
       }
     }
-    debugger;
     return <div>{loadingStatus === "loading" ? <Loading loadingMessage="Retrieving Game..." /> :
       <div>
         <CloudinaryContext cloudName="aztecgamelab-com">
@@ -176,18 +183,20 @@ class GamePage extends Component {
                   <Card.Header><h3 style={{ textAlign: "center", fontSize: "5em" }}>{currentGame.title}</h3></Card.Header>
                   <br/>
                   <CloudImage publicId={currentGame.showcase.public_id} style={{width: "100%", textAlign: "center"}}/>
-                  <br/>
+                  <hr/>
                   <div style={{background:"black", color: "white"}}>
                     <br />
                     <Slider {...settings}>
-                      {screenshots}
+                      { screenshots }
                     </Slider>
-                    {lightBox}
+                    { lightBox }
+                    <br />
                     <br />
                   </div>
-                  <div>
-                    {currentGame.description}
-                  </div>
+                  <Header dividing/>
+                  <Card.Description>
+                    { currentGame.description }
+                  </Card.Description>
                 </Card.Content>
               </Card>
               <Card fluid>
