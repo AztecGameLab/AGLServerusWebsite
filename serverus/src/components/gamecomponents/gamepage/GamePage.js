@@ -6,7 +6,7 @@ import Lightbox from 'react-images';
 import Slider from 'react-slick';
 import SlickNextArrow from '../../assets/arrows/SlickNextArrow';
 import SlickPrevArrow from '../../assets/arrows/SlickPrevArrow';
-import { Card, Grid, Image, Label, Header, Comment, Icon, Table, Rating, Form, Button, Message } from 'semantic-ui-react';
+import { Card, Grid, Image, Label, Header, Comment, Icon, Table, Rating, Form, Button, Message, Dropdown } from 'semantic-ui-react';
 
 import { Image as CloudImage, CloudinaryContext } from 'cloudinary-react';
 
@@ -31,8 +31,10 @@ class GamePage extends Component {
     InnoRatingScore: 0,
     ThemRatingScore: 0,
     commentStr: "",
-    screenshots: []
+    screenshots: [],
+    dlLinks: []
   }
+
   componentDidMount() {
     const { isGameDirectoryCached, loadGames } = this.props;
     if (!isGameDirectoryCached) {
@@ -74,7 +76,7 @@ class GamePage extends Component {
   }
 
   closeLightbox = () => {
-    this.setState({lightboxIsOpen: false});
+    this.setState({ lightboxIsOpen: false });
   }
 
   goToPrevious = () => {
@@ -102,6 +104,10 @@ class GamePage extends Component {
     this.setState({ ThemRatingScore: rating });
   }
 
+  handleDownload = () => {
+    //Handles Download
+  }
+
   minify = profileURL => {
     let headerImage = profileURL;
     headerImage = headerImage.slice(0, headerImage.indexOf("Small")) + "Extra" + headerImage.slice(headerImage.indexOf("Small"));
@@ -114,7 +120,7 @@ class GamePage extends Component {
       return (
         <div key={time}>
           <Comment>
-            <Header dividing/>
+            <Header dividing />
             <Grid>
               <Grid.Column>
                 <CloudImage className="avatar" publicId={this.minify(comments[time].profilePic)} />
@@ -181,21 +187,21 @@ class GamePage extends Component {
               <Card fluid>
                 <Card.Content>
                   <Card.Header><h3 style={{ textAlign: "center", fontSize: "5em" }}>{currentGame.title}</h3></Card.Header>
-                  <br/>
-                  <CloudImage publicId={currentGame.showcase.public_id} style={{width: "100%", textAlign: "center"}}/>
-                  <hr/>
-                  <div style={{background:"black", color: "white"}}>
+                  <br />
+                  <CloudImage publicId={currentGame.showcase.public_id} style={{ width: "100%", textAlign: "center" }} />
+                  <hr />
+                  <div style={{ background: "black", color: "white" }}>
                     <br />
                     <Slider {...settings}>
-                      { screenshots }
+                      {screenshots}
                     </Slider>
-                    { lightBox }
+                    {lightBox}
                     <br />
                     <br />
                   </div>
-                  <Header dividing/>
+                  <Header dividing />
                   <Card.Description>
-                    { currentGame.description }
+                    {currentGame.description}
                   </Card.Description>
                 </Card.Content>
               </Card>
@@ -304,7 +310,14 @@ class GamePage extends Component {
                   </Grid>
                 </Card.Content>
                 <Card.Content>
-                  <Header>Category</Header>
+                  <Grid columns={2}>
+                      <Grid.Column>
+                        <Header>Category</Header>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Header>TODO Implement Me</Header>
+                      </Grid.Column>
+                  </Grid>
                 </Card.Content>
                 <Card.Content>
                   <Grid columns={2}>
@@ -327,6 +340,14 @@ class GamePage extends Component {
                           return (<Label key={idx} tag>{tag}</Label>);
                         })
                       }
+                      <Header dividing />
+                      <Dropdown options={Object.values(currentGame.downloadLinks)} trigger={
+                        <span>
+                          <Button size="big" fluid color="green">
+                            <h3>Download</h3>
+                          </Button>
+                        </span>
+                      } />
                     </Grid.Column>
                   </Grid>
                 </Card.Content>
