@@ -49,6 +49,18 @@ class GameDirectory extends Component {
             <GameGrid games={games} />
           </Grid.Column>
         </Grid>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
       </div>
     }</div>;
   }

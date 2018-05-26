@@ -1,8 +1,12 @@
 import {
   LOG_IN_LOADING,
+  LOGGING_IN,
   LOG_IN_SUCCESS,
   LOG_IN_FAILURE,
   LOG_OUT,
+  CREATE_ACCOUNT_LOADING,
+  CREATE_ACCOUNT_SUCCESS,
+  CREATE_ACCOUNT_FAILURE,
   DISPLAY_PASSWORD_HELP,
   REQUEST_PASS_RESET,
   REQUEST_PASS_SUCCESS,
@@ -19,7 +23,8 @@ const initialAuthState = {
   loggedIn: false,
   status: {
     login: "idle",
-    registration: "idle",
+    loggingIn: false,
+    createAccount: "idle",
     passwordReset: "idle",
     changePassword: "idle"
   },
@@ -36,10 +41,18 @@ export default (state = initialAuthState, action) => {
   switch (action.type) {
     case LOG_IN_LOADING:
       return { ...state, status: { ...state.status, login: "loading" } };
+    case LOGGING_IN:
+      return { ...state, status: { ...state.status, loggingIn: true } };
     case LOG_IN_FAILURE:
-      return { ...state, status: { ...state.status, login: "failed" }, error: action.payload, ...(state.failedLogins += 1) };
+      return { ...state, status: { ...state.status, login: "failed", loggingIn: false }, error: action.payload, ...(state.failedLogins += 1) };
     case LOG_IN_SUCCESS:
-      return { ...state, status: { ...state.status, login: "succeeded" }, loggedIn: true, displayHelp: false };
+      return { ...state, status: { ...state.status, login: "succeeded", loggingIn: false }, loggedIn: true, displayHelp: false };
+    case CREATE_ACCOUNT_LOADING:
+      return { ...state, status: { ...state.status, createAccount: "loading" } };
+    case CREATE_ACCOUNT_SUCCESS:
+      return { ...state, status: { ...state.status, createAccount: "succeeded" } };
+    case CREATE_ACCOUNT_FAILURE:
+      return { ...state, status: { ...state.status, createAccount: "failed" }, error: action.payload };
     case DISPLAY_PASSWORD_HELP:
       return { ...state, displayHelp: true };
     case REQUEST_PASS_RESET:

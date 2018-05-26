@@ -14,13 +14,11 @@ import GamePage from "../gamecomponents/gamepage/GamePage";
 import ForgotPassword from "../forgot/ForgotPassword";
 import ChangePassword from "../forgot/ChangePassword";
 import SponsorPage from "../sponsors/SponsorPage";
-
 class App extends Component {
   render() {
     return (
       <div>
         <HeaderMenu />
-        <Spacer lines={3} />
         <Router history={history}>
           <Switch>
             <Route exact path="/" component={Home} />
@@ -34,7 +32,6 @@ class App extends Component {
             <Route exact path="/sponsors" component={SponsorPage} />
           </Switch>
         </Router>
-        <Spacer lines={10} />
         <Footer />
       </div>
     );

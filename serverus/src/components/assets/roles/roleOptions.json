@@ -1,6 +1,13 @@
 {
     "roles": [
         {
+            "key": "UNKN",
+            "text": "Undecided",
+            "value": "Undecided",
+            "description": "No roles selected yet! :)",
+            "icon": "leaf"
+        },
+        {
             "key": "PROG",
             "text": "Programmer",
             "value": "Programmer",
