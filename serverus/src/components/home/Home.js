@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Grid, Image, Segment } from 'semantic-ui-react'
+import { Grid, Header, Image, Segment } from 'semantic-ui-react'
 
 //Components
 import ReactPlayer from "react-player";
+import { Image as CloudImage, CloudinaryContext, Transformation } from "cloudinary-react";
 
 //Stylings
 import "./Home.css";
@@ -15,10 +16,10 @@ class Home extends Component {
 
         </Segment.Group>
         <Segment.Group>
-          
+
         </Segment.Group>
         <Segment.Group>
-
+          
         </Segment.Group>
         <Segment.Group>
           <Segment vertical textAlign='center' style={thirdPart}>
@@ -31,10 +32,18 @@ class Home extends Component {
             </Grid>
             <Grid columns={2}>
               <Grid.Column>
-                <Image src="https://res.cloudinary.com/aztecgamelab-com/image/upload/c_scale,w_300/v1522789701/VIVE_xp3jad.png" />
+                <CloudinaryContext cloudName="aztecgamelab-com">
+                  <CloudImage publicId="VIVE_xp3jad.png" centered>
+                    <Transformation width="300" crop="scale" quality="auto" responsive />
+                  </CloudImage>
+                </CloudinaryContext>
               </Grid.Column>
               <Grid.Column>
-                <Image src="https://res.cloudinary.com/aztecgamelab-com/image/upload/c_scale,w_300/v1522789700/PlayStation_dkb1c1.png" />
+                <CloudinaryContext cloudName="aztecgamelab-com">
+                  <CloudImage publicId="PlayStation.png">
+                    <Transformation width="300" crop="scale" quality="auto" responsive />
+                  </CloudImage>
+                </CloudinaryContext>
               </Grid.Column>
             </Grid>
           </Segment>
