@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Container, Dimmer, Divider, Grid, Header, Icon, Image, List, Segment, Statistic } from "semantic-ui-react";
+import { Container, Divider, Grid, Header, Icon, List, Segment, Statistic } from "semantic-ui-react";
 
 //Components
-import ReactPlayer from "react-player";
+import YouTubePlayer from "react-player/lib/players/YouTube";
 import { Image as CloudImage, CloudinaryContext, Transformation } from "cloudinary-react";
 
 //Stylings
@@ -13,13 +13,15 @@ class Home extends Component {
     return (
       <div>
         {/* 1ST SECTION: VIDEO */}
-        {/* Fix: Create a Youtube video using the image itself */}
         <Container fluid>
-          <ReactPlayer url="https://www.youtube.com/embed/AQiAEczCASw" playing loop muted height="900px" width="100%">
-            <Dimmer active={true}>
-              <Image publicId="AGLBanner.png" />
-            </Dimmer>
-          </ReactPlayer>
+            <YouTubePlayer url="https://youtu.be/Uhs-JTzRWHk"
+              volume="0"
+              mute
+              playing
+              loop
+              height="700px"
+              width="100%"
+            />
         </Container>
 
         <Divider hidden />
@@ -156,7 +158,7 @@ class Home extends Component {
             <Grid columns={1}>
               <Grid.Row>
                 <Grid.Column>
-                  <Header as="h2">A special thank you to our sponsors for their help!</Header>
+                  <Header as="h1">A special thank you to our sponsors for their help!</Header>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
@@ -178,30 +180,11 @@ class Home extends Component {
             </Grid>
           </Container>
         </Container>
-      </div>
+      </div >
     );
   }
 }
 
-// // Inline Styles
-// const headerText = {
-//   fontSize: "4em",
-//   fontWeight: "normal"
-// };
 
-// const firstPart = {
-//   height: "700px",
-//   textAlign: "center"
-// };
-
-// const secondPart = {
-//   background: "#FFFFFF",
-//   padding: "8em"
-// };
-
-// const thirdPart = {
-//   background: "#FFFFFF",
-//   padding: "6em"
-// };
 
 export default Home;
