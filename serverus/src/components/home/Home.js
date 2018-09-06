@@ -14,14 +14,14 @@ class Home extends Component {
       <div>
         {/* 1ST SECTION: VIDEO */}
         <Container fluid>
-            <YouTubePlayer url="https://youtu.be/Uhs-JTzRWHk"
-              volume="0"
-              mute
-              playing
-              loop
-              height="700px"
-              width="100%"
-            />
+          <YouTubePlayer url="https://youtu.be/Uhs-JTzRWHk"
+            volume="0"
+            mute
+            playing
+            loop
+            height="700px"
+            width="100%"
+          />
         </Container>
 
         <Divider hidden />
@@ -60,11 +60,8 @@ class Home extends Component {
                 <Segment padded="true">
                   <Header as="h2">When and where are the lab meetings?</Header>
                   <p>
-                    <s>We meet every Friday from 1 PM to 3 PM (PST)!</s>
-                    <br />
-                    <b>NOTE: No more meetings until further notice!</b>
-                    <br />
-                    <br />
+                    We meet every <b>Friday from 1 PM to 3 PM (PST)!</b>
+                    <br /><br />
                     At SDSU we're located in the VITaL lab which is at the bottom and center of the Adams Humanities building!
                   </p>
                   <Segment tertiary="true">
