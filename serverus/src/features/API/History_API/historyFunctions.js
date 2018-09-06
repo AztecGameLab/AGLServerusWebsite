@@ -10,3 +10,15 @@ export const RedirectToHome = () => {
     dispatch(replace("/"));
   };
 };
+
+export const RedirectToForgot = () => {
+  return dispatch => {
+    dispatch(replace("/forgot"));
+  };
+};
+
+export const RedirectToExternal = (site) => {
+  return dispatch => {
+    dispatch(replace(site));
+  };
+}

@@ -1,23 +1,30 @@
 // React + React-Redux + Router
-import React from "react";
+import React, { Component } from "react";
 import { Link, Router } from "react-router-dom";
 import { history } from "../../features/API/History_API/historyFunctions";
+import { connect } from "react-redux";
 
 // Components
-import { Icon, Menu, Button } from "semantic-ui-react";
-import { Image as CloudImage, CloudinaryContext } from "cloudinary-react";
+import { Icon, Menu } from "semantic-ui-react";
+import { Image as CloudImage, CloudinaryContext, Transformation } from "cloudinary-react";
+import RegistrationModal from "../register/RegistrationModal";
+import HeaderDropdown from "../usercomponents/headerdropdown/HeaderDropdown";
+import "./Header.css";
 
-const Header = () => {
-  // Create list of Menu Items with settings
-  const MenuObjects = [
-    { name: "Competitions", logo: "trophy", route: "/competitions" },
-    { name: "Game Directory", logo: "gamepad", route: "/games" },
-    { name: "User Directory", logo: "users", route: "/users" },
-    { name: "Resources", logo: "cubes", route: "/resources" }
-  ];
+//Selectors
+import { selectLoggedIn } from "../../features/auth/authSelectors";
 
+// Create list of Menu Items with settings
+const MenuObjects = [
+  // { name: "Competitions", logo: "trophy", route: "/competitions" },
+  // { name: "Game Directory", logo: "gamepad", route: "/games" },
+  // { name: "User Directory", logo: "users", route: "/users" },
+  // { name: "Sponsors", logo: "shield", route: "/sponsors" }
+];
+
+class Header extends Component {
   // Construct Menu Item Components using list
-  const MenuItemComponents = MenuObjects.map(obj => {
+  MenuItemComponents = MenuObjects.map(obj => {
     return (
       <Menu.Item key={obj.name} as={Link} to={obj.route}>
         <Icon size="big" name={obj.logo} />
@@ -25,25 +32,36 @@ const Header = () => {
       </Menu.Item>
     );
   });
-  return (
-    <Router history={history}>
-      <Menu secondary stackable borderless>
-        <Menu.Item key="home" as={Link} to="/">
-          <CloudinaryContext cloudName="aztecgamelab-com">
-            <CloudImage publicId="WebsiteAssets/blacklogo.png" />
-          </CloudinaryContext>
-        </Menu.Item>
 
-        {MenuItemComponents}
-
-        <Menu.Menu position="right">
-          <Menu.Item as={Link} to="/signup">
-            <Button>Sign Up!</Button>
+  render() {
+    const { loggedIn } = this.props;
+    return (
+      <Router history={history}>
+        <Menu secondary stackable borderless>
+          <Menu.Item key="home" as={Link} to="/">
+            <CloudinaryContext cloudName="aztecgamelab-com">
+              <CloudImage publicId="WebsiteAssets/Parallax/AGL_retro_parallax_layer2.png">
+                <Transformation width="150" crop="scale" quality="auto" responsive />
+              </CloudImage>
+            </CloudinaryContext>
           </Menu.Item>
-        </Menu.Menu>
-      </Menu>
-    </Router>
-  );
+
+          {this.MenuItemComponents}
+
+          <Menu.Menu position="right">
+            {/* <Menu.Item>{loggedIn ? <HeaderDropdown /> : <RegistrationModal />}</Menu.Item>
+            <Menu.Item /> */}
+          </Menu.Menu>
+        </Menu>
+      </Router>
+    );
+  }
+}
+
+const mapStateToProps = state => {
+  return {
+    loggedIn: selectLoggedIn(state)
+  };
 };
 
-export default Header;
+export default connect(mapStateToProps, null)(Header);

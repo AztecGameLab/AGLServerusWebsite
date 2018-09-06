@@ -4,13 +4,14 @@
 
 Becoming a super hero is a fairly straight forward process:
 
-```
-$ give me super-powers
-```
+* Development Tools
+  * Install [Visual Studio Code](https://code.visualstudio.com/)
+  * Install [Gitkraken](https://www.gitkraken.com/)
+  * Install [Redux Dev Tools](https://github.com/gaearon/redux-devtools)
+  * Install [node.js](https://nodejs.org/en/)
+  * Install [yarn](https://yarnpkg.com/lang/en/docs/install/)
 
-{% hint style="info" %}
- Super-powers are granted randomly so please submit an issue if you're not happy with yours.
-{% endhint %}
+Relevant Plugins for Visual Studio Code
 
 Once you're strong enough, save the world:
 
