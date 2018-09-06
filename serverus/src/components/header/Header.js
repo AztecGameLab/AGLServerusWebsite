@@ -16,10 +16,10 @@ import { selectLoggedIn } from "../../features/auth/authSelectors";
 
 // Create list of Menu Items with settings
 const MenuObjects = [
-  { name: "Competitions", logo: "trophy", route: "/competitions" },
-  { name: "Game Directory", logo: "gamepad", route: "/games" },
-  { name: "User Directory", logo: "users", route: "/users" },
-  { name: "Sponsors", logo: "shield", route: "/sponsors" }
+  // { name: "Competitions", logo: "trophy", route: "/competitions" },
+  // { name: "Game Directory", logo: "gamepad", route: "/games" },
+  // { name: "User Directory", logo: "users", route: "/users" },
+  // { name: "Sponsors", logo: "shield", route: "/sponsors" }
 ];
 
 class Header extends Component {
@@ -49,8 +49,8 @@ class Header extends Component {
           {this.MenuItemComponents}
 
           <Menu.Menu position="right">
-            <Menu.Item>{loggedIn ? <HeaderDropdown /> : <RegistrationModal />}</Menu.Item>
-            <Menu.Item />
+            {/* <Menu.Item>{loggedIn ? <HeaderDropdown /> : <RegistrationModal />}</Menu.Item>
+            <Menu.Item /> */}
           </Menu.Menu>
         </Menu>
       </Router>
