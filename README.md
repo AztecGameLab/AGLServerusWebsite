@@ -1,6 +1,6 @@
 # Aztec Game Lab Website
 
-## [![Build Status](https://travis-ci.org/AztecGameLab/AGLServerusWebsite.svg?branch=master)](https://travis-ci.org/AztecGameLab/AGLServerusWebsite)
+# Future site development is moving to https://github.com/AztecGameLab/AztecGameLaboratory/
 
 ## Getting Started
 
